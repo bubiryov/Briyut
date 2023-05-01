@@ -1,0 +1,617 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5702A000A1C00C90D49 /* BriyutApp.swift */; };
+		899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5722A000A1C00C90D49 /* ContentView.swift */; };
+		899EC5752A000A1E00C90D49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 899EC5742A000A1E00C90D49 /* Assets.xcassets */; };
+		899EC5792A000A1E00C90D49 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 899EC5782A000A1E00C90D49 /* Preview Assets.xcassets */; };
+		899EC5832A000A1E00C90D49 /* BriyutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5822A000A1E00C90D49 /* BriyutTests.swift */; };
+		899EC58D2A000A1E00C90D49 /* BriyutUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC58C2A000A1E00C90D49 /* BriyutUITests.swift */; };
+		899EC58F2A000A1E00C90D49 /* BriyutUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC58E2A000A1E00C90D49 /* BriyutUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		899EC57F2A000A1E00C90D49 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 899EC5652A000A1C00C90D49 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 899EC56C2A000A1C00C90D49;
+			remoteInfo = Briyut;
+		};
+		899EC5892A000A1E00C90D49 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 899EC5652A000A1C00C90D49 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 899EC56C2A000A1C00C90D49;
+			remoteInfo = Briyut;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		899EC56D2A000A1C00C90D49 /* Briyut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Briyut.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		899EC5702A000A1C00C90D49 /* BriyutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriyutApp.swift; sourceTree = "<group>"; };
+		899EC5722A000A1C00C90D49 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		899EC5742A000A1E00C90D49 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		899EC5762A000A1E00C90D49 /* Briyut.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Briyut.entitlements; sourceTree = "<group>"; };
+		899EC5782A000A1E00C90D49 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		899EC57E2A000A1E00C90D49 /* BriyutTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BriyutTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		899EC5822A000A1E00C90D49 /* BriyutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriyutTests.swift; sourceTree = "<group>"; };
+		899EC5882A000A1E00C90D49 /* BriyutUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BriyutUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		899EC58C2A000A1E00C90D49 /* BriyutUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriyutUITests.swift; sourceTree = "<group>"; };
+		899EC58E2A000A1E00C90D49 /* BriyutUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriyutUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		899EC56A2A000A1C00C90D49 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899EC57B2A000A1E00C90D49 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899EC5852A000A1E00C90D49 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		899EC5642A000A1C00C90D49 = {
+			isa = PBXGroup;
+			children = (
+				899EC56F2A000A1C00C90D49 /* Briyut */,
+				899EC5812A000A1E00C90D49 /* BriyutTests */,
+				899EC58B2A000A1E00C90D49 /* BriyutUITests */,
+				899EC56E2A000A1C00C90D49 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		899EC56E2A000A1C00C90D49 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				899EC56D2A000A1C00C90D49 /* Briyut.app */,
+				899EC57E2A000A1E00C90D49 /* BriyutTests.xctest */,
+				899EC5882A000A1E00C90D49 /* BriyutUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		899EC56F2A000A1C00C90D49 /* Briyut */ = {
+			isa = PBXGroup;
+			children = (
+				899EC5702A000A1C00C90D49 /* BriyutApp.swift */,
+				899EC5722A000A1C00C90D49 /* ContentView.swift */,
+				899EC5742A000A1E00C90D49 /* Assets.xcassets */,
+				899EC5762A000A1E00C90D49 /* Briyut.entitlements */,
+				899EC5772A000A1E00C90D49 /* Preview Content */,
+			);
+			path = Briyut;
+			sourceTree = "<group>";
+		};
+		899EC5772A000A1E00C90D49 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				899EC5782A000A1E00C90D49 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		899EC5812A000A1E00C90D49 /* BriyutTests */ = {
+			isa = PBXGroup;
+			children = (
+				899EC5822A000A1E00C90D49 /* BriyutTests.swift */,
+			);
+			path = BriyutTests;
+			sourceTree = "<group>";
+		};
+		899EC58B2A000A1E00C90D49 /* BriyutUITests */ = {
+			isa = PBXGroup;
+			children = (
+				899EC58C2A000A1E00C90D49 /* BriyutUITests.swift */,
+				899EC58E2A000A1E00C90D49 /* BriyutUITestsLaunchTests.swift */,
+			);
+			path = BriyutUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		899EC56C2A000A1C00C90D49 /* Briyut */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 899EC5922A000A1E00C90D49 /* Build configuration list for PBXNativeTarget "Briyut" */;
+			buildPhases = (
+				899EC5692A000A1C00C90D49 /* Sources */,
+				899EC56A2A000A1C00C90D49 /* Frameworks */,
+				899EC56B2A000A1C00C90D49 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Briyut;
+			productName = Briyut;
+			productReference = 899EC56D2A000A1C00C90D49 /* Briyut.app */;
+			productType = "com.apple.product-type.application";
+		};
+		899EC57D2A000A1E00C90D49 /* BriyutTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 899EC5952A000A1E00C90D49 /* Build configuration list for PBXNativeTarget "BriyutTests" */;
+			buildPhases = (
+				899EC57A2A000A1E00C90D49 /* Sources */,
+				899EC57B2A000A1E00C90D49 /* Frameworks */,
+				899EC57C2A000A1E00C90D49 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				899EC5802A000A1E00C90D49 /* PBXTargetDependency */,
+			);
+			name = BriyutTests;
+			productName = BriyutTests;
+			productReference = 899EC57E2A000A1E00C90D49 /* BriyutTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		899EC5872A000A1E00C90D49 /* BriyutUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 899EC5982A000A1E00C90D49 /* Build configuration list for PBXNativeTarget "BriyutUITests" */;
+			buildPhases = (
+				899EC5842A000A1E00C90D49 /* Sources */,
+				899EC5852A000A1E00C90D49 /* Frameworks */,
+				899EC5862A000A1E00C90D49 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				899EC58A2A000A1E00C90D49 /* PBXTargetDependency */,
+			);
+			name = BriyutUITests;
+			productName = BriyutUITests;
+			productReference = 899EC5882A000A1E00C90D49 /* BriyutUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		899EC5652A000A1C00C90D49 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					899EC56C2A000A1C00C90D49 = {
+						CreatedOnToolsVersion = 14.3;
+					};
+					899EC57D2A000A1E00C90D49 = {
+						CreatedOnToolsVersion = 14.3;
+						TestTargetID = 899EC56C2A000A1C00C90D49;
+					};
+					899EC5872A000A1E00C90D49 = {
+						CreatedOnToolsVersion = 14.3;
+						TestTargetID = 899EC56C2A000A1C00C90D49;
+					};
+				};
+			};
+			buildConfigurationList = 899EC5682A000A1C00C90D49 /* Build configuration list for PBXProject "Briyut" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 899EC5642A000A1C00C90D49;
+			productRefGroup = 899EC56E2A000A1C00C90D49 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				899EC56C2A000A1C00C90D49 /* Briyut */,
+				899EC57D2A000A1E00C90D49 /* BriyutTests */,
+				899EC5872A000A1E00C90D49 /* BriyutUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		899EC56B2A000A1C00C90D49 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				899EC5792A000A1E00C90D49 /* Preview Assets.xcassets in Resources */,
+				899EC5752A000A1E00C90D49 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899EC57C2A000A1E00C90D49 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899EC5862A000A1E00C90D49 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		899EC5692A000A1C00C90D49 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */,
+				899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899EC57A2A000A1E00C90D49 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				899EC5832A000A1E00C90D49 /* BriyutTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899EC5842A000A1E00C90D49 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				899EC58D2A000A1E00C90D49 /* BriyutUITests.swift in Sources */,
+				899EC58F2A000A1E00C90D49 /* BriyutUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		899EC5802A000A1E00C90D49 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 899EC56C2A000A1C00C90D49 /* Briyut */;
+			targetProxy = 899EC57F2A000A1E00C90D49 /* PBXContainerItemProxy */;
+		};
+		899EC58A2A000A1E00C90D49 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 899EC56C2A000A1C00C90D49 /* Briyut */;
+			targetProxy = 899EC5892A000A1E00C90D49 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		899EC5902A000A1E00C90D49 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		899EC5912A000A1E00C90D49 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		899EC5932A000A1E00C90D49 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Briyut/Briyut.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Briyut/Preview Content\"";
+				DEVELOPMENT_TEAM = FSGMDDB4P8;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.icloud-bubiryov.Briyut";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		899EC5942A000A1E00C90D49 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Briyut/Briyut.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Briyut/Preview Content\"";
+				DEVELOPMENT_TEAM = FSGMDDB4P8;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.icloud-bubiryov.Briyut";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		899EC5962A000A1E00C90D49 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FSGMDDB4P8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.icloud-bubiryov.BriyutTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Briyut.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Briyut";
+			};
+			name = Debug;
+		};
+		899EC5972A000A1E00C90D49 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FSGMDDB4P8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.icloud-bubiryov.BriyutTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Briyut.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Briyut";
+			};
+			name = Release;
+		};
+		899EC5992A000A1E00C90D49 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FSGMDDB4P8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.icloud-bubiryov.BriyutUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Briyut;
+			};
+			name = Debug;
+		};
+		899EC59A2A000A1E00C90D49 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FSGMDDB4P8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.icloud-bubiryov.BriyutUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Briyut;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		899EC5682A000A1C00C90D49 /* Build configuration list for PBXProject "Briyut" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				899EC5902A000A1E00C90D49 /* Debug */,
+				899EC5912A000A1E00C90D49 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		899EC5922A000A1E00C90D49 /* Build configuration list for PBXNativeTarget "Briyut" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				899EC5932A000A1E00C90D49 /* Debug */,
+				899EC5942A000A1E00C90D49 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		899EC5952A000A1E00C90D49 /* Build configuration list for PBXNativeTarget "BriyutTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				899EC5962A000A1E00C90D49 /* Debug */,
+				899EC5972A000A1E00C90D49 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		899EC5982A000A1E00C90D49 /* Build configuration list for PBXNativeTarget "BriyutUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				899EC5992A000A1E00C90D49 /* Debug */,
+				899EC59A2A000A1E00C90D49 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 899EC5652A000A1C00C90D49 /* Project object */;
+}
