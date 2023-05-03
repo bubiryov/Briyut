@@ -32,6 +32,14 @@
 		899EC5CD2A00579300C90D49 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5CC2A00579300C90D49 /* AuthenticationView.swift */; };
 		899EC5CF2A0057EE00C90D49 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5CE2A0057EE00C90D49 /* RegistrationView.swift */; };
 		899EC5D12A00596D00C90D49 /* LabelledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5D02A00596D00C90D49 /* LabelledDivider.swift */; };
+		89CA5AAC2A027A1E00695069 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AAB2A027A1E00695069 /* ResetPasswordView.swift */; };
+		89CA5AAE2A02911600695069 /* PhoneAuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AAD2A02911600695069 /* PhoneAuthenticationView.swift */; };
+		89CA5AB02A02D9E000695069 /* Extetnsions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AAF2A02D9E000695069 /* Extetnsions.swift */; };
+		89CA5AB32A02F40E00695069 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 89CA5AB22A02F40E00695069 /* GoogleSignIn */; };
+		89CA5AB52A02F40E00695069 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 89CA5AB42A02F40E00695069 /* GoogleSignInSwift */; };
+		89CA5AB72A02FCC700695069 /* GoogleAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AB62A02FCC700695069 /* GoogleAuthenticationManager.swift */; };
+		89CA5AB92A02FCE100695069 /* GoogleSignInResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AB82A02FCE100695069 /* GoogleSignInResultModel.swift */; };
+		89CA5ABB2A02FD3200695069 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5ABA2A02FD3200695069 /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +85,12 @@
 		899EC5CC2A00579300C90D49 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		899EC5CE2A0057EE00C90D49 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
 		899EC5D02A00596D00C90D49 /* LabelledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledDivider.swift; sourceTree = "<group>"; };
+		89CA5AAB2A027A1E00695069 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
+		89CA5AAD2A02911600695069 /* PhoneAuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthenticationView.swift; sourceTree = "<group>"; };
+		89CA5AAF2A02D9E000695069 /* Extetnsions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extetnsions.swift; sourceTree = "<group>"; };
+		89CA5AB62A02FCC700695069 /* GoogleAuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthenticationManager.swift; sourceTree = "<group>"; };
+		89CA5AB82A02FCE100695069 /* GoogleSignInResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInResultModel.swift; sourceTree = "<group>"; };
+		89CA5ABA2A02FD3200695069 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,7 +98,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89CA5AB52A02F40E00695069 /* GoogleSignInSwift in Frameworks */,
 				899EC5A22A000E1300C90D49 /* FirebaseAnalyticsSwift in Frameworks */,
+				89CA5AB32A02F40E00695069 /* GoogleSignIn in Frameworks */,
 				899EC5A42A000E1300C90D49 /* FirebaseAuth in Frameworks */,
 				899EC5A02A000E1300C90D49 /* FirebaseAnalytics in Frameworks */,
 			);
@@ -137,7 +153,7 @@
 				899EC5722A000A1C00C90D49 /* ContentView.swift */,
 				899EC5702A000A1C00C90D49 /* BriyutApp.swift */,
 				899EC5C42A0041E900C90D49 /* Managers */,
-				899EC5AF2A00190600C90D49 /* Utilities */,
+				899EC5AF2A00190600C90D49 /* Tools */,
 				899EC59B2A000C3300C90D49 /* GoogleService-Info.plist */,
 				899EC5AB2A0016DE00C90D49 /* Info.plist */,
 				899EC5742A000A1E00C90D49 /* Assets.xcassets */,
@@ -185,18 +201,22 @@
 			children = (
 				899EC5B22A001A2500C90D49 /* Components */,
 				899EC5CC2A00579300C90D49 /* AuthenticationView.swift */,
+				89CA5AAB2A027A1E00695069 /* ResetPasswordView.swift */,
+				89CA5AAD2A02911600695069 /* PhoneAuthenticationView.swift */,
 				899EC5CE2A0057EE00C90D49 /* RegistrationView.swift */,
 				899EC5C02A003DBF00C90D49 /* HomeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
 		};
-		899EC5AF2A00190600C90D49 /* Utilities */ = {
+		899EC5AF2A00190600C90D49 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
 				899EC5A52A000E6500C90D49 /* AppDelegate.swift */,
+				89CA5AAF2A02D9E000695069 /* Extetnsions.swift */,
+				89CA5ABA2A02FD3200695069 /* Utilities.swift */,
 			);
-			path = Utilities;
+			path = Tools;
 			sourceTree = "<group>";
 		};
 		899EC5B22A001A2500C90D49 /* Components */ = {
@@ -222,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				899EC5C52A00420C00C90D49 /* AuthenticationManager.swift */,
+				89CA5AB62A02FCC700695069 /* GoogleAuthenticationManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -230,6 +251,7 @@
 			isa = PBXGroup;
 			children = (
 				899EC5C82A00434A00C90D49 /* AuthDataResultModel.swift */,
+				89CA5AB82A02FCE100695069 /* GoogleSignInResultModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -254,6 +276,8 @@
 				899EC59F2A000E1300C90D49 /* FirebaseAnalytics */,
 				899EC5A12A000E1300C90D49 /* FirebaseAnalyticsSwift */,
 				899EC5A32A000E1300C90D49 /* FirebaseAuth */,
+				89CA5AB22A02F40E00695069 /* GoogleSignIn */,
+				89CA5AB42A02F40E00695069 /* GoogleSignInSwift */,
 			);
 			productName = Briyut;
 			productReference = 899EC56D2A000A1C00C90D49 /* Briyut.app */;
@@ -329,6 +353,7 @@
 			mainGroup = 899EC5642A000A1C00C90D49;
 			packageReferences = (
 				899EC59E2A000E1300C90D49 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				89CA5AB12A02F40E00695069 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = 899EC56E2A000A1C00C90D49 /* Products */;
 			projectDirPath = "";
@@ -375,9 +400,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89CA5AB02A02D9E000695069 /* Extetnsions.swift in Sources */,
 				899EC5D12A00596D00C90D49 /* LabelledDivider.swift in Sources */,
 				899EC5B82A001D5C00C90D49 /* LoginView.swift in Sources */,
 				899EC5C12A003DBF00C90D49 /* HomeView.swift in Sources */,
+				89CA5AAC2A027A1E00695069 /* ResetPasswordView.swift in Sources */,
 				899EC5C62A00420C00C90D49 /* AuthenticationManager.swift in Sources */,
 				899EC5CF2A0057EE00C90D49 /* RegistrationView.swift in Sources */,
 				899EC5CB2A00574700C90D49 /* AuthenticationViewModel.swift in Sources */,
@@ -385,6 +412,10 @@
 				899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */,
 				899EC5C92A00434A00C90D49 /* AuthDataResultModel.swift in Sources */,
 				899EC5CD2A00579300C90D49 /* AuthenticationView.swift in Sources */,
+				89CA5AB72A02FCC700695069 /* GoogleAuthenticationManager.swift in Sources */,
+				89CA5ABB2A02FD3200695069 /* Utilities.swift in Sources */,
+				89CA5AB92A02FCE100695069 /* GoogleSignInResultModel.swift in Sources */,
+				89CA5AAE2A02911600695069 /* PhoneAuthenticationView.swift in Sources */,
 				899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */,
 				899EC5BF2A002FF400C90D49 /* AccentButton.swift in Sources */,
 				899EC5B62A001A7600C90D49 /* InputField.swift in Sources */,
@@ -752,6 +783,14 @@
 				version = 10.9.0;
 			};
 		};
+		89CA5AB12A02F40E00695069 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -769,6 +808,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 899EC59E2A000E1300C90D49 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		89CA5AB22A02F40E00695069 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89CA5AB12A02F40E00695069 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		89CA5AB42A02F40E00695069 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89CA5AB12A02F40E00695069 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

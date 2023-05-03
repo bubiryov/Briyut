@@ -11,7 +11,7 @@ struct AccentButton: View {
     
     var buttonColor: Color {
         if isButtonActive {
-            return .green.opacity(0.7)
+            return .blue.opacity(0.2)
         } else {
             return .gray.opacity(0.3)
         }
@@ -32,22 +32,44 @@ struct AccentButton: View {
         }
     }
     
+    var filled: Bool = true
     var text: String
     var isButtonActive: Bool
+    var logo: String? = nil
     
     var body: some View {
-        Text(text)
-            .foregroundColor(textColor)
-            .bold(bold)
-            .frame(height: 50)
+        
+        if filled {
+            Text(text)
+                .foregroundColor(textColor)
+                .bold(bold)
+                .frame(height: ScreenHeight.main * 0.06)
+                .frame(maxWidth: .infinity)
+                .background(buttonColor)
+                .cornerRadius(30)
+        } else {
+            HStack {
+                Image(logo ?? "")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20)
+                Text(text)
+                    .foregroundColor(textColor)
+                    .bold(bold)
+            }
+            .frame(height: ScreenHeight.main * 0.06)
             .frame(maxWidth: .infinity)
-            .background(buttonColor)
-            .cornerRadius(30)
+            .overlay {
+                RoundedRectangle(cornerRadius: 30)
+                    .stroke(Color.secondary, lineWidth: 0.5)
+        }
+
+        }
     }
 }
 
 struct AccentButton_Previews: PreviewProvider {
     static var previews: some View {
-        AccentButton(text: "Continue", isButtonActive: true)
+        AccentButton(filled: false, text: "Continue", isButtonActive: true, logo: "googleLogo")
     }
 }

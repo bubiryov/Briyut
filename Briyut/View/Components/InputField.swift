@@ -14,7 +14,7 @@ struct InputField: View {
     var isSecureField: Bool
     var title: String
     var header: String?
-    var heightFrame: CGFloat = 45
+    var heightFrame: CGFloat = ScreenHeight.main * 0.06
     
     var body: some View {
         VStack(alignment: .leading) {
