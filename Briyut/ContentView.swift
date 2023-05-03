@@ -8,19 +8,34 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @EnvironmentObject var vm: AuthenticationViewModel
+    @AppStorage("notEntered") var notEntered = true
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        
+        ZStack {
+            if !vm.notEntered {
+                HomeView()
+            }
         }
-        .padding()
+        .onAppear {
+            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+            vm.notEntered = authUser == nil
+        }
+        .fullScreenCover(isPresented: $notEntered) {
+            AuthenticationView()
+        }
+        .onChange(of: vm.notEntered) { newValue in
+            notEntered = newValue
+        }
+
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(AuthenticationViewModel())
     }
 }
