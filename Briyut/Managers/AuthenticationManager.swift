@@ -23,6 +23,24 @@ final class AuthenticationManager {
     func signOut() throws {
         try Auth.auth().signOut()
     }
+    
+    func getProvider() throws -> [AuthProviderOption] {
+        guard let providerData = Auth.auth().currentUser?.providerData else {
+            throw URLError(.badServerResponse)
+        }
+        
+        var providers: [AuthProviderOption] = []
+        
+        for provider in providerData {
+            if let option = AuthProviderOption(rawValue: provider.providerID) {
+                providers.append(option)
+            } else {
+                assertionFailure("Provider option not found: \(provider.providerID)")
+            }
+        }
+        return providers
+    }
+
 }
 
 // MARK: Email functions
@@ -83,5 +101,19 @@ extension AuthenticationManager {
     func signIn(credential: AuthCredential) async throws -> AuthDataResultModel {
         let authDataResult = try await Auth.auth().signIn(with: credential)
         return AuthDataResultModel(user: authDataResult.user)
+    }
+}
+
+// MARK: Apple functions
+
+extension AuthenticationManager {
+    
+    @discardableResult
+    func signInWithApple(tokens: AppleSignInResultModel) async throws -> AuthDataResultModel {
+        let credential = OAuthProvider.credential(
+            withProviderID: AuthProviderOption.apple.rawValue,
+            idToken: tokens.token,
+            rawNonce: tokens.nonce)
+        return try await signIn(credential: credential)
     }
 }

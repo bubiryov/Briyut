@@ -11,11 +11,9 @@ import FirebaseAuth
 struct AuthDataResultModel {
     let uid: String
     let email: String?
-    let isVerified: Bool?
     
     init(user: User) {
         self.uid = user.uid
         self.email = user.email
-        self.isVerified = user.isEmailVerified
     }
 }

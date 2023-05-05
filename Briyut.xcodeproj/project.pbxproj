@@ -32,9 +32,22 @@
 		899EC5CD2A00579300C90D49 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5CC2A00579300C90D49 /* AuthenticationView.swift */; };
 		899EC5CF2A0057EE00C90D49 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5CE2A0057EE00C90D49 /* RegistrationView.swift */; };
 		899EC5D12A00596D00C90D49 /* LabelledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5D02A00596D00C90D49 /* LabelledDivider.swift */; };
+		89A17E562A03B36100C92A58 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E552A03B36100C92A58 /* SignInWithAppleButton.swift */; };
+		89A17E582A03C8BD00C92A58 /* AppleAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E572A03C8BD00C92A58 /* AppleAuthenticationManager.swift */; };
+		89A17E5A2A03C8E300C92A58 /* AppleSignInResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E592A03C8E300C92A58 /* AppleSignInResultModel.swift */; };
+		89A17E5C2A03C9B200C92A58 /* AuthProviderOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E5B2A03C9B200C92A58 /* AuthProviderOption.swift */; };
+		89C5904E2A051AFB00975E50 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C5904D2A051AFB00975E50 /* BackButton.swift */; };
+		89C590502A05291800975E50 /* BarButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C5904F2A05291800975E50 /* BarButtonView.swift */; };
+		89C590522A052B4700975E50 /* BarTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C590512A052B4700975E50 /* BarTitle.swift */; };
+		89C590542A05642B00975E50 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C590532A05642B00975E50 /* TabBar.swift */; };
+		89C590562A0570B000975E50 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C590552A0570B000975E50 /* RootView.swift */; };
+		89C590592A058B0C00975E50 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 89C590582A058B0C00975E50 /* FirebaseFirestore */; };
+		89C5905B2A058B0C00975E50 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 89C5905A2A058B0C00975E50 /* FirebaseFirestoreSwift */; };
+		89C5905E2A059DD800975E50 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C5905D2A059DD800975E50 /* UserManager.swift */; };
+		89C590602A059EF300975E50 /* DBUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C5905F2A059EF300975E50 /* DBUser.swift */; };
 		89CA5AAC2A027A1E00695069 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AAB2A027A1E00695069 /* ResetPasswordView.swift */; };
 		89CA5AAE2A02911600695069 /* PhoneAuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AAD2A02911600695069 /* PhoneAuthenticationView.swift */; };
-		89CA5AB02A02D9E000695069 /* Extetnsions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AAF2A02D9E000695069 /* Extetnsions.swift */; };
+		89CA5AB02A02D9E000695069 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AAF2A02D9E000695069 /* Extensions.swift */; };
 		89CA5AB32A02F40E00695069 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 89CA5AB22A02F40E00695069 /* GoogleSignIn */; };
 		89CA5AB52A02F40E00695069 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 89CA5AB42A02F40E00695069 /* GoogleSignInSwift */; };
 		89CA5AB72A02FCC700695069 /* GoogleAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AB62A02FCC700695069 /* GoogleAuthenticationManager.swift */; };
@@ -85,9 +98,20 @@
 		899EC5CC2A00579300C90D49 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		899EC5CE2A0057EE00C90D49 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
 		899EC5D02A00596D00C90D49 /* LabelledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledDivider.swift; sourceTree = "<group>"; };
+		89A17E552A03B36100C92A58 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
+		89A17E572A03C8BD00C92A58 /* AppleAuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthenticationManager.swift; sourceTree = "<group>"; };
+		89A17E592A03C8E300C92A58 /* AppleSignInResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInResultModel.swift; sourceTree = "<group>"; };
+		89A17E5B2A03C9B200C92A58 /* AuthProviderOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProviderOption.swift; sourceTree = "<group>"; };
+		89C5904D2A051AFB00975E50 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
+		89C5904F2A05291800975E50 /* BarButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarButtonView.swift; sourceTree = "<group>"; };
+		89C590512A052B4700975E50 /* BarTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarTitle.swift; sourceTree = "<group>"; };
+		89C590532A05642B00975E50 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
+		89C590552A0570B000975E50 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		89C5905D2A059DD800975E50 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		89C5905F2A059EF300975E50 /* DBUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBUser.swift; sourceTree = "<group>"; };
 		89CA5AAB2A027A1E00695069 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		89CA5AAD2A02911600695069 /* PhoneAuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthenticationView.swift; sourceTree = "<group>"; };
-		89CA5AAF2A02D9E000695069 /* Extetnsions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extetnsions.swift; sourceTree = "<group>"; };
+		89CA5AAF2A02D9E000695069 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		89CA5AB62A02FCC700695069 /* GoogleAuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthenticationManager.swift; sourceTree = "<group>"; };
 		89CA5AB82A02FCE100695069 /* GoogleSignInResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInResultModel.swift; sourceTree = "<group>"; };
 		89CA5ABA2A02FD3200695069 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -101,8 +125,10 @@
 				89CA5AB52A02F40E00695069 /* GoogleSignInSwift in Frameworks */,
 				899EC5A22A000E1300C90D49 /* FirebaseAnalyticsSwift in Frameworks */,
 				89CA5AB32A02F40E00695069 /* GoogleSignIn in Frameworks */,
+				89C5905B2A058B0C00975E50 /* FirebaseFirestoreSwift in Frameworks */,
 				899EC5A42A000E1300C90D49 /* FirebaseAuth in Frameworks */,
 				899EC5A02A000E1300C90D49 /* FirebaseAnalytics in Frameworks */,
+				89C590592A058B0C00975E50 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +157,7 @@
 				899EC58B2A000A1E00C90D49 /* BriyutUITests */,
 				899EC5A82A00167400C90D49 /* Fonts */,
 				899EC56E2A000A1C00C90D49 /* Products */,
+				89C590572A058B0C00975E50 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -199,12 +226,11 @@
 		899EC5AC2A0018DC00C90D49 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				89C5904A2A05185300975E50 /* Authentication */,
+				89C5904C2A0518AF00975E50 /* Home */,
+				89C5905C2A058C1400975E50 /* Profile */,
 				899EC5B22A001A2500C90D49 /* Components */,
-				899EC5CC2A00579300C90D49 /* AuthenticationView.swift */,
-				89CA5AAB2A027A1E00695069 /* ResetPasswordView.swift */,
-				89CA5AAD2A02911600695069 /* PhoneAuthenticationView.swift */,
-				899EC5CE2A0057EE00C90D49 /* RegistrationView.swift */,
-				899EC5C02A003DBF00C90D49 /* HomeView.swift */,
+				89C590552A0570B000975E50 /* RootView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -213,7 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				899EC5A52A000E6500C90D49 /* AppDelegate.swift */,
-				89CA5AAF2A02D9E000695069 /* Extetnsions.swift */,
+				89CA5AAF2A02D9E000695069 /* Extensions.swift */,
 				89CA5ABA2A02FD3200695069 /* Utilities.swift */,
 			);
 			path = Tools;
@@ -223,9 +249,11 @@
 			isa = PBXGroup;
 			children = (
 				899EC5B52A001A7600C90D49 /* InputField.swift */,
+				89C5904D2A051AFB00975E50 /* BackButton.swift */,
+				89C5904F2A05291800975E50 /* BarButtonView.swift */,
 				899EC5BE2A002FF400C90D49 /* AccentButton.swift */,
-				899EC5D02A00596D00C90D49 /* LabelledDivider.swift */,
-				899EC5B72A001D5C00C90D49 /* LoginView.swift */,
+				89C590512A052B4700975E50 /* BarTitle.swift */,
+				89C590532A05642B00975E50 /* TabBar.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -241,8 +269,9 @@
 		899EC5C42A0041E900C90D49 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				89A17E5D2A03D5DB00C92A58 /* GoogleAndAppleManagers */,
 				899EC5C52A00420C00C90D49 /* AuthenticationManager.swift */,
-				89CA5AB62A02FCC700695069 /* GoogleAuthenticationManager.swift */,
+				89C5905D2A059DD800975E50 /* UserManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -252,8 +281,64 @@
 			children = (
 				899EC5C82A00434A00C90D49 /* AuthDataResultModel.swift */,
 				89CA5AB82A02FCE100695069 /* GoogleSignInResultModel.swift */,
+				89A17E592A03C8E300C92A58 /* AppleSignInResultModel.swift */,
+				89A17E5B2A03C9B200C92A58 /* AuthProviderOption.swift */,
+				89C5905F2A059EF300975E50 /* DBUser.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		89A17E5D2A03D5DB00C92A58 /* GoogleAndAppleManagers */ = {
+			isa = PBXGroup;
+			children = (
+				89CA5AB62A02FCC700695069 /* GoogleAuthenticationManager.swift */,
+				89A17E572A03C8BD00C92A58 /* AppleAuthenticationManager.swift */,
+			);
+			path = GoogleAndAppleManagers;
+			sourceTree = "<group>";
+		};
+		89C5904A2A05185300975E50 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				89C5904B2A05188000975E50 /* AuthComponents */,
+				899EC5CC2A00579300C90D49 /* AuthenticationView.swift */,
+				89CA5AAD2A02911600695069 /* PhoneAuthenticationView.swift */,
+				89CA5AAB2A027A1E00695069 /* ResetPasswordView.swift */,
+				899EC5CE2A0057EE00C90D49 /* RegistrationView.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		89C5904B2A05188000975E50 /* AuthComponents */ = {
+			isa = PBXGroup;
+			children = (
+				89A17E552A03B36100C92A58 /* SignInWithAppleButton.swift */,
+				899EC5B72A001D5C00C90D49 /* LoginView.swift */,
+				899EC5D02A00596D00C90D49 /* LabelledDivider.swift */,
+			);
+			path = AuthComponents;
+			sourceTree = "<group>";
+		};
+		89C5904C2A0518AF00975E50 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				899EC5C02A003DBF00C90D49 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		89C590572A058B0C00975E50 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		89C5905C2A058C1400975E50 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -278,6 +363,8 @@
 				899EC5A32A000E1300C90D49 /* FirebaseAuth */,
 				89CA5AB22A02F40E00695069 /* GoogleSignIn */,
 				89CA5AB42A02F40E00695069 /* GoogleSignInSwift */,
+				89C590582A058B0C00975E50 /* FirebaseFirestore */,
+				89C5905A2A058B0C00975E50 /* FirebaseFirestoreSwift */,
 			);
 			productName = Briyut;
 			productReference = 899EC56D2A000A1C00C90D49 /* Briyut.app */;
@@ -400,25 +487,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89CA5AB02A02D9E000695069 /* Extetnsions.swift in Sources */,
+				89C590542A05642B00975E50 /* TabBar.swift in Sources */,
+				89A17E5C2A03C9B200C92A58 /* AuthProviderOption.swift in Sources */,
+				89A17E562A03B36100C92A58 /* SignInWithAppleButton.swift in Sources */,
+				89CA5AB02A02D9E000695069 /* Extensions.swift in Sources */,
+				89C590562A0570B000975E50 /* RootView.swift in Sources */,
 				899EC5D12A00596D00C90D49 /* LabelledDivider.swift in Sources */,
 				899EC5B82A001D5C00C90D49 /* LoginView.swift in Sources */,
+				89C5905E2A059DD800975E50 /* UserManager.swift in Sources */,
 				899EC5C12A003DBF00C90D49 /* HomeView.swift in Sources */,
 				89CA5AAC2A027A1E00695069 /* ResetPasswordView.swift in Sources */,
 				899EC5C62A00420C00C90D49 /* AuthenticationManager.swift in Sources */,
+				89C5904E2A051AFB00975E50 /* BackButton.swift in Sources */,
 				899EC5CF2A0057EE00C90D49 /* RegistrationView.swift in Sources */,
 				899EC5CB2A00574700C90D49 /* AuthenticationViewModel.swift in Sources */,
 				899EC5A62A000E6500C90D49 /* AppDelegate.swift in Sources */,
 				899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */,
 				899EC5C92A00434A00C90D49 /* AuthDataResultModel.swift in Sources */,
+				89C590502A05291800975E50 /* BarButtonView.swift in Sources */,
 				899EC5CD2A00579300C90D49 /* AuthenticationView.swift in Sources */,
+				89A17E5A2A03C8E300C92A58 /* AppleSignInResultModel.swift in Sources */,
 				89CA5AB72A02FCC700695069 /* GoogleAuthenticationManager.swift in Sources */,
 				89CA5ABB2A02FD3200695069 /* Utilities.swift in Sources */,
 				89CA5AB92A02FCE100695069 /* GoogleSignInResultModel.swift in Sources */,
 				89CA5AAE2A02911600695069 /* PhoneAuthenticationView.swift in Sources */,
+				89C590602A059EF300975E50 /* DBUser.swift in Sources */,
+				89C590522A052B4700975E50 /* BarTitle.swift in Sources */,
 				899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */,
 				899EC5BF2A002FF400C90D49 /* AccentButton.swift in Sources */,
 				899EC5B62A001A7600C90D49 /* InputField.swift in Sources */,
+				89A17E582A03C8BD00C92A58 /* AppleAuthenticationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -587,8 +685,8 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -626,8 +724,8 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -808,6 +906,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 899EC59E2A000E1300C90D49 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		89C590582A058B0C00975E50 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 899EC59E2A000E1300C90D49 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		89C5905A2A058B0C00975E50 /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 899EC59E2A000E1300C90D49 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
 		};
 		89CA5AB22A02F40E00695069 /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;

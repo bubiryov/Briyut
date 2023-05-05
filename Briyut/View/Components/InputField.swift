@@ -14,7 +14,8 @@ struct InputField: View {
     var isSecureField: Bool
     var title: String
     var header: String?
-    var heightFrame: CGFloat = ScreenHeight.main * 0.06
+    var heightFrame: CGFloat = ScreenSize.height * 0.06
+    var cornerRadius = ScreenSize.width / 30
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -40,7 +41,7 @@ struct InputField: View {
                         }
                         .cornerRadius(30)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 30)
+                            RoundedRectangle(cornerRadius: cornerRadius)
                                 .stroke(Color.secondary, lineWidth: 0.5)
                         )
                 } else {
@@ -60,7 +61,7 @@ struct InputField: View {
                         }
                         .cornerRadius(30)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 30)
+                            RoundedRectangle(cornerRadius: cornerRadius)
                                 .stroke(Color.secondary, lineWidth: 0.5)
                         )
                 }
@@ -71,7 +72,7 @@ struct InputField: View {
                     .textInputAutocapitalization(.never)
                     .cornerRadius(30)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 30)
+                        RoundedRectangle(cornerRadius: cornerRadius)
                             .stroke(Color.secondary, lineWidth: 0.5)
                     )
             }

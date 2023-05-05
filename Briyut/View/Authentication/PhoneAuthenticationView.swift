@@ -20,13 +20,16 @@ struct PhoneAuthenticationView: View {
         }
         return true
     }
-    
+        
     var body: some View {
-        VStack(spacing: ScreenHeight.main * 0.03) {
+        VStack(spacing: ScreenSize.height * 0.03) {
+            
+            BarTitle<BackButton, Text>(text: "Phone Sign In", leftButton: BackButton(presentationMode: _presentationMode))
+            
             if sentSms {
                 InputField(field: $code, isSecureField: false, title: "", header: "Code")
                     .keyboardType(.numberPad)
-                
+
                 Button {
                     Task {
                         try await vm.verifyCode(code: code)
@@ -56,16 +59,14 @@ struct PhoneAuthenticationView: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-                .frame(height: ScreenHeight.main * 0.02)
+                .frame(height: ScreenSize.height * 0.02)
             }
             
             Spacer()
         }
-        .navigationTitle("Sign in with phone")
         .padding(.top)
-        .padding(.horizontal, 30)
+        .padding(.horizontal, 20)
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: BackButton(presentationMode: presentationMode))
         .navigationBarTitleDisplayMode(.large)
         .onDisappear {
             vm.errorText = nil

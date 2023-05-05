@@ -16,7 +16,7 @@ struct ContentView: View {
         
         ZStack {
             if !vm.notEntered {
-                HomeView()
+                RootView()
             }
         }
         .onAppear {
@@ -29,7 +29,6 @@ struct ContentView: View {
         .onChange(of: vm.notEntered) { newValue in
             notEntered = newValue
         }
-
     }
 }
 

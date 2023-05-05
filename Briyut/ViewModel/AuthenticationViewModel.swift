@@ -14,11 +14,12 @@ final class AuthenticationViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var authUser: AuthDataResultModel? = nil
+    @Published var authProviders: [AuthProviderOption] = []
     @Published var errorText: String? = nil
     @Published var notEntered = true
     @Published var ID: String? = ""
     
-    func loadAuthUser() {
+    func getAuthUser() {
         self.authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
     }
     
@@ -30,6 +31,12 @@ final class AuthenticationViewModel: ObservableObject {
             }
         } catch  {
             print("Log out error: \(error)")
+        }
+    }
+    
+    func getProvider() {
+        if let providers = try? AuthenticationManager.shared.getProvider() {
+            authProviders = providers
         }
     }
 }
@@ -183,3 +190,17 @@ extension AuthenticationViewModel {
         }
     }
 }
+
+// MARK: Apple functions
+
+extension AuthenticationViewModel {
+            
+    func singInWithApple() async throws {
+        let appleManager = AppleAuthenticationManager()
+        let tokens = try await appleManager.startSignInWithAppleFlow()
+        let authDataResult = try await AuthenticationManager.shared.signInWithApple(tokens: tokens)
+//        let user = DBUser(auth: authDataResult)
+//        try await UserManager.shared.createNewUser(user: user)
+    }
+}
+

@@ -10,16 +10,17 @@ import SwiftUI
 struct HomeView: View {
     
     @EnvironmentObject var vm: AuthenticationViewModel
+    @State private var selectedTab: Tab = .home
     
     var body: some View {
-        Button {
-            Task {
-                try vm.signOut()
-            }
-        } label: {
-            Text("Log out")
+        VStack {
+            Text("Home")
+                .onTapGesture {
+                    Task {
+                        try vm.signOut()
+                    }
+                }
         }
-
     }
 }
 

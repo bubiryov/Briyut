@@ -10,14 +10,13 @@ import SwiftUI
 struct AccentButton: View {
     
     var buttonColor: Color {
-        if isButtonActive {
-            return .blue.opacity(0.2)
-        } else {
-            return .gray.opacity(0.3)
-        }
+        isButtonActive ? Color.mainColor : .gray.opacity(0.3)
     }
+    
     var textColor: Color {
-        if isButtonActive {
+        if isButtonActive && filled {
+            return .white
+        } else if isButtonActive && !filled {
             return .black
         } else {
             return .secondary
@@ -25,17 +24,15 @@ struct AccentButton: View {
     }
     
     var bold: Bool {
-        if isButtonActive {
-            return true
-        } else {
-            return false
-        }
+        isButtonActive ? true : false
     }
     
+    var height: CGFloat = ScreenSize.height * 0.06
     var filled: Bool = true
     var text: String
     var isButtonActive: Bool
     var logo: String? = nil
+    var cornerRadius = ScreenSize.width / 30
     
     var body: some View {
         
@@ -43,27 +40,26 @@ struct AccentButton: View {
             Text(text)
                 .foregroundColor(textColor)
                 .bold(bold)
-                .frame(height: ScreenHeight.main * 0.06)
+                .frame(height: height)
                 .frame(maxWidth: .infinity)
                 .background(buttonColor)
-                .cornerRadius(30)
+                .cornerRadius(cornerRadius)
         } else {
             HStack {
                 Image(logo ?? "")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 20)
+                    .frame(width: 17)
                 Text(text)
                     .foregroundColor(textColor)
                     .bold(bold)
             }
-            .frame(height: ScreenHeight.main * 0.06)
+            .frame(height: height)
             .frame(maxWidth: .infinity)
             .overlay {
-                RoundedRectangle(cornerRadius: 30)
-                    .stroke(Color.secondary, lineWidth: 0.5)
-        }
-
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .stroke(Color.secondary, lineWidth: 1)
+            }
         }
     }
 }
