@@ -14,6 +14,7 @@ struct PhoneAuthenticationView: View {
     @State private var phoneNumber: String = ""
     @State private var code: String = ""
     @State private var sentSms: Bool = false
+    @Binding var notEntered: Bool
     private var activeButton: Bool {
         if phoneNumber.count < 10 || phoneNumber.count > 13 {
             return false
@@ -33,6 +34,7 @@ struct PhoneAuthenticationView: View {
                 Button {
                     Task {
                         try await vm.verifyCode(code: code)
+                        notEntered = false
                     }
                 } label: {
                     AccentButton(text: "Done", isButtonActive: code.count != 6 ? false : true)
@@ -77,7 +79,7 @@ struct PhoneAuthenticationView: View {
 struct PhoneAuthenticationView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            PhoneAuthenticationView()
+            PhoneAuthenticationView(notEntered: .constant(true))
                 .environmentObject(AuthenticationViewModel())
         }
     }

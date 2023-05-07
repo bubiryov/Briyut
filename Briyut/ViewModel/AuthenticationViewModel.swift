@@ -16,7 +16,6 @@ final class AuthenticationViewModel: ObservableObject {
     @Published var authUser: AuthDataResultModel? = nil
     @Published var authProviders: [AuthProviderOption] = []
     @Published var errorText: String? = nil
-    @Published var notEntered = true
     @Published var ID: String? = ""
     
     init() {
@@ -26,18 +25,7 @@ final class AuthenticationViewModel: ObservableObject {
     func getAuthUser() {
         self.authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
     }
-    
-    func signOut() throws {
-        do {
-            try AuthenticationManager.shared.signOut()
-            withAnimation {
-                notEntered = true
-            }
-        } catch  {
-            print("Log out error: \(error)")
-        }
-    }
-    
+        
     func getProvider() {
         if let providers = try? AuthenticationManager.shared.getProvider() {
             authProviders = providers
@@ -78,7 +66,7 @@ extension AuthenticationViewModel {
     func logInWithEmail() async throws {
         do {
             try await AuthenticationManager.shared.signIn(email: email, password: password)
-            notEntered = false
+//            notEntered = false
             email = ""
             password = ""
             errorText = nil
@@ -100,7 +88,6 @@ extension AuthenticationViewModel {
             let user = DBUser(auth: authDataResult, name: nil, dateCreated: Date(), isDoctor: false)
             try await UserManager.shared.createNewUser(user: user)
 
-            notEntered = false
             email = ""
             password = ""
         } catch let error {
@@ -165,7 +152,6 @@ extension AuthenticationViewModel {
                 let user = DBUser(auth: authDataResult, name: nil, dateCreated: Date(), isDoctor: false)
                 try await UserManager.shared.createNewUser(user: user)
 
-                notEntered = false
                 errorText = nil
             } catch {
                 errorText = "Something went wrong"
@@ -193,7 +179,6 @@ extension AuthenticationViewModel {
             let authDataResult = try await googleManager.signInGoogle()
             let user = DBUser(auth: authDataResult, name: nil, dateCreated: Date(), isDoctor: false)
             try await UserManager.shared.createNewUser(user: user)
-            notEntered = false
         } catch {
             print("Error: \(error)")
             return

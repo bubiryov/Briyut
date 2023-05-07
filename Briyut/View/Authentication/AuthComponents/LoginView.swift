@@ -10,6 +10,7 @@ import SwiftUI
 struct LoginView: View {
     
     @EnvironmentObject var vm: AuthenticationViewModel
+    @Binding var notEntered: Bool
     
     var body: some View {
         VStack(spacing: ScreenSize.height * 0.02) {
@@ -20,6 +21,7 @@ struct LoginView: View {
             Button {
                 Task {
                     try await vm.logInWithEmail()
+                    notEntered = false
                 }
             } label: {
                 AccentButton(text: "Login to Briyut", isButtonActive: vm.validate(email: vm.email, password: vm.password, repeatPassword: nil))
@@ -41,13 +43,14 @@ struct LoginView: View {
             Button {
                 Task {
                     try await vm.singInWithGoogle()
+                    notEntered = false
                 }
             } label: {
                 AccentButton(filled: false, text: "Sign in with Google", isButtonActive: true, logo: "googleLogo")
             }
             
             NavigationLink {
-                PhoneAuthenticationView()
+                PhoneAuthenticationView(notEntered: $notEntered)
             } label: {
                 AccentButton(filled: false, text: "Sign in with number", isButtonActive: true, logo: "phoneLogo")
             }
@@ -55,6 +58,7 @@ struct LoginView: View {
             Button {
                 Task {
                     try await vm.singInWithApple()
+                    notEntered = false
                 }
             } label: {
                 SignInWithAppleButton(type: .signIn, style: .whiteOutline)
@@ -76,7 +80,7 @@ struct LoginView: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(notEntered: .constant(true))
             .environmentObject(AuthenticationViewModel())
     }
 }

@@ -10,24 +10,25 @@ import SwiftUI
 struct ContentView: View {
     
     @EnvironmentObject var vm: AuthenticationViewModel
-    @AppStorage("notEntered") var notEntered = true
+    @AppStorage("notEntered") var notEntered2 = true
+    @State private var notEntered = true
 
     var body: some View {
         
         ZStack {
-            if !vm.notEntered {
-                RootView()
+            if !notEntered2 {
+                RootView(notEntered: $notEntered)
             }
         }
         .onAppear {
             let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-            vm.notEntered = authUser == nil
+            notEntered = authUser == nil
         }
-        .fullScreenCover(isPresented: $notEntered) {
-            AuthenticationView()
+        .fullScreenCover(isPresented: $notEntered2) {
+            AuthenticationView(notEntered: $notEntered)
         }
-        .onChange(of: vm.notEntered) { newValue in
-            notEntered = newValue
+        .onChange(of: notEntered) { newValue in
+            notEntered2 = newValue
         }
     }
 }

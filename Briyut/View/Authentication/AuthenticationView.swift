@@ -13,6 +13,7 @@ struct AuthenticationView: View {
     
     @State private var showTipsAlert: Bool = false
     @State private var showResetPasswordView: Bool = false
+    @Binding var notEntered: Bool
     
     var body: some View {
         NavigationView {
@@ -28,7 +29,7 @@ struct AuthenticationView: View {
                 
                 VStack {
                     
-                    LoginView()
+                    LoginView(notEntered: $notEntered)
                     
                     Spacer()
                 }
@@ -67,7 +68,7 @@ struct AuthenticationView: View {
 }
 struct AuthenticationView_Previews: PreviewProvider {
     static var previews: some View {
-        AuthenticationView()
+        AuthenticationView(notEntered: .constant(true))
             .environmentObject(AuthenticationViewModel())
     }
 }

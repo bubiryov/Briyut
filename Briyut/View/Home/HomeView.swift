@@ -7,25 +7,9 @@
 
 import SwiftUI
 
-//@MainActor
-//class ProfileViewModel: ObservableObject {
-//
-//    @Published var user: DBUser? = nil
-//
-//    func loadCurrentUser() async throws {
-//        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
-//        self.user = try await UserManager.shared.getUser(userId: authDataResult.uid)
-//    }
-//
-//    func signOut() throws {
-//        let vm = AuthenticationViewModel()
-//        try vm.signOut()
-//    }
-//}
-
 struct HomeView: View {
-
-//    @State private var selectedTab: Tab = .home
+    
+    @EnvironmentObject var vm: ProfileViewModel
     
     var body: some View {
         VStack {

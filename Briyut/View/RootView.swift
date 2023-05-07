@@ -9,8 +9,9 @@ import SwiftUI
 
 struct RootView: View {
     
-    @EnvironmentObject var vm: AuthenticationViewModel
+    @StateObject var vm = ProfileViewModel()
     @State private var selectedTab: Tab = .home
+    @Binding var notEntered: Bool
     
     var body: some View {
         ZStack {
@@ -18,12 +19,14 @@ struct RootView: View {
                 switch selectedTab {
                 case .home:
                     HomeView()
+                        .environmentObject(vm)
                 case .plus:
                     HomeView()
                 case .calendar:
                     HomeView()
                 case .profile:
-                    ProfileView()
+                    ProfileView(notEntered: $notEntered)
+                        .environmentObject(vm)
                 }
             }
             .padding(.horizontal, 20)
@@ -43,7 +46,7 @@ struct RootView: View {
 
 struct RootView_Previews: PreviewProvider {
     static var previews: some View {
-        RootView()
+        RootView(notEntered: .constant(true))
             .environmentObject(AuthenticationViewModel())
     }
 }
