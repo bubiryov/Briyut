@@ -15,10 +15,15 @@ struct RootView: View {
     var body: some View {
         ZStack {
             VStack {
-                if selectedTab == .home {
+                switch selectedTab {
+                case .home:
                     HomeView()
-                } else {
-                    
+                case .plus:
+                    HomeView()
+                case .calendar:
+                    HomeView()
+                case .profile:
+                    ProfileView()
                 }
             }
             .padding(.horizontal, 20)

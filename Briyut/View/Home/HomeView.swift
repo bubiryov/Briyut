@@ -7,19 +7,29 @@
 
 import SwiftUI
 
+//@MainActor
+//class ProfileViewModel: ObservableObject {
+//
+//    @Published var user: DBUser? = nil
+//
+//    func loadCurrentUser() async throws {
+//        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+//        self.user = try await UserManager.shared.getUser(userId: authDataResult.uid)
+//    }
+//
+//    func signOut() throws {
+//        let vm = AuthenticationViewModel()
+//        try vm.signOut()
+//    }
+//}
+
 struct HomeView: View {
-    
-    @EnvironmentObject var vm: AuthenticationViewModel
-    @State private var selectedTab: Tab = .home
+
+//    @State private var selectedTab: Tab = .home
     
     var body: some View {
         VStack {
             Text("Home")
-                .onTapGesture {
-                    Task {
-                        try vm.signOut()
-                    }
-                }
         }
     }
 }
@@ -27,6 +37,5 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
-            .environmentObject(AuthenticationViewModel())
     }
 }

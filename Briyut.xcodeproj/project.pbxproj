@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		890C28BA2A0652FE000DB1A6 /* ProcedureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C28B92A0652FE000DB1A6 /* ProcedureModel.swift */; };
+		890C28BC2A06D3F1000DB1A6 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */; };
 		899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5702A000A1C00C90D49 /* BriyutApp.swift */; };
 		899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5722A000A1C00C90D49 /* ContentView.swift */; };
 		899EC5752A000A1E00C90D49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 899EC5742A000A1E00C90D49 /* Assets.xcassets */; };
@@ -73,6 +75,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		890C28B92A0652FE000DB1A6 /* ProcedureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureModel.swift; sourceTree = "<group>"; };
+		890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		899EC56D2A000A1C00C90D49 /* Briyut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Briyut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		899EC5702A000A1C00C90D49 /* BriyutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriyutApp.swift; sourceTree = "<group>"; };
 		899EC5722A000A1C00C90D49 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -284,6 +288,7 @@
 				89A17E592A03C8E300C92A58 /* AppleSignInResultModel.swift */,
 				89A17E5B2A03C9B200C92A58 /* AuthProviderOption.swift */,
 				89C5905F2A059EF300975E50 /* DBUser.swift */,
+				890C28B92A0652FE000DB1A6 /* ProcedureModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -337,6 +342,7 @@
 		89C5905C2A058C1400975E50 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -499,6 +505,7 @@
 				89CA5AAC2A027A1E00695069 /* ResetPasswordView.swift in Sources */,
 				899EC5C62A00420C00C90D49 /* AuthenticationManager.swift in Sources */,
 				89C5904E2A051AFB00975E50 /* BackButton.swift in Sources */,
+				890C28BA2A0652FE000DB1A6 /* ProcedureModel.swift in Sources */,
 				899EC5CF2A0057EE00C90D49 /* RegistrationView.swift in Sources */,
 				899EC5CB2A00574700C90D49 /* AuthenticationViewModel.swift in Sources */,
 				899EC5A62A000E6500C90D49 /* AppDelegate.swift in Sources */,
@@ -510,6 +517,7 @@
 				89CA5AB72A02FCC700695069 /* GoogleAuthenticationManager.swift in Sources */,
 				89CA5ABB2A02FD3200695069 /* Utilities.swift in Sources */,
 				89CA5AB92A02FCE100695069 /* GoogleSignInResultModel.swift in Sources */,
+				890C28BC2A06D3F1000DB1A6 /* ProfileView.swift in Sources */,
 				89CA5AAE2A02911600695069 /* PhoneAuthenticationView.swift in Sources */,
 				89C590602A059EF300975E50 /* DBUser.swift in Sources */,
 				89C590522A052B4700975E50 /* BarTitle.swift in Sources */,

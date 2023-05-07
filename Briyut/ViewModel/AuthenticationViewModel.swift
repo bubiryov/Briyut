@@ -19,6 +19,10 @@ final class AuthenticationViewModel: ObservableObject {
     @Published var notEntered = true
     @Published var ID: String? = ""
     
+    init() {
+        print("INIT")
+    }
+    
     func getAuthUser() {
         self.authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
     }
@@ -93,6 +97,9 @@ extension AuthenticationViewModel {
     func createUserWithEmail() async throws {
         do {
             let authDataResult = try await AuthenticationManager.shared.createUser(email: email, password: password)
+            let user = DBUser(auth: authDataResult, name: nil, dateCreated: Date(), isDoctor: false)
+            try await UserManager.shared.createNewUser(user: user)
+
             notEntered = false
             email = ""
             password = ""
@@ -154,7 +161,10 @@ extension AuthenticationViewModel {
     func verifyCode(code: String) async throws {
         if let ID {
             do {
-                try await AuthenticationManager.shared.verifyCode(ID: ID, code: code)
+                let authDataResult = try await AuthenticationManager.shared.verifyCode(ID: ID, code: code)
+                let user = DBUser(auth: authDataResult, name: nil, dateCreated: Date(), isDoctor: false)
+                try await UserManager.shared.createNewUser(user: user)
+
                 notEntered = false
                 errorText = nil
             } catch {
@@ -181,8 +191,8 @@ extension AuthenticationViewModel {
         let googleManager = GoogleAuthenticationManager()
         do {
             let authDataResult = try await googleManager.signInGoogle()
-//            let user = DBUser(auth: authDataResult)
-//            try await UserManager.shared.createNewUser(user: user)
+            let user = DBUser(auth: authDataResult, name: nil, dateCreated: Date(), isDoctor: false)
+            try await UserManager.shared.createNewUser(user: user)
             notEntered = false
         } catch {
             print("Error: \(error)")
@@ -199,8 +209,8 @@ extension AuthenticationViewModel {
         let appleManager = AppleAuthenticationManager()
         let tokens = try await appleManager.startSignInWithAppleFlow()
         let authDataResult = try await AuthenticationManager.shared.signInWithApple(tokens: tokens)
-//        let user = DBUser(auth: authDataResult)
-//        try await UserManager.shared.createNewUser(user: user)
+        let user = DBUser(auth: authDataResult, name: nil, dateCreated: Date(), isDoctor: false)
+        try await UserManager.shared.createNewUser(user: user)
     }
 }
 
