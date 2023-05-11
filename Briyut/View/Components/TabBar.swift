@@ -34,9 +34,7 @@ struct TabBar: View {
                     .background(selectedTab == tab ? Color.mainColor : nil)
                     .cornerRadius(20)
                     .onTapGesture {
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            selectedTab = tab
-                        }
+                        selectedTab = tab
                     }
 
                 Spacer()

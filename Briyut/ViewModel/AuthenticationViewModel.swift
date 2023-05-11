@@ -14,7 +14,6 @@ final class AuthenticationViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var authUser: AuthDataResultModel? = nil
-    @Published var authProviders: [AuthProviderOption] = []
     @Published var errorText: String? = nil
     @Published var ID: String? = ""
     
@@ -24,12 +23,6 @@ final class AuthenticationViewModel: ObservableObject {
     
     func getAuthUser() {
         self.authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-    }
-        
-    func getProvider() {
-        if let providers = try? AuthenticationManager.shared.getProvider() {
-            authProviders = providers
-        }
     }
 }
 
@@ -66,7 +59,6 @@ extension AuthenticationViewModel {
     func logInWithEmail() async throws {
         do {
             try await AuthenticationManager.shared.signIn(email: email, password: password)
-//            notEntered = false
             email = ""
             password = ""
             errorText = nil
@@ -85,9 +77,8 @@ extension AuthenticationViewModel {
     func createUserWithEmail() async throws {
         do {
             let authDataResult = try await AuthenticationManager.shared.createUser(email: email, password: password)
-            let user = DBUser(auth: authDataResult, name: nil, dateCreated: Date(), isDoctor: false)
+            let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil)
             try await UserManager.shared.createNewUser(user: user)
-
             email = ""
             password = ""
         } catch let error {
@@ -148,8 +139,8 @@ extension AuthenticationViewModel {
     func verifyCode(code: String) async throws {
         if let ID {
             do {
-                let authDataResult = try await AuthenticationManager.shared.verifyCode(ID: ID, code: code)
-                let user = DBUser(auth: authDataResult, name: nil, dateCreated: Date(), isDoctor: false)
+                let (authDataResult, phoneNumber) = try await AuthenticationManager.shared.verifyCode(ID: ID, code: code)
+                let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: phoneNumber)
                 try await UserManager.shared.createNewUser(user: user)
 
                 errorText = nil
@@ -175,13 +166,12 @@ extension AuthenticationViewModel {
 extension AuthenticationViewModel {
     func singInWithGoogle() async throws {
         let googleManager = GoogleAuthenticationManager()
+        let authDataResult = try await googleManager.signInGoogle()
         do {
-            let authDataResult = try await googleManager.signInGoogle()
-            let user = DBUser(auth: authDataResult, name: nil, dateCreated: Date(), isDoctor: false)
-            try await UserManager.shared.createNewUser(user: user)
+            try await UserManager.shared.getUser(userId: authDataResult.uid)
         } catch {
-            print("Error: \(error)")
-            return
+            let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil)
+            try await UserManager.shared.createNewUser(user: user)
         }
     }
 }
@@ -194,7 +184,7 @@ extension AuthenticationViewModel {
         let appleManager = AppleAuthenticationManager()
         let tokens = try await appleManager.startSignInWithAppleFlow()
         let authDataResult = try await AuthenticationManager.shared.signInWithApple(tokens: tokens)
-        let user = DBUser(auth: authDataResult, name: nil, dateCreated: Date(), isDoctor: false)
+        let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil)
         try await UserManager.shared.createNewUser(user: user)
     }
 }

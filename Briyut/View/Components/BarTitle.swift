@@ -12,6 +12,7 @@ struct BarTitle<V1: View, V2: View>: View {
     var text: String
     var leftButton: V1? = nil
     var rightButton: V2? = nil
+    var frame: CGFloat = ScreenSize.height * 0.06
 
     
     var body: some View {
@@ -35,6 +36,7 @@ struct BarTitle<V1: View, V2: View>: View {
             }
         }
         .frame(maxWidth: .infinity)
+        .frame(height: frame)
     }
 }
 

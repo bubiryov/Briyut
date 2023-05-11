@@ -82,10 +82,11 @@ extension AuthenticationManager {
     }
     
     @discardableResult
-    func verifyCode(ID: String, code: String) async throws -> AuthDataResultModel {
+    func verifyCode(ID: String, code: String) async throws -> (AuthDataResultModel, String?) {
         let credential = PhoneAuthProvider.provider().credential(withVerificationID: ID, verificationCode: code)
         let authDataResult = try await Auth.auth().signIn(with: credential)
-        return AuthDataResultModel(user: authDataResult.user)
+        let number = Auth.auth().currentUser?.phoneNumber
+        return (AuthDataResultModel(user: authDataResult.user), number)
     }
 }
 

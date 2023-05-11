@@ -15,8 +15,9 @@ struct BackButton: View {
         Button {
             presentationMode.wrappedValue.dismiss()
         } label: {
-            BarButtonView(image: "chevron.backward")
+            BarButtonView(image: "back", scale: 0.35)
         }
+        .buttonStyle(.plain)
 
     }
 }

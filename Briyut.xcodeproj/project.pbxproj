@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		890C28BA2A0652FE000DB1A6 /* ProcedureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C28B92A0652FE000DB1A6 /* ProcedureModel.swift */; };
 		890C28BC2A06D3F1000DB1A6 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */; };
+		898FD9B52A08F4E000725697 /* AllProcedures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B42A08F4E000725697 /* AllProcedures.swift */; };
+		898FD9B72A08FDE000725697 /* AddProcedureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B62A08FDE000725697 /* AddProcedureView.swift */; };
+		898FD9BA2A0908FD00725697 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B92A0908FD00725697 /* CalendarView.swift */; };
+		898FD9BC2A0910F100725697 /* AddDoctorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BB2A0910F100725697 /* AddDoctorView.swift */; };
+		898FD9BE2A0935E100725697 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BD2A0935E100725697 /* ProfileViewModel.swift */; };
+		898FD9C02A096D4B00725697 /* DoctorsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BF2A096D4B00725697 /* DoctorsList.swift */; };
 		899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5702A000A1C00C90D49 /* BriyutApp.swift */; };
 		899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5722A000A1C00C90D49 /* ContentView.swift */; };
 		899EC5752A000A1E00C90D49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 899EC5742A000A1E00C90D49 /* Assets.xcassets */; };
@@ -47,6 +53,7 @@
 		89C5905B2A058B0C00975E50 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 89C5905A2A058B0C00975E50 /* FirebaseFirestoreSwift */; };
 		89C5905E2A059DD800975E50 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C5905D2A059DD800975E50 /* UserManager.swift */; };
 		89C590602A059EF300975E50 /* DBUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C5905F2A059EF300975E50 /* DBUser.swift */; };
+		89C9E2F02A0BC8F600B16CBF /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 89C9E2EF2A0BC8F600B16CBF /* CachedAsyncImage */; };
 		89CA5AAC2A027A1E00695069 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AAB2A027A1E00695069 /* ResetPasswordView.swift */; };
 		89CA5AAE2A02911600695069 /* PhoneAuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AAD2A02911600695069 /* PhoneAuthenticationView.swift */; };
 		89CA5AB02A02D9E000695069 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AAF2A02D9E000695069 /* Extensions.swift */; };
@@ -55,6 +62,8 @@
 		89CA5AB72A02FCC700695069 /* GoogleAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AB62A02FCC700695069 /* GoogleAuthenticationManager.swift */; };
 		89CA5AB92A02FCE100695069 /* GoogleSignInResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AB82A02FCE100695069 /* GoogleSignInResultModel.swift */; };
 		89CA5ABB2A02FD3200695069 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5ABA2A02FD3200695069 /* Utilities.swift */; };
+		89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */; };
+		89D37B792A0A87D100A7C933 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B782A0A87D100A7C933 /* EditProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +86,12 @@
 /* Begin PBXFileReference section */
 		890C28B92A0652FE000DB1A6 /* ProcedureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureModel.swift; sourceTree = "<group>"; };
 		890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		898FD9B42A08F4E000725697 /* AllProcedures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllProcedures.swift; sourceTree = "<group>"; };
+		898FD9B62A08FDE000725697 /* AddProcedureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProcedureView.swift; sourceTree = "<group>"; };
+		898FD9B92A0908FD00725697 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		898FD9BB2A0910F100725697 /* AddDoctorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDoctorView.swift; sourceTree = "<group>"; };
+		898FD9BD2A0935E100725697 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		898FD9BF2A096D4B00725697 /* DoctorsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorsList.swift; sourceTree = "<group>"; };
 		899EC56D2A000A1C00C90D49 /* Briyut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Briyut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		899EC5702A000A1C00C90D49 /* BriyutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriyutApp.swift; sourceTree = "<group>"; };
 		899EC5722A000A1C00C90D49 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -119,6 +134,8 @@
 		89CA5AB62A02FCC700695069 /* GoogleAuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthenticationManager.swift; sourceTree = "<group>"; };
 		89CA5AB82A02FCE100695069 /* GoogleSignInResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInResultModel.swift; sourceTree = "<group>"; };
 		89CA5ABA2A02FD3200695069 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureManager.swift; sourceTree = "<group>"; };
+		89D37B782A0A87D100A7C933 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +144,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89CA5AB52A02F40E00695069 /* GoogleSignInSwift in Frameworks */,
+				89C9E2F02A0BC8F600B16CBF /* CachedAsyncImage in Frameworks */,
 				899EC5A22A000E1300C90D49 /* FirebaseAnalyticsSwift in Frameworks */,
 				89CA5AB32A02F40E00695069 /* GoogleSignIn in Frameworks */,
 				89C5905B2A058B0C00975E50 /* FirebaseFirestoreSwift in Frameworks */,
@@ -153,6 +171,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		898FD9B32A08F4B800725697 /* Plus */ = {
+			isa = PBXGroup;
+			children = (
+				898FD9B42A08F4E000725697 /* AllProcedures.swift */,
+				898FD9B62A08FDE000725697 /* AddProcedureView.swift */,
+				898FD9BF2A096D4B00725697 /* DoctorsList.swift */,
+			);
+			path = Plus;
+			sourceTree = "<group>";
+		};
+		898FD9B82A0908C700725697 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				898FD9B92A0908FD00725697 /* CalendarView.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
 		899EC5642A000A1C00C90D49 = {
 			isa = PBXGroup;
 			children = (
@@ -232,6 +268,8 @@
 			children = (
 				89C5904A2A05185300975E50 /* Authentication */,
 				89C5904C2A0518AF00975E50 /* Home */,
+				898FD9B32A08F4B800725697 /* Plus */,
+				898FD9B82A0908C700725697 /* Calendar */,
 				89C5905C2A058C1400975E50 /* Profile */,
 				899EC5B22A001A2500C90D49 /* Components */,
 				89C590552A0570B000975E50 /* RootView.swift */,
@@ -266,6 +304,7 @@
 			isa = PBXGroup;
 			children = (
 				899EC5CA2A00574700C90D49 /* AuthenticationViewModel.swift */,
+				898FD9BD2A0935E100725697 /* ProfileViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -276,6 +315,7 @@
 				89A17E5D2A03D5DB00C92A58 /* GoogleAndAppleManagers */,
 				899EC5C52A00420C00C90D49 /* AuthenticationManager.swift */,
 				89C5905D2A059DD800975E50 /* UserManager.swift */,
+				89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -343,6 +383,8 @@
 			isa = PBXGroup;
 			children = (
 				890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */,
+				898FD9BB2A0910F100725697 /* AddDoctorView.swift */,
+				89D37B782A0A87D100A7C933 /* EditProfileView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -371,6 +413,7 @@
 				89CA5AB42A02F40E00695069 /* GoogleSignInSwift */,
 				89C590582A058B0C00975E50 /* FirebaseFirestore */,
 				89C5905A2A058B0C00975E50 /* FirebaseFirestoreSwift */,
+				89C9E2EF2A0BC8F600B16CBF /* CachedAsyncImage */,
 			);
 			productName = Briyut;
 			productReference = 899EC56D2A000A1C00C90D49 /* Briyut.app */;
@@ -447,6 +490,7 @@
 			packageReferences = (
 				899EC59E2A000E1300C90D49 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				89CA5AB12A02F40E00695069 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				89C9E2EE2A0BC8F600B16CBF /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 			);
 			productRefGroup = 899EC56E2A000A1C00C90D49 /* Products */;
 			projectDirPath = "";
@@ -495,26 +539,34 @@
 			files = (
 				89C590542A05642B00975E50 /* TabBar.swift in Sources */,
 				89A17E5C2A03C9B200C92A58 /* AuthProviderOption.swift in Sources */,
+				898FD9C02A096D4B00725697 /* DoctorsList.swift in Sources */,
 				89A17E562A03B36100C92A58 /* SignInWithAppleButton.swift in Sources */,
 				89CA5AB02A02D9E000695069 /* Extensions.swift in Sources */,
 				89C590562A0570B000975E50 /* RootView.swift in Sources */,
 				899EC5D12A00596D00C90D49 /* LabelledDivider.swift in Sources */,
+				898FD9B52A08F4E000725697 /* AllProcedures.swift in Sources */,
 				899EC5B82A001D5C00C90D49 /* LoginView.swift in Sources */,
 				89C5905E2A059DD800975E50 /* UserManager.swift in Sources */,
+				89D37B792A0A87D100A7C933 /* EditProfileView.swift in Sources */,
 				899EC5C12A003DBF00C90D49 /* HomeView.swift in Sources */,
 				89CA5AAC2A027A1E00695069 /* ResetPasswordView.swift in Sources */,
 				899EC5C62A00420C00C90D49 /* AuthenticationManager.swift in Sources */,
 				89C5904E2A051AFB00975E50 /* BackButton.swift in Sources */,
 				890C28BA2A0652FE000DB1A6 /* ProcedureModel.swift in Sources */,
 				899EC5CF2A0057EE00C90D49 /* RegistrationView.swift in Sources */,
+				898FD9BA2A0908FD00725697 /* CalendarView.swift in Sources */,
 				899EC5CB2A00574700C90D49 /* AuthenticationViewModel.swift in Sources */,
+				89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */,
+				898FD9BC2A0910F100725697 /* AddDoctorView.swift in Sources */,
 				899EC5A62A000E6500C90D49 /* AppDelegate.swift in Sources */,
+				898FD9B72A08FDE000725697 /* AddProcedureView.swift in Sources */,
 				899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */,
 				899EC5C92A00434A00C90D49 /* AuthDataResultModel.swift in Sources */,
 				89C590502A05291800975E50 /* BarButtonView.swift in Sources */,
 				899EC5CD2A00579300C90D49 /* AuthenticationView.swift in Sources */,
 				89A17E5A2A03C8E300C92A58 /* AppleSignInResultModel.swift in Sources */,
 				89CA5AB72A02FCC700695069 /* GoogleAuthenticationManager.swift in Sources */,
+				898FD9BE2A0935E100725697 /* ProfileViewModel.swift in Sources */,
 				89CA5ABB2A02FD3200695069 /* Utilities.swift in Sources */,
 				89CA5AB92A02FCE100695069 /* GoogleSignInResultModel.swift in Sources */,
 				890C28BC2A06D3F1000DB1A6 /* ProfileView.swift in Sources */,
@@ -889,6 +941,14 @@
 				version = 10.9.0;
 			};
 		};
+		89C9E2EE2A0BC8F600B16CBF /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
+			requirement = {
+				kind = exactVersion;
+				version = 2.1.1;
+			};
+		};
 		89CA5AB12A02F40E00695069 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS.git";
@@ -924,6 +984,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 899EC59E2A000E1300C90D49 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		89C9E2EF2A0BC8F600B16CBF /* CachedAsyncImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89C9E2EE2A0BC8F600B16CBF /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
+			productName = CachedAsyncImage;
 		};
 		89CA5AB22A02F40E00695069 /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;

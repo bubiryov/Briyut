@@ -10,7 +10,7 @@ import SwiftUI
 struct AccentButton: View {
     
     var buttonColor: Color {
-        isButtonActive ? Color.mainColor : .gray.opacity(0.3)
+        isButtonActive ? Color.mainColor : Color.secondary.opacity(0.1)
     }
     
     var textColor: Color {

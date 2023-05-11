@@ -39,7 +39,7 @@ struct InputField: View {
                                 }
                             }
                         }
-                        .cornerRadius(30)
+                        .cornerRadius(cornerRadius)
                         .overlay(
                             RoundedRectangle(cornerRadius: cornerRadius)
                                 .stroke(Color.secondary, lineWidth: 0.5)
@@ -59,7 +59,7 @@ struct InputField: View {
                                 }
                             }
                         }
-                        .cornerRadius(30)
+                        .cornerRadius(cornerRadius)
                         .overlay(
                             RoundedRectangle(cornerRadius: cornerRadius)
                                 .stroke(Color.secondary, lineWidth: 0.5)
@@ -70,7 +70,7 @@ struct InputField: View {
                     .padding()
                     .frame(height: heightFrame)
                     .textInputAutocapitalization(.never)
-                    .cornerRadius(30)
+                    .cornerRadius(cornerRadius)
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .stroke(Color.secondary, lineWidth: 0.5)
@@ -94,6 +94,6 @@ extension InputField {
 
 struct InputField_Previews: PreviewProvider {
     static var previews: some View {
-        InputField(field: .constant(""), showEye: false, isSecureField: true, title: "briyut@gmail.com", header: "Your email address")
+        InputField(field: .constant(""), showEye: false, isSecureField: false, title: "briyut@gmail.com", header: "Your email address")
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct RegistrationView: View {
     
     @EnvironmentObject var vm: AuthenticationViewModel
+    @Binding var notEntered: Bool
     @State private var repeatPassword: String = ""
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -28,6 +29,7 @@ struct RegistrationView: View {
                 Button {
                     Task {
                         try await vm.createUserWithEmail()
+                        notEntered = false
                     }
                 } label: {
                     AccentButton(text: "Create an account", isButtonActive: vm.validate(email: vm.email, password: vm.password, repeatPassword: repeatPassword))
@@ -48,7 +50,7 @@ struct RegistrationView: View {
 struct RegistrationView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            RegistrationView()
+            RegistrationView(notEntered: .constant(false))
                 .environmentObject(AuthenticationViewModel())
         }
     }

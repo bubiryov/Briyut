@@ -7,10 +7,15 @@
 
 import Foundation
 
-struct ProcedureModel: Codable {
-    let id: String
+struct ProcedureModel: Codable, Equatable {
+    let procedureId: String
     let name: String
     let duration: Int
-    let cost: Double
-    let doctor: String
+    let cost: Int
+    let availableDoctors: [String]
+    
+    static func == (lhs: ProcedureModel, rhs: ProcedureModel) -> Bool {
+        return lhs.procedureId == rhs.procedureId
+    }
+
 }

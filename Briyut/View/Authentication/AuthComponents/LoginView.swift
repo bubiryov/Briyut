@@ -20,8 +20,12 @@ struct LoginView: View {
             
             Button {
                 Task {
-                    try await vm.logInWithEmail()
-                    notEntered = false
+                    do {
+                        try await vm.logInWithEmail()
+                        notEntered = false
+                    } catch let error {
+                        print(error.localizedDescription)
+                    }
                 }
             } label: {
                 AccentButton(text: "Login to Briyut", isButtonActive: vm.validate(email: vm.email, password: vm.password, repeatPassword: nil))
@@ -42,8 +46,13 @@ struct LoginView: View {
             
             Button {
                 Task {
-                    try await vm.singInWithGoogle()
-                    notEntered = false
+                    do {
+                        try await vm.singInWithGoogle()
+                        notEntered = false
+                        return
+                    } catch {
+                        
+                    }
                 }
             } label: {
                 AccentButton(filled: false, text: "Sign in with Google", isButtonActive: true, logo: "googleLogo")
@@ -66,7 +75,7 @@ struct LoginView: View {
             .frame(height: ScreenSize.height * 0.06)
             
             NavigationLink {
-                RegistrationView()
+                RegistrationView(notEntered: $notEntered)
             } label: {
                 Text("Create an account")
                     .font(.subheadline)

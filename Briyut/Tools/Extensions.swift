@@ -25,3 +25,29 @@ extension Color {
     static let darkColor = Color("DarkColor")
     static let lightBlueColor = Color("LightBlueColor")
 }
+
+func bottonPadding() -> CGFloat {
+    if ScreenSize.height < 750 {
+        return ScreenSize.height * 0.02
+    } else {
+        return ScreenSize.height * 0.035
+    }
+}
+
+func topPadding() -> CGFloat {
+    if ScreenSize.height < 750 {
+        return ScreenSize.height * 0.015
+    } else {
+        return 0
+    }
+}
+
+func tabBarHeight() -> CGFloat {
+    if ScreenSize.height < 750 {
+        return (ScreenSize.width / 15) + 45
+    } else {
+        return (ScreenSize.width / 15) + 30
+    }
+}
+
+

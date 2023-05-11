@@ -18,30 +18,39 @@ struct RootView: View {
             VStack {
                 switch selectedTab {
                 case .home:
-                    HomeView()
+                    HomeView(selectedTab: $selectedTab)
                         .environmentObject(vm)
                 case .plus:
-                    HomeView()
+                    AllProcedures()
+                        .environmentObject(vm)
                 case .calendar:
-                    HomeView()
+                    CalendarView()
+                        .environmentObject(vm)
                 case .profile:
                     ProfileView(notEntered: $notEntered)
                         .environmentObject(vm)
                 }
             }
             .padding(.horizontal, 20)
+            .padding(.top, topPadding())
+            .padding(.bottom, tabBarHeight())
             
             VStack {
                 Spacer()
                 TabBar(selectedTab: $selectedTab)
-                    .padding(.bottom, 30)
+                    .padding(.bottom, bottonPadding())
                     .padding(.top, 10)
                     .frame(maxWidth: .infinity)
                     .background(Color.white)
             }
             .ignoresSafeArea(.all)
         }
-    }
+        .onAppear {
+            Task {
+                vm.getProvider()
+            }
+        }
+    }    
 }
 
 struct RootView_Previews: PreviewProvider {
