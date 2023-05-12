@@ -12,6 +12,7 @@ struct AddDoctorView: View {
     @EnvironmentObject var vm: ProfileViewModel
     @State private var futureDoctorID: String = ""
     @State private var isEditing = false
+    @State private var showAlert = false
     var cornerRadius = ScreenSize.width / 30
     
     var body: some View {
@@ -30,43 +31,45 @@ struct AddDoctorView: View {
             } label: {
                 AccentButton(text: "Add a doctor", isButtonActive: validateDoctor())
             }
-                        
+                                    
             ScrollView {
                 if let doctors = vm.doctors {
                     ForEach(doctors, id: \.userId) { doctor in
                         HStack {
+                            
+                            ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
+
                             Text("\(doctor.name ?? doctor.userId) \(doctor.lastName ?? "")")
                                 .bold()
-                            Spacer()
+                                .padding(.leading, 8)
+                                .lineLimit(1)
                         }
                         .padding(.horizontal)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .frame(height: ScreenSize.height * 0.06)
+                        .frame(height: ScreenSize.height * 0.09)
                         .background(Color.secondaryColor)
                         .cornerRadius(cornerRadius)
-                        .overlay {
-                            if isEditing {
-                                DeleteButton(deleteFunction:  {
-                                    removeDoctor(at: IndexSet([vm.doctors?.firstIndex(where: { $0.userId == doctor.userId }) ?? 0]))
-                                })
+                        .contextMenu {
+                            Button(role: .destructive) {
+                                Task {
+                                    try await vm.removeDoctor(userID: doctor.userId)
+                                }
+                            } label: {
+                                Label("Delete", systemImage: "trash")
                             }
                         }
                     }
                     .listRowSeparator(.hidden)
                 }
             }
-            .listStyle(.inset)
             .scrollIndicators(.hidden)
-
             Spacer()
-            
         }
         .navigationBarBackButtonHidden(true)
         .onDisappear {
             isEditing = false
         }
     }
-        
 }
 
 struct AddDoctorView_Previews: PreviewProvider {
@@ -80,44 +83,6 @@ extension AddDoctorView {
     func validateDoctor() -> Bool {
         guard !futureDoctorID.isEmpty else { return false }
         return true
-    }
-    
-    func removeDoctor(at offsets: IndexSet) {
-        guard vm.doctors?.count ?? 0 > 1 else { return }
-        for index in offsets {
-            if let userID = vm.doctors?[index].userId {
-                guard userID != vm.user?.userId else { return }
-                Task {
-                    do {
-                        try await vm.removeDoctor(userID: userID)
-                        try await vm.getAllDoctors()
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                }
-            }
-        }
-    }
-}
-
-struct DeleteButton: View {
-    
-    var deleteFunction: () -> ()
-    
-    var body: some View {
-        HStack(alignment: .top) {
-            Spacer()
-            Button {
-                deleteFunction()
-            } label: {
-                Image(systemName: "x.circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: ScreenSize.height * 0.03)
-                    .foregroundColor(Color.mainColor)
-            }
-            .padding(.trailing)
-        }
     }
 }
 

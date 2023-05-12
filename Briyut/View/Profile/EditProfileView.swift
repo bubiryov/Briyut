@@ -41,6 +41,7 @@ struct EditProfileView: View {
                                 lastName: lastName != "" ? lastName : nil,
                                 phoneNumber: phoneNumber.count > 5 ? phoneNumber : nil)
                             try await vm.loadCurrentUser()
+                            try await vm.getAllDoctors()
                             presentationMode.wrappedValue.dismiss()
                         } catch {
                             

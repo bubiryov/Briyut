@@ -25,9 +25,6 @@ struct AddProcedureView: View {
             ScrollView {
                 VStack(spacing: ScreenSize.height * 0.02) {
                                         
-//                    InputField(field: $procedureId, isSecureField: false, title: "1", header: "Procedure ID")
-//                        .keyboardType(.numberPad)
-
                     InputField(field: $name, isSecureField: false, title: "Massage", header: "Procedure name")
 
                     InputField(field: $duration, isSecureField: false, title: "30", header: "Duration (min)")
@@ -56,6 +53,7 @@ struct AddProcedureView: View {
                     } label: {
                         AccentButton(text: "Add", isButtonActive: validateFields())
                     }
+                    .disabled(!validateFields())
                 }
             }
             Spacer()

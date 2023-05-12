@@ -21,13 +21,18 @@ struct DoctorsList: View {
                 if let doctors = vm.doctors {
                     ForEach(doctors, id: \.userId) { doctor in
                         HStack {
+                            
+                            ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
+                            
                             Text("\(doctor.name ?? doctor.userId) \(doctor.lastName ?? "")")
                                 .foregroundColor(choosenDoctors.contains(doctor.userId) ? .white : .black)
                                 .bold()
+                                .padding(.leading, 8)
+                                .lineLimit(1)
                         }
-                        .padding(.leading)
+                        .padding(.horizontal)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .frame(height: ScreenSize.height * 0.06)
+                        .frame(height: ScreenSize.height * 0.09)
                         .background(choosenDoctors.contains(doctor.userId) ? Color.mainColor : Color.secondaryColor)
                         .cornerRadius(cornerRadius)
                         .onTapGesture {

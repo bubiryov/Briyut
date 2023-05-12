@@ -45,6 +45,7 @@ final class ProfileViewModel: ObservableObject {
     }
     
     func removeDoctor(userID: String) async throws {
+        guard userID != user?.userId else { return }
         try await UserManager.shared.removeDoctor(userID: userID)
         self.doctors = try await UserManager.shared.getAllDoctors()
     }

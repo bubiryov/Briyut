@@ -64,6 +64,7 @@
 		89CA5ABB2A02FD3200695069 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5ABA2A02FD3200695069 /* Utilities.swift */; };
 		89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */; };
 		89D37B792A0A87D100A7C933 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B782A0A87D100A7C933 /* EditProfileView.swift */; };
+		89E8ECD32A0E38A700398095 /* ProcedureEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8ECD22A0E38A700398095 /* ProcedureEditingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -136,6 +137,7 @@
 		89CA5ABA2A02FD3200695069 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureManager.swift; sourceTree = "<group>"; };
 		89D37B782A0A87D100A7C933 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		89E8ECD22A0E38A700398095 /* ProcedureEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureEditingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				898FD9B42A08F4E000725697 /* AllProcedures.swift */,
+				89E8ECD22A0E38A700398095 /* ProcedureEditingView.swift */,
 				898FD9B62A08FDE000725697 /* AddProcedureView.swift */,
 				898FD9BF2A096D4B00725697 /* DoctorsList.swift */,
 			);
@@ -556,6 +559,7 @@
 				899EC5CF2A0057EE00C90D49 /* RegistrationView.swift in Sources */,
 				898FD9BA2A0908FD00725697 /* CalendarView.swift in Sources */,
 				899EC5CB2A00574700C90D49 /* AuthenticationViewModel.swift in Sources */,
+				89E8ECD32A0E38A700398095 /* ProcedureEditingView.swift in Sources */,
 				89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */,
 				898FD9BC2A0910F100725697 /* AddDoctorView.swift in Sources */,
 				899EC5A62A000E6500C90D49 /* AppDelegate.swift in Sources */,

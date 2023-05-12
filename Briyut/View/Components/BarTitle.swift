@@ -31,7 +31,7 @@ struct BarTitle<V1: View, V2: View>: View {
             
             HStack {
                 Text(text)
-                    .font(.title)
+                    .font(.title2)
                     .bold()
             }
         }
