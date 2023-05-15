@@ -10,7 +10,7 @@
 		890C28BA2A0652FE000DB1A6 /* ProcedureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C28B92A0652FE000DB1A6 /* ProcedureModel.swift */; };
 		890C28BC2A06D3F1000DB1A6 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */; };
 		898FD9B52A08F4E000725697 /* AllProcedures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B42A08F4E000725697 /* AllProcedures.swift */; };
-		898FD9B72A08FDE000725697 /* AddProcedureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B62A08FDE000725697 /* AddProcedureView.swift */; };
+		898FD9B72A08FDE000725697 /* ProcedureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B62A08FDE000725697 /* ProcedureView.swift */; };
 		898FD9BA2A0908FD00725697 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B92A0908FD00725697 /* CalendarView.swift */; };
 		898FD9BC2A0910F100725697 /* AddDoctorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BB2A0910F100725697 /* AddDoctorView.swift */; };
 		898FD9BE2A0935E100725697 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BD2A0935E100725697 /* ProfileViewModel.swift */; };
@@ -62,6 +62,8 @@
 		89CA5AB72A02FCC700695069 /* GoogleAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AB62A02FCC700695069 /* GoogleAuthenticationManager.swift */; };
 		89CA5AB92A02FCE100695069 /* GoogleSignInResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AB82A02FCE100695069 /* GoogleSignInResultModel.swift */; };
 		89CA5ABB2A02FD3200695069 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5ABA2A02FD3200695069 /* Utilities.swift */; };
+		89CFDD682A122E7200159C4B /* OrderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD672A122E7200159C4B /* OrderManager.swift */; };
+		89CFDD6A2A122ED700159C4B /* OrderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD692A122ED700159C4B /* OrderModel.swift */; };
 		89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */; };
 		89D37B792A0A87D100A7C933 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B782A0A87D100A7C933 /* EditProfileView.swift */; };
 		89E8ECD32A0E38A700398095 /* ProcedureEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8ECD22A0E38A700398095 /* ProcedureEditingView.swift */; };
@@ -88,7 +90,7 @@
 		890C28B92A0652FE000DB1A6 /* ProcedureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureModel.swift; sourceTree = "<group>"; };
 		890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		898FD9B42A08F4E000725697 /* AllProcedures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllProcedures.swift; sourceTree = "<group>"; };
-		898FD9B62A08FDE000725697 /* AddProcedureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProcedureView.swift; sourceTree = "<group>"; };
+		898FD9B62A08FDE000725697 /* ProcedureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureView.swift; sourceTree = "<group>"; };
 		898FD9B92A0908FD00725697 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		898FD9BB2A0910F100725697 /* AddDoctorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDoctorView.swift; sourceTree = "<group>"; };
 		898FD9BD2A0935E100725697 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -135,6 +137,8 @@
 		89CA5AB62A02FCC700695069 /* GoogleAuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthenticationManager.swift; sourceTree = "<group>"; };
 		89CA5AB82A02FCE100695069 /* GoogleSignInResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInResultModel.swift; sourceTree = "<group>"; };
 		89CA5ABA2A02FD3200695069 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		89CFDD672A122E7200159C4B /* OrderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderManager.swift; sourceTree = "<group>"; };
+		89CFDD692A122ED700159C4B /* OrderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderModel.swift; sourceTree = "<group>"; };
 		89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureManager.swift; sourceTree = "<group>"; };
 		89D37B782A0A87D100A7C933 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		89E8ECD22A0E38A700398095 /* ProcedureEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureEditingView.swift; sourceTree = "<group>"; };
@@ -178,7 +182,7 @@
 			children = (
 				898FD9B42A08F4E000725697 /* AllProcedures.swift */,
 				89E8ECD22A0E38A700398095 /* ProcedureEditingView.swift */,
-				898FD9B62A08FDE000725697 /* AddProcedureView.swift */,
+				898FD9B62A08FDE000725697 /* ProcedureView.swift */,
 				898FD9BF2A096D4B00725697 /* DoctorsList.swift */,
 			);
 			path = Plus;
@@ -319,6 +323,7 @@
 				899EC5C52A00420C00C90D49 /* AuthenticationManager.swift */,
 				89C5905D2A059DD800975E50 /* UserManager.swift */,
 				89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */,
+				89CFDD672A122E7200159C4B /* OrderManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -332,6 +337,7 @@
 				89A17E5B2A03C9B200C92A58 /* AuthProviderOption.swift */,
 				89C5905F2A059EF300975E50 /* DBUser.swift */,
 				890C28B92A0652FE000DB1A6 /* ProcedureModel.swift */,
+				89CFDD692A122ED700159C4B /* OrderModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -558,12 +564,14 @@
 				890C28BA2A0652FE000DB1A6 /* ProcedureModel.swift in Sources */,
 				899EC5CF2A0057EE00C90D49 /* RegistrationView.swift in Sources */,
 				898FD9BA2A0908FD00725697 /* CalendarView.swift in Sources */,
+				89CFDD682A122E7200159C4B /* OrderManager.swift in Sources */,
 				899EC5CB2A00574700C90D49 /* AuthenticationViewModel.swift in Sources */,
 				89E8ECD32A0E38A700398095 /* ProcedureEditingView.swift in Sources */,
 				89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */,
 				898FD9BC2A0910F100725697 /* AddDoctorView.swift in Sources */,
 				899EC5A62A000E6500C90D49 /* AppDelegate.swift in Sources */,
-				898FD9B72A08FDE000725697 /* AddProcedureView.swift in Sources */,
+				89CFDD6A2A122ED700159C4B /* OrderModel.swift in Sources */,
+				898FD9B72A08FDE000725697 /* ProcedureView.swift in Sources */,
 				899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */,
 				899EC5C92A00434A00C90D49 /* AuthDataResultModel.swift in Sources */,
 				89C590502A05291800975E50 /* BarButtonView.swift in Sources */,

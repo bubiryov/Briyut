@@ -16,34 +16,32 @@ struct RootView: View {
     var body: some View {
         ZStack {
             VStack {
-                switch selectedTab {
-                case .home:
-                    HomeView(selectedTab: $selectedTab)
-                        .environmentObject(vm)
-                case .plus:
-                    AllProcedures()
-                        .environmentObject(vm)
-                case .calendar:
-                    CalendarView()
-                        .environmentObject(vm)
-                case .profile:
-                    ProfileView(notEntered: $notEntered)
-                        .environmentObject(vm)
+                VStack {
+                    switch selectedTab {
+                    case .home:
+                        HomeView(selectedTab: $selectedTab)
+                            .environmentObject(vm)
+                    case .plus:
+                        AllProcedures(notEntered: $notEntered)
+                            .environmentObject(vm)
+                    case .calendar:
+                        CalendarView()
+                            .environmentObject(vm)
+                    case .profile:
+                        ProfileView(notEntered: $notEntered)
+                            .environmentObject(vm)
+                    }
                 }
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, topPadding())
-            .padding(.bottom, tabBarHeight())
-            
-            VStack {
+                .padding(.top, topPadding())
+                .padding(.horizontal, 20)
+                .animation(nil, value: selectedTab)
+                
                 Spacer()
+                
                 TabBar(selectedTab: $selectedTab)
-                    .padding(.bottom, bottonPadding())
-                    .padding(.top, 10)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.white)
+                
             }
-            .ignoresSafeArea(.all)
+            .edgesIgnoringSafeArea(.bottom)            
         }
         .onAppear {
             Task {

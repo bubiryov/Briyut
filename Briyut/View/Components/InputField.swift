@@ -42,7 +42,7 @@ struct InputField: View {
                         .cornerRadius(cornerRadius)
                         .overlay(
                             RoundedRectangle(cornerRadius: cornerRadius)
-                                .stroke(Color.secondary, lineWidth: 0.5)
+                                .strokeBorder(Color.secondary, lineWidth: 0.5)
                         )
                 } else {
                     SecureField(title, text: $field)
@@ -62,7 +62,7 @@ struct InputField: View {
                         .cornerRadius(cornerRadius)
                         .overlay(
                             RoundedRectangle(cornerRadius: cornerRadius)
-                                .stroke(Color.secondary, lineWidth: 0.5)
+                                .strokeBorder(Color.secondary, lineWidth: 0.5)
                         )
                 }
             } else {
@@ -73,7 +73,7 @@ struct InputField: View {
                     .cornerRadius(cornerRadius)
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
-                            .stroke(Color.secondary, lineWidth: 0.5)
+                            .strokeBorder(Color.secondary, lineWidth: 0.5)
                     )
             }
         }

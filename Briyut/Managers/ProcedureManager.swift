@@ -25,7 +25,7 @@ final class ProcedureManager {
     }
         
     func createNewProcedure(procedure: ProcedureModel) async throws {
-        try procedureDocument(procedureId: String(procedure.procedureId))
+        try procedureDocument(procedureId: procedure.procedureId)
             .setData(from: procedure, merge: false)
     }
     
@@ -33,27 +33,27 @@ final class ProcedureManager {
         proceduresCollection
     }
 
-    func getAllProcedures(countLimit: Int, lastDocument: DocumentSnapshot?) async throws -> (procedures: [ProcedureModel], lastDocument: DocumentSnapshot?) {
+    func getAllProcedures() async throws -> [ProcedureModel] {
         
         let query: Query = getAllProcedures()
-                
-        if let lastDocument {
-            return try await query
-                .limit(to: countLimit)
-                .start(afterDocument: lastDocument)
-                .getDocumentsWithSnapshot(as: ProcedureModel.self)
-        } else {
-            return try await query
-                .limit(to: countLimit)
-                .getDocumentsWithSnapshot(as: ProcedureModel.self)
-        }
+        
+        return try await query
+            .getDocuments(as: ProcedureModel.self)
     }
     
-//    func checkIfProcedureExists(procedureId: Int) async throws -> Bool {
-//        let document = procedureDocument(procedureId: String(procedureId))
-//        let snapshot = try await document.getDocument()
-//        return snapshot.exists
-//    }
+    func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, availableDoctors: [String]) async throws {
+        let data: [String : Any] = [
+            ProcedureModel.CodingKeys.name.rawValue : name,
+            ProcedureModel.CodingKeys.duration.rawValue : duration,
+            ProcedureModel.CodingKeys.cost.rawValue : cost,
+            ProcedureModel.CodingKeys.availableDoctors.rawValue : availableDoctors
+        ]
+        try await procedureDocument(procedureId: procedureId).updateData(data)
+    }
+    
+    func removeProcedure(procedureId: String) async throws {
+        try await procedureDocument(procedureId: procedureId).delete()
+    }
 }
 
 extension Query {

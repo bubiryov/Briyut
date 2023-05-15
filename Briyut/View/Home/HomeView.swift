@@ -11,18 +11,19 @@ struct HomeView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
     @Binding var selectedTab: Tab
+    @State var test = ""
     
     var body: some View {
         VStack {
             BarTitle<MapButton, ProfileButton>(text: "Home", leftButton: MapButton(image: "pin"), rightButton: ProfileButton(selectedTab: $selectedTab, photo: vm.user?.photoUrl ?? ""))
                                     
             Spacer()
-            
+                        
         }
         .onAppear {
             Task {
                 try await vm.loadCurrentUser()
-                try await vm.getProcedures()
+                try await vm.getAllProcedures()
                 try await vm.getAllDoctors()
             }
         }
@@ -43,11 +44,14 @@ struct ProfileButton: View {
     
     var body: some View {
         Button {
-            selectedTab = .profile
+            withAnimation(.easeInOut(duration: 0.15)) {
+                selectedTab = .profile
+            }
         } label: {
             ProfileImage(photoURL: photo, frame: ScreenSize.height * 0.06, color: Color.secondary.opacity(0.1))
         }
         .buttonStyle(.plain)
+        .cornerRadius(ScreenSize.width / 30)
     }
 }
 

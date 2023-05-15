@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
+import SwiftUI
 
 @MainActor
 final class ProfileViewModel: ObservableObject {
@@ -47,7 +48,8 @@ final class ProfileViewModel: ObservableObject {
     func removeDoctor(userID: String) async throws {
         guard userID != user?.userId else { return }
         try await UserManager.shared.removeDoctor(userID: userID)
-        self.doctors = try await UserManager.shared.getAllDoctors()
+        try await getAllDoctors()
+//        self.doctors = try await UserManager.shared.getAllDoctors()
     }
     
     func getAllDoctors() async throws {
@@ -61,20 +63,25 @@ final class ProfileViewModel: ObservableObject {
 }
 
 extension ProfileViewModel {
+    
     func addNewProcedure(procedure: ProcedureModel) async throws {
-//        guard try await !ProcedureManager.shared.checkIfProcedureExists(procedureId: procedure.procedureId) else {
-//            throw URLError(.badServerResponse)
-//        }
         try await ProcedureManager.shared.createNewProcedure(procedure: procedure)
+        try await getAllProcedures()
     }
     
-    func getProcedures() async throws {
-        let (newProducts, lastDocument) = try await ProcedureManager.shared.getAllProcedures(countLimit: 10, lastDocument: lastDocument)
-        self.procedures.append(contentsOf: newProducts)
-        if let lastDocument {
-            self.lastDocument = lastDocument
-        }
-        print("Gotten!!!")
+    func getAllProcedures() async throws {
+        let procedures = try await ProcedureManager.shared.getAllProcedures()
+        self.procedures = procedures
     }
     
+    func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, availableDoctors: [String]) async throws {
+        try await ProcedureManager.shared.editProcedure(procedureId: procedureId, name: name, duration: duration, cost: cost, availableDoctors: availableDoctors)
+        self.procedures = []
+        try await getAllProcedures()
+    }
+    
+    func removeProcedure(procedureId: String) async throws {
+        try await ProcedureManager.shared.removeProcedure(procedureId: procedureId)
+        try await getAllProcedures()
+    }
 }

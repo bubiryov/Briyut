@@ -41,6 +41,8 @@ struct BarButtonView: View {
     var frame: CGFloat = ScreenSize.height * 0.06
     var image: String
     var scale: CGFloat? = nil
+    var textColor: Color? = nil
+    var backgroundColor: Color? = nil
     
     var body: some View {
         Image(image)
@@ -48,8 +50,9 @@ struct BarButtonView: View {
 //            .scaledToFit()
             .scaleEffect((scale != nil) ? scale! : 0.4)
             .frame(width: frame, height: frame)
-            .background(Color.secondary.opacity(0.1))
+            .background(backgroundColor == nil ? Color.secondary.opacity(0.1) : backgroundColor)
             .cornerRadius(cornerRadius)
+            .foregroundColor(textColor)
     }
 }
 

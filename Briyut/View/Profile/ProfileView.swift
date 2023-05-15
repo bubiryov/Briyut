@@ -12,14 +12,16 @@ struct ProfileView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
     @Binding var notEntered: Bool
+    @State private var test = ""
     
     var body: some View {
-
+        
         NavigationView {
             VStack {
-                BarTitle<Text, BarButton>(text: "", rightButton: BarButton())
+                BarTitle<Text, BarButton>(text: "", rightButton: BarButton(notEntered: $notEntered))
                 
                 ProfileImage(photoURL: vm.user?.photoUrl, frame: ScreenSize.height * 0.12, color: Color.secondaryColor)
+                    .cornerRadius(ScreenSize.width / 20)
                 
                 HStack {
                     Text(vm.user?.name ?? (vm.user?.userId ?? ""))
@@ -30,28 +32,13 @@ struct ProfileView: View {
                         .font(.title.bold())
                         .lineLimit(1)
                 }
-                                                
-//                List {
-//                    Text("User is doctor: \(vm.user?.isDoctor.description ?? "")")
-//
-                    if vm.user?.isDoctor == true {
-                        NavigationLink("Add doctor", destination: AddDoctorView())
-                    }
-//
-//                }
-//                .listStyle(.inset)
-                                
-                Button {
-                    Task {
-                        try vm.signOut()
-                        notEntered = true
-                    }
-                } label: {
-                    Text("Log out")
+                
+                if vm.user?.isDoctor == true {
+                    NavigationLink("Add doctor", destination: AddDoctorView())
                 }
                 
                 Spacer()
-
+                
             }
         }
     }
@@ -65,10 +52,12 @@ struct ProfileView_Previews: PreviewProvider {
 }
 
 struct BarButton: View {
-        
+    
+    @Binding var notEntered: Bool
+    
     var body: some View {
         NavigationLink {
-            EditProfileView()
+            EditProfileView(notEntered: $notEntered)
         } label: {
             BarButtonView(image: "settings")
         }
@@ -102,6 +91,5 @@ struct ProfileImage: View {
                     .background(color)
             }
         }
-        .cornerRadius(ScreenSize.width / 30)
     }
 }

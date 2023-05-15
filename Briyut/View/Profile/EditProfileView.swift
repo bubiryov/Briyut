@@ -14,14 +14,16 @@ struct EditProfileView: View {
     @State private var name: String = ""
     @State private var lastName: String = ""
     @State private var phoneNumber: String = "+38"
+    @State private var showAlert: Bool = false
+    @Binding var notEntered: Bool
     
     var body: some View {
         VStack {
-            BarTitle<BackButton, Text>(text: "Edit", leftButton: BackButton())
+            BarTitle<BackButton, LogOutButton>(text: "Edit", leftButton: BackButton(), rightButton: LogOutButton(showAlert: $showAlert))
                 .padding(.bottom)
             
             VStack(spacing: ScreenSize.height * 0.02) {
-                                
+                
                 InputField(field: $name, isSecureField: false, title: "Name", header: "Your name")
                 
                 InputField(field: $lastName, isSecureField: false, title: "Last name", header: "Your last name (optional)")
@@ -30,6 +32,8 @@ struct EditProfileView: View {
                     InputField(field: $phoneNumber, isSecureField: false, title: "+38 (099)-999-99-99", header: "Phone number")
                         .keyboardType(.numberPad)
                 }
+                
+                Spacer()
                 
                 Button {
                     guard let user = vm.user else { return }
@@ -48,11 +52,13 @@ struct EditProfileView: View {
                         }
                     }
                 } label: {
-                    AccentButton(text: "Edit", isButtonActive: true)
+                    AccentButton(text: "Save", isButtonActive: true)
                 }
             }
-            
-            Spacer()
+            .ignoresSafeArea(.keyboard)
+            .onTapGesture {
+                hideKeyboard()
+            }
         }
         .navigationBarBackButtonHidden(true)
         .onAppear {
@@ -62,12 +68,41 @@ struct EditProfileView: View {
                 phoneNumber = user.phoneNumber ?? ""
             }
         }
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("Are you sure you want to log out?"),
+                primaryButton: .destructive(Text("Log out"), action: {
+                    Task {
+                        try vm.signOut()
+                        notEntered = true
+                    }
+                }),
+                secondaryButton: .default(Text("Cancel"), action: {
+                    
+                })
+            )
+        }
+
     }
 }
 
 struct EditProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        EditProfileView()
+        EditProfileView(notEntered: .constant(false))
             .environmentObject(ProfileViewModel())
+    }
+}
+
+struct LogOutButton: View {
+    
+    @Binding var showAlert: Bool
+    
+    var body: some View {
+        Button {
+            showAlert = true
+        } label: {
+            BarButtonView(image: "exit")
+        }
+        .buttonStyle(.plain)
     }
 }

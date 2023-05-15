@@ -15,9 +15,14 @@ final class UserManager {
     private init() { }
     
     private let userCollection = Firestore.firestore().collection("users")
+    private let doctorCollection = Firestore.firestore().collection("doctors")
     
     private func userDocument(userId: String) -> DocumentReference {
         userCollection.document(userId)
+    }
+    
+    private func doctorDocument(doctorID: String) -> DocumentReference {
+        doctorCollection.document(doctorID)
     }
 
     func createNewUser(user: DBUser) async throws {
@@ -52,12 +57,30 @@ final class UserManager {
 
     func makeDoctor(userID: String) async throws {
         try await updateDoctorStatus(userID: userID, isDoctor: true)
-        try await Firestore.firestore().collection("doctors").document(userID).setData(["id" : userID])
+        try await doctorDocument(doctorID: userID).setData(["id" : userID])
+//        try await Firestore.firestore().collection("doctors").document(userID).setData(["id" : userID])
     }
     
     func removeDoctor(userID: String) async throws {
         try await updateDoctorStatus(userID: userID, isDoctor: false)
-        try await Firestore.firestore().collection("doctors").document(userID).delete()
+        try await doctorDocument(doctorID: userID).delete()
+        let query = Firestore.firestore().collection("procedures").whereField("available_doctors", arrayContains: userID)
+        
+        let snapshot = try await query.getDocuments(as: ProcedureModel.self)
+        for procedure in snapshot {
+            let procedureDocument = Firestore.firestore().collection("procedures").document(procedure.procedureId)
+            try await procedureDocument.updateData(["available_doctors": FieldValue.arrayRemove([userID])])
+        }
+//        query.getDocuments { (snapshot, error) in
+//            if let error {
+//                print("Error getting documents: \(error)")
+//            } else {
+//                for document in snapshot!.documents {
+//                    let docRef = Firestore.firestore().collection("procedures").document(document.documentID)
+//                    docRef.updateData(["available_doctors": FieldValue.arrayRemove([userID])])
+//                }
+//            }
+//        }
     }
     
     func checkIfUserExists(userId: String) async throws -> Bool {
@@ -67,7 +90,7 @@ final class UserManager {
     }
         
     func getAllDoctors() async throws -> [DBUser] {
-        let querySnapshot = try await Firestore.firestore().collection("doctors").getDocuments()
+        let querySnapshot = try await doctorCollection.getDocuments()
         let doctorIds = querySnapshot.documents.map { $0.documentID }
         var doctors: [DBUser] = []
         for id in doctorIds {

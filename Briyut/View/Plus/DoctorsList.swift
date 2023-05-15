@@ -23,6 +23,7 @@ struct DoctorsList: View {
                         HStack {
                             
                             ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
+                                .cornerRadius(ScreenSize.width / 30)
                             
                             Text("\(doctor.name ?? doctor.userId) \(doctor.lastName ?? "")")
                                 .foregroundColor(choosenDoctors.contains(doctor.userId) ? .white : .black)

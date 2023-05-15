@@ -17,7 +17,7 @@ struct AddDoctorView: View {
     
     var body: some View {
         VStack(spacing: ScreenSize.height * 0.02) {
-            BarTitle<BackButton, EditButton>(text: "Add a doctor", leftButton: BackButton(), rightButton: EditButton(isEditing: $isEditing))
+            BarTitle<BackButton, Text>(text: "Add a doctor", leftButton: BackButton())
             
             
             InputField(field: $futureDoctorID, isSecureField: false, title: "UserID")
@@ -38,6 +38,7 @@ struct AddDoctorView: View {
                         HStack {
                             
                             ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
+                                .cornerRadius(ScreenSize.width / 30)
 
                             Text("\(doctor.name ?? doctor.userId) \(doctor.lastName ?? "")")
                                 .bold()
@@ -59,7 +60,6 @@ struct AddDoctorView: View {
                             }
                         }
                     }
-                    .listRowSeparator(.hidden)
                 }
             }
             .scrollIndicators(.hidden)
@@ -83,21 +83,5 @@ extension AddDoctorView {
     func validateDoctor() -> Bool {
         guard !futureDoctorID.isEmpty else { return false }
         return true
-    }
-}
-
-struct EditButton: View {
-    
-    @Binding var isEditing: Bool
-    
-    var body: some View {
-        Button {
-            withAnimation(.easeInOut(duration: 0.2)) {
-                isEditing.toggle()
-            }
-        } label: {
-            BarButtonView(image: "pencil", scale: 0.35)
-        }
-        .buttonStyle(.plain)
     }
 }

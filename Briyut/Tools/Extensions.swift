@@ -26,7 +26,7 @@ extension Color {
     static let lightBlueColor = Color("LightBlueColor")
 }
 
-func bottonPadding() -> CGFloat {
+func bottomPadding() -> CGFloat {
     if ScreenSize.height < 750 {
         return ScreenSize.height * 0.02
     } else {
@@ -38,7 +38,7 @@ func topPadding() -> CGFloat {
     if ScreenSize.height < 750 {
         return ScreenSize.height * 0.015
     } else {
-        return 0
+        return 5
     }
 }
 
@@ -50,4 +50,19 @@ func tabBarHeight() -> CGFloat {
     }
 }
 
+extension Animation {
+    func `repeat`(while expression: Bool, autoreverses: Bool = true) -> Animation {
+        if expression {
+            return self.repeatForever(autoreverses: autoreverses)
+        } else {
+            return self
+        }
+    }
+}
+
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
 

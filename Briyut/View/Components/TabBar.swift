@@ -15,27 +15,40 @@ enum Tab: String, CaseIterable {
 }
 
 struct TabBar: View {
-    
+
     @Binding var selectedTab: Tab
-    
+    @Namespace private var animationNamespace
+
     var body: some View {
         HStack {
             ForEach(Tab.allCases, id: \.rawValue) { tab in
                 
                 Spacer()
                 
-                Image(tab.rawValue)
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundColor(selectedTab == tab ? .white : .secondary)
-                    .frame(width: ScreenSize.width / 15)
-                    .padding(.horizontal, 25)
-                    .padding(.vertical, 15)
-                    .background(selectedTab == tab ? Color.mainColor : nil)
-                    .cornerRadius(20)
-                    .onTapGesture {
-                        selectedTab = tab
+                ZStack {
+                    if selectedTab == tab {
+                        RoundedRectangle(cornerRadius: 20)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: UIScreen.main.bounds.height / 15)
+                            .foregroundColor(Color.mainColor)
+                            .matchedGeometryEffect(id: "selectedTab", in: animationNamespace)
                     }
+                    
+                    Image(tab.rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(selectedTab == tab ? .white : .secondary)
+                        .padding(.horizontal, 25)
+                        .cornerRadius(20)
+                        .onTapGesture {
+                            withAnimation(.easeInOut(duration: 0.15)) {
+                                selectedTab = tab
+                            }
+                        }
+                }
+                .frame(width: UIScreen.main.bounds.width / 15 + 50)
+                .padding(.top, 10)
+                .padding(.bottom, bottomPadding())
 
                 Spacer()
             }

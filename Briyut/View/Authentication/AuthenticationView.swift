@@ -62,7 +62,7 @@ struct AuthenticationView: View {
         .sheet(isPresented: $showResetPasswordView) {
             ResetPasswordView(showResetPasswordView: $showResetPasswordView)
                 .presentationDetents([.medium, .large])
-                .presentationCornerRadius(21)
+                .presentationCornerRadius(30)
         }
     }
 }

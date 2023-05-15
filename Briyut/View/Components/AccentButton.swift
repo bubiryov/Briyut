@@ -44,12 +44,15 @@ struct AccentButton: View {
                 .frame(maxWidth: .infinity)
                 .background(buttonColor)
                 .cornerRadius(cornerRadius)
+                .padding(.horizontal, 3)
         } else {
             HStack {
-                Image(logo ?? "")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 17)
+                if let logo {
+                    Image(logo)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 17)
+                }
                 Text(text)
                     .foregroundColor(textColor)
                     .bold(bold)
@@ -60,6 +63,7 @@ struct AccentButton: View {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .stroke(Color.secondary, lineWidth: 1)
             }
+//            .padding(.horizontal, 3)
         }
     }
 }
