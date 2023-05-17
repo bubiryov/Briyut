@@ -16,11 +16,7 @@ final class AuthenticationViewModel: ObservableObject {
     @Published var authUser: AuthDataResultModel? = nil
     @Published var errorText: String? = nil
     @Published var ID: String? = ""
-    
-    init() {
-        print("INIT")
-    }
-    
+        
     func getAuthUser() {
         self.authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
     }

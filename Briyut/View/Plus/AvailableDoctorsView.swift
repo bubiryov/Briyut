@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DoctorsList: View {
+struct AvailableDoctorsView: View {
     
     @Binding var choosenDoctors: [String]
     @EnvironmentObject var vm: ProfileViewModel
@@ -54,7 +54,7 @@ struct DoctorsList: View {
 
 struct DoctorsList_Previews: PreviewProvider {
     static var previews: some View {
-        DoctorsList(choosenDoctors: .constant([]))
+        AvailableDoctorsView(choosenDoctors: .constant([]))
             .environmentObject(ProfileViewModel())
     }
 }

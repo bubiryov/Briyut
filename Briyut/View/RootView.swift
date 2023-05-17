@@ -22,7 +22,7 @@ struct RootView: View {
                         HomeView(selectedTab: $selectedTab)
                             .environmentObject(vm)
                     case .plus:
-                        AllProcedures(notEntered: $notEntered)
+                        AllProcedures(notEntered: $notEntered, selectedTab: $selectedTab)
                             .environmentObject(vm)
                     case .calendar:
                         CalendarView()
@@ -39,11 +39,12 @@ struct RootView: View {
                 Spacer()
                 
                 TabBar(selectedTab: $selectedTab)
-                
+                                
             }
             .edgesIgnoringSafeArea(.bottom)            
         }
         .onAppear {
+            print("Appear root view")
             Task {
                 vm.getProvider()
             }

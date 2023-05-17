@@ -19,12 +19,16 @@ final class OrderManager {
     private func orderDocument(orderId: String) -> DocumentReference {
         orderCollection.document(orderId)
     }
-
-    private func getAllOrders() -> Query {
-        orderCollection
-    }
     
-    func createNewProcedure(order: OrderModel) async throws {
+    func getProduct(orderId: String) async throws -> OrderModel {
+        try await orderDocument(orderId: orderId).getDocument(as: OrderModel.self)
+    }
+
+//    private func getAllOrders() -> Query {
+//        orderCollection
+//    }
+    
+    func createNewOrder(order: OrderModel) async throws {
         try orderDocument(orderId: order.orderId)
             .setData(from: order, merge: false)
     }
@@ -32,14 +36,35 @@ final class OrderManager {
     func removeOrder(orderId: String) async throws {
         try await orderDocument(orderId: orderId).delete()
     }
-
-    func getAllOrders() async throws -> [OrderModel] {
-        
-        let query: Query = getAllOrders()
-        
-        return try await query
-            .getDocuments(as: OrderModel.self)
+    
+    private func filter(clientId: String, isDone: Bool) -> Query {
+        orderCollection
+            .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: clientId)
+            .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+            .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
     }
     
+    func getAllOrders(userId: String, isDone: Bool, countLimit: Int, lastDocument: DocumentSnapshot?) async throws -> (products: [OrderModel], lastDocument: DocumentSnapshot?) {
+                
+        let query = filter(clientId: userId, isDone: isDone)
+                
+        if let lastDocument {
+            return try await query
+                .limit(to: countLimit)
+                .start(afterDocument: lastDocument)
+                .getDocumentsWithSnapshot(as: OrderModel.self)
+        } else {
+            return try await query
+                .limit(to: countLimit)
+                .getDocumentsWithSnapshot(as: OrderModel.self)
+        }
+    }
+    
+    func updateOrderStatus(orderId: String) async throws {
+        let data: [String : Any] = [
+            OrderModel.CodingKeys.isDone.rawValue : true
+        ]
+        try await orderDocument(orderId: orderId).updateData(data)
+    }
     
 }

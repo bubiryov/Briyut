@@ -8,10 +8,14 @@
 import SwiftUI
 
 struct CalendarView: View {
+    
+    @EnvironmentObject var vm: ProfileViewModel
+    
     var body: some View {
-        VStack {
-            BarTitle<Text, Text>(text: "Calendar")
-            Spacer()
+        if vm.user?.isDoctor == true {
+            DoctorOrders()
+        } else {
+            ClientOrders()
         }
     }
 }
@@ -19,5 +23,6 @@ struct CalendarView: View {
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView()
+            .environmentObject(ProfileViewModel())
     }
 }

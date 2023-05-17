@@ -20,8 +20,9 @@ struct AuthenticationView: View {
             ZStack {
                 VStack {
                     Text("Briyut")
+                        .foregroundColor(.white)
                         .font(.custom("Alokary", size: 25))
-                        .padding(.top, ScreenSize.height * 0.1)
+                        .padding(.top, ScreenSize.height * 0.12)
                     Spacer()
                 }
                 .edgesIgnoringSafeArea(.all)
@@ -36,13 +37,13 @@ struct AuthenticationView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, ScreenSize.height * 0.03)
                 .background(Color.white)
-                .cornerRadius(30)
+                .cornerRadius(ScreenSize.width / 30)
                 .shadow(radius: 10, y: -10)
                 .offset(y: ScreenSize.height / 3.5)
                 .edgesIgnoringSafeArea(.all)
                 .ignoresSafeArea(.keyboard)
             }
-            .background(Color.secondaryColor)
+            .background(Color.mainColor)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {

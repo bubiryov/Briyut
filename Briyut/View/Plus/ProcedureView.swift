@@ -60,7 +60,7 @@ struct ProcedureView: View {
             Spacer()
             
             NavigationLink {
-                DoctorsList(choosenDoctors: $availableDoctors)
+                AvailableDoctorsView(choosenDoctors: $availableDoctors)
             } label: {
                 AccentButton(text: "Choose available doctors", isButtonActive: true)
             }

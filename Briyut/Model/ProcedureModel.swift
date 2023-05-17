@@ -14,13 +14,13 @@ struct ProcedureModel: Codable, Equatable {
     let cost: Int
     let availableDoctors: [String]
     
-//    init(procedureId: String, name: String, duration: Int, cost: Int, availableDoctors: [String]) {
-//        self.procedureId = procedureId
-//        self.name = name
-//        self.duration = duration
-//        self.cost = cost
-//        self.availableDoctors = availableDoctors
-//    }
+    init(procedureId: String, name: String, duration: Int, cost: Int, availableDoctors: [String]) {
+        self.procedureId = procedureId
+        self.name = name
+        self.duration = duration
+        self.cost = cost
+        self.availableDoctors = availableDoctors
+    }
     
     enum CodingKeys: String, CodingKey {
         case procedureId = "procedure_id"

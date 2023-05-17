@@ -12,6 +12,7 @@ struct AllProcedures: View {
     @EnvironmentObject var vm: ProfileViewModel
     @Binding var notEntered: Bool
     @State private var isEditing: Bool = false
+    @Binding var selectedTab: Tab
     
     var body: some View {
         NavigationView {
@@ -35,8 +36,8 @@ struct AllProcedures: View {
                                     .scaledToFit()
                                     .frame(width: ScreenSize.height * 0.03)
                             }
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 5)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 7)
                         }
                         .frame(maxWidth: .infinity)
                         .background(Color.yellow.opacity(0.3))
@@ -49,7 +50,7 @@ struct AllProcedures: View {
                     
                     ForEach(vm.procedures, id: \.procedureId) { procedure in
                         
-                        ProcedureRow(vm: vm, procedure: procedure, isEditing: $isEditing)
+                        ProcedureRow(vm: vm, procedure: procedure, isEditing: $isEditing, selectedTab: $selectedTab)
                             .offset(x: isEditing ? 2 : 0)
                             .offset(x: isEditing ? -2 : 0)
                             .animation(.easeInOut(duration: randomize(
@@ -57,6 +58,8 @@ struct AllProcedures: View {
                                 withVariance: 0.055
                             )).repeat(while: isEditing), value: isEditing)
                             .padding(.horizontal, isEditing ? 3 : 0)
+                            .disabled(vm.user?.isDoctor != true && alertContition() ? true : false)
+                            
                     }
                 }
                 .scrollIndicators(.hidden)
@@ -80,7 +83,7 @@ struct AllProcedures: View {
 
 struct AddProcedureView_Previews: PreviewProvider {
     static var previews: some View {
-        AllProcedures(notEntered: .constant(false))
+        AllProcedures(notEntered: .constant(false), selectedTab: .constant(.plus))
             .environmentObject(ProfileViewModel())
     }
 }
@@ -103,16 +106,20 @@ struct ProcedureRow: View {
     var procedure: ProcedureModel
     var cornerRadius = ScreenSize.width / 30
     @Binding var isEditing: Bool
+    @Binding var selectedTab: Tab
     
     var body: some View {
-                        
+        
         NavigationLink {
             if isEditing {
                 ProcedureView(title: "Editing procedure", buttonText: "Save changes", procedure: procedure, isEditing: $isEditing)
+            } else {
+                if vm.user?.isDoctor == true {
+                    
+                } else {
+                    ChooseDoctorView(procedure: procedure, selectedTab: $selectedTab)
+                }
             }
-//            if vm.user?.isDoctor == true {
-//                AddProcedureView(title: "Editing procedure", buttonText: "Save changes", procedure: procedure)
-//            }
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 5) {
@@ -122,9 +129,9 @@ struct ProcedureRow: View {
                         .font(.subheadline)
                 }
                 .padding(.vertical, 7)
-
+                
                 Spacer()
-
+                
                 VStack {
                     Text("₴ \(procedure.cost)")
                         .font(.title2)

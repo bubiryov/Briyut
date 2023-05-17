@@ -29,7 +29,7 @@ struct TabBar: View {
                     if selectedTab == tab {
                         RoundedRectangle(cornerRadius: 20)
                             .frame(maxWidth: .infinity)
-                            .frame(height: UIScreen.main.bounds.height / 15)
+                            .frame(height: ScreenSize.height * 0.06)
                             .foregroundColor(Color.mainColor)
                             .matchedGeometryEffect(id: "selectedTab", in: animationNamespace)
                     }

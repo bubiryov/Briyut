@@ -12,7 +12,7 @@ struct ProfileView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
     @Binding var notEntered: Bool
-    @State private var test = ""
+//    @State private var test = ""
     
     var body: some View {
         

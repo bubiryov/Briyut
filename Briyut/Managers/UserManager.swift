@@ -64,13 +64,26 @@ final class UserManager {
     func removeDoctor(userID: String) async throws {
         try await updateDoctorStatus(userID: userID, isDoctor: false)
         try await doctorDocument(doctorID: userID).delete()
-        let query = Firestore.firestore().collection("procedures").whereField("available_doctors", arrayContains: userID)
         
-        let snapshot = try await query.getDocuments(as: ProcedureModel.self)
-        for procedure in snapshot {
+        let proceduresQuery = Firestore.firestore().collection("procedures").whereField("available_doctors", arrayContains: userID)
+        let orderQuery = Firestore.firestore().collection("orders").whereField("doctor_id", isEqualTo: userID)
+        
+        let proceduresSnapshot = try await proceduresQuery.getDocuments(as: ProcedureModel.self)
+        let ordersSnapshot = try await orderQuery.getDocuments(as: OrderModel.self)
+        
+        for procedure in proceduresSnapshot {
             let procedureDocument = Firestore.firestore().collection("procedures").document(procedure.procedureId)
             try await procedureDocument.updateData(["available_doctors": FieldValue.arrayRemove([userID])])
         }
+        
+        for order in ordersSnapshot {
+            let orderDocument = Firestore.firestore().collection("orders").document(order.orderId)
+            if !order.isDone {
+                try await orderDocument.delete()
+            }
+        }
+        
+        
 //        query.getDocuments { (snapshot, error) in
 //            if let error {
 //                print("Error getting documents: \(error)")

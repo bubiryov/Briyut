@@ -14,7 +14,7 @@
 		898FD9BA2A0908FD00725697 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B92A0908FD00725697 /* CalendarView.swift */; };
 		898FD9BC2A0910F100725697 /* AddDoctorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BB2A0910F100725697 /* AddDoctorView.swift */; };
 		898FD9BE2A0935E100725697 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BD2A0935E100725697 /* ProfileViewModel.swift */; };
-		898FD9C02A096D4B00725697 /* DoctorsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BF2A096D4B00725697 /* DoctorsList.swift */; };
+		898FD9C02A096D4B00725697 /* AvailableDoctorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BF2A096D4B00725697 /* AvailableDoctorsView.swift */; };
 		899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5702A000A1C00C90D49 /* BriyutApp.swift */; };
 		899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5722A000A1C00C90D49 /* ContentView.swift */; };
 		899EC5752A000A1E00C90D49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 899EC5742A000A1E00C90D49 /* Assets.xcassets */; };
@@ -64,9 +64,13 @@
 		89CA5ABB2A02FD3200695069 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5ABA2A02FD3200695069 /* Utilities.swift */; };
 		89CFDD682A122E7200159C4B /* OrderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD672A122E7200159C4B /* OrderManager.swift */; };
 		89CFDD6A2A122ED700159C4B /* OrderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD692A122ED700159C4B /* OrderModel.swift */; };
+		89CFDD6C2A126BCB00159C4B /* AddOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD6B2A126BCB00159C4B /* AddOrderView.swift */; };
+		89CFDD6E2A126F5600159C4B /* ChooseDoctorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD6D2A126F5600159C4B /* ChooseDoctorView.swift */; };
+		89CFDD702A12823700159C4B /* ClientOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD6F2A12823700159C4B /* ClientOrders.swift */; };
+		89CFDD722A12824200159C4B /* DoctorOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD712A12824200159C4B /* DoctorOrders.swift */; };
 		89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */; };
 		89D37B792A0A87D100A7C933 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B782A0A87D100A7C933 /* EditProfileView.swift */; };
-		89E8ECD32A0E38A700398095 /* ProcedureEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8ECD22A0E38A700398095 /* ProcedureEditingView.swift */; };
+		89E8AB342A14DD52000661E6 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AB332A14DD51000661E6 /* SplashView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,7 +98,7 @@
 		898FD9B92A0908FD00725697 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		898FD9BB2A0910F100725697 /* AddDoctorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDoctorView.swift; sourceTree = "<group>"; };
 		898FD9BD2A0935E100725697 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
-		898FD9BF2A096D4B00725697 /* DoctorsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorsList.swift; sourceTree = "<group>"; };
+		898FD9BF2A096D4B00725697 /* AvailableDoctorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableDoctorsView.swift; sourceTree = "<group>"; };
 		899EC56D2A000A1C00C90D49 /* Briyut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Briyut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		899EC5702A000A1C00C90D49 /* BriyutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriyutApp.swift; sourceTree = "<group>"; };
 		899EC5722A000A1C00C90D49 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -139,9 +143,13 @@
 		89CA5ABA2A02FD3200695069 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		89CFDD672A122E7200159C4B /* OrderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderManager.swift; sourceTree = "<group>"; };
 		89CFDD692A122ED700159C4B /* OrderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderModel.swift; sourceTree = "<group>"; };
+		89CFDD6B2A126BCB00159C4B /* AddOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddOrderView.swift; sourceTree = "<group>"; };
+		89CFDD6D2A126F5600159C4B /* ChooseDoctorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseDoctorView.swift; sourceTree = "<group>"; };
+		89CFDD6F2A12823700159C4B /* ClientOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientOrders.swift; sourceTree = "<group>"; };
+		89CFDD712A12824200159C4B /* DoctorOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorOrders.swift; sourceTree = "<group>"; };
 		89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureManager.swift; sourceTree = "<group>"; };
 		89D37B782A0A87D100A7C933 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
-		89E8ECD22A0E38A700398095 /* ProcedureEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureEditingView.swift; sourceTree = "<group>"; };
+		89E8AB332A14DD51000661E6 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,9 +189,10 @@
 			isa = PBXGroup;
 			children = (
 				898FD9B42A08F4E000725697 /* AllProcedures.swift */,
-				89E8ECD22A0E38A700398095 /* ProcedureEditingView.swift */,
 				898FD9B62A08FDE000725697 /* ProcedureView.swift */,
-				898FD9BF2A096D4B00725697 /* DoctorsList.swift */,
+				898FD9BF2A096D4B00725697 /* AvailableDoctorsView.swift */,
+				89CFDD6D2A126F5600159C4B /* ChooseDoctorView.swift */,
+				89CFDD6B2A126BCB00159C4B /* AddOrderView.swift */,
 			);
 			path = Plus;
 			sourceTree = "<group>";
@@ -192,6 +201,8 @@
 			isa = PBXGroup;
 			children = (
 				898FD9B92A0908FD00725697 /* CalendarView.swift */,
+				89CFDD6F2A12823700159C4B /* ClientOrders.swift */,
+				89CFDD712A12824200159C4B /* DoctorOrders.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -303,6 +314,7 @@
 				899EC5BE2A002FF400C90D49 /* AccentButton.swift */,
 				89C590512A052B4700975E50 /* BarTitle.swift */,
 				89C590532A05642B00975E50 /* TabBar.swift */,
+				89E8AB332A14DD51000661E6 /* SplashView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -546,14 +558,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89CFDD702A12823700159C4B /* ClientOrders.swift in Sources */,
 				89C590542A05642B00975E50 /* TabBar.swift in Sources */,
 				89A17E5C2A03C9B200C92A58 /* AuthProviderOption.swift in Sources */,
-				898FD9C02A096D4B00725697 /* DoctorsList.swift in Sources */,
+				898FD9C02A096D4B00725697 /* AvailableDoctorsView.swift in Sources */,
 				89A17E562A03B36100C92A58 /* SignInWithAppleButton.swift in Sources */,
+				89CFDD722A12824200159C4B /* DoctorOrders.swift in Sources */,
 				89CA5AB02A02D9E000695069 /* Extensions.swift in Sources */,
 				89C590562A0570B000975E50 /* RootView.swift in Sources */,
 				899EC5D12A00596D00C90D49 /* LabelledDivider.swift in Sources */,
 				898FD9B52A08F4E000725697 /* AllProcedures.swift in Sources */,
+				89E8AB342A14DD52000661E6 /* SplashView.swift in Sources */,
 				899EC5B82A001D5C00C90D49 /* LoginView.swift in Sources */,
 				89C5905E2A059DD800975E50 /* UserManager.swift in Sources */,
 				89D37B792A0A87D100A7C933 /* EditProfileView.swift in Sources */,
@@ -566,7 +581,6 @@
 				898FD9BA2A0908FD00725697 /* CalendarView.swift in Sources */,
 				89CFDD682A122E7200159C4B /* OrderManager.swift in Sources */,
 				899EC5CB2A00574700C90D49 /* AuthenticationViewModel.swift in Sources */,
-				89E8ECD32A0E38A700398095 /* ProcedureEditingView.swift in Sources */,
 				89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */,
 				898FD9BC2A0910F100725697 /* AddDoctorView.swift in Sources */,
 				899EC5A62A000E6500C90D49 /* AppDelegate.swift in Sources */,
@@ -579,6 +593,7 @@
 				89A17E5A2A03C8E300C92A58 /* AppleSignInResultModel.swift in Sources */,
 				89CA5AB72A02FCC700695069 /* GoogleAuthenticationManager.swift in Sources */,
 				898FD9BE2A0935E100725697 /* ProfileViewModel.swift in Sources */,
+				89CFDD6E2A126F5600159C4B /* ChooseDoctorView.swift in Sources */,
 				89CA5ABB2A02FD3200695069 /* Utilities.swift in Sources */,
 				89CA5AB92A02FCE100695069 /* GoogleSignInResultModel.swift in Sources */,
 				890C28BC2A06D3F1000DB1A6 /* ProfileView.swift in Sources */,
@@ -588,6 +603,7 @@
 				899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */,
 				899EC5BF2A002FF400C90D49 /* AccentButton.swift in Sources */,
 				899EC5B62A001A7600C90D49 /* InputField.swift in Sources */,
+				89CFDD6C2A126BCB00159C4B /* AddOrderView.swift in Sources */,
 				89A17E582A03C8BD00C92A58 /* AppleAuthenticationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

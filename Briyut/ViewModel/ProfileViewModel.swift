@@ -16,11 +16,22 @@ final class ProfileViewModel: ObservableObject {
     @Published var doctors: [DBUser]? = nil
     @Published var procedures: [ProcedureModel] = []
     @Published var authProviders: [AuthProviderOption] = []
+    @Published var orders: [OrderModel] = []
     var lastDocument: DocumentSnapshot? = nil
+//    let procedureVM = ProcedureViewModel()
+    
+    init() {
+        print("INIT ProfileViewModel")
+    }
     
     func loadCurrentUser() async throws {
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
-        self.user = try await UserManager.shared.getUser(userId: authDataResult.uid)
+        self.user = try await getUser(userId: authDataResult.uid)
+//        self.user = try await UserManager.shared.getUser(userId: authDataResult.uid)
+    }
+    
+    func getUser(userId: String) async throws -> DBUser {
+        try await UserManager.shared.getUser(userId: userId)
     }
     
     func getProvider() {
@@ -62,11 +73,21 @@ final class ProfileViewModel: ObservableObject {
     
 }
 
+// MARK: Procedures
+
 extension ProfileViewModel {
     
     func addNewProcedure(procedure: ProcedureModel) async throws {
         try await ProcedureManager.shared.createNewProcedure(procedure: procedure)
         try await getAllProcedures()
+    }
+    
+//    func add2(procedure: ProcedureModel) async throws {
+//        self.procedures = try await procedureVM.addNewProcedure(procedure: procedure)
+//    }
+    
+    func getProcedure(procedureId: String) async throws -> ProcedureModel {
+        try await ProcedureManager.shared.getProduct(procedureId: procedureId)
     }
     
     func getAllProcedures() async throws {
@@ -84,4 +105,51 @@ extension ProfileViewModel {
         try await ProcedureManager.shared.removeProcedure(procedureId: procedureId)
         try await getAllProcedures()
     }
+}
+
+//class ProcedureViewModel {
+//    func addNewProcedure(procedure: ProcedureModel) async throws -> [ProcedureModel] {
+//        try await ProcedureManager.shared.createNewProcedure(procedure: procedure)
+//        return try await getAllProcedures()
+//    }
+//
+//    func getAllProcedures() async throws -> [ProcedureModel] {
+//        return try await ProcedureManager.shared.getAllProcedures()
+//    }
+//
+//}
+
+// MARK: Orders
+
+extension ProfileViewModel {
+    
+    func getAllOrders(isDone: Bool, countLimit: Int) async throws {
+        let (orders, lastDocument) = try await OrderManager.shared.getAllOrders(userId: user?.userId ?? "", isDone: isDone, countLimit: countLimit, lastDocument: lastDocument)
+        self.orders.append(contentsOf: orders)
+        if let lastDocument {
+            self.lastDocument = lastDocument
+        }
+        print("Догрузка ордеров")
+    }
+    
+    func addNewOrder(order: OrderModel) async throws {
+        try await OrderManager.shared.createNewOrder(order: order)
+    }
+    
+    func removeOrder(orderId: String) async throws {
+        try await OrderManager.shared.removeOrder(orderId: orderId)
+    }
+    
+    func updateOrdersStatus() async throws {
+        try await getAllOrders(isDone: false, countLimit: 20)
+        for order in orders {
+            if order.date.dateValue() <= Date() {
+                try await OrderManager.shared.updateOrderStatus(orderId: order.orderId)
+            }
+        }
+        orders = []
+        lastDocument = nil
+        try await getAllOrders(isDone: false, countLimit: 4)
+    }
+    
 }

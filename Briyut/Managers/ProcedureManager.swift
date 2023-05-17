@@ -53,6 +53,15 @@ final class ProcedureManager {
     
     func removeProcedure(procedureId: String) async throws {
         try await procedureDocument(procedureId: procedureId).delete()
+        let orderQuery = Firestore.firestore().collection("orders").whereField("procedure_id", isEqualTo: procedureId)
+        let ordersSnapshot = try await orderQuery.getDocuments(as: OrderModel.self)
+        
+        for order in ordersSnapshot {
+            let orderDocument = Firestore.firestore().collection("orders").document(order.orderId)
+            if !order.isDone {
+                try await orderDocument.delete()
+            }
+        }
     }
 }
 
