@@ -71,6 +71,7 @@
 		89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */; };
 		89D37B792A0A87D100A7C933 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B782A0A87D100A7C933 /* EditProfileView.swift */; };
 		89E8AB342A14DD52000661E6 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AB332A14DD51000661E6 /* SplashView.swift */; };
+		89E8AB382A154D73000661E6 /* OrderInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AB372A154D73000661E6 /* OrderInformationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +151,7 @@
 		89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureManager.swift; sourceTree = "<group>"; };
 		89D37B782A0A87D100A7C933 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		89E8AB332A14DD51000661E6 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		89E8AB372A154D73000661E6 /* OrderInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderInformationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,9 +202,9 @@
 		898FD9B82A0908C700725697 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
+				89E8AB352A1547B1000661E6 /* ClientOrders */,
+				89E8AB362A1547BA000661E6 /* DoctorOrders */,
 				898FD9B92A0908FD00725697 /* CalendarView.swift */,
-				89CFDD6F2A12823700159C4B /* ClientOrders.swift */,
-				89CFDD712A12824200159C4B /* DoctorOrders.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -410,6 +412,23 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		89E8AB352A1547B1000661E6 /* ClientOrders */ = {
+			isa = PBXGroup;
+			children = (
+				89CFDD6F2A12823700159C4B /* ClientOrders.swift */,
+				89E8AB372A154D73000661E6 /* OrderInformationView.swift */,
+			);
+			path = ClientOrders;
+			sourceTree = "<group>";
+		};
+		89E8AB362A1547BA000661E6 /* DoctorOrders */ = {
+			isa = PBXGroup;
+			children = (
+				89CFDD712A12824200159C4B /* DoctorOrders.swift */,
+			);
+			path = DoctorOrders;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -576,6 +595,7 @@
 				89CA5AAC2A027A1E00695069 /* ResetPasswordView.swift in Sources */,
 				899EC5C62A00420C00C90D49 /* AuthenticationManager.swift in Sources */,
 				89C5904E2A051AFB00975E50 /* BackButton.swift in Sources */,
+				89E8AB382A154D73000661E6 /* OrderInformationView.swift in Sources */,
 				890C28BA2A0652FE000DB1A6 /* ProcedureModel.swift in Sources */,
 				899EC5CF2A0057EE00C90D49 /* RegistrationView.swift in Sources */,
 				898FD9BA2A0908FD00725697 /* CalendarView.swift in Sources */,

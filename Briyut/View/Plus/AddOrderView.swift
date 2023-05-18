@@ -24,11 +24,9 @@ struct AddOrderView: View {
             
             Button {
                 let timestamp = Timestamp(date: Date())
-                let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure?.procedureId ?? "", procedureName: procedure?.name ?? "", doctorId: doctor?.userId ?? "", doctorName: "\(doctor?.name ?? "") \(doctor?.lastName ?? "")", clientId: vm.user?.userId ?? "", date: timestamp, isDone: false)
+                let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure?.procedureId ?? "", procedureName: procedure?.name ?? "", doctorId: doctor?.userId ?? "", doctorName: "\(doctor?.name ?? "") \(doctor?.lastName ?? "")", clientId: vm.user?.userId ?? "", date: timestamp, isDone: false, price: procedure?.cost ?? 0)
                 Task {
                     try await vm.addNewOrder(order: order)
-                    vm.lastDocument = nil
-                    vm.orders = []
                     selectedTab = .home
                 }
             } label: {

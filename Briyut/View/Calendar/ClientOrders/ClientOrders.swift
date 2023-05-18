@@ -17,40 +17,15 @@ struct ClientOrders: View {
         VStack {
             BarTitle<Text, Text>(text: "Appointments")
             
-            CustomSegmentedPicker(options: ["Upcoming", "Recent"], selectedIndex: $selectedIndex, vm: vm)
-                                    
-            List {
-                ForEach(vm.orders, id: \.orderId) { order in
-                    OrderRow(vm: vm, order: order)
-                        .listRowInsets(EdgeInsets())
-                        .padding(.bottom, 7)
-                    
-                    if order == vm.orders.last {
-                        ProgressView()
-                            .onAppear {
-                                Task {
-                                    try await vm.getAllOrders(isDone: false, countLimit: 4)
-                                }
-                            }
-                    }
-
-                    
-                }
-                .listRowSeparator(.hidden)
+            CustomSegmentedPicker(options: ["Upcoming", "Recent"], selectedIndex: $selectedIndex)
+            
+            if selectedIndex == 0 {
+                OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.activeOrders)
+            } else {
+                OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.doneOrders)
             }
-            .listStyle(.inset)
-            .scrollIndicators(.hidden)
             
             Spacer()
-        }
-        .onDisappear {
-            Task {
-                if selectedIndex == 1 {
-                    vm.orders = []
-                    vm.lastDocument = nil
-                    try await vm.getAllOrders(isDone: false, countLimit: 4)
-                }
-            }
         }
     }
 }
@@ -63,12 +38,11 @@ struct ClientOrders_Previews: PreviewProvider {
 }
 
 struct CustomSegmentedPicker: View {
-
+    
     let options: [String]
     @Binding var selectedIndex: Int
     @Namespace private var animation
-    let vm: ProfileViewModel
-
+    
     var body: some View {
         ZStack {
             HStack {
@@ -82,17 +56,6 @@ struct CustomSegmentedPicker: View {
             HStack {
                 ForEach(options.indices, id: \.self) { index in
                     Button {
-                        Task {
-                            if selectedIndex == 0 {
-                                vm.orders = []
-                                vm.lastDocument = nil
-                                try await vm.getAllOrders(isDone: false, countLimit: 10)
-                            } else {
-                                vm.orders = []
-                                vm.lastDocument = nil
-                                try await vm.getAllOrders(isDone: true, countLimit: 10)
-                            }
-                        }
                         withAnimation(.easeInOut(duration: 0.15)) {
                             selectedIndex = index
                         }
@@ -120,40 +83,26 @@ struct OrderRow: View {
     
     var body: some View {
         
-        VStack {
-            HStack(spacing: 10) {
-                
-                ProfileImage(photoURL: doctor?.photoUrl, frame: ScreenSize.height * 0.11, color: Color.white)
-                    .cornerRadius(ScreenSize.width / 20)
-                                
-                VStack(alignment: .leading) {
-                    
+        VStack(spacing: 15) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 10) {
                     Text(order.procedureName)
                         .font(.title3.bold())
                         .lineLimit(1)
-                                        
-                    Spacer()
-                    
-                    Text(order.doctorName)
-                        .font(.subheadline.bold())
-                        .foregroundColor(.secondary)
-                    
-                    Spacer()
                     
                     Text(orderDate())
                         .font(.subheadline.bold())
-                    
+                        .foregroundColor(.secondary)
                 }
-                .padding(.horizontal, 10)
-                .frame(height: ScreenSize.height * 0.1)
-            }
-            .padding(.horizontal, 15)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .frame(height: ScreenSize.height * 0.1)
-                        
-            if !order.isDone {
                 
                 Spacer()
+                
+                Text("₴ \(order.price)")
+                    .font(.title2)
+                
+            }
+            
+            if !order.isDone {
                 
                 HStack {
                     Button {
@@ -184,14 +133,14 @@ struct OrderRow: View {
                     }
                     .buttonStyle(.plain)
                 }
-                .padding(.horizontal)
             }
         }
-        .padding(.vertical, 15)
-        .frame(height: order.isDone ? ScreenSize.height * 0.15 : ScreenSize.height * 0.22)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 7)
+        .frame(height: order.isDone ? ScreenSize.height * 0.12 : ScreenSize.height * 0.18)
         .background(order.isDone ? Color.secondary.opacity(0.1) : Color.secondaryColor)
         .cornerRadius(ScreenSize.width / 30)
-        .frame(maxWidth: .infinity)
         .onAppear {
             Task {
                 doctor = try await vm.getUser(userId: order.doctorId)
@@ -202,10 +151,10 @@ struct OrderRow: View {
                 title: Text("Are you sure you want to remove the appointment?"),
                 primaryButton: .destructive(Text("Remove"), action: {
                     Task {
+                        vm.activeOrders = []
+                        vm.activeLastDocument = nil
                         try await vm.removeOrder(orderId: order.orderId)
-                        vm.lastDocument = nil
-                        vm.orders = []
-                        try await vm.getAllOrders(isDone: false, countLimit: 10)
+                        try await vm.getAllOrders(isDone: false, countLimit: 6)
                     }
                 }),
                 secondaryButton: .default(Text("Cancel"), action: {
@@ -222,4 +171,47 @@ struct OrderRow: View {
         return dateFormatter.string(from: order.date.dateValue())
     }
     
+}
+
+struct OrderList: View {
+    
+    let vm: ProfileViewModel
+    var selectedIndex: Int
+    var orderArray: [OrderModel]
+    
+    var body: some View {
+        List {
+            ForEach(orderArray, id: \.orderId) { order in
+                
+                OrderRow(vm: vm, order: order)
+                    .listRowInsets(EdgeInsets())
+                    .padding(.bottom, 7)
+                
+                if order == orderArray.last {
+                    HStack {
+                        
+                    }
+                    .frame(height: 1)
+                    .onAppear {
+                        Task {
+                            try await vm.getAllOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
+                        }
+                    }
+                }
+            }
+            .listRowSeparator(.hidden)
+        }
+        .listStyle(.inset)
+        .scrollIndicators(.hidden)
+        .refreshable {
+            vm.activeOrders = []
+            vm.doneOrders = []
+            vm.activeLastDocument = nil
+            vm.doneLastDocument = nil
+            Task {
+                try await vm.getAllOrders(isDone: false, countLimit: 6)
+                try await vm.getAllOrders(isDone: true, countLimit: 6)
+            }
+        }
+    }
 }

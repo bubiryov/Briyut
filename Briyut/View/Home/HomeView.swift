@@ -11,12 +11,12 @@ struct HomeView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
     @Binding var selectedTab: Tab
-    @State var justOpened: Bool = true
+    @Binding var justOpened: Bool
     
     var body: some View {
         VStack {
             BarTitle<MapButton, ProfileButton>(text: "Home", leftButton: MapButton(image: "pin"), rightButton: ProfileButton(selectedTab: $selectedTab, photo: vm.user?.photoUrl ?? ""))
-                                                            
+                                                                        
             Spacer()
                         
         }
@@ -27,10 +27,11 @@ struct HomeView: View {
                 try await vm.getAllDoctors()
                 if justOpened {
                     try await vm.updateOrdersStatus()
+                    justOpened = false
                 } else {
-                    try await vm.getAllOrders(isDone: false, countLimit: 4)
+                    try await vm.getAllOrders(isDone: false, countLimit: 6)
+                    try await vm.getAllOrders(isDone: true, countLimit: 6)
                 }
-                justOpened = false
             }
         }
     }
@@ -38,7 +39,7 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(selectedTab: .constant(.profile))
+        HomeView(selectedTab: .constant(.profile), justOpened: .constant(false))
             .environmentObject(ProfileViewModel())
     }
 }

@@ -16,8 +16,11 @@ final class ProfileViewModel: ObservableObject {
     @Published var doctors: [DBUser]? = nil
     @Published var procedures: [ProcedureModel] = []
     @Published var authProviders: [AuthProviderOption] = []
-    @Published var orders: [OrderModel] = []
-    var lastDocument: DocumentSnapshot? = nil
+    @Published var activeOrders: [OrderModel] = []
+    @Published var doneOrders: [OrderModel] = []
+
+    var activeLastDocument: DocumentSnapshot? = nil
+    var doneLastDocument: DocumentSnapshot? = nil
 //    let procedureVM = ProcedureViewModel()
     
     init() {
@@ -124,12 +127,21 @@ extension ProfileViewModel {
 extension ProfileViewModel {
     
     func getAllOrders(isDone: Bool, countLimit: Int) async throws {
-        let (orders, lastDocument) = try await OrderManager.shared.getAllOrders(userId: user?.userId ?? "", isDone: isDone, countLimit: countLimit, lastDocument: lastDocument)
-        self.orders.append(contentsOf: orders)
-        if let lastDocument {
-            self.lastDocument = lastDocument
+        if !isDone {
+            let (activeOrders, activeLastDocument) = try await OrderManager.shared.getAllOrders(userId: user?.userId ?? "", isDone: false, countLimit: countLimit, lastDocument: activeLastDocument)
+            self.activeOrders.append(contentsOf: activeOrders)
+            if let activeLastDocument {
+                self.activeLastDocument = activeLastDocument
+            }
+            print("Догрузка активных ордеров")
+        } else {
+            let (doneOrders, doneLastDocument) = try await OrderManager.shared.getAllOrders(userId: user?.userId ?? "", isDone: true, countLimit: countLimit, lastDocument: doneLastDocument)
+            self.doneOrders.append(contentsOf: doneOrders)
+            if let doneLastDocument {
+                self.doneLastDocument = doneLastDocument
+            }
+            print("Догрузка выполненных ордеров")
         }
-        print("Догрузка ордеров")
     }
     
     func addNewOrder(order: OrderModel) async throws {
@@ -142,14 +154,13 @@ extension ProfileViewModel {
     
     func updateOrdersStatus() async throws {
         try await getAllOrders(isDone: false, countLimit: 20)
-        for order in orders {
+        for order in activeOrders {
             if order.date.dateValue() <= Date() {
                 try await OrderManager.shared.updateOrderStatus(orderId: order.orderId)
             }
         }
-        orders = []
-        lastDocument = nil
-        try await getAllOrders(isDone: false, countLimit: 4)
+        try await getAllOrders(isDone: false, countLimit: 6)
+        try await getAllOrders(isDone: true, countLimit: 6)
     }
     
 }

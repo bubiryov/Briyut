@@ -18,8 +18,9 @@ struct OrderModel: Codable, Equatable {
     let clientId: String
     let date: Timestamp
     let isDone: Bool
+    let price: Int
     
-    init(orderId: String, procedureId: String, procedureName: String, doctorId: String, doctorName: String, clientId: String, date: Timestamp, isDone: Bool) {
+    init(orderId: String, procedureId: String, procedureName: String, doctorId: String, doctorName: String, clientId: String, date: Timestamp, isDone: Bool, price: Int) {
         self.orderId = orderId
         self.procedureId = procedureId
         self.procedureName = procedureName
@@ -28,6 +29,7 @@ struct OrderModel: Codable, Equatable {
         self.clientId = clientId
         self.date = date
         self.isDone = isDone
+        self.price = price
     }
     
     enum CodingKeys: String, CodingKey {
@@ -39,6 +41,7 @@ struct OrderModel: Codable, Equatable {
         case clientId = "client_id"
         case date = "date"
         case isDone = "is_done"
+        case price = "price"
     }
     
     func encode(to encoder: Encoder) throws {
@@ -51,6 +54,7 @@ struct OrderModel: Codable, Equatable {
         try container.encode(self.clientId, forKey: .clientId)
         try container.encode(self.date, forKey: .date)
         try container.encode(self.isDone, forKey: .isDone)
+        try container.encode(self.price, forKey: .price)
     }
         
     init(from decoder: Decoder) throws {
@@ -63,5 +67,6 @@ struct OrderModel: Codable, Equatable {
         self.clientId = try container.decode(String.self, forKey: .clientId)
         self.date = try container.decode(Timestamp.self, forKey: .date)
         self.isDone = try container.decode(Bool.self, forKey: .isDone)
+        self.price = try container.decode(Int.self, forKey: .price)
     }
 }

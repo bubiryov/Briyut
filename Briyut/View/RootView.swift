@@ -12,6 +12,7 @@ struct RootView: View {
     @StateObject var vm = ProfileViewModel()
     @State private var selectedTab: Tab = .home
     @Binding var notEntered: Bool
+    @State var justOpened: Bool = true
     
     var body: some View {
         ZStack {
@@ -19,7 +20,7 @@ struct RootView: View {
                 VStack {
                     switch selectedTab {
                     case .home:
-                        HomeView(selectedTab: $selectedTab)
+                        HomeView(selectedTab: $selectedTab, justOpened: $justOpened)
                             .environmentObject(vm)
                     case .plus:
                         AllProcedures(notEntered: $notEntered, selectedTab: $selectedTab)
@@ -41,7 +42,7 @@ struct RootView: View {
                 TabBar(selectedTab: $selectedTab)
                                 
             }
-            .edgesIgnoringSafeArea(.bottom)            
+            .edgesIgnoringSafeArea(.bottom)
         }
         .onAppear {
             print("Appear root view")
