@@ -13,6 +13,7 @@ struct ChooseDoctorView: View {
     @Environment(\.presentationMode) var presentationMode
     var procedure: ProcedureModel
     var cornerRadius = ScreenSize.width / 30
+    @State var ordersTime = [Date: Date]()
     @Binding var selectedTab: Tab
     
     var body: some View {
@@ -24,7 +25,8 @@ struct ChooseDoctorView: View {
                     ForEach(doctors, id: \.userId) { doctor in
                         NavigationLink {
                             
-                            AddOrderView(doctor: doctor, procedure: procedure, selectedTab: $selectedTab)
+                            DateTimeSelectionView(doctor: doctor, procedure: procedure, selectedTab: $selectedTab, ordersTime: $ordersTime)
+//                            AddOrderView(doctor: doctor, procedure: procedure, selectedTab: $selectedTab)
                             
                         } label: {
                             
@@ -52,6 +54,11 @@ struct ChooseDoctorView: View {
             Spacer()
         }
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            Task {
+                ordersTime = try await vm.getDayOrders(date: Date())
+            }
+        }
     }
 }
 

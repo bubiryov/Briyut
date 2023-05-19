@@ -67,4 +67,39 @@ final class OrderManager {
         try await orderDocument(orderId: orderId).updateData(data)
     }
     
+//    func getDayOrders(date: Timestamp) async throws -> [OrderModel] {
+//        let query = orderCollection.whereField("date", isEqualTo: date)
+//
+//        return try await query.getDocuments(as: OrderModel.self)
+//    }
+    
+    func getDayOrders(date: Date) async throws -> [OrderModel] {
+        let calendar = Calendar.current
+        
+        let startDate = calendar.startOfDay(for: date)
+        let endDate = calendar.date(byAdding: .day, value: 1, to: startDate)!
+        
+        let query = orderCollection
+            .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: false)
+            .whereField("date", isGreaterThanOrEqualTo: startDate)
+            .whereField("date", isLessThan: endDate)
+//
+//        let querySnapshot = try await query.getDocuments()
+//        let orders = querySnapshot.documents.compactMap { document -> OrderModel? in
+//            let result = Result { try document.data(as: OrderModel.self) }
+//            switch result {
+//            case .success(let order):
+//                return order
+//            case .failure(let error):
+//                // Обработка ошибки
+//                print("Failed to decode order: \(error)")
+//                return nil
+//            }
+//        }
+//
+//        return orders
+        return try await query.getDocuments(as: OrderModel.self)
+    }
+
+    
 }
