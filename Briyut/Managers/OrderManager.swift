@@ -41,7 +41,7 @@ final class OrderManager {
         orderCollection
             .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: clientId)
             .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
-            .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
+            .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
     }
     
     func getAllOrders(userId: String, isDone: Bool, countLimit: Int, lastDocument: DocumentSnapshot?) async throws -> (products: [OrderModel], lastDocument: DocumentSnapshot?) {
@@ -66,13 +66,7 @@ final class OrderManager {
         ]
         try await orderDocument(orderId: orderId).updateData(data)
     }
-    
-//    func getDayOrders(date: Timestamp) async throws -> [OrderModel] {
-//        let query = orderCollection.whereField("date", isEqualTo: date)
-//
-//        return try await query.getDocuments(as: OrderModel.self)
-//    }
-    
+        
     func getDayOrders(date: Date) async throws -> [OrderModel] {
         let calendar = Calendar.current
         
@@ -81,23 +75,10 @@ final class OrderManager {
         
         let query = orderCollection
             .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: false)
-            .whereField("date", isGreaterThanOrEqualTo: startDate)
-            .whereField("date", isLessThan: endDate)
-//
-//        let querySnapshot = try await query.getDocuments()
-//        let orders = querySnapshot.documents.compactMap { document -> OrderModel? in
-//            let result = Result { try document.data(as: OrderModel.self) }
-//            switch result {
-//            case .success(let order):
-//                return order
-//            case .failure(let error):
-//                // Обработка ошибки
-//                print("Failed to decode order: \(error)")
-//                return nil
-//            }
-//        }
-//
-//        return orders
+            .whereField(OrderModel.CodingKeys.date.rawValue, isGreaterThanOrEqualTo: startDate)
+            .whereField(OrderModel.CodingKeys.date.rawValue, isLessThan: endDate)
+            .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
+
         return try await query.getDocuments(as: OrderModel.self)
     }
 

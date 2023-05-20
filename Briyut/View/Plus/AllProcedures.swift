@@ -36,8 +36,7 @@ struct AllProcedures: View {
                                     .scaledToFit()
                                     .frame(width: ScreenSize.height * 0.03)
                             }
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 7)
+                            .padding(10)
                         }
                         .frame(maxWidth: .infinity)
                         .background(Color.yellow.opacity(0.3))

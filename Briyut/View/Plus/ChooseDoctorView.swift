@@ -25,7 +25,7 @@ struct ChooseDoctorView: View {
                     ForEach(doctors, id: \.userId) { doctor in
                         NavigationLink {
                             
-                            DateTimeSelectionView(doctor: doctor, procedure: procedure, selectedTab: $selectedTab, ordersTime: $ordersTime)
+                            DateTimeSelectionView(doctor: doctor, procedure: procedure, selectedTab: $selectedTab)
 //                            AddOrderView(doctor: doctor, procedure: procedure, selectedTab: $selectedTab)
                             
                         } label: {
@@ -54,11 +54,6 @@ struct ChooseDoctorView: View {
             Spacer()
         }
         .navigationBarBackButtonHidden(true)
-        .onAppear {
-            Task {
-                ordersTime = try await vm.getDayOrders(date: Date())
-            }
-        }
     }
 }
 

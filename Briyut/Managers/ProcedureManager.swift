@@ -29,13 +29,13 @@ final class ProcedureManager {
             .setData(from: procedure, merge: false)
     }
     
-    private func getAllProcedures() -> Query {
-        proceduresCollection
-    }
+//    private func getAllProcedures() -> Query {
+//        proceduresCollection
+//    }
 
     func getAllProcedures() async throws -> [ProcedureModel] {
         
-        let query: Query = getAllProcedures()
+        let query = proceduresCollection
         
         return try await query
             .getDocuments(as: ProcedureModel.self)

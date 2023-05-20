@@ -152,10 +152,28 @@ extension ProfileViewModel {
         try await OrderManager.shared.removeOrder(orderId: orderId)
     }
     
+//    func updateOrdersStatus() async throws {
+//        try await getAllOrders(isDone: false, countLimit: 20)
+//        for order in activeOrders {
+//            if order.date.dateValue() <= Date() {
+//                try await OrderManager.shared.updateOrderStatus(orderId: order.orderId)
+//            }
+//        }
+//        activeLastDocument = nil
+//        doneLastDocument = nil
+//        activeOrders = []
+//        doneOrders = []
+//        try await getAllOrders(isDone: false, countLimit: 6)
+//        try await getAllOrders(isDone: true, countLimit: 6)
+//        print("Updated")
+//    }
+    
     func updateOrdersStatus() async throws {
         try await getAllOrders(isDone: false, countLimit: 20)
         for order in activeOrders {
-            if order.date.dateValue() <= Date() {
+            let calendar = Calendar.current
+            let procedureDuration = try await ProcedureManager.shared.getProduct(procedureId: order.procedureId).duration
+            if calendar.date(byAdding: .minute, value: procedureDuration, to: order.date.dateValue())! <= Date() {
                 try await OrderManager.shared.updateOrderStatus(orderId: order.orderId)
             }
         }
@@ -167,6 +185,7 @@ extension ProfileViewModel {
         try await getAllOrders(isDone: true, countLimit: 6)
         print("Updated")
     }
+
     
     /*
     func getDayOrders(date: Timestamp) async throws -> [Date: Date] {
@@ -215,24 +234,46 @@ extension ProfileViewModel {
 //        return occupied
 //    }
     
+//    func getDayOrders(date: Date) async throws -> [Date: Date] {
+//        let orders = try await OrderManager.shared.getDayOrders(date: date)
+//        var occupied = [Date: Date]()
+//        for order in orders {
+//            let orderDate = order.date.dateValue()
+//            let calendar = Calendar.current
+//            let dateComponents = calendar.dateComponents([.hour, .minute], from: orderDate)
+//            let hour = dateComponents.hour ?? 0
+//            let minute = dateComponents.minute ?? 0
+//            let start = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: Date())!
+//
+//            let procedureDuration = try await ProcedureManager.shared.getProduct(procedureId: order.procedureId).duration
+//            let end = calendar.date(byAdding: .minute, value: procedureDuration, to: start)!
+//
+//            occupied[start] = end
+//        }
+//        print(occupied)
+//        return occupied
+//    }
+    
     func getDayOrders(date: Date) async throws -> [Date: Date] {
         let orders = try await OrderManager.shared.getDayOrders(date: date)
         var occupied = [Date: Date]()
         for order in orders {
-            let date = order.date.dateValue()
+            let orderDate = order.date.dateValue()
             let calendar = Calendar.current
-            let dateComponents = calendar.dateComponents([.hour, .minute], from: date)
-            let hour = dateComponents.hour ?? 0
-            let minute = dateComponents.minute ?? 0
-            let start = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: Date())!
+//            let dateComponents = calendar.dateComponents([.hour, .minute], from: orderDate)
+//            let hour = dateComponents.hour ?? 0
+//            let minute = dateComponents.minute ?? 0
+//            let start = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: Date())!
             
             let procedureDuration = try await ProcedureManager.shared.getProduct(procedureId: order.procedureId).duration
-            let end = calendar.date(byAdding: .minute, value: procedureDuration, to: start)!
+            let end = calendar.date(byAdding: .minute, value: procedureDuration, to: orderDate)!
             
-            occupied[start] = end
+            occupied[orderDate] = end
         }
+        print(occupied)
         return occupied
     }
+
 
 
     

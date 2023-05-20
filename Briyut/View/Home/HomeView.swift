@@ -26,10 +26,6 @@ struct HomeView: View {
                 try await vm.getAllProcedures()
                 try await vm.getAllDoctors()
                 if justOpened {
-                    //
-                    try await vm.getAllOrders(isDone: false, countLimit: 6)
-                    try await vm.getAllOrders(isDone: true, countLimit: 6)
-
 //                    try await vm.updateOrdersStatus()
                     justOpened = false
                 } else {
