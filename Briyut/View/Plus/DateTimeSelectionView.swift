@@ -25,16 +25,38 @@ struct DateTimeSelectionView: View {
         formatter.dateFormat = "d MMMM yyyy"
         return formatter
     }()
+    
+    @State var timeSlots: [String] = []
             
-    let timeSlots = [
-        "8:00", "8:30", "9:00", "9:30",
-        "10:00", "10:30", "11:00", "11:30",
-        "12:00", "12:30", "13:00", "13:30",
-        "14:00", "14:30", "15:00", "15:30",
-        "16:00", "16:30", "17:00", "17:30",
-        "18:00", "18:30", "19:00", "19:30",
-        "20:00", "20:30", "21:00"
-    ]
+//    let timeSlots = [
+//        "8:00", "8:30", "9:00", "9:30",
+//        "10:00", "10:30", "11:00", "11:30",
+//        "12:00", "12:30", "13:00", "13:30",
+//        "14:00", "14:30", "15:00", "15:30",
+//        "16:00", "16:30", "17:00", "17:30",
+//        "18:00", "18:30", "19:00", "19:30",
+//        "20:00", "20:30", "21:00"
+//    ]
+    
+//    var timeSlots: [String] {
+//        var slots = [String]()
+//
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "HH:mm"
+//
+//        var currentTime = formatter.date(from: "8:00")!
+//        let endTime = formatter.date(from: "21:00")!
+//
+//        let interval = 30 * 60 // 30 минут в секундах
+//
+//        while currentTime <= endTime {
+//            let timeString = formatter.string(from: currentTime)
+//            slots.append(timeString)
+//            currentTime = currentTime.addingTimeInterval(TimeInterval(interval))
+//        }
+//
+//        return slots
+//    }
     
     var body: some View {
 //        VStack {
@@ -81,7 +103,7 @@ struct DateTimeSelectionView: View {
                     Task {
                         try await vm.addNewOrder(order: order)
                         withAnimation {
-                            selectedTab = .home
+                            selectedTab = .calendar
                         }
                     }
                 } label: {
@@ -93,14 +115,18 @@ struct DateTimeSelectionView: View {
             .onChange(of: selectedDate) { _ in
                 Task {
                     disableAllButtons = true
+                    timeSlots = []
                     ordersTime = try await vm.getDayOrders(date: selectedDate)
+                    generateTimeSlots()
                     disableAllButtons = false
                 }
             }
             .onAppear {
                 Task {
                     disableAllButtons = true
+                    timeSlots = []
                     ordersTime = try await vm.getDayOrders(date: Date())
+                    generateTimeSlots()
                     disableAllButtons = false
                 }
             }
@@ -108,7 +134,50 @@ struct DateTimeSelectionView: View {
 //        }
 //        .padding(.horizontal, 20)
     }
+    
+    func generateTimeSlots() {
+        var slots = [String]()
         
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        
+        let calendar = Calendar.current
+        
+        var currentTime = calendar.date(bySettingHour: 8, minute: 0, second: 0, of: selectedDate)!
+//        let endTime = calendar.date(bySettingHour: 21, minute: 0, second: 0, of: selectedDate)!
+        
+        let interval = 30 * 60
+                
+        for _ in 0..<27 {
+            let nextTime = calendar.date(byAdding: .second, value: interval, to: currentTime)!
+                        
+            if ordersTime.isEmpty {
+                let timeString = formatter.string(from: currentTime)
+                slots.append(timeString)
+                currentTime = nextTime
+                continue
+            }
+            
+            if slots.isEmpty {
+                let timeString = formatter.string(from: currentTime)
+                slots.append(timeString)
+                currentTime = nextTime
+            }
+            
+            if let time = ordersTime.first(where: { $0.value > currentTime && $0.value < nextTime }) {
+                let timeString = formatter.string(from: time.value)
+                slots.append(timeString)
+                currentTime = time.value
+            } else {
+                let timeString = formatter.string(from: nextTime)
+                slots.append(timeString)
+                currentTime = nextTime
+            }
+        }
+                
+        timeSlots = slots
+    }
+
     func createTimestamp(from date: Date, time: String) -> Timestamp? {
         guard let date = createFullDate(from: date, time: time) else {
             return nil

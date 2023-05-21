@@ -119,21 +119,22 @@ struct OrderInformationView: View {
                 Button {
                     //
                 } label: {
-                    Text("Navigate")
-                        .foregroundColor(.white)
-                        .bold()
+                    AccentButton(text: "Go home", isButtonActive: true)
+//                    Text("Back to home")
+//                        .foregroundColor(.white)
+//                        .bold()
                 }
-                .buttonStyle(.plain)
-                .frame(width: ScreenSize.width * 0.3, height: ScreenSize.height * 0.05)
-                .background(Color.mainColor)
-                .cornerRadius(ScreenSize.width / 30)
+//                .buttonStyle(.plain)
+//                .frame(width: ScreenSize.width * 0.3, height: ScreenSize.height * 0.05)
+//                .background(Color.mainColor)
+//                .cornerRadius(ScreenSize.width / 30)
 
                 
 //                Spacer()
             }
             .padding(.horizontal, 40)
 //            .padding(.vertical, 20)
-            .frame(width: ScreenSize.width * 0.8, height: ScreenSize.height * 0.6)
+            .frame(width: ScreenSize.width * 0.8, height: ScreenSize.height * 0.65)
             .background(Color.secondaryColor)
             .cornerRadius(ScreenSize.width / 20)
             .shadow(radius: 40, y: 5)

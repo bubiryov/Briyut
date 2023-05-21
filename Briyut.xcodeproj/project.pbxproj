@@ -16,6 +16,7 @@
 		898FD9BC2A0910F100725697 /* AddDoctorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BB2A0910F100725697 /* AddDoctorView.swift */; };
 		898FD9BE2A0935E100725697 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BD2A0935E100725697 /* ProfileViewModel.swift */; };
 		898FD9C02A096D4B00725697 /* AvailableDoctorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BF2A096D4B00725697 /* AvailableDoctorsView.swift */; };
+		89988BEA2A1A3D35004DB4C6 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 89988BE92A1A3D35004DB4C6 /* Lottie */; };
 		899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5702A000A1C00C90D49 /* BriyutApp.swift */; };
 		899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5722A000A1C00C90D49 /* ContentView.swift */; };
 		899EC5752A000A1E00C90D49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 899EC5742A000A1E00C90D49 /* Assets.xcassets */; };
@@ -163,6 +164,7 @@
 			files = (
 				89CA5AB52A02F40E00695069 /* GoogleSignInSwift in Frameworks */,
 				89C9E2F02A0BC8F600B16CBF /* CachedAsyncImage in Frameworks */,
+				89988BEA2A1A3D35004DB4C6 /* Lottie in Frameworks */,
 				899EC5A22A000E1300C90D49 /* FirebaseAnalyticsSwift in Frameworks */,
 				89CA5AB32A02F40E00695069 /* GoogleSignIn in Frameworks */,
 				89C5905B2A058B0C00975E50 /* FirebaseFirestoreSwift in Frameworks */,
@@ -457,6 +459,7 @@
 				89C590582A058B0C00975E50 /* FirebaseFirestore */,
 				89C5905A2A058B0C00975E50 /* FirebaseFirestoreSwift */,
 				89C9E2EF2A0BC8F600B16CBF /* CachedAsyncImage */,
+				89988BE92A1A3D35004DB4C6 /* Lottie */,
 			);
 			productName = Briyut;
 			productReference = 899EC56D2A000A1C00C90D49 /* Briyut.app */;
@@ -534,6 +537,7 @@
 				899EC59E2A000E1300C90D49 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				89CA5AB12A02F40E00695069 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				89C9E2EE2A0BC8F600B16CBF /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
+				89988BE82A1A3D35004DB4C6 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = 899EC56E2A000A1C00C90D49 /* Products */;
 			projectDirPath = "";
@@ -985,6 +989,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		89988BE82A1A3D35004DB4C6 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		899EC59E2A000E1300C90D49 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -1012,6 +1024,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		89988BE92A1A3D35004DB4C6 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89988BE82A1A3D35004DB4C6 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
 		899EC59F2A000E1300C90D49 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 899EC59E2A000E1300C90D49 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
