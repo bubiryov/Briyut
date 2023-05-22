@@ -82,7 +82,15 @@ struct EditProfileView: View {
                 })
             )
         }
-
+        .contentShape(Rectangle())
+        .gesture(
+            DragGesture()
+                .onEnded { gesture in
+                if gesture.translation.width > 100 {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+        )
     }
 }
 

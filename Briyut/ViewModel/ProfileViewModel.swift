@@ -146,6 +146,9 @@ extension ProfileViewModel {
     
     func addNewOrder(order: OrderModel) async throws {
         try await OrderManager.shared.createNewOrder(order: order)
+        activeLastDocument = nil
+        activeOrders = []
+        try await getAllOrders(isDone: false, countLimit: 6)
     }
     
     func removeOrder(orderId: String) async throws {

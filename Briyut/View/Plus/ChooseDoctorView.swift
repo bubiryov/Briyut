@@ -15,6 +15,7 @@ struct ChooseDoctorView: View {
     var cornerRadius = ScreenSize.width / 30
     @State var ordersTime = [Date: Date]()
     @Binding var selectedTab: Tab
+    @Binding var doneAnimation: Bool
     
     var body: some View {
         VStack {
@@ -25,7 +26,7 @@ struct ChooseDoctorView: View {
                     ForEach(doctors, id: \.userId) { doctor in
                         NavigationLink {
                             
-                            DateTimeSelectionView(doctor: doctor, procedure: procedure, selectedTab: $selectedTab)
+                            DateTimeSelectionView(doctor: doctor, procedure: procedure, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
 //                            AddOrderView(doctor: doctor, procedure: procedure, selectedTab: $selectedTab)
                             
                         } label: {
@@ -54,12 +55,21 @@ struct ChooseDoctorView: View {
             Spacer()
         }
         .navigationBarBackButtonHidden(true)
+        .contentShape(Rectangle())
+        .gesture(
+            DragGesture()
+                .onEnded { gesture in
+                if gesture.translation.width > 100 {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+        )
     }
 }
 
 struct ChooseDoctorView_Previews: PreviewProvider {
     static var previews: some View {
-        ChooseDoctorView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, availableDoctors: []), selectedTab: .constant(.plus))
+        ChooseDoctorView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, availableDoctors: []), selectedTab: .constant(.plus), doneAnimation:.constant(false))
             .environmentObject(ProfileViewModel())
     }
 }

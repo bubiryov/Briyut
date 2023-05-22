@@ -34,6 +34,7 @@ struct PhoneAuthenticationView: View {
                 Button {
                     Task {
                         try await vm.verifyCode(code: code)
+                        hideKeyboard()
                         notEntered = false
                     }
                 } label: {

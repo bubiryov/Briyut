@@ -17,6 +17,8 @@
 		898FD9BE2A0935E100725697 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BD2A0935E100725697 /* ProfileViewModel.swift */; };
 		898FD9C02A096D4B00725697 /* AvailableDoctorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9BF2A096D4B00725697 /* AvailableDoctorsView.swift */; };
 		89988BEA2A1A3D35004DB4C6 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 89988BE92A1A3D35004DB4C6 /* Lottie */; };
+		89988BEE2A1A3DFB004DB4C6 /* DoneAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988BED2A1A3DFB004DB4C6 /* DoneAnimation.swift */; };
+		89988BF32A1A3EF9004DB4C6 /* Done.json in Resources */ = {isa = PBXBuildFile; fileRef = 89988BF22A1A3EF9004DB4C6 /* Done.json */; };
 		899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5702A000A1C00C90D49 /* BriyutApp.swift */; };
 		899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5722A000A1C00C90D49 /* ContentView.swift */; };
 		899EC5752A000A1E00C90D49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 899EC5742A000A1E00C90D49 /* Assets.xcassets */; };
@@ -103,6 +105,8 @@
 		898FD9BB2A0910F100725697 /* AddDoctorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDoctorView.swift; sourceTree = "<group>"; };
 		898FD9BD2A0935E100725697 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		898FD9BF2A096D4B00725697 /* AvailableDoctorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableDoctorsView.swift; sourceTree = "<group>"; };
+		89988BED2A1A3DFB004DB4C6 /* DoneAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneAnimation.swift; sourceTree = "<group>"; };
+		89988BF22A1A3EF9004DB4C6 /* Done.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Done.json; sourceTree = "<group>"; };
 		899EC56D2A000A1C00C90D49 /* Briyut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Briyut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		899EC5702A000A1C00C90D49 /* BriyutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriyutApp.swift; sourceTree = "<group>"; };
 		899EC5722A000A1C00C90D49 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -214,6 +218,23 @@
 			path = Calendar;
 			sourceTree = "<group>";
 		};
+		89988BEC2A1A3DE8004DB4C6 /* Lottie */ = {
+			isa = PBXGroup;
+			children = (
+				89988BEF2A1A3E10004DB4C6 /* DoneAnimation */,
+			);
+			path = Lottie;
+			sourceTree = "<group>";
+		};
+		89988BEF2A1A3E10004DB4C6 /* DoneAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				89988BED2A1A3DFB004DB4C6 /* DoneAnimation.swift */,
+				89988BF22A1A3EF9004DB4C6 /* Done.json */,
+			);
+			path = DoneAnimation;
+			sourceTree = "<group>";
+		};
 		899EC5642A000A1C00C90D49 = {
 			isa = PBXGroup;
 			children = (
@@ -246,6 +267,7 @@
 				899EC5702A000A1C00C90D49 /* BriyutApp.swift */,
 				899EC5C42A0041E900C90D49 /* Managers */,
 				899EC5AF2A00190600C90D49 /* Tools */,
+				89988BEC2A1A3DE8004DB4C6 /* Lottie */,
 				899EC59B2A000C3300C90D49 /* GoogleService-Info.plist */,
 				899EC5AB2A0016DE00C90D49 /* Info.plist */,
 				899EC5742A000A1E00C90D49 /* Assets.xcassets */,
@@ -556,6 +578,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				899EC5792A000A1E00C90D49 /* Preview Assets.xcassets in Resources */,
+				89988BF32A1A3EF9004DB4C6 /* Done.json in Resources */,
 				899EC5752A000A1E00C90D49 /* Assets.xcassets in Resources */,
 				899EC5AA2A0016A700C90D49 /* Alokary.ttf in Resources */,
 				899EC59C2A000C3300C90D49 /* GoogleService-Info.plist in Resources */,
@@ -594,6 +617,7 @@
 				89C590562A0570B000975E50 /* RootView.swift in Sources */,
 				899EC5D12A00596D00C90D49 /* LabelledDivider.swift in Sources */,
 				898FD9B52A08F4E000725697 /* AllProcedures.swift in Sources */,
+				89988BEE2A1A3DFB004DB4C6 /* DoneAnimation.swift in Sources */,
 				890ECEDF2A162F0500BEE3CC /* DateTimeSelectionView.swift in Sources */,
 				89E8AB342A14DD52000661E6 /* SplashView.swift in Sources */,
 				899EC5B82A001D5C00C90D49 /* LoginView.swift in Sources */,

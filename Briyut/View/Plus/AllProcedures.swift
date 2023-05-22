@@ -13,6 +13,7 @@ struct AllProcedures: View {
     @Binding var notEntered: Bool
     @State private var isEditing: Bool = false
     @Binding var selectedTab: Tab
+    @Binding var doneAnimation: Bool
     
     var body: some View {
         NavigationView {
@@ -49,7 +50,7 @@ struct AllProcedures: View {
                     
                     ForEach(vm.procedures, id: \.procedureId) { procedure in
                         
-                        ProcedureRow(vm: vm, procedure: procedure, isEditing: $isEditing, selectedTab: $selectedTab)
+                        ProcedureRow(vm: vm, procedure: procedure, isEditing: $isEditing, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
                             .offset(x: isEditing ? 2 : 0)
                             .offset(x: isEditing ? -2 : 0)
                             .animation(.easeInOut(duration: randomize(
@@ -82,7 +83,7 @@ struct AllProcedures: View {
 
 struct AddProcedureView_Previews: PreviewProvider {
     static var previews: some View {
-        AllProcedures(notEntered: .constant(false), selectedTab: .constant(.plus))
+        AllProcedures(notEntered: .constant(false), selectedTab: .constant(.plus), doneAnimation: .constant(false))
             .environmentObject(ProfileViewModel())
     }
 }
@@ -106,6 +107,7 @@ struct ProcedureRow: View {
     var cornerRadius = ScreenSize.width / 30
     @Binding var isEditing: Bool
     @Binding var selectedTab: Tab
+    @Binding var doneAnimation: Bool
     
     var body: some View {
         
@@ -116,7 +118,7 @@ struct ProcedureRow: View {
                 if vm.user?.isDoctor == true {
                     
                 } else {
-                    ChooseDoctorView(procedure: procedure, selectedTab: $selectedTab)
+                    ChooseDoctorView(procedure: procedure, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
                 }
             }
         } label: {

@@ -12,6 +12,7 @@ import FirebaseFirestoreSwift
 struct DateTimeSelectionView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
+    @Environment(\.presentationMode) var presentationMode
     var doctor: DBUser? = nil
     var procedure: ProcedureModel? = nil
     @Binding var selectedTab: Tab
@@ -19,6 +20,7 @@ struct DateTimeSelectionView: View {
     @State private var selectedDate = Date()
     @State var ordersTime = [Date: Date]()
     @State private var disableAllButtons: Bool = true
+    @Binding var doneAnimation: Bool
         
     let dayMonthFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -27,37 +29,7 @@ struct DateTimeSelectionView: View {
     }()
     
     @State var timeSlots: [String] = []
-            
-//    let timeSlots = [
-//        "8:00", "8:30", "9:00", "9:30",
-//        "10:00", "10:30", "11:00", "11:30",
-//        "12:00", "12:30", "13:00", "13:30",
-//        "14:00", "14:30", "15:00", "15:30",
-//        "16:00", "16:30", "17:00", "17:30",
-//        "18:00", "18:30", "19:00", "19:30",
-//        "20:00", "20:30", "21:00"
-//    ]
-    
-//    var timeSlots: [String] {
-//        var slots = [String]()
-//
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "HH:mm"
-//
-//        var currentTime = formatter.date(from: "8:00")!
-//        let endTime = formatter.date(from: "21:00")!
-//
-//        let interval = 30 * 60 // 30 минут в секундах
-//
-//        while currentTime <= endTime {
-//            let timeString = formatter.string(from: currentTime)
-//            slots.append(timeString)
-//            currentTime = currentTime.addingTimeInterval(TimeInterval(interval))
-//        }
-//
-//        return slots
-//    }
-    
+                
     var body: some View {
 //        VStack {
             VStack {
@@ -94,21 +66,32 @@ struct DateTimeSelectionView: View {
                         .opacity(checkIfDisabled(time: timeSlot) || disableAllButtons ? 0.5 : 1)
                     }
                 }
-                .padding()
+                .padding(.horizontal)
 
                 Spacer()
                 
                 Button {
                     let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure?.procedureId ?? "", procedureName: procedure?.name ?? "", doctorId: doctor?.userId ?? "", doctorName: "\(doctor?.name ?? "") \(doctor?.lastName ?? "")", clientId: vm.user?.userId ?? "", date: createTimestamp(from: selectedDate, time: selectedTime)!, isDone: false, price: procedure?.cost ?? 0)
                     Task {
+//                        vm.activeOrders = []
+                        
                         try await vm.addNewOrder(order: order)
+                        
                         withAnimation {
-                            selectedTab = .calendar
+                            doneAnimation = true
+                        }
+                        
+                        try await Task.sleep(nanoseconds: 3_000_000_000)
+                        
+                        withAnimation {
+                            doneAnimation = false
+                            selectedTab = .home
                         }
                     }
                 } label: {
                     AccentButton(text: "Add order", isButtonActive: selectedTime != "" ? true : false)
                 }
+                .disabled(selectedTime != "" ? false : true)
                 
             }
             .navigationBarBackButtonHidden(true)
@@ -130,7 +113,15 @@ struct DateTimeSelectionView: View {
                     disableAllButtons = false
                 }
             }
-
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture()
+                    .onEnded { gesture in
+                    if gesture.translation.width > 100 {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            )
 //        }
 //        .padding(.horizontal, 20)
     }
@@ -144,14 +135,15 @@ struct DateTimeSelectionView: View {
         let calendar = Calendar.current
         
         var currentTime = calendar.date(bySettingHour: 8, minute: 0, second: 0, of: selectedDate)!
-//        let endTime = calendar.date(bySettingHour: 21, minute: 0, second: 0, of: selectedDate)!
+        let endTime = calendar.date(bySettingHour: 21, minute: 0, second: 0, of: selectedDate)!
         
         let interval = 30 * 60
                 
-        for _ in 0..<27 {
+        for _ in 0..<28 {
             let nextTime = calendar.date(byAdding: .second, value: interval, to: currentTime)!
                         
             if ordersTime.isEmpty {
+                guard currentTime <= endTime else { break }
                 let timeString = formatter.string(from: currentTime)
                 slots.append(timeString)
                 currentTime = nextTime
@@ -169,9 +161,11 @@ struct DateTimeSelectionView: View {
                 slots.append(timeString)
                 currentTime = time.value
             } else {
-                let timeString = formatter.string(from: nextTime)
-                slots.append(timeString)
-                currentTime = nextTime
+                if nextTime <= endTime {
+                    let timeString = formatter.string(from: nextTime)
+                    slots.append(timeString)
+                    currentTime = nextTime
+                }
             }
         }
                 
@@ -237,7 +231,7 @@ struct DateTimeSelectionView: View {
 
 struct DateTimeSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        DateTimeSelectionView(selectedTab: .constant(.plus))
+        DateTimeSelectionView(selectedTab: .constant(.plus), doneAnimation: .constant(false))
             .environmentObject(ProfileViewModel())
     }
 }

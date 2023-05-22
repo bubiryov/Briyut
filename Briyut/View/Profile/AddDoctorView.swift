@@ -10,6 +10,7 @@ import SwiftUI
 struct AddDoctorView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
+    @Environment(\.presentationMode) var presentationMode
     @State private var futureDoctorID: String = ""
     @State private var isEditing = false
     @State private var showAlert = false
@@ -69,6 +70,15 @@ struct AddDoctorView: View {
         .onDisappear {
             isEditing = false
         }
+        .contentShape(Rectangle())
+        .gesture(
+            DragGesture()
+                .onEnded { gesture in
+                if gesture.translation.width > 100 {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+        )
     }
 }
 

@@ -28,9 +28,6 @@ struct HomeView: View {
                 if justOpened {
                     try await vm.updateOrdersStatus()
                     justOpened = false
-                } else {
-                    try await vm.getAllOrders(isDone: false, countLimit: 6)
-                    try await vm.getAllOrders(isDone: true, countLimit: 6)
                 }
             }
         }

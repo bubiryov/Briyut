@@ -13,6 +13,7 @@ struct RootView: View {
     @State private var selectedTab: Tab = .home
     @Binding var notEntered: Bool
     @State var justOpened: Bool = true
+    @State var doneAnimation: Bool = false
     
     var body: some View {
         ZStack {
@@ -23,7 +24,7 @@ struct RootView: View {
                         HomeView(selectedTab: $selectedTab, justOpened: $justOpened)
                             .environmentObject(vm)
                     case .plus:
-                        AllProcedures(notEntered: $notEntered, selectedTab: $selectedTab)
+                        AllProcedures(notEntered: $notEntered, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
                             .environmentObject(vm)
                     case .calendar:
                         CalendarView()
@@ -43,6 +44,13 @@ struct RootView: View {
                                 
             }
             .edgesIgnoringSafeArea(.bottom)
+            .blur(radius: doneAnimation ? 20 : 0)
+            
+            if doneAnimation {
+                DoneAnimation()
+                    .frame(width: 250)
+            }
+            
         }
         .onAppear {
             print("Appear root view")
