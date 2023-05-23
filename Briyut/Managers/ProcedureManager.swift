@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import Combine
 
 final class ProcedureManager {
     
@@ -29,17 +30,29 @@ final class ProcedureManager {
             .setData(from: procedure, merge: false)
     }
     
-//    private func getAllProcedures() -> Query {
-//        proceduresCollection
+//    func getAllProcedures() async throws -> [ProcedureModel] {
+//
+//        let query = proceduresCollection
+//
+//        return try await query
+//            .getDocuments(as: ProcedureModel.self)
 //    }
-
-    func getAllProcedures() async throws -> [ProcedureModel] {
         
-        let query = proceduresCollection
-        
-        return try await query
-            .getDocuments(as: ProcedureModel.self)
+    func addListenerForProcedures(completion: @escaping (_ products: [ProcedureModel]) -> Void) {
+        proceduresCollection.addSnapshotListener { querySnapshot, error in
+            guard let documents = querySnapshot?.documents else {
+                return
+            }
+            
+            let procedures: [ProcedureModel] = documents.compactMap({ try? $0.data(as: ProcedureModel.self) })
+            completion(procedures)
+        }
     }
+    
+//    func addListenerForProcedures() -> AnyPublisher<[ProcedureModel], Error> {
+//        return proceduresCollection
+//            .addSnapshotListener(as: ProcedureModel.self)
+//    }
     
     func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, availableDoctors: [String]) async throws {
         let data: [String : Any] = [
@@ -73,14 +86,27 @@ extension Query {
             return try document.data(as: T.self)
         }
     }
-    
+
     func getDocumentsWithSnapshot<T>(as type: T.Type) async throws -> ([T], DocumentSnapshot?) where T : Decodable {
         let snapshot = try await self.getDocuments()
-        
+
         let products = try snapshot.documents.map({ document in
             try document.data(as: T.self)
         })
         return (products, snapshot.documents.last)
+    }
+    
+    func addSnapshotListener<T>(as type: T.Type) -> (AnyPublisher<[T], Error>) where T: Decodable {
+        let publisher = PassthroughSubject<[T], Error> ()
+        let listener = self.addSnapshotListener { querySnapshot, error in
+            guard let documents = querySnapshot?.documents else {
+                print("No documents")
+                return
+            }
+            let products: [T] = documents.compactMap({ try? $0.data(as: T.self) })
+            publisher.send(products)
+        }
+        return publisher.eraseToAnyPublisher()
     }
 }
 

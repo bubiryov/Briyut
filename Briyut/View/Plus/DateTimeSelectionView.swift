@@ -73,7 +73,6 @@ struct DateTimeSelectionView: View {
                 Button {
                     let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure?.procedureId ?? "", procedureName: procedure?.name ?? "", doctorId: doctor?.userId ?? "", doctorName: "\(doctor?.name ?? "") \(doctor?.lastName ?? "")", clientId: vm.user?.userId ?? "", date: createTimestamp(from: selectedDate, time: selectedTime)!, isDone: false, price: procedure?.cost ?? 0)
                     Task {
-//                        vm.activeOrders = []
                         
                         try await vm.addNewOrder(order: order)
                         
@@ -172,14 +171,14 @@ struct DateTimeSelectionView: View {
         timeSlots = slots
     }
 
-    func createTimestamp(from date: Date, time: String) -> Timestamp? {
+    private func createTimestamp(from date: Date, time: String) -> Timestamp? {
         guard let date = createFullDate(from: date, time: time) else {
             return nil
         }
         return Timestamp(date: date)
     }
         
-    func createFullDate(from date: Date, time: String) -> Date? {
+    private func createFullDate(from date: Date, time: String) -> Date? {
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HH:mm"
         
@@ -199,7 +198,7 @@ struct DateTimeSelectionView: View {
         return mergedDate
     }
     
-    func checkIfDisabled(time: String) -> Bool {
+    private func checkIfDisabled(time: String) -> Bool {
         
         let calendar = Calendar.current
         let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: createFullDate(from: selectedDate, time: time)!)

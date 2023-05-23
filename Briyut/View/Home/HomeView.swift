@@ -23,9 +23,10 @@ struct HomeView: View {
         .onAppear {
             Task {
                 try await vm.loadCurrentUser()
-                try await vm.getAllProcedures()
+//                try await vm.getAllProcedures()
                 try await vm.getAllDoctors()
                 if justOpened {
+                    vm.addListenerForProcuderes()
                     try await vm.updateOrdersStatus()
                     justOpened = false
                 }

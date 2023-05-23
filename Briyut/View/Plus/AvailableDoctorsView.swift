@@ -11,6 +11,7 @@ struct AvailableDoctorsView: View {
     
     @Binding var choosenDoctors: [String]
     @EnvironmentObject var vm: ProfileViewModel
+    @Environment(\.presentationMode) var presentationMode
     var cornerRadius = ScreenSize.width / 30
     
     var body: some View {
@@ -49,6 +50,15 @@ struct AvailableDoctorsView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .contentShape(Rectangle())
+        .gesture(
+            DragGesture()
+                .onEnded { gesture in
+                if gesture.translation.width > 100 {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+        )
     }
 }
 

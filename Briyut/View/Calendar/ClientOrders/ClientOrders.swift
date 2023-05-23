@@ -84,7 +84,7 @@ struct OrderRow: View {
     var body: some View {
         
         VStack(spacing: 15) {
-            HStack(alignment: .top) {
+            HStack {
                 VStack(alignment: .leading, spacing: 10) {
                     Text(order.procedureName)
                         .font(.title3.bold())
