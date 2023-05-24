@@ -88,18 +88,7 @@ extension ProfileViewModel {
             self?.procedures = products
         }
     }
-    
-//    func addListenerForProcuderes() {
-//        ProcedureManager.shared.addListenerForProcedures()
-//            .sink { completion in
-//
-//            } receiveValue: { [weak self] procedures in
-//                self?.procedures = procedures
-//            }
-//            .store(in: &cancellables)
-//
-//    }
-    
+        
     func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, availableDoctors: [String]) async throws {
         try await ProcedureManager.shared.editProcedure(procedureId: procedureId, name: name, duration: duration, cost: cost, availableDoctors: availableDoctors)
     }
@@ -159,9 +148,13 @@ extension ProfileViewModel {
         try await getAllOrders(isDone: true, countLimit: 6)
         print("Updated")
     }
+    
+    func getDayOrders(date: Date) async throws -> [OrderModel] {
+        return try await OrderManager.shared.getDayOrders(date: date)
+    }
 
-    func getDayOrders(date: Date) async throws -> [Date: Date] {
-        let orders = try await OrderManager.shared.getDayOrders(date: date)
+    func getDayOrderTimes(date: Date) async throws -> [Date: Date] {
+        let orders = try await getDayOrders(date: date)
         var occupied = [Date: Date]()
         for order in orders {
             let orderDate = order.date.dateValue()
@@ -174,5 +167,4 @@ extension ProfileViewModel {
         print(occupied)
         return occupied
     }
-    
 }

@@ -14,18 +14,20 @@ struct ClientOrders: View {
     @State private var selectedIndex = 0
     
     var body: some View {
-        VStack {
-            BarTitle<Text, Text>(text: "Appointments")
-            
-            CustomSegmentedPicker(options: ["Upcoming", "Recent"], selectedIndex: $selectedIndex)
-            
-            if selectedIndex == 0 {
-                OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.activeOrders)
-            } else {
-                OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.doneOrders)
+        NavigationView {
+            VStack {
+                BarTitle<Text, Text>(text: "Appointments")
+                
+                CustomSegmentedPicker(options: ["Upcoming", "Recent"], selectedIndex: $selectedIndex)
+                
+                if selectedIndex == 0 {
+                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.activeOrders)
+                } else {
+                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.doneOrders)
+                }
+                
+                Spacer()
             }
-            
-            Spacer()
         }
     }
 }
@@ -120,18 +122,31 @@ struct OrderRow: View {
                     .buttonStyle(.plain)
                     
                     Spacer()
-                    
-                    Button {
-                        //
-                    } label: {
+                    ZStack {
+//                        NavigationLink(destination: DateTimeSelectionView(selectedTab: , doneAnimation: <#T##Binding<Bool>#>)) {
+//                            EmptyView()
+//                        }
                         Text("Reschedule")
                             .foregroundColor(.white)
                             .bold()
                             .frame(width: ScreenSize.width * 0.4, height: ScreenSize.height * 0.05)
                             .background(Color.mainColor)
                             .cornerRadius(ScreenSize.width / 30)
+
                     }
-                    .buttonStyle(.plain)
+
+                    
+//                    Button {
+//                        //
+//                    } label: {
+//                        Text("Reschedule")
+//                            .foregroundColor(.white)
+//                            .bold()
+//                            .frame(width: ScreenSize.width * 0.4, height: ScreenSize.height * 0.05)
+//                            .background(Color.mainColor)
+//                            .cornerRadius(ScreenSize.width / 30)
+//                    }
+//                    .buttonStyle(.plain)
                 }
             }
         }

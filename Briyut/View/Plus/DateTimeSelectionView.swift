@@ -20,6 +20,7 @@ struct DateTimeSelectionView: View {
     @State private var selectedDate = Date()
     @State var ordersTime = [Date: Date]()
     @State private var disableAllButtons: Bool = true
+    @State private var showAlert: Bool = false
     @Binding var doneAnimation: Bool
         
     let dayMonthFormatter: DateFormatter = {
@@ -67,24 +68,33 @@ struct DateTimeSelectionView: View {
                     }
                 }
                 .padding(.horizontal)
+                .alert("Sorry, this time has just been taken", isPresented: $showAlert) {
+                    Button("Got it", role: .cancel) { }
+                }
 
                 Spacer()
                 
                 Button {
                     let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure?.procedureId ?? "", procedureName: procedure?.name ?? "", doctorId: doctor?.userId ?? "", doctorName: "\(doctor?.name ?? "") \(doctor?.lastName ?? "")", clientId: vm.user?.userId ?? "", date: createTimestamp(from: selectedDate, time: selectedTime)!, isDone: false, price: procedure?.cost ?? 0)
                     Task {
-                        
-                        try await vm.addNewOrder(order: order)
-                        
-                        withAnimation {
-                            doneAnimation = true
-                        }
-                        
-                        try await Task.sleep(nanoseconds: 3_000_000_000)
-                        
-                        withAnimation {
-                            doneAnimation = false
-                            selectedTab = .home
+                        ordersTime = try await vm.getDayOrderTimes(date: selectedDate)
+                        if !checkIfDisabled(time: selectedTime) {
+                            try await vm.addNewOrder(order: order)
+                            
+                            withAnimation {
+                                doneAnimation = true
+                            }
+                            
+                            try await Task.sleep(nanoseconds: 3_000_000_000)
+                            
+                            withAnimation {
+                                doneAnimation = false
+                                selectedTab = .home
+                            }
+                        } else {
+                            showAlert = true
+                            selectedTime = ""
+                            generateTimeSlots()
                         }
                     }
                 } label: {
@@ -98,7 +108,7 @@ struct DateTimeSelectionView: View {
                 Task {
                     disableAllButtons = true
                     timeSlots = []
-                    ordersTime = try await vm.getDayOrders(date: selectedDate)
+                    ordersTime = try await vm.getDayOrderTimes(date: selectedDate)
                     generateTimeSlots()
                     disableAllButtons = false
                 }
@@ -107,7 +117,7 @@ struct DateTimeSelectionView: View {
                 Task {
                     disableAllButtons = true
                     timeSlots = []
-                    ordersTime = try await vm.getDayOrders(date: Date())
+                    ordersTime = try await vm.getDayOrderTimes(date: Date())
                     generateTimeSlots()
                     disableAllButtons = false
                 }
