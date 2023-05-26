@@ -47,7 +47,6 @@ struct BarButtonView: View {
     var body: some View {
         Image(image)
             .resizable()
-//            .scaledToFit()
             .scaleEffect((scale != nil) ? scale! : 0.4)
             .frame(width: frame, height: frame)
             .background(backgroundColor == nil ? Color.secondary.opacity(0.1) : backgroundColor)

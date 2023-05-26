@@ -39,11 +39,12 @@ final class UserManager {
         try await userDocument(userId: userId).getDocument(as: DBUser.self)
     }
     
-    func editProfile(userID: String, name: String?, lastName: String?, phoneNumber: String?) async throws {
+    func editProfile(userID: String, name: String?, lastName: String?, phoneNumber: String?, photoURL: String?) async throws {
         let data: [String : Any] = [
             DBUser.CodingKeys.name.rawValue : name as Any,
             DBUser.CodingKeys.lastName.rawValue : lastName as Any,
-            DBUser.CodingKeys.phoneNumber.rawValue : phoneNumber as Any
+            DBUser.CodingKeys.phoneNumber.rawValue : phoneNumber as Any,
+            DBUser.CodingKeys.photoUrl.rawValue : photoURL as Any
         ]
         try await userDocument(userId: userID).updateData(data)
     }
@@ -54,11 +55,17 @@ final class UserManager {
         ]
         try await userDocument(userId: userID).updateData(data)
     }
+    
+//    func updateProfileImagePath(userID: String, path: String) async throws {
+//        let data: [String : Any] = [
+//            DBUser.CodingKeys.profileImagePath.rawValue : path
+//        ]
+//        try await userDocument(userId: userID).updateData(data)
+//    }
 
     func makeDoctor(userID: String) async throws {
         try await updateDoctorStatus(userID: userID, isDoctor: true)
         try await doctorDocument(doctorID: userID).setData(["id" : userID])
-//        try await Firestore.firestore().collection("doctors").document(userID).setData(["id" : userID])
     }
     
     func removeDoctor(userID: String) async throws {
@@ -82,7 +89,6 @@ final class UserManager {
                 try await orderDocument.delete()
             }
         }
-        
         
 //        query.getDocuments { (snapshot, error) in
 //            if let error {

@@ -78,5 +78,12 @@ final class OrderManager {
 
         return try await query
             .getDocuments(as: OrderModel.self)
-    }    
+    }
+    
+    func editOrderTime(orderId: String, date: Timestamp) async throws {
+        let data: [String: Any] = [
+            OrderModel.CodingKeys.date.rawValue: date
+        ]
+        try await orderDocument(orderId: orderId).updateData(data)
+    }
 }

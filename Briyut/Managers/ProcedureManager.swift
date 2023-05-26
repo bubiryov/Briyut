@@ -96,17 +96,17 @@ extension Query {
         return (products, snapshot.documents.last)
     }
     
-    func addSnapshotListener<T>(as type: T.Type) -> (AnyPublisher<[T], Error>) where T: Decodable {
-        let publisher = PassthroughSubject<[T], Error> ()
-        let listener = self.addSnapshotListener { querySnapshot, error in
-            guard let documents = querySnapshot?.documents else {
-                print("No documents")
-                return
-            }
-            let products: [T] = documents.compactMap({ try? $0.data(as: T.self) })
-            publisher.send(products)
-        }
-        return publisher.eraseToAnyPublisher()
-    }
+//    func addSnapshotListener<T>(as type: T.Type) -> (AnyPublisher<[T], Error>) where T: Decodable {
+//        let publisher = PassthroughSubject<[T], Error> ()
+//        let listener = self.addSnapshotListener { querySnapshot, error in
+//            guard let documents = querySnapshot?.documents else {
+//                print("No documents")
+//                return
+//            }
+//            let products: [T] = documents.compactMap({ try? $0.data(as: T.self) })
+//            publisher.send(products)
+//        }
+//        return publisher.eraseToAnyPublisher()
+//    }
 }
 

@@ -12,7 +12,6 @@ struct ProfileView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
     @Binding var notEntered: Bool
-//    @State private var test = ""
     
     var body: some View {
         
@@ -20,7 +19,7 @@ struct ProfileView: View {
             VStack {
                 BarTitle<Text, BarButton>(text: "", rightButton: BarButton(notEntered: $notEntered))
                 
-                ProfileImage(photoURL: vm.user?.photoUrl, frame: ScreenSize.height * 0.12, color: Color.secondaryColor)
+                ProfileImage(photoURL: vm.user?.photoUrl, frame: ScreenSize.height * 0.12, color: Color.secondary.opacity(0.1))
                     .cornerRadius(ScreenSize.width / 20)
                 
                 HStack {
@@ -73,7 +72,7 @@ struct ProfileImage: View {
     
     var body: some View {
         VStack {
-            CachedAsyncImage(url: URL(string: photoURL ?? "")) { image in
+            CachedAsyncImage(url: URL(string: photoURL ?? ""), urlCache: .imageCache) { image in
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)

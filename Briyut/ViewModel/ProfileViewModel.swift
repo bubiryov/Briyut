@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestore
 import SwiftUI
-import Combine
+import PhotosUI
 
 @MainActor
 final class ProfileViewModel: ObservableObject {
@@ -65,10 +65,28 @@ final class ProfileViewModel: ObservableObject {
         self.doctors = try await UserManager.shared.getAllDoctors()
     }
     
-    func editProfile(userID: String, name: String?, lastName: String?, phoneNumber: String?) async throws {
-        try await UserManager.shared.editProfile(userID: userID, name: name, lastName: lastName, phoneNumber: phoneNumber)
+    func editProfile(userID: String, name: String?, lastName: String?, phoneNumber: String?, photoURL: String?) async throws {
+        print("Edit")
+        return try await UserManager.shared.editProfile(userID: userID, name: name, lastName: lastName, phoneNumber: phoneNumber, photoURL: photoURL)
     }
     
+    func saveProfilePhoto(item: PhotosPickerItem) async throws -> String {
+        guard let data = try await item.loadTransferable(type: Data.self) else {
+            throw URLError(.badServerResponse)
+        }
+        guard let user = user else {
+            throw URLError(.badServerResponse)
+        }
+        return try await StorageManager.shared.saveImage(data: data, userID: user.userId)
+    }
+    
+    func deletePreviousPhoto(url: String) async throws {
+        try await StorageManager.shared.deletePreviousPhoto(url: url)
+    }
+    
+    func getUrlForImage(path: String) async throws -> String {
+        return try await StorageManager.shared.getUrlForImage(path: path)
+    }
 }
 
 // MARK: Procedures
@@ -127,8 +145,18 @@ extension ProfileViewModel {
         try await getAllOrders(isDone: false, countLimit: 6)
     }
     
+    func editOrderTime(orderId: String, date: Timestamp) async throws {
+        try await OrderManager.shared.editOrderTime(orderId: orderId, date: date)
+        activeLastDocument = nil
+        activeOrders = []
+        try await getAllOrders(isDone: false, countLimit: 6)
+    }
+    
     func removeOrder(orderId: String) async throws {
         try await OrderManager.shared.removeOrder(orderId: orderId)
+        activeLastDocument = nil
+        activeOrders = []
+        try await getAllOrders(isDone: false, countLimit: 6)
     }
         
     func updateOrdersStatus() async throws {

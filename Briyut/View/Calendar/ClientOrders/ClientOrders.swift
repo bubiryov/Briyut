@@ -12,6 +12,9 @@ struct ClientOrders: View {
     
     @EnvironmentObject var vm: ProfileViewModel
     @State private var selectedIndex = 0
+    @Binding var doneAnimation: Bool
+    @Binding var selectedTab: Tab
+    @State var fullCover: Bool = false
     
     var body: some View {
         NavigationView {
@@ -19,11 +22,11 @@ struct ClientOrders: View {
                 BarTitle<Text, Text>(text: "Appointments")
                 
                 CustomSegmentedPicker(options: ["Upcoming", "Recent"], selectedIndex: $selectedIndex)
-                
+                                
                 if selectedIndex == 0 {
-                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.activeOrders)
+                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.activeOrders, doneAnimation: $doneAnimation, selectedTab: $selectedTab, fullCover: $fullCover)
                 } else {
-                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.doneOrders)
+                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.doneOrders, doneAnimation: $doneAnimation, selectedTab: $selectedTab, fullCover: $fullCover)
                 }
                 
                 Spacer()
@@ -34,7 +37,7 @@ struct ClientOrders: View {
 
 struct ClientOrders_Previews: PreviewProvider {
     static var previews: some View {
-        ClientOrders()
+        ClientOrders(doneAnimation: .constant(false), selectedTab: .constant(.calendar))
             .environmentObject(ProfileViewModel())
     }
 }
@@ -82,6 +85,9 @@ struct OrderRow: View {
     let order: OrderModel
     @State private var doctor: DBUser? = nil
     @State private var showAlert: Bool = false
+    @Binding var doneAnimation: Bool
+    @Binding var selectedTab: Tab
+    @Binding var fullCover: Bool
     
     var body: some View {
         
@@ -103,7 +109,7 @@ struct OrderRow: View {
                     .font(.title2)
                 
             }
-            
+                        
             if !order.isDone {
                 
                 HStack {
@@ -122,31 +128,18 @@ struct OrderRow: View {
                     .buttonStyle(.plain)
                     
                     Spacer()
-                    ZStack {
-//                        NavigationLink(destination: DateTimeSelectionView(selectedTab: , doneAnimation: <#T##Binding<Bool>#>)) {
-//                            EmptyView()
-//                        }
+                    
+                    Button {
+                        fullCover.toggle()
+                    } label: {
                         Text("Reschedule")
                             .foregroundColor(.white)
                             .bold()
                             .frame(width: ScreenSize.width * 0.4, height: ScreenSize.height * 0.05)
                             .background(Color.mainColor)
                             .cornerRadius(ScreenSize.width / 30)
-
                     }
-
-                    
-//                    Button {
-//                        //
-//                    } label: {
-//                        Text("Reschedule")
-//                            .foregroundColor(.white)
-//                            .bold()
-//                            .frame(width: ScreenSize.width * 0.4, height: ScreenSize.height * 0.05)
-//                            .background(Color.mainColor)
-//                            .cornerRadius(ScreenSize.width / 30)
-//                    }
-//                    .buttonStyle(.plain)
+                    .buttonStyle(.plain)
                 }
             }
         }
@@ -169,7 +162,7 @@ struct OrderRow: View {
                         vm.activeOrders = []
                         vm.activeLastDocument = nil
                         try await vm.removeOrder(orderId: order.orderId)
-                        try await vm.getAllOrders(isDone: false, countLimit: 6)
+//                        try await vm.getAllOrders(isDone: false, countLimit: 6)
                     }
                 }),
                 secondaryButton: .default(Text("Cancel"), action: {
@@ -193,14 +186,22 @@ struct OrderList: View {
     let vm: ProfileViewModel
     var selectedIndex: Int
     var orderArray: [OrderModel]
+    @Binding var doneAnimation: Bool
+    @Binding var selectedTab: Tab
+    @Binding var fullCover: Bool
     
     var body: some View {
         List {
             ForEach(orderArray, id: \.orderId) { order in
                 
-                OrderRow(vm: vm, order: order)
+                OrderRow(vm: vm, order: order, doneAnimation: $doneAnimation, selectedTab: $selectedTab, fullCover: $fullCover)
                     .listRowInsets(EdgeInsets())
                     .padding(.bottom, 7)
+                    .sheet(isPresented: $fullCover) {
+                        DateTimeSelectionView(order: order, mainButtonTitle: "Change appoinment", selectedTab: $selectedTab, doneAnimation: $doneAnimation)
+                            .padding()
+                            .padding(.bottom)
+                    }
                 
                 if order == orderArray.last {
                     HStack {

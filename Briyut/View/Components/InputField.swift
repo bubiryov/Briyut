@@ -62,7 +62,7 @@ struct InputField: View {
                         .cornerRadius(cornerRadius)
                         .overlay(
                             RoundedRectangle(cornerRadius: cornerRadius)
-                                .strokeBorder(Color.secondary, lineWidth: 0.5)
+                                .strokeBorder(Color.secondary, lineWidth: 1)
                         )
                 }
             } else {
@@ -73,7 +73,7 @@ struct InputField: View {
                     .cornerRadius(cornerRadius)
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
-                            .strokeBorder(Color.secondary, lineWidth: 0.5)
+                            .strokeBorder(Color.secondary, lineWidth: 1)
                     )
             }
         }

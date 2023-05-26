@@ -16,6 +16,7 @@ struct DBUser: Codable {
     let dateCreated: Date?
     let isDoctor: Bool
     let phoneNumber: String?
+//    let profileImagePath: String?
 
     init(auth: AuthDataResultModel, name: String?, lastName: String?, dateCreated: Date?, isDoctor: Bool, phoneNumber: String?) {
         self.userId = auth.uid
@@ -26,6 +27,7 @@ struct DBUser: Codable {
         self.dateCreated = dateCreated
         self.isDoctor = isDoctor
         self.phoneNumber = phoneNumber
+//        self.profileImagePath = profileImagePath
     }
 
     enum CodingKeys: String, CodingKey {
@@ -37,6 +39,7 @@ struct DBUser: Codable {
         case dateCreated = "date_created"
         case isDoctor = "is_doctor"
         case phoneNumber = "phone_number"
+//        case profileImagePath = "profile_image_path"
     }
 
     func encode(to encoder: Encoder) throws {
@@ -49,6 +52,7 @@ struct DBUser: Codable {
         try container.encodeIfPresent(self.dateCreated, forKey: .dateCreated)
         try container.encodeIfPresent(self.isDoctor, forKey: .isDoctor)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
+//        try container.encodeIfPresent(self.profileImagePath, forKey: .profileImagePath)
     }
 
     init(from decoder: Decoder) throws {
@@ -61,5 +65,6 @@ struct DBUser: Codable {
         self.photoUrl = try container.decodeIfPresent(String.self, forKey: .photoUrl)
         self.dateCreated = try container.decodeIfPresent(Date.self, forKey: .dateCreated)
         self.phoneNumber = try container.decodeIfPresent(String.self, forKey: .phoneNumber)
+//        self.profileImagePath = try container.decodeIfPresent(String.self, forKey: .profileImagePath)
     }
 }

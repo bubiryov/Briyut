@@ -15,12 +15,15 @@ struct DateTimeSelectionView: View {
     @Environment(\.presentationMode) var presentationMode
     var doctor: DBUser? = nil
     var procedure: ProcedureModel? = nil
-    @Binding var selectedTab: Tab
+    var order: OrderModel? = nil
+    var mainButtonTitle: String
     @State private var selectedTime = ""
     @State private var selectedDate = Date()
     @State var ordersTime = [Date: Date]()
     @State private var disableAllButtons: Bool = true
     @State private var showAlert: Bool = false
+    @State var timeSlots: [String] = []
+    @Binding var selectedTab: Tab
     @Binding var doneAnimation: Bool
         
     let dayMonthFormatter: DateFormatter = {
@@ -29,13 +32,12 @@ struct DateTimeSelectionView: View {
         return formatter
     }()
     
-    @State var timeSlots: [String] = []
                 
     var body: some View {
 //        VStack {
             VStack {
                 
-                BarTitle<BackButton, Text>(text: dayMonthFormatter.string(from: selectedDate), leftButton: BackButton())
+                BarTitle<BackButton?, Text>(text: dayMonthFormatter.string(from: selectedDate), leftButton: procedure != nil ? BackButton() : nil)
                 
                 CustomDatePicker(selectedDate: $selectedDate, selectedTime: $selectedTime)
                 
@@ -63,42 +65,38 @@ struct DateTimeSelectionView: View {
                         .cornerRadius(ScreenSize.width / 30)
                         .buttonStyle(.plain)
                         .disabled(checkIfDisabled(time: timeSlot))
-                        .disabled(disableAllButtons)
-                        .opacity(checkIfDisabled(time: timeSlot) || disableAllButtons ? 0.5 : 1)
+//                        .disabled(disableAllButtons)
+                        .opacity(checkIfDisabled(time: timeSlot) ? 0.5 : 1)
                     }
                 }
                 .padding(.horizontal)
                 .alert("Sorry, this time has just been taken", isPresented: $showAlert) {
                     Button("Got it", role: .cancel) { }
                 }
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture()
+                        .onEnded { gesture in
+                        if gesture.translation.width > 100 && procedure != nil {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+                )
 
                 Spacer()
                 
                 Button {
-                    let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure?.procedureId ?? "", procedureName: procedure?.name ?? "", doctorId: doctor?.userId ?? "", doctorName: "\(doctor?.name ?? "") \(doctor?.lastName ?? "")", clientId: vm.user?.userId ?? "", date: createTimestamp(from: selectedDate, time: selectedTime)!, isDone: false, price: procedure?.cost ?? 0)
-                    Task {
-                        ordersTime = try await vm.getDayOrderTimes(date: selectedDate)
-                        if !checkIfDisabled(time: selectedTime) {
-                            try await vm.addNewOrder(order: order)
-                            
-                            withAnimation {
-                                doneAnimation = true
-                            }
-                            
-                            try await Task.sleep(nanoseconds: 3_000_000_000)
-                            
-                            withAnimation {
-                                doneAnimation = false
-                                selectedTab = .home
-                            }
-                        } else {
-                            showAlert = true
-                            selectedTime = ""
-                            generateTimeSlots()
+                    if let procedure {
+                        Task {
+                            try await addNewOrderAction(procedure: procedure)
+                        }
+                    } else if let order {
+                        Task {
+                            try await editOrderAction(order: order)
                         }
                     }
                 } label: {
-                    AccentButton(text: "Add order", isButtonActive: selectedTime != "" ? true : false)
+                    AccentButton(text: mainButtonTitle, isButtonActive: selectedTime != "" ? true : false)
                 }
                 .disabled(selectedTime != "" ? false : true)
                 
@@ -106,33 +104,76 @@ struct DateTimeSelectionView: View {
             .navigationBarBackButtonHidden(true)
             .onChange(of: selectedDate) { _ in
                 Task {
-                    disableAllButtons = true
+//                    disableAllButtons = true
                     timeSlots = []
                     ordersTime = try await vm.getDayOrderTimes(date: selectedDate)
                     generateTimeSlots()
-                    disableAllButtons = false
+//                    disableAllButtons = false
                 }
             }
             .onAppear {
                 Task {
-                    disableAllButtons = true
+//                    disableAllButtons = true
                     timeSlots = []
                     ordersTime = try await vm.getDayOrderTimes(date: Date())
                     generateTimeSlots()
-                    disableAllButtons = false
+//                    disableAllButtons = false
                 }
             }
-            .contentShape(Rectangle())
-            .gesture(
-                DragGesture()
-                    .onEnded { gesture in
-                    if gesture.translation.width > 100 {
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                }
-            )
 //        }
 //        .padding(.horizontal, 20)
+    }
+    
+    func addNewOrderAction(procedure: ProcedureModel) async throws {
+        let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure.procedureId , procedureName: procedure.name , doctorId: doctor?.userId ?? "", doctorName: "\(doctor?.name ?? "") \(doctor?.lastName ?? "")", clientId: vm.user?.userId ?? "", date: createTimestamp(from: selectedDate, time: selectedTime)!, isDone: false, price: procedure.cost)
+        
+        ordersTime = try await vm.getDayOrderTimes(date: selectedDate)
+        
+        if !checkIfDisabled(time: selectedTime) {
+            try await vm.addNewOrder(order: order)
+            
+            withAnimation {
+                doneAnimation = true
+            }
+            
+            try await Task.sleep(nanoseconds: 3_000_000_000)
+            
+            withAnimation {
+                doneAnimation = false
+                selectedTab = .home
+            }
+        } else {
+            showAlert = true
+            selectedTime = ""
+            generateTimeSlots()
+        }
+    }
+    
+    func editOrderAction(order: OrderModel) async throws {
+        
+        let date = createTimestamp(from: selectedDate, time: selectedTime)
+        
+        ordersTime = try await vm.getDayOrderTimes(date: selectedDate)
+        
+        if !checkIfDisabled(time: selectedTime) {
+            try await vm.editOrderTime(orderId: order.orderId, date: date!)
+            
+            presentationMode.wrappedValue.dismiss()
+            
+            withAnimation {
+                doneAnimation = true
+            }
+            
+            try await Task.sleep(nanoseconds: 3_000_000_000)
+            
+            withAnimation {
+                doneAnimation = false
+            }
+        } else {
+            showAlert = true
+            selectedTime = ""
+            generateTimeSlots()
+        }
     }
     
     func generateTimeSlots() {
@@ -213,23 +254,32 @@ struct DateTimeSelectionView: View {
         let calendar = Calendar.current
         let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: createFullDate(from: selectedDate, time: time)!)
         
+        var duration: TimeInterval = 0
+        
         guard let orderDate = calendar.date(from: dateComponents) else {
             return true
         }
         
-        let duration = TimeInterval(((procedure?.duration) ?? 0) * 60)
+        if let procedure {
+            duration = TimeInterval(procedure.duration * 60)
+        } else if let order {
+            Task {
+                let procedure = try await vm.getProcedure(procedureId: order.procedureId)
+                duration = TimeInterval(procedure.duration * 60)
+            }
+        }
         
         let endOfFutureOrder = orderDate.addingTimeInterval(duration)
-        
+                        
         guard orderDate > Date() else { return true }
-        
+
         for (start, end) in ordersTime {
             if orderDate >= start && orderDate < end {
                 return true
             }
             
             if let nextStart = ordersTime.first(where: { $0.key > orderDate }) {
-                guard nextStart.key >= endOfFutureOrder else {
+                if nextStart.key < endOfFutureOrder {
                     return true
                 }
             }
@@ -240,7 +290,7 @@ struct DateTimeSelectionView: View {
 
 struct DateTimeSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        DateTimeSelectionView(selectedTab: .constant(.plus), doneAnimation: .constant(false))
+        DateTimeSelectionView(mainButtonTitle: "Add appoinment", selectedTab: .constant(.plus), doneAnimation: .constant(false))
             .environmentObject(ProfileViewModel())
     }
 }
@@ -325,6 +375,17 @@ struct CustomDatePicker: View {
             }
             .padding(.horizontal)
         }
+        .gesture(
+            DragGesture()
+                .onEnded { gesture in
+                    if gesture.translation.width > 100 && selectedDate >= Date() {
+                        selectedDate = Calendar.current.date(byAdding: .day, value: -1, to: selectedDate) ?? selectedDate
+                    } else if gesture.translation.width < 100 {
+                        selectedDate = Calendar.current.date(byAdding: .day, value: 1, to: selectedDate) ?? selectedDate
+                    }
+                }
+        )
+
     }
     
     func checkIfDisabled(date: Date) -> Bool {

@@ -15,12 +15,14 @@ struct LoginView: View {
     var body: some View {
         VStack(spacing: ScreenSize.height * 0.02) {
             InputField(field: $vm.email, showEye: false, isSecureField: false, title: "briyut@gmail.com", header: "Your email address")
+                .keyboardType(.URL)
             
             InputField(field: $vm.password, isSecureField: true, title: "min. 6 characters", header: "Choose your password")
             
             Button {
                 Task {
                     do {
+                        hideKeyboard()
                         try await vm.logInWithEmail()
                         notEntered = false
                     } catch let error {

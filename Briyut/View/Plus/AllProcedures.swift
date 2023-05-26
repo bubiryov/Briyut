@@ -10,45 +10,73 @@ import SwiftUI
 struct AllProcedures: View {
     
     @EnvironmentObject var vm: ProfileViewModel
-    @Binding var notEntered: Bool
     @State private var isEditing: Bool = false
+    @State private var searchText: String = ""
+    @Binding var notEntered: Bool
+    @Binding var showSearch: Bool
     @Binding var selectedTab: Tab
     @Binding var doneAnimation: Bool
+    @FocusState var focus: Bool
     
     var body: some View {
         NavigationView {
             VStack {
-                BarTitle<EditButton, AddProcedureButton>(
-                    text: "Procedures",
-                    leftButton: vm.user?.isDoctor == true ? EditButton(isEditing: $isEditing) : nil,
-                    rightButton: vm.user?.isDoctor == true ? AddProcedureButton(isEditing: $isEditing) : nil)
-                
+                if vm.user?.isDoctor == true {
+                    BarTitle<EditButton, AddProcedureButton>(
+                        text: "Procedures",
+                        leftButton: EditButton(isEditing: $isEditing),
+                        rightButton: AddProcedureButton(isEditing: $isEditing))
+                } else {
+                    BarTitle<Text, SearchButton>(
+                        text: "Procedures",
+                        rightButton: SearchButton(showSearch: $showSearch, searchText: $searchText))
+                }
+                                
                 if alertContition() {
                     NavigationLink {
                         EditProfileView(notEntered: $notEntered)
                     } label: {
                         HStack {
                             HStack {
-                                Text("To create an appointment, you should provide a name and phone number in your profile settings.")
+                                Text("To create an appointment, you should provide a name and phone number")
+                                    .foregroundColor(.white)
                                     .font(.subheadline)
                                     .bold()
-                                Image(systemName: "exclamationmark.triangle")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: ScreenSize.height * 0.03)
+                                    .multilineTextAlignment(.center)
                             }
-                            .padding(10)
+                            .padding(5)
                         }
                         .frame(maxWidth: .infinity)
-                        .background(Color.yellow.opacity(0.3))
+                        .frame(height: ScreenSize.height * 0.06)
+                        .background(Color.mainColor)
                         .cornerRadius(ScreenSize.width / 30)
                     }
                     .buttonStyle(.plain)
                 }
                 
+                if showSearch {
+                    TextField("", text: $searchText, prompt: Text("Procedure"))
+                        .bold()
+                        .padding(.leading)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: ScreenSize.height * 0.06)
+                        .background(Color.secondary.opacity(0.1))
+                        .cornerRadius(ScreenSize.width / 30)
+                        .focused($focus)
+                        .onAppear {
+                            focus = true
+                        }
+                        .onDisappear {
+                            showSearch = false
+                            searchText = ""
+                        }
+                }
+                
                 ScrollView {
                     
-                    ForEach(vm.procedures, id: \.procedureId) { procedure in
+                    ForEach(vm.procedures.filter { procedure in
+                        searchText.isEmpty ? true : procedure.name.localizedCaseInsensitiveContains(searchText) == true
+                    }, id: \.procedureId) { procedure in
                         
                         ProcedureRow(vm: vm, procedure: procedure, isEditing: $isEditing, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
                             .offset(x: isEditing ? 2 : 0)
@@ -83,7 +111,7 @@ struct AllProcedures: View {
 
 struct AddProcedureView_Previews: PreviewProvider {
     static var previews: some View {
-        AllProcedures(notEntered: .constant(false), selectedTab: .constant(.plus), doneAnimation: .constant(false))
+        AllProcedures(notEntered: .constant(false), showSearch: .constant(false), selectedTab: .constant(.plus), doneAnimation: .constant(false))
             .environmentObject(ProfileViewModel())
     }
 }
@@ -156,6 +184,24 @@ fileprivate struct EditButton: View {
             isEditing.toggle()
         } label: {
             BarButtonView(image: "pencil", textColor: isEditing ? .white : nil, backgroundColor: isEditing ? .mainColor : nil)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+struct SearchButton: View {
+    
+    @Binding var showSearch: Bool
+    @Binding var searchText: String
+    
+    var body: some View {
+        Button {
+            withAnimation(.easeInOut(duration: 0.15)) {
+                showSearch.toggle()
+                searchText = ""
+            }
+        } label: {
+            BarButtonView(image: "search")
         }
         .buttonStyle(.plain)
     }

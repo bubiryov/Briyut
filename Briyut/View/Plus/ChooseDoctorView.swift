@@ -26,8 +26,7 @@ struct ChooseDoctorView: View {
                     ForEach(doctors, id: \.userId) { doctor in
                         NavigationLink {
                             
-                            DateTimeSelectionView(doctor: doctor, procedure: procedure, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
-//                            AddOrderView(doctor: doctor, procedure: procedure, selectedTab: $selectedTab)
+                            DateTimeSelectionView(doctor: doctor, procedure: procedure, mainButtonTitle: "Add appoinment", selectedTab: $selectedTab, doneAnimation: $doneAnimation)
                             
                         } label: {
                             

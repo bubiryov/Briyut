@@ -14,6 +14,7 @@ struct RootView: View {
     @Binding var notEntered: Bool
     @State var justOpened: Bool = true
     @State var doneAnimation: Bool = false
+    @State var showSearch: Bool = false
     
     var body: some View {
         ZStack {
@@ -21,13 +22,13 @@ struct RootView: View {
                 VStack {
                     switch selectedTab {
                     case .home:
-                        HomeView(selectedTab: $selectedTab, justOpened: $justOpened)
+                        HomeView(selectedTab: $selectedTab, justOpened: $justOpened, showSearch: $showSearch)
                             .environmentObject(vm)
                     case .plus:
-                        AllProcedures(notEntered: $notEntered, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
+                        AllProcedures(notEntered: $notEntered, showSearch: $showSearch, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
                             .environmentObject(vm)
                     case .calendar:
-                        CalendarView()
+                        CalendarView(doneAnimation: $doneAnimation, selectedTab: $selectedTab)
                             .environmentObject(vm)
                     case .profile:
                         ProfileView(notEntered: $notEntered)
