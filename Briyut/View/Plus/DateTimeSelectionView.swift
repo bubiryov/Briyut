@@ -19,10 +19,11 @@ struct DateTimeSelectionView: View {
     var mainButtonTitle: String
     @State private var selectedTime = ""
     @State private var selectedDate = Date()
-    @State var personalOrdersTime: [Date: Date] = [:]
+    @State var personalOrdersTime: [(Date, Date)] = []
     @State private var allOrders: [OrderModel] = []
     @State private var showAlert: Bool = false
-    @State var timeSlots: [String: Bool] = [:]
+    @State var timeSlots: [String] = []
+    @State private var disabledAllButtons: Bool = true
     @Binding var selectedTab: Tab
     @Binding var doneAnimation: Bool
                             
@@ -44,7 +45,7 @@ struct DateTimeSelectionView: View {
                 Spacer()
     
                 LazyVGrid(columns: Array(repeating: GridItem(), count: 4), spacing: 20) {
-                    ForEach(timeSlots.sorted(by: { $0.key < $1.key }), id: \.key) { (timeSlot, disabled) in
+                    ForEach(timeSlots, id: \.self) { timeSlot in
                         Button(action: {
                             withAnimation(nil) {
                                 selectedTime = timeSlot
@@ -63,8 +64,8 @@ struct DateTimeSelectionView: View {
                                 )
                         }
                         .buttonStyle(.plain)
-                        .disabled(disabled)
-                        .opacity(disabled ? 0.5 : 1)
+                        .disabled(disabledAllButtons ? true : checkIfDisabled(time: timeSlot))
+                        .opacity(disabledAllButtons ? 0.5 : checkIfDisabled(time: timeSlot) ? 0.5 : 1)
                         .cornerRadius(ScreenSize.width / 30)
                     }
                 }
@@ -103,16 +104,20 @@ struct DateTimeSelectionView: View {
             .navigationBarBackButtonHidden(true)
             .onChange(of: selectedDate) { newDate in
                 Task {
+                    disabledAllButtons = true
                     personalOrdersTime = try await vm.getDayOrderTimes(date: newDate, doctorId: doctor?.userId)
                     allOrders = try await vm.getDayOrders(date: newDate, doctorId: nil)
                     generateTimeSlots()
+                    disabledAllButtons = false
                 }
             }
             .onAppear {
                 Task {
+                    disabledAllButtons = true
                     personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, doctorId: doctor?.userId)
                     allOrders = try await vm.getDayOrders(date: selectedDate, doctorId: nil)
                     generateTimeSlots()
+                    disabledAllButtons = false
                 }
             }
 //        }
@@ -178,8 +183,8 @@ struct DateTimeSelectionView: View {
     }
     
     func generateTimeSlots() {
-        timeSlots = [:]
-        var slots = [String: Bool]()
+        
+        var slots = [String]()
         
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
@@ -197,25 +202,25 @@ struct DateTimeSelectionView: View {
             if personalOrdersTime.isEmpty {
                 guard currentTime <= endTime else { break }
                 let timeString = formatter.string(from: currentTime)
-                slots[timeString] = checkIfDisabled(time: timeString)
+                slots.append(timeString)
                 currentTime = nextTime
                 continue
             }
             
             if slots.isEmpty {
                 let timeString = formatter.string(from: currentTime)
-                slots[timeString] = checkIfDisabled(time: timeString)
+                slots.append(timeString)
                 currentTime = nextTime
             }
             
-            if let time = personalOrdersTime.first(where: { $0.value > currentTime && $0.value < nextTime }) {
-                let timeString = formatter.string(from: time.value)
-                slots[timeString] = checkIfDisabled(time: timeString)
-                currentTime = time.value
+            if let time = personalOrdersTime.first(where: { $0.1 > currentTime && $0.1 < nextTime }) {
+                let timeString = formatter.string(from: time.1)
+                slots.append(timeString)
+                currentTime = time.1
             } else {
                 if nextTime <= endTime {
                     let timeString = formatter.string(from: nextTime)
-                    slots[timeString] = checkIfDisabled(time: timeString)
+                    slots.append(timeString)
                     currentTime = nextTime
                 }
             }
@@ -319,10 +324,12 @@ struct DateTimeSelectionView: View {
         
         var localProcedure: ProcedureModel? = nil
         var duration: TimeInterval = 0
-
+        var localPersonalOrdersTime = personalOrdersTime
+        
         if let procedure {
             localProcedure = procedure
         } else if let order {
+            localPersonalOrdersTime = personalOrdersTime.filter({ $0.0 != order.date.dateValue() })
             localProcedure = vm.procedures.first(where: { $0.procedureId == order.procedureId })
         }
 
@@ -332,12 +339,12 @@ struct DateTimeSelectionView: View {
         
         let endOfFutureOrder = orderDate.addingTimeInterval(duration)
         
-        if personalOrdersTime.contains(where: { orderDate >= $0.key && orderDate < $0.value }) {
+        if localPersonalOrdersTime.contains(where: { orderDate >= $0.0 && orderDate < $0.1 }) {
             return true
         }
 
-        if let nextOrder = personalOrdersTime.first(where: { $0.key > orderDate }) {
-            guard nextOrder.key >= endOfFutureOrder else { return true }
+        if let nextOrder = localPersonalOrdersTime.first(where: { $0.0 > orderDate }) {
+            guard nextOrder.0 >= endOfFutureOrder else { return true }
         }
 
         let matches = allOrders.filter {

@@ -181,17 +181,29 @@ extension ProfileViewModel {
         return try await OrderManager.shared.getDayOrders(date: date, doctorId: doctorId)
     }
     
-    func getDayOrderTimes(date: Date, doctorId: String?) async throws -> [Date: Date] {
-        let orders = try await getDayOrders(date: date, doctorId: doctorId).sorted(by: { $0.date.dateValue() < $1.date.dateValue() })
-        var occupied = [Date: Date]()
+    func getDayOrderTimes(date: Date, doctorId: String?) async throws -> [(Date, Date)] {
+        let orders = try await getDayOrders(date: date, doctorId: doctorId)
+        var occupied = [(Date, Date)]()
         for order in orders {
             let start = order.date.dateValue()
             let end = order.end.dateValue()
 
-            occupied[start] = end
+            let tuple = (start, end)
+            occupied.append(tuple)
         }
-        print(occupied)
         return occupied
     }
+    
+//    func getDayOrderTimes(date: Date, doctorId: String?) async throws -> [Date: Date] {
+//        let orders = try await getDayOrders(date: date, doctorId: doctorId)
+//        var occupied = [Date: Date]()
+//        for order in orders {
+//            let start = order.date.dateValue()
+//            let end = order.end.dateValue()
+//
+//            occupied[start] = end
+//        }
+//        return occupied
+//    }
 
 }

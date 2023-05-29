@@ -45,6 +45,13 @@ struct HomeView: View {
             
             if let nearestOrder = vm.activeOrders.first {
                 ZStack {
+                    if vm.activeOrders.count > 1 {
+                        RoundedRectangle(cornerRadius: ScreenSize.width / 15)
+                            .frame(height: ScreenSize.height * 0.14)
+                            .offset(y: ScreenSize.height / 35)
+                            .scaleEffect(0.85)
+                            .foregroundColor(.mainColor.opacity(0.7))
+                    }
                     OrderRow(vm: vm, order: nearestOrder, withButtons: false, color: .mainColor, fontColor: .white, doneAnimation: Binding.constant(false), selectedTab: $selectedTab)
                 }
             }
