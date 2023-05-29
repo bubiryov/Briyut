@@ -54,11 +54,12 @@ final class ProcedureManager {
 //            .addSnapshotListener(as: ProcedureModel.self)
 //    }
     
-    func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, availableDoctors: [String]) async throws {
+    func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, parallelQuantity: Int, availableDoctors: [String]) async throws {
         let data: [String : Any] = [
             ProcedureModel.CodingKeys.name.rawValue : name,
             ProcedureModel.CodingKeys.duration.rawValue : duration,
             ProcedureModel.CodingKeys.cost.rawValue : cost,
+            ProcedureModel.CodingKeys.parallelQuantity.rawValue : parallelQuantity,
             ProcedureModel.CodingKeys.availableDoctors.rawValue : availableDoctors
         ]
         try await procedureDocument(procedureId: procedureId).updateData(data)

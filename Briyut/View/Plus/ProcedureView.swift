@@ -17,10 +17,13 @@ struct ProcedureView: View {
     var procedure: ProcedureModel? = nil
     @State var name: String = ""
     @State var duration: String = ""
+    @State var parallelQuantity: String = ""
     @State var cost: String = ""
     @State var availableDoctors: [String] = []
     @State private var showAlert = false
     @Binding var isEditing: Bool
+    
+    @State var test: Int = 0
         
     var body: some View {
         VStack {
@@ -29,14 +32,49 @@ struct ProcedureView: View {
             
             ScrollView {
                 VStack(spacing: ScreenSize.height * 0.02) {
+                    
+                    TextField("", text: $name, prompt: Text("Procedure name"))
+                        .bold()
+                        .padding(.leading)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: ScreenSize.height * 0.06)
+                        .background(Color.secondary.opacity(0.1))
+                        .cornerRadius(ScreenSize.width / 30)
+                    
+                    TextField("", text: $duration, prompt: Text("Duration (minutes)"))
+                        .bold()
+                        .padding(.leading)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: ScreenSize.height * 0.06)
+                        .background(Color.secondary.opacity(0.1))
+                        .cornerRadius(ScreenSize.width / 30)
+                        .keyboardType(.numberPad)
                                         
-                    InputField(field: $name, isSecureField: false, title: "Massage", header: "Procedure name")
-
-                    InputField(field: $duration, isSecureField: false, title: "30", header: "Duration (min)")
+                    TextField("", text: $parallelQuantity, prompt: Text("Count of parallel procedures"))
+                        .bold()
+                        .padding(.leading)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: ScreenSize.height * 0.06)
+                        .background(Color.secondary.opacity(0.1))
+                        .cornerRadius(ScreenSize.width / 30)
                         .keyboardType(.numberPad)
                     
-                    InputField(field: $cost, isSecureField: false, title: "1000", header: "Price")
+                    TextField("", text: $cost, prompt: Text("Price"))
+                        .bold()
+                        .padding(.leading)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: ScreenSize.height * 0.06)
+                        .background(Color.secondary.opacity(0.1))
+                        .cornerRadius(ScreenSize.width / 30)
                         .keyboardType(.numberPad)
+
+//                    InputField(field: $name, isSecureField: false, title: "Massage", header: "Procedure name")
+
+//                    InputField(field: $duration, isSecureField: false, title: "30", header: "Duration (min)")
+//                        .keyboardType(.numberPad)
+//
+//                    InputField(field: $cost, isSecureField: false, title: "1000", header: "Price")
+//                        .keyboardType(.numberPad)
                                         
                 }
             }
@@ -106,17 +144,18 @@ struct ProcedureView: View {
     }
     
     func validateFields() -> Bool {
-        if name.isEmpty || duration.isEmpty || cost.isEmpty || availableDoctors.isEmpty {
+        if name.isEmpty || duration.isEmpty || cost.isEmpty || Int(cost) == nil || availableDoctors.isEmpty || parallelQuantity.isEmpty || Int(parallelQuantity) == nil {
             return false
         }
         if !duration.allSatisfy({ $0.isNumber }) || !cost.allSatisfy({ $0.isNumber }) {
             return false
         }
+        
         return true
     }
     
     func addProcedure() async throws {
-        let newProcedure = ProcedureModel(procedureId: UUID().uuidString, name: name, duration: Int(duration)!, cost: Int(cost)!, availableDoctors: availableDoctors)
+        let newProcedure = ProcedureModel(procedureId: UUID().uuidString, name: name, duration: Int(duration)!, cost: Int(cost)!, parallelQuantity: Int(parallelQuantity)!, availableDoctors: availableDoctors)
         do {
             try await vm.addNewProcedure(procedure: newProcedure)
             presentationMode.wrappedValue.dismiss()
@@ -127,7 +166,7 @@ struct ProcedureView: View {
     
     func editProcedure() async throws {
         do {
-            try await vm.editProcedure(procedureId: procedure?.procedureId ?? "", name: name, duration: Int(duration)!, cost: Int(cost)!, availableDoctors: availableDoctors)
+            try await vm.editProcedure(procedureId: procedure?.procedureId ?? "", name: name, duration: Int(duration)!, cost: Int(cost)!, parallelQuantity: Int(parallelQuantity)!, availableDoctors: availableDoctors)
             presentationMode.wrappedValue.dismiss()
         } catch  {
             print("Can't edit the procedure")

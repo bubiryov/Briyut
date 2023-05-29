@@ -17,22 +17,22 @@ struct AddOrderView: View {
     
     var body: some View {
         VStack {
-            
-            BarTitle<BackButton, Text>(text: "Test add", leftButton: BackButton())
-                 
-            Spacer()
-            
-            Button {
-                let timestamp = Timestamp(date: Date())
-                let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure?.procedureId ?? "", procedureName: procedure?.name ?? "", doctorId: doctor?.userId ?? "", doctorName: "\(doctor?.name ?? "") \(doctor?.lastName ?? "")", clientId: vm.user?.userId ?? "", date: timestamp, isDone: false, price: procedure?.cost ?? 0)
-                Task {
-                    try await vm.addNewOrder(order: order)
-                    selectedTab = .home
-                }
-            } label: {
-                AccentButton(text: "Add order", isButtonActive: true)
-            }
-            
+//            
+//            BarTitle<BackButton, Text>(text: "Test add", leftButton: BackButton())
+//                 
+//            Spacer()
+//            
+//            Button {
+//                let timestamp = Timestamp(date: Date())
+//                let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure?.procedureId ?? "", procedureName: procedure?.name ?? "", doctorId: doctor?.userId ?? "", doctorName: "\(doctor?.name ?? "") \(doctor?.lastName ?? "")", clientId: vm.user?.userId ?? "", date: timestamp, end: , isDone: false, price: procedure?.cost ?? 0)
+//                Task {
+//                    try await vm.addNewOrder(order: order)
+//                    selectedTab = .home
+//                }
+//            } label: {
+//                AccentButton(text: "Add order", isButtonActive: true)
+//            }
+//            
         }
         .navigationBarBackButtonHidden(true)
     }

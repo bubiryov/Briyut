@@ -132,7 +132,7 @@ struct ProcedureRow: View {
     
     var vm: ProfileViewModel
     var procedure: ProcedureModel
-    var cornerRadius = ScreenSize.width / 30
+    var cornerRadius = ScreenSize.width / 20
     @Binding var isEditing: Bool
     @Binding var selectedTab: Tab
     @Binding var doneAnimation: Bool

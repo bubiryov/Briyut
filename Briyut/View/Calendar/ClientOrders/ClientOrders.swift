@@ -14,7 +14,6 @@ struct ClientOrders: View {
     @State private var selectedIndex = 0
     @Binding var doneAnimation: Bool
     @Binding var selectedTab: Tab
-    @State var fullCover: Bool = false
     
     var body: some View {
         NavigationView {
@@ -24,9 +23,9 @@ struct ClientOrders: View {
                 CustomSegmentedPicker(options: ["Upcoming", "Recent"], selectedIndex: $selectedIndex)
                                 
                 if selectedIndex == 0 {
-                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.activeOrders, doneAnimation: $doneAnimation, selectedTab: $selectedTab, fullCover: $fullCover)
+                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.activeOrders, doneAnimation: $doneAnimation, selectedTab: $selectedTab)
                 } else {
-                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.doneOrders, doneAnimation: $doneAnimation, selectedTab: $selectedTab, fullCover: $fullCover)
+                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.doneOrders, doneAnimation: $doneAnimation, selectedTab: $selectedTab)
                 }
                 
                 Spacer()
@@ -79,108 +78,6 @@ struct CustomSegmentedPicker: View {
     }
 }
 
-struct OrderRow: View {
-    
-    let vm: ProfileViewModel
-    let order: OrderModel
-    @State private var doctor: DBUser? = nil
-    @State private var showAlert: Bool = false
-    @Binding var doneAnimation: Bool
-    @Binding var selectedTab: Tab
-    @Binding var fullCover: Bool
-    
-    var body: some View {
-        
-        VStack(spacing: 15) {
-            HStack {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text(order.procedureName)
-                        .font(.title3.bold())
-                        .lineLimit(1)
-                    
-                    Text(orderDate())
-                        .font(.subheadline.bold())
-                        .foregroundColor(.secondary)
-                }
-                
-                Spacer()
-                
-                Text("₴ \(order.price)")
-                    .font(.title2)
-                
-            }
-                        
-            if !order.isDone {
-                
-                HStack {
-                    Button {
-                        Task {
-                            showAlert = true
-                        }
-                    } label: {
-                        Text("Cancel")
-                            .foregroundColor(.black)
-                            .bold()
-                            .frame(width: ScreenSize.width * 0.4, height: ScreenSize.height * 0.05)
-                            .background(Color.white)
-                            .cornerRadius(ScreenSize.width / 30)
-                    }
-                    .buttonStyle(.plain)
-                    
-                    Spacer()
-                    
-                    Button {
-                        fullCover.toggle()
-                    } label: {
-                        Text("Reschedule")
-                            .foregroundColor(.white)
-                            .bold()
-                            .frame(width: ScreenSize.width * 0.4, height: ScreenSize.height * 0.05)
-                            .background(Color.mainColor)
-                            .cornerRadius(ScreenSize.width / 30)
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal, 20)
-        .padding(.vertical, 7)
-        .frame(height: order.isDone ? ScreenSize.height * 0.12 : ScreenSize.height * 0.18)
-        .background(order.isDone ? Color.secondary.opacity(0.1) : Color.secondaryColor)
-        .cornerRadius(ScreenSize.width / 30)
-        .onAppear {
-            Task {
-                doctor = try await vm.getUser(userId: order.doctorId)
-            }
-        }
-        .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text("Are you sure you want to remove the appointment?"),
-                primaryButton: .destructive(Text("Remove"), action: {
-                    Task {
-                        vm.activeOrders = []
-                        vm.activeLastDocument = nil
-                        try await vm.removeOrder(orderId: order.orderId)
-//                        try await vm.getAllOrders(isDone: false, countLimit: 6)
-                    }
-                }),
-                secondaryButton: .default(Text("Cancel"), action: {
-                    
-                })
-            )
-        }
-
-    }
-    
-    func orderDate() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd MMM yyyy, HH:mm"
-        return dateFormatter.string(from: order.date.dateValue())
-    }
-    
-}
-
 struct OrderList: View {
     
     let vm: ProfileViewModel
@@ -188,20 +85,14 @@ struct OrderList: View {
     var orderArray: [OrderModel]
     @Binding var doneAnimation: Bool
     @Binding var selectedTab: Tab
-    @Binding var fullCover: Bool
     
     var body: some View {
         List {
             ForEach(orderArray, id: \.orderId) { order in
                 
-                OrderRow(vm: vm, order: order, doneAnimation: $doneAnimation, selectedTab: $selectedTab, fullCover: $fullCover)
+                OrderRow(vm: vm, order: order, withButtons: order.isDone ? false : true, color: nil, fontColor: nil, doneAnimation: $doneAnimation, selectedTab: $selectedTab)
                     .listRowInsets(EdgeInsets())
                     .padding(.bottom, 7)
-                    .sheet(isPresented: $fullCover) {
-                        DateTimeSelectionView(order: order, mainButtonTitle: "Change appoinment", selectedTab: $selectedTab, doneAnimation: $doneAnimation)
-                            .padding()
-                            .padding(.bottom)
-                    }
                 
                 if order == orderArray.last {
                     HStack {
@@ -210,7 +101,7 @@ struct OrderList: View {
                     .frame(height: 1)
                     .onAppear {
                         Task {
-                            try await vm.getAllOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
+                            try await vm.getAllClientOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
                         }
                     }
                 }
@@ -219,15 +110,20 @@ struct OrderList: View {
         }
         .listStyle(.inset)
         .scrollIndicators(.hidden)
-        .refreshable {
-            vm.activeOrders = []
-            vm.doneOrders = []
-            vm.activeLastDocument = nil
-            vm.doneLastDocument = nil
+        .onAppear {
             Task {
-                try await vm.getAllOrders(isDone: false, countLimit: 6)
-                try await vm.getAllOrders(isDone: true, countLimit: 6)
+                try await vm.getAllClientOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
             }
         }
+//        .refreshable {
+//            vm.activeOrders = []
+//            vm.doneOrders = []
+//            vm.activeLastDocument = nil
+//            vm.doneLastDocument = nil
+//            Task {
+//                try await vm.getAllOrders(isDone: false, countLimit: 6)
+//                try await vm.getAllOrders(isDone: true, countLimit: 6)
+//            }
+//        }
     }
 }

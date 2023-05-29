@@ -19,13 +19,13 @@ struct DateTimeSelectionView: View {
     var mainButtonTitle: String
     @State private var selectedTime = ""
     @State private var selectedDate = Date()
-    @State var ordersTime = [Date: Date]()
-    @State private var disableAllButtons: Bool = true
+    @State var personalOrdersTime: [Date: Date] = [:]
+    @State private var allOrders: [OrderModel] = []
     @State private var showAlert: Bool = false
-    @State var timeSlots: [String] = []
+    @State var timeSlots: [String: Bool] = [:]
     @Binding var selectedTab: Tab
     @Binding var doneAnimation: Bool
-        
+                            
     let dayMonthFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "d MMMM yyyy"
@@ -40,11 +40,11 @@ struct DateTimeSelectionView: View {
                 BarTitle<BackButton?, Text>(text: dayMonthFormatter.string(from: selectedDate), leftButton: procedure != nil ? BackButton() : nil)
                 
                 CustomDatePicker(selectedDate: $selectedDate, selectedTime: $selectedTime)
-                
+                                
                 Spacer()
-                
+    
                 LazyVGrid(columns: Array(repeating: GridItem(), count: 4), spacing: 20) {
-                    ForEach(timeSlots, id: \.self) { timeSlot in
+                    ForEach(timeSlots.sorted(by: { $0.key < $1.key }), id: \.key) { (timeSlot, disabled) in
                         Button(action: {
                             withAnimation(nil) {
                                 selectedTime = timeSlot
@@ -62,11 +62,10 @@ struct DateTimeSelectionView: View {
                                         )
                                 )
                         }
-                        .cornerRadius(ScreenSize.width / 30)
                         .buttonStyle(.plain)
-                        .disabled(checkIfDisabled(time: timeSlot))
-//                        .disabled(disableAllButtons)
-                        .opacity(checkIfDisabled(time: timeSlot) ? 0.5 : 1)
+                        .disabled(disabled)
+                        .opacity(disabled ? 0.5 : 1)
+                        .cornerRadius(ScreenSize.width / 30)
                     }
                 }
                 .padding(.horizontal)
@@ -102,22 +101,18 @@ struct DateTimeSelectionView: View {
                 
             }
             .navigationBarBackButtonHidden(true)
-            .onChange(of: selectedDate) { _ in
+            .onChange(of: selectedDate) { newDate in
                 Task {
-//                    disableAllButtons = true
-                    timeSlots = []
-                    ordersTime = try await vm.getDayOrderTimes(date: selectedDate)
+                    personalOrdersTime = try await vm.getDayOrderTimes(date: newDate, doctorId: doctor?.userId)
+                    allOrders = try await vm.getDayOrders(date: newDate, doctorId: nil)
                     generateTimeSlots()
-//                    disableAllButtons = false
                 }
             }
             .onAppear {
                 Task {
-//                    disableAllButtons = true
-                    timeSlots = []
-                    ordersTime = try await vm.getDayOrderTimes(date: Date())
+                    personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, doctorId: doctor?.userId)
+                    allOrders = try await vm.getDayOrders(date: selectedDate, doctorId: nil)
                     generateTimeSlots()
-//                    disableAllButtons = false
                 }
             }
 //        }
@@ -125,19 +120,20 @@ struct DateTimeSelectionView: View {
     }
     
     func addNewOrderAction(procedure: ProcedureModel) async throws {
-        let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure.procedureId , procedureName: procedure.name , doctorId: doctor?.userId ?? "", doctorName: "\(doctor?.name ?? "") \(doctor?.lastName ?? "")", clientId: vm.user?.userId ?? "", date: createTimestamp(from: selectedDate, time: selectedTime)!, isDone: false, price: procedure.cost)
+        let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure.procedureId, doctorId: doctor?.userId ?? "", clientId: vm.user?.userId ?? "", date: createTimestamp(from: selectedDate, time: selectedTime, procedure: nil)!, end: createTimestamp(from: selectedDate, time: selectedTime, procedure: procedure)!, isDone: false, price: procedure.cost)
         
-        ordersTime = try await vm.getDayOrderTimes(date: selectedDate)
-        
+        allOrders = try await vm.getDayOrders(date: selectedDate, doctorId: nil)
+        personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, doctorId: doctor?.userId)
+
         if !checkIfDisabled(time: selectedTime) {
             try await vm.addNewOrder(order: order)
-            
+
             withAnimation {
                 doneAnimation = true
             }
-            
+
             try await Task.sleep(nanoseconds: 3_000_000_000)
-            
+
             withAnimation {
                 doneAnimation = false
                 selectedTab = .home
@@ -150,22 +146,27 @@ struct DateTimeSelectionView: View {
     }
     
     func editOrderAction(order: OrderModel) async throws {
-        
-        let date = createTimestamp(from: selectedDate, time: selectedTime)
-        
-        ordersTime = try await vm.getDayOrderTimes(date: selectedDate)
-        
+        guard
+            let date = createTimestamp(from: selectedDate, time: selectedTime, procedure: nil),
+            let end = createTimestamp(from: selectedDate, time: selectedTime, procedure: vm.procedures.first(where: { $0.procedureId == order.procedureId })) else {
+            print("Edit order action error")
+            throw URLError(.badServerResponse)
+        }
+                
+        allOrders = try await vm.getDayOrders(date: selectedDate, doctorId: nil)
+        personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, doctorId: order.doctorId)
+
         if !checkIfDisabled(time: selectedTime) {
-            try await vm.editOrderTime(orderId: order.orderId, date: date!)
-            
+            try await vm.editOrderTime(orderId: order.orderId, date: date, end: end)
+
             presentationMode.wrappedValue.dismiss()
-            
+
             withAnimation {
                 doneAnimation = true
             }
-            
+
             try await Task.sleep(nanoseconds: 3_000_000_000)
-            
+
             withAnimation {
                 doneAnimation = false
             }
@@ -177,7 +178,8 @@ struct DateTimeSelectionView: View {
     }
     
     func generateTimeSlots() {
-        var slots = [String]()
+        timeSlots = [:]
+        var slots = [String: Bool]()
         
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
@@ -192,28 +194,28 @@ struct DateTimeSelectionView: View {
         for _ in 0..<28 {
             let nextTime = calendar.date(byAdding: .second, value: interval, to: currentTime)!
                         
-            if ordersTime.isEmpty {
+            if personalOrdersTime.isEmpty {
                 guard currentTime <= endTime else { break }
                 let timeString = formatter.string(from: currentTime)
-                slots.append(timeString)
+                slots[timeString] = checkIfDisabled(time: timeString)
                 currentTime = nextTime
                 continue
             }
             
             if slots.isEmpty {
                 let timeString = formatter.string(from: currentTime)
-                slots.append(timeString)
+                slots[timeString] = checkIfDisabled(time: timeString)
                 currentTime = nextTime
             }
             
-            if let time = ordersTime.first(where: { $0.value > currentTime && $0.value < nextTime }) {
+            if let time = personalOrdersTime.first(where: { $0.value > currentTime && $0.value < nextTime }) {
                 let timeString = formatter.string(from: time.value)
-                slots.append(timeString)
+                slots[timeString] = checkIfDisabled(time: timeString)
                 currentTime = time.value
             } else {
                 if nextTime <= endTime {
                     let timeString = formatter.string(from: nextTime)
-                    slots.append(timeString)
+                    slots[timeString] = checkIfDisabled(time: timeString)
                     currentTime = nextTime
                 }
             }
@@ -222,13 +224,68 @@ struct DateTimeSelectionView: View {
         timeSlots = slots
     }
 
-    private func createTimestamp(from date: Date, time: String) -> Timestamp? {
-        guard let date = createFullDate(from: date, time: time) else {
-            return nil
-        }
-        return Timestamp(date: date)
-    }
+    
+//    func generateTimeSlots() {
+//        var slots = [String]()
+//
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "HH:mm"
+//
+//        let calendar = Calendar.current
+//
+//        var currentTime = calendar.date(bySettingHour: 8, minute: 0, second: 0, of: selectedDate)!
+//        let endTime = calendar.date(bySettingHour: 21, minute: 0, second: 0, of: selectedDate)!
+//
+//        let interval = 30 * 60
+//
+//        for _ in 0..<28 {
+//            let nextTime = calendar.date(byAdding: .second, value: interval, to: currentTime)!
+//
+//            if personalOrdersTime.isEmpty {
+//                guard currentTime <= endTime else { break }
+//                let timeString = formatter.string(from: currentTime)
+//                slots.append(timeString)
+//                currentTime = nextTime
+//                continue
+//            }
+//
+//            if slots.isEmpty {
+//                let timeString = formatter.string(from: currentTime)
+//                slots.append(timeString)
+//                currentTime = nextTime
+//            }
+//
+//            if let time = personalOrdersTime.first(where: { $0.value > currentTime && $0.value < nextTime }) {
+//                let timeString = formatter.string(from: time.value)
+//                slots.append(timeString)
+//                currentTime = time.value
+//            } else {
+//                if nextTime <= endTime {
+//                    let timeString = formatter.string(from: nextTime)
+//                    slots.append(timeString)
+//                    currentTime = nextTime
+//                }
+//            }
+//        }
+//
+//        timeSlots = slots
+//    }
+    
+    private func createTimestamp(from date: Date, time: String, procedure: ProcedureModel?) -> Timestamp? {
         
+        if let procedure {
+            guard let date = createFullDate(from: date, time: time)?.addingTimeInterval(TimeInterval(procedure.duration * 60)) else {
+                return nil
+            }
+            return Timestamp(date: date)
+        } else {
+            guard let date = createFullDate(from: date, time: time) else {
+                return nil
+            }
+            return Timestamp(date: date)
+        }
+    }
+    
     private func createFullDate(from date: Date, time: String) -> Date? {
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HH:mm"
@@ -250,40 +307,62 @@ struct DateTimeSelectionView: View {
     }
     
     private func checkIfDisabled(time: String) -> Bool {
-        
+                        
         let calendar = Calendar.current
-        let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: createFullDate(from: selectedDate, time: time)!)
-        
-        var duration: TimeInterval = 0
-        
+        let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .timeZone], from: createFullDate(from: selectedDate, time: time) ?? Date())
+
         guard let orderDate = calendar.date(from: dateComponents) else {
             return true
         }
         
+        guard orderDate > Date() else { return true }
+        
+        var localProcedure: ProcedureModel? = nil
+        var duration: TimeInterval = 0
+
         if let procedure {
-            duration = TimeInterval(procedure.duration * 60)
+            localProcedure = procedure
         } else if let order {
-            Task {
-                let procedure = try await vm.getProcedure(procedureId: order.procedureId)
-                duration = TimeInterval(procedure.duration * 60)
-            }
+            localProcedure = vm.procedures.first(where: { $0.procedureId == order.procedureId })
         }
+
+        guard let localProcedure else { return true }
+            
+        duration = TimeInterval(localProcedure.duration * 60)
         
         let endOfFutureOrder = orderDate.addingTimeInterval(duration)
-                        
-        guard orderDate > Date() else { return true }
+        
+        if personalOrdersTime.contains(where: { orderDate >= $0.key && orderDate < $0.value }) {
+            return true
+        }
 
-        for (start, end) in ordersTime {
-            if orderDate >= start && orderDate < end {
+        if let nextOrder = personalOrdersTime.first(where: { $0.key > orderDate }) {
+            guard nextOrder.key >= endOfFutureOrder else { return true }
+        }
+
+        let matches = allOrders.filter {
+            $0.procedureId == localProcedure.procedureId && orderDate >= $0.date.dateValue() && orderDate < $0.end.dateValue() ||
+            $0.procedureId == localProcedure.procedureId && endOfFutureOrder > $0.date.dateValue() && endOfFutureOrder <= $0.end.dateValue() }
+
+        if matches.count > 0 {
+
+            guard let matchedProcedure = vm.procedures.first(where: { $0.procedureId == localProcedure.procedureId }) else { return true }
+            guard (matchedProcedure.parallelQuantity - matches.count) > 0 else {
                 return true
             }
-            
-            if let nextStart = ordersTime.first(where: { $0.key > orderDate }) {
-                if nextStart.key < endOfFutureOrder {
-                    return true
-                }
-            }
         }
+
+//        for (start, end) in personalOrdersTime {
+//            if orderDate >= start && orderDate < end {
+//                return true
+//            }
+//
+//            if let nextStart = personalOrdersTime.first(where: { $0.key > orderDate }) {
+//                if nextStart.key < endOfFutureOrder {
+//                    return true
+//                }
+//            }
+//        }
         return false
     }
 }

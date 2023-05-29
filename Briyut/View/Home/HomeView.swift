@@ -43,56 +43,64 @@ struct HomeView: View {
                 .cornerRadius(ScreenSize.width / 30)
             }
             
+            if let nearestOrder = vm.activeOrders.first {
+                ZStack {
+                    OrderRow(vm: vm, order: nearestOrder, withButtons: false, color: .mainColor, fontColor: .white, doneAnimation: Binding.constant(false), selectedTab: $selectedTab)
+                }
+            }
+
+            
             Spacer()
             
-            VStack(alignment: .leading) {
-                Text("Specialists")
-                    .font(.title2.bold())
-                
-                ScrollView(.horizontal) {
-                    LazyHStack(spacing: 15) {
-//                        Spacer()
-                        if let doctors = vm.doctors {
-                            ForEach(doctors, id: \.userId) { doctor in
-                                VStack(alignment: .center) {
-                                    ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.1, color: .lightBlueColor)
-                                        .cornerRadius(ScreenSize.width / 20)
-                                    
-                                    Spacer()
-                                    
-                                    Text("\(doctor.lastName ?? "") \(doctor.name ?? "")")
-                                        .font(.callout.bold())
-                                        .multilineTextAlignment(.center)
-                                        .lineLimit(2)
-                                    
-                                    Spacer()
-
-                                    Text("Rehabilitator")
-                                        .font(.footnote)
-                                        .foregroundColor(.secondary)
-                                }
-                                .padding()
-                                .frame(width: ScreenSize.height * 0.2, height: ScreenSize.height * 0.2)
-                                .background(Color.secondaryColor)
-                                .cornerRadius(ScreenSize.width / 20)
-                            }
-                        }
-                    }
-                }
-                .scrollIndicators(.hidden)
-                .frame(height: ScreenSize.height * 0.2)
-            }
+//            VStack(alignment: .leading) {
+//                Text("Specialists")
+//                    .font(.title2.bold())
+//                
+//                ScrollView(.horizontal) {
+//                    LazyHStack(spacing: 15) {
+////                        Spacer()
+//                        if let doctors = vm.doctors {
+//                            ForEach(doctors, id: \.userId) { doctor in
+//                                VStack(alignment: .center) {
+//                                    ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.1, color: .lightBlueColor)
+//                                        .cornerRadius(ScreenSize.width / 20)
+//                                    
+//                                    Spacer()
+//                                    
+//                                    Text("\(doctor.lastName ?? "") \(doctor.name ?? "")")
+//                                        .font(.callout.bold())
+//                                        .multilineTextAlignment(.center)
+//                                        .lineLimit(2)
+//                                    
+//                                    Spacer()
+//
+//                                    Text("Rehabilitator")
+//                                        .font(.footnote)
+//                                        .foregroundColor(.secondary)
+//                                }
+//                                .padding()
+//                                .frame(width: ScreenSize.height * 0.2, height: ScreenSize.height * 0.2)
+//                                .background(Color.secondaryColor)
+//                                .cornerRadius(ScreenSize.width / 20)
+//                            }
+//                        }
+//                    }
+//                }
+//                .scrollIndicators(.hidden)
+//                .frame(height: ScreenSize.height * 0.2)
+//            }
             
         }
         .onAppear {
             Task {
                 try await vm.loadCurrentUser()
-//                try await vm.getAllProcedures()
                 try await vm.getAllDoctors()
                 if justOpened {
                     vm.addListenerForProcuderes()
                     try await vm.updateOrdersStatus()
                     justOpened = false
+                } else {
+                    try await vm.getAllClientOrders(isDone: false, countLimit: 2)
                 }
             }
         }

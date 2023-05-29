@@ -78,6 +78,7 @@
 		89D37B792A0A87D100A7C933 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B782A0A87D100A7C933 /* EditProfileView.swift */; };
 		89E8AB342A14DD52000661E6 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AB332A14DD51000661E6 /* SplashView.swift */; };
 		89E8AB382A154D73000661E6 /* OrderInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AB372A154D73000661E6 /* OrderInformationView.swift */; };
+		89EEC9AF2A21FBB60069A711 /* OrderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EEC9AE2A21FBB60069A711 /* OrderRow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,6 +163,7 @@
 		89D37B782A0A87D100A7C933 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		89E8AB332A14DD51000661E6 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		89E8AB372A154D73000661E6 /* OrderInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderInformationView.swift; sourceTree = "<group>"; };
+		89EEC9AE2A21FBB60069A711 /* OrderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -449,6 +451,7 @@
 			children = (
 				89CFDD6F2A12823700159C4B /* ClientOrders.swift */,
 				89E8AB372A154D73000661E6 /* OrderInformationView.swift */,
+				89EEC9AE2A21FBB60069A711 /* OrderRow.swift */,
 			);
 			path = ClientOrders;
 			sourceTree = "<group>";
@@ -638,6 +641,7 @@
 				890C28BA2A0652FE000DB1A6 /* ProcedureModel.swift in Sources */,
 				899EC5CF2A0057EE00C90D49 /* RegistrationView.swift in Sources */,
 				898FD9BA2A0908FD00725697 /* CalendarView.swift in Sources */,
+				89EEC9AF2A21FBB60069A711 /* OrderRow.swift in Sources */,
 				89CFDD682A122E7200159C4B /* OrderManager.swift in Sources */,
 				899EC5CB2A00574700C90D49 /* AuthenticationViewModel.swift in Sources */,
 				89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */,

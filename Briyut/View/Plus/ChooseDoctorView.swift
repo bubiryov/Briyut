@@ -68,7 +68,7 @@ struct ChooseDoctorView: View {
 
 struct ChooseDoctorView_Previews: PreviewProvider {
     static var previews: some View {
-        ChooseDoctorView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, availableDoctors: []), selectedTab: .constant(.plus), doneAnimation:.constant(false))
+        ChooseDoctorView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, parallelQuantity: 1, availableDoctors: []), selectedTab: .constant(.plus), doneAnimation:.constant(false))
             .environmentObject(ProfileViewModel())
     }
 }

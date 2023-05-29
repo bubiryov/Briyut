@@ -12,13 +12,15 @@ struct ProcedureModel: Codable, Equatable {
     let name: String
     let duration: Int
     let cost: Int
+    let parallelQuantity: Int
     let availableDoctors: [String]
     
-    init(procedureId: String, name: String, duration: Int, cost: Int, availableDoctors: [String]) {
+    init(procedureId: String, name: String, duration: Int, cost: Int, parallelQuantity: Int, availableDoctors: [String]) {
         self.procedureId = procedureId
         self.name = name
         self.duration = duration
         self.cost = cost
+        self.parallelQuantity = parallelQuantity
         self.availableDoctors = availableDoctors
     }
     
@@ -27,6 +29,7 @@ struct ProcedureModel: Codable, Equatable {
         case name = "name"
         case duration = "duration"
         case cost = "cost"
+        case parallelQuantity = "parallel_quantity"
         case availableDoctors = "available_doctors"
     }
         
@@ -35,6 +38,7 @@ struct ProcedureModel: Codable, Equatable {
         try container.encode(self.procedureId, forKey: .procedureId)
         try container.encode(self.name, forKey: .name)
         try container.encode(self.duration, forKey: .duration)
+        try container.encode(self.parallelQuantity, forKey: .parallelQuantity)
         try container.encode(self.cost, forKey: .cost)
         try container.encode(self.availableDoctors, forKey: .availableDoctors)
     }
@@ -45,6 +49,7 @@ struct ProcedureModel: Codable, Equatable {
         self.name = try container.decode(String.self, forKey: .name)
         self.duration = try container.decode(Int.self, forKey: .duration)
         self.cost = try container.decode(Int.self, forKey: .cost)
+        self.parallelQuantity = try container.decode(Int.self, forKey: .parallelQuantity)
         self.availableDoctors = try container.decode([String].self, forKey: .availableDoctors)
     }
     
