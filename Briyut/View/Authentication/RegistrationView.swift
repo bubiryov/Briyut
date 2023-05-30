@@ -20,11 +20,11 @@ struct RegistrationView: View {
                 
                 BarTitle<BackButton, Text>(text: "New account", leftButton: BackButton(presentationMode: _presentationMode))
                             
-                InputField(field: $vm.email, isSecureField: false, title: "briyut@gmail.com", header: "Your email address")
+                AuthInputField(field: $vm.email, isSecureField: false, title: "briyut@gmail.com", header: "Your email address")
                 
-                InputField(field: $vm.password, isSecureField: true, title: "min. 6 characters", header: "Choose your password")
+                AuthInputField(field: $vm.password, isSecureField: true, title: "min. 6 characters", header: "Choose your password")
                 
-                InputField(field: $repeatPassword, isSecureField: true, title: "min. 6 characters", header: "Repeat password")
+                AuthInputField(field: $repeatPassword, isSecureField: true, title: "min. 6 characters", header: "Repeat password")
                 
                 Button {
                     Task {

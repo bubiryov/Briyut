@@ -28,7 +28,7 @@ struct PhoneAuthenticationView: View {
             BarTitle<BackButton, Text>(text: "Phone Sign In", leftButton: BackButton(presentationMode: _presentationMode))
             
             if sentSms {
-                InputField(field: $code, isSecureField: false, title: "", header: "Code")
+                AuthInputField(field: $code, isSecureField: false, title: "", header: "Code")
                     .keyboardType(.numberPad)
 
                 Button {
@@ -42,7 +42,7 @@ struct PhoneAuthenticationView: View {
                 }
                 
             } else {
-                InputField(field: $phoneNumber, isSecureField: false, title: "+380", header: "Your phone number")
+                AuthInputField(field: $phoneNumber, isSecureField: false, title: "+380", header: "Your phone number")
                     .keyboardType(.numberPad)
                 
                 Button {

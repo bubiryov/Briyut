@@ -53,42 +53,16 @@ struct EditProfileView: View {
                         self.data = data
                     }
                 }
-                                
-                TextField("", text: $name, prompt: Text("Name"))
-                    .bold()
-                    .padding(.leading)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: ScreenSize.height * 0.06)
-                    .background(Color.secondary.opacity(0.1))
-                    .cornerRadius(ScreenSize.width / 30)
                 
-                TextField("", text: $lastName, prompt: Text("Last name"))
-                    .bold()
-                    .padding(.leading)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: ScreenSize.height * 0.06)
-                    .background(Color.secondary.opacity(0.1))
-                    .cornerRadius(ScreenSize.width / 30)
+                AccentInputField(promptText: "Name", input: $name)
+                
+                AccentInputField(promptText: "Last name", input: $lastName)
                 
                 if !vm.authProviders.contains(.phone) {
-                    TextField("", text: $phoneNumber, prompt: Text("+38 (099)-999-99-99"))
-                        .bold()
-                        .padding(.leading)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: ScreenSize.height * 0.06)
-                        .background(Color.secondary.opacity(0.1))
-                        .cornerRadius(ScreenSize.width / 30)
+                    AccentInputField(promptText: "+38 (099)-999-99-99", input: $phoneNumber)
+                        .keyboardType(.phonePad)
                 }
-
-//                InputField(field: $name, isSecureField: false, title: "Name", header: "Your name")
-                
-//                InputField(field: $lastName, isSecureField: false, title: "Last name", header: "Your last name (optional)")
-                
-//                if !vm.authProviders.contains(.phone) {
-//                    InputField(field: $phoneNumber, isSecureField: false, title: "+38 (099)-999-99-99", header: "Phone number")
-//                        .keyboardType(.numberPad)
-//                }
-                
+                                                
                 Spacer()
                 
                 Button {

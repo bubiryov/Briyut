@@ -33,49 +33,16 @@ struct ProcedureView: View {
             ScrollView {
                 VStack(spacing: ScreenSize.height * 0.02) {
                     
-                    TextField("", text: $name, prompt: Text("Procedure name"))
-                        .bold()
-                        .padding(.leading)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: ScreenSize.height * 0.06)
-                        .background(Color.secondary.opacity(0.1))
-                        .cornerRadius(ScreenSize.width / 30)
+                    AccentInputField(promptText: "Procedure name", input: $name)
                     
-                    TextField("", text: $duration, prompt: Text("Duration (minutes)"))
-                        .bold()
-                        .padding(.leading)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: ScreenSize.height * 0.06)
-                        .background(Color.secondary.opacity(0.1))
-                        .cornerRadius(ScreenSize.width / 30)
-                        .keyboardType(.numberPad)
-                                        
-                    TextField("", text: $parallelQuantity, prompt: Text("Count of parallel procedures"))
-                        .bold()
-                        .padding(.leading)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: ScreenSize.height * 0.06)
-                        .background(Color.secondary.opacity(0.1))
-                        .cornerRadius(ScreenSize.width / 30)
+                    AccentInputField(promptText: "Duration (minutes)", input: $duration)
                         .keyboardType(.numberPad)
                     
-                    TextField("", text: $cost, prompt: Text("Price"))
-                        .bold()
-                        .padding(.leading)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: ScreenSize.height * 0.06)
-                        .background(Color.secondary.opacity(0.1))
-                        .cornerRadius(ScreenSize.width / 30)
+                    AccentInputField(promptText: "Count of parallel procedures", input: $parallelQuantity)
                         .keyboardType(.numberPad)
-
-//                    InputField(field: $name, isSecureField: false, title: "Massage", header: "Procedure name")
-
-//                    InputField(field: $duration, isSecureField: false, title: "30", header: "Duration (min)")
-//                        .keyboardType(.numberPad)
-//
-//                    InputField(field: $cost, isSecureField: false, title: "1000", header: "Price")
-//                        .keyboardType(.numberPad)
-                                        
+                    
+                    AccentInputField(promptText: "Price", input: $cost)
+                        .keyboardType(.numberPad)
                 }
             }
             .scrollDisabled(true)
@@ -192,5 +159,21 @@ fileprivate struct DeleteButton: View {
             BarButtonView(image: "trash", textColor: .red)
         }
         .buttonStyle(.plain)
+    }
+}
+
+struct AccentInputField: View {
+    
+    var promptText: String
+    @Binding var input: String
+    
+    var body: some View {
+        TextField("", text: $input, prompt: Text(promptText))
+            .bold()
+            .padding(.leading)
+            .frame(maxWidth: .infinity)
+            .frame(height: ScreenSize.height * 0.06)
+            .background(Color.secondary.opacity(0.1))
+            .cornerRadius(ScreenSize.width / 30)
     }
 }

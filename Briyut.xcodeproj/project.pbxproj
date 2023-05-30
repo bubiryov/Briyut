@@ -34,7 +34,7 @@
 		899EC5A62A000E6500C90D49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5A52A000E6500C90D49 /* AppDelegate.swift */; };
 		899EC5A72A000E6500C90D49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5A52A000E6500C90D49 /* AppDelegate.swift */; };
 		899EC5AA2A0016A700C90D49 /* Alokary.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 899EC5A92A0016A700C90D49 /* Alokary.ttf */; };
-		899EC5B62A001A7600C90D49 /* InputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5B52A001A7600C90D49 /* InputField.swift */; };
+		899EC5B62A001A7600C90D49 /* AuthInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5B52A001A7600C90D49 /* AuthInputField.swift */; };
 		899EC5B82A001D5C00C90D49 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5B72A001D5C00C90D49 /* LoginView.swift */; };
 		899EC5BF2A002FF400C90D49 /* AccentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5BE2A002FF400C90D49 /* AccentButton.swift */; };
 		899EC5C12A003DBF00C90D49 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899EC5C02A003DBF00C90D49 /* HomeView.swift */; };
@@ -125,7 +125,7 @@
 		899EC5A52A000E6500C90D49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		899EC5A92A0016A700C90D49 /* Alokary.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Alokary.ttf; sourceTree = "<group>"; };
 		899EC5AB2A0016DE00C90D49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		899EC5B52A001A7600C90D49 /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputField.swift; sourceTree = "<group>"; };
+		899EC5B52A001A7600C90D49 /* AuthInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthInputField.swift; sourceTree = "<group>"; };
 		899EC5B72A001D5C00C90D49 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		899EC5BE2A002FF400C90D49 /* AccentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentButton.swift; sourceTree = "<group>"; };
 		899EC5C02A003DBF00C90D49 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -343,7 +343,7 @@
 		899EC5B22A001A2500C90D49 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				899EC5B52A001A7600C90D49 /* InputField.swift */,
+				899EC5B52A001A7600C90D49 /* AuthInputField.swift */,
 				89C5904D2A051AFB00975E50 /* BackButton.swift */,
 				89C5904F2A05291800975E50 /* BarButtonView.swift */,
 				899EC5BE2A002FF400C90D49 /* AccentButton.swift */,
@@ -665,7 +665,7 @@
 				89C590522A052B4700975E50 /* BarTitle.swift in Sources */,
 				899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */,
 				899EC5BF2A002FF400C90D49 /* AccentButton.swift in Sources */,
-				899EC5B62A001A7600C90D49 /* InputField.swift in Sources */,
+				899EC5B62A001A7600C90D49 /* AuthInputField.swift in Sources */,
 				89CFDD6C2A126BCB00159C4B /* AddOrderView.swift in Sources */,
 				89A17E582A03C8BD00C92A58 /* AppleAuthenticationManager.swift in Sources */,
 			);

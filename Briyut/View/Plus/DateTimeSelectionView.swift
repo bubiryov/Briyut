@@ -325,10 +325,12 @@ struct DateTimeSelectionView: View {
         var localProcedure: ProcedureModel? = nil
         var duration: TimeInterval = 0
         var localPersonalOrdersTime = personalOrdersTime
+        var localAllOrders = allOrders
         
         if let procedure {
             localProcedure = procedure
         } else if let order {
+            localAllOrders = allOrders.filter({ $0.date.dateValue() != order.date.dateValue() })
             localPersonalOrdersTime = personalOrdersTime.filter({ $0.0 != order.date.dateValue() })
             localProcedure = vm.procedures.first(where: { $0.procedureId == order.procedureId })
         }
@@ -347,7 +349,7 @@ struct DateTimeSelectionView: View {
             guard nextOrder.0 >= endOfFutureOrder else { return true }
         }
 
-        let matches = allOrders.filter {
+        let matches = localAllOrders.filter {
             $0.procedureId == localProcedure.procedureId && orderDate >= $0.date.dateValue() && orderDate < $0.end.dateValue() ||
             $0.procedureId == localProcedure.procedureId && endOfFutureOrder > $0.date.dateValue() && endOfFutureOrder <= $0.end.dateValue() }
 
@@ -359,17 +361,6 @@ struct DateTimeSelectionView: View {
             }
         }
 
-//        for (start, end) in personalOrdersTime {
-//            if orderDate >= start && orderDate < end {
-//                return true
-//            }
-//
-//            if let nextStart = personalOrdersTime.first(where: { $0.key > orderDate }) {
-//                if nextStart.key < endOfFutureOrder {
-//                    return true
-//                }
-//            }
-//        }
         return false
     }
 }
@@ -436,7 +427,6 @@ struct CustomDatePicker: View {
                                 .font(.system(size: 12))
                         }
                         .frame(width: ScreenSize.height * 0.05, height: ScreenSize.width * 0.15)
-
                         .background(isSelected ? Color.mainColor : Color.clear)
                         .cornerRadius(ScreenSize.width / 30)
                     }

@@ -55,13 +55,7 @@ struct AllProcedures: View {
                 }
                 
                 if showSearch {
-                    TextField("", text: $searchText, prompt: Text("Procedure"))
-                        .bold()
-                        .padding(.leading)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: ScreenSize.height * 0.06)
-                        .background(Color.secondary.opacity(0.1))
-                        .cornerRadius(ScreenSize.width / 30)
+                    AccentInputField(promptText: "Procedure", input: $searchText)
                         .focused($focus)
                         .onAppear {
                             focus = true

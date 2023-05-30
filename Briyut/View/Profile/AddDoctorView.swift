@@ -21,7 +21,7 @@ struct AddDoctorView: View {
             BarTitle<BackButton, Text>(text: "Add a doctor", leftButton: BackButton())
             
             
-            InputField(field: $futureDoctorID, isSecureField: false, title: "UserID")
+            AuthInputField(field: $futureDoctorID, isSecureField: false, title: "UserID")
             
             Button {
                 Task {

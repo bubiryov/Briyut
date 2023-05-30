@@ -1,5 +1,5 @@
 //
-//  InputField.swift
+//  AuthInputField.swift
 //  Briyut
 //
 //  Created by Egor Bubiryov on 01.05.2023.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct InputField: View {
+struct AuthInputField: View {
     
     @Binding var field: String
     @State var showEye: Bool = false
@@ -80,7 +80,7 @@ struct InputField: View {
     }
 }
 
-extension InputField {
+extension AuthInputField {
     private func eye(image: String) -> some View {
         Image(systemName: image)
             .resizable()
@@ -94,6 +94,6 @@ extension InputField {
 
 struct InputField_Previews: PreviewProvider {
     static var previews: some View {
-        InputField(field: .constant(""), showEye: false, isSecureField: false, title: "briyut@gmail.com", header: "Your email address")
+        AuthInputField(field: .constant(""), showEye: false, isSecureField: false, title: "briyut@gmail.com", header: "Your email address")
     }
 }
