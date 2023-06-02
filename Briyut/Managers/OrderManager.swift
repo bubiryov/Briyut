@@ -34,16 +34,23 @@ final class OrderManager {
         try await orderDocument(orderId: orderId).delete()
     }
     
-    private func clientFilter(clientId: String, isDone: Bool) -> Query {
-        orderCollection
-            .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: clientId)
-            .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
-            .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
+    private func filter(userId: String, isDoctor: Bool, isDone: Bool) -> Query {
+        if isDoctor {
+            return orderCollection
+                .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
+                .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+                .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
+        } else {
+            return orderCollection
+                .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
+                .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+                .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
+        }
     }
         
-    func getAllClientOrders(userId: String, isDone: Bool, countLimit: Int, lastDocument: DocumentSnapshot?) async throws -> (products: [OrderModel], lastDocument: DocumentSnapshot?) {
+    func getAllOrders(userId: String, isDoctor: Bool, isDone: Bool, countLimit: Int, lastDocument: DocumentSnapshot?) async throws -> (products: [OrderModel], lastDocument: DocumentSnapshot?) {
 
-        let query = clientFilter(clientId: userId, isDone: isDone)
+        let query = filter(userId: userId, isDoctor: isDoctor, isDone: isDone)
 
         if let lastDocument {
             return try await query
@@ -71,7 +78,7 @@ final class OrderManager {
         let endDate = calendar.date(byAdding: .day, value: 1, to: startDate)!
         
         let query = orderCollection
-            .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: false)
+//            .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: false)
             .whereField(OrderModel.CodingKeys.date.rawValue, isGreaterThanOrEqualTo: startDate)
             .whereField(OrderModel.CodingKeys.date.rawValue, isLessThan: endDate)
             .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)

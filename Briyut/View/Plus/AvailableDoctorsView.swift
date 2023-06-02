@@ -19,8 +19,8 @@ struct AvailableDoctorsView: View {
             BarTitle<BackButton, Text>(text: "Doctors", leftButton: BackButton())
             
             ScrollView {
-                if let doctors = vm.doctors {
-                    ForEach(doctors, id: \.userId) { doctor in
+//                if let doctors = vm.doctors {
+                    ForEach(vm.doctors, id: \.userId) { doctor in
                         HStack {
                             
                             ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
@@ -46,7 +46,7 @@ struct AvailableDoctorsView: View {
                         }
                     }
                     .listRowSeparator(.hidden)
-                }
+//                }
             }
         }
         .navigationBarBackButtonHidden(true)

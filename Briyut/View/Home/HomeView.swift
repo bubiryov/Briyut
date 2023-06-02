@@ -42,7 +42,7 @@ struct HomeView: View {
                 .background(Color.secondary.opacity(0.1))
                 .cornerRadius(ScreenSize.width / 30)
             }
-            
+                        
             if let nearestOrder = vm.activeOrders.first {
                 ZStack {
                     if vm.activeOrders.count > 1 {
@@ -52,7 +52,20 @@ struct HomeView: View {
                             .scaleEffect(0.85)
                             .foregroundColor(.mainColor.opacity(0.7))
                     }
-                    OrderRow(vm: vm, order: nearestOrder, withButtons: false, color: .mainColor, fontColor: .white, doneAnimation: Binding.constant(false), selectedTab: $selectedTab)
+                    OrderRow(vm: vm, order: nearestOrder, withButtons: false, color: .mainColor, fontColor: .white, photoBackgroundColor: .white, doneAnimation: Binding.constant(false), selectedTab: $selectedTab)
+                }
+            } else {
+                Button {
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        selectedTab = .plus
+                    }
+                } label: {
+                    Text("You don't have any appointments yet. \n Want to add?")
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(height: ScreenSize.height * 0.14)
+                        .background(Color.secondaryColor)
+                        .cornerRadius(ScreenSize.width / 20)
+                        .foregroundColor(.secondary)
                 }
             }
 
@@ -62,7 +75,7 @@ struct HomeView: View {
 //            VStack(alignment: .leading) {
 //                Text("Specialists")
 //                    .font(.title2.bold())
-//                
+//
 //                ScrollView(.horizontal) {
 //                    LazyHStack(spacing: 15) {
 ////                        Spacer()
@@ -71,14 +84,14 @@ struct HomeView: View {
 //                                VStack(alignment: .center) {
 //                                    ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.1, color: .lightBlueColor)
 //                                        .cornerRadius(ScreenSize.width / 20)
-//                                    
+//
 //                                    Spacer()
-//                                    
+//
 //                                    Text("\(doctor.lastName ?? "") \(doctor.name ?? "")")
 //                                        .font(.callout.bold())
 //                                        .multilineTextAlignment(.center)
 //                                        .lineLimit(2)
-//                                    
+//
 //                                    Spacer()
 //
 //                                    Text("Rehabilitator")
@@ -96,7 +109,6 @@ struct HomeView: View {
 //                .scrollIndicators(.hidden)
 //                .frame(height: ScreenSize.height * 0.2)
 //            }
-            
         }
         .onAppear {
             Task {
@@ -107,7 +119,10 @@ struct HomeView: View {
                     try await vm.updateOrdersStatus()
                     justOpened = false
                 } else {
-                    try await vm.getAllClientOrders(isDone: false, countLimit: 2)
+                    try await vm.getAllOrders(isDone: false, countLimit: 2)
+                }
+                if vm.user?.isDoctor ?? false {
+                    try await vm.getAllUsers()
                 }
             }
         }

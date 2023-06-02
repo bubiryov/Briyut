@@ -55,7 +55,7 @@ struct AllProcedures: View {
                 }
                 
                 if showSearch {
-                    AccentInputField(promptText: "Procedure", input: $searchText)
+                    AccentInputField(promptText: "Massage", title: "Procedure", input: $searchText)
                         .focused($focus)
                         .onAppear {
                             focus = true

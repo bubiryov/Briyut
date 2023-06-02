@@ -20,22 +20,11 @@ struct AddDoctorView: View {
         VStack(spacing: ScreenSize.height * 0.02) {
             BarTitle<BackButton, Text>(text: "Add a doctor", leftButton: BackButton())
             
-            
-            AuthInputField(field: $futureDoctorID, isSecureField: false, title: "UserID")
-            
-            Button {
-                Task {
-                    try await vm.addDoctor(userID: futureDoctorID)
-                    try await vm.getAllDoctors()
-                    futureDoctorID = ""
-                }
-            } label: {
-                AccentButton(text: "Add a doctor", isButtonActive: validateDoctor())
-            }
-                                    
+            AccentInputField(promptText: "", title: "UserID", input: $futureDoctorID)
+                                                
             ScrollView {
-                if let doctors = vm.doctors {
-                    ForEach(doctors, id: \.userId) { doctor in
+//                if let doctors = vm.doctors {
+                    ForEach(vm.doctors, id: \.userId) { doctor in
                         HStack {
                             
                             ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
@@ -60,11 +49,23 @@ struct AddDoctorView: View {
                                 Label("Delete", systemImage: "trash")
                             }
                         }
-                    }
+//                    }
                 }
             }
             .scrollIndicators(.hidden)
+            
             Spacer()
+            
+            Button {
+                Task {
+                    try await vm.addDoctor(userID: futureDoctorID)
+                    try await vm.getAllDoctors()
+                    futureDoctorID = ""
+                }
+            } label: {
+                AccentButton(text: "Add a doctor", isButtonActive: validateDoctor())
+            }
+
         }
         .navigationBarBackButtonHidden(true)
         .onDisappear {

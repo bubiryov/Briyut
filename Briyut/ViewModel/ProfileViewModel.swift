@@ -14,23 +14,28 @@ import PhotosUI
 final class ProfileViewModel: ObservableObject {
     
     @Published var user: DBUser? = nil
-    @Published var doctors: [DBUser]? = nil
+    @Published var doctors: [DBUser] = []
+    @Published var users: [DBUser] = []
     @Published var procedures: [ProcedureModel] = []
     @Published var authProviders: [AuthProviderOption] = []
     @Published var activeOrders: [OrderModel] = []
     @Published var doneOrders: [OrderModel] = []
-    @Published var dayOrders: [OrderModel] = []
+//    @Published var dayOrders: [OrderModel] = []
 
     var activeLastDocument: DocumentSnapshot? = nil
     var doneLastDocument: DocumentSnapshot? = nil
         
     func loadCurrentUser() async throws {
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
-        self.user = try await getUser(userId: authDataResult.uid)
+        user = try await getUser(userId: authDataResult.uid)
     }
     
     func getUser(userId: String) async throws -> DBUser {
         try await UserManager.shared.getUser(userId: userId)
+    }
+    
+    func getAllUsers() async throws {
+        users = try await UserManager.shared.getAllUsers()
     }
     
     func getProvider() {
@@ -120,16 +125,16 @@ extension ProfileViewModel {
 
 extension ProfileViewModel {
         
-    func getAllClientOrders(isDone: Bool, countLimit: Int) async throws {
+    func getAllOrders(isDone: Bool, countLimit: Int) async throws {
         if !isDone {
-            let (activeOrders, activeLastDocument) = try await OrderManager.shared.getAllClientOrders(userId: user?.userId ?? "", isDone: false, countLimit: countLimit, lastDocument: activeLastDocument)
+            let (activeOrders, activeLastDocument) = try await OrderManager.shared.getAllOrders(userId: user?.userId ?? "", isDoctor: user?.isDoctor ?? false, isDone: false, countLimit: countLimit, lastDocument: activeLastDocument)
             self.activeOrders.append(contentsOf: activeOrders)
             if let activeLastDocument {
                 self.activeLastDocument = activeLastDocument
             }
             print("Догрузка активных ордеров")
         } else {
-            let (doneOrders, doneLastDocument) = try await OrderManager.shared.getAllClientOrders(userId: user?.userId ?? "", isDone: true, countLimit: countLimit, lastDocument: doneLastDocument)
+            let (doneOrders, doneLastDocument) = try await OrderManager.shared.getAllOrders(userId: user?.userId ?? "", isDoctor: user?.isDoctor ?? false, isDone: true, countLimit: countLimit, lastDocument: doneLastDocument)
             self.doneOrders.append(contentsOf: doneOrders)
             if let doneLastDocument {
                 self.doneLastDocument = doneLastDocument
@@ -142,25 +147,25 @@ extension ProfileViewModel {
         try await OrderManager.shared.createNewOrder(order: order)
         activeLastDocument = nil
         activeOrders = []
-        try await getAllClientOrders(isDone: false, countLimit: 6)
+        try await getAllOrders(isDone: false, countLimit: 6)
     }
     
     func editOrderTime(orderId: String, date: Timestamp, end: Timestamp) async throws {
         try await OrderManager.shared.editOrderTime(orderId: orderId, date: date, end: end)
         activeLastDocument = nil
         activeOrders = []
-        try await getAllClientOrders(isDone: false, countLimit: 6)
+        try await getAllOrders(isDone: false, countLimit: 6)
     }
     
     func removeOrder(orderId: String) async throws {
         try await OrderManager.shared.removeOrder(orderId: orderId)
         activeLastDocument = nil
         activeOrders = []
-        try await getAllClientOrders(isDone: false, countLimit: 6)
+        try await getAllOrders(isDone: false, countLimit: 6)
     }
         
     func updateOrdersStatus() async throws {
-        try await getAllClientOrders(isDone: false, countLimit: 20)
+        try await getAllOrders(isDone: false, countLimit: 20)
         for order in activeOrders {
             let calendar = Calendar.current
             let procedureDuration = try await ProcedureManager.shared.getProduct(procedureId: order.procedureId).duration
@@ -172,13 +177,15 @@ extension ProfileViewModel {
         doneLastDocument = nil
         activeOrders = []
         doneOrders = []
-        try await getAllClientOrders(isDone: false, countLimit: 6)
-        try await getAllClientOrders(isDone: true, countLimit: 6)
+        try await getAllOrders(isDone: false, countLimit: 6)
+        try await getAllOrders(isDone: true, countLimit: 6)
         print("Updated")
     }
     
     func getDayOrders(date: Date, doctorId: String?) async throws -> [OrderModel] {
-        return try await OrderManager.shared.getDayOrders(date: date, doctorId: doctorId)
+        let dayOrders = try await OrderManager.shared.getDayOrders(date: date, doctorId: doctorId)
+        print("Day orders: \(dayOrders)")
+        return dayOrders
     }
     
     func getDayOrderTimes(date: Date, doctorId: String?) async throws -> [(Date, Date)] {
@@ -191,19 +198,7 @@ extension ProfileViewModel {
             let tuple = (start, end)
             occupied.append(tuple)
         }
+        print("Occupied: \(occupied)")
         return occupied
     }
-    
-//    func getDayOrderTimes(date: Date, doctorId: String?) async throws -> [Date: Date] {
-//        let orders = try await getDayOrders(date: date, doctorId: doctorId)
-//        var occupied = [Date: Date]()
-//        for order in orders {
-//            let start = order.date.dateValue()
-//            let end = order.end.dateValue()
-//
-//            occupied[start] = end
-//        }
-//        return occupied
-//    }
-
 }

@@ -22,8 +22,8 @@ struct ChooseDoctorView: View {
             BarTitle<BackButton, Text>(text: "Choose a doctor", leftButton: BackButton())
             
             ScrollView {
-                if let doctors = vm.doctors {
-                    ForEach(doctors, id: \.userId) { doctor in
+//                if let doctors = vm.doctors {
+                    ForEach(vm.doctors, id: \.userId) { doctor in
                         NavigationLink {
                             
                             DateTimeSelectionView(doctor: doctor, procedure: procedure, mainButtonTitle: "Add appoinment", selectedTab: $selectedTab, doneAnimation: $doneAnimation)
@@ -48,7 +48,7 @@ struct ChooseDoctorView: View {
                         }
                     }
                     .listRowSeparator(.hidden)
-                }
+//                }
             }
             
             Spacer()

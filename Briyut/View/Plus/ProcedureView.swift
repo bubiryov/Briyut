@@ -33,15 +33,15 @@ struct ProcedureView: View {
             ScrollView {
                 VStack(spacing: ScreenSize.height * 0.02) {
                     
-                    AccentInputField(promptText: "Procedure name", input: $name)
+                    AccentInputField(promptText: "Massage", title: "Procedure name", input: $name)
                     
-                    AccentInputField(promptText: "Duration (minutes)", input: $duration)
+                    AccentInputField(promptText: "30", title: "Duration (minutes)", input: $duration)
                         .keyboardType(.numberPad)
                     
-                    AccentInputField(promptText: "Count of parallel procedures", input: $parallelQuantity)
+                    AccentInputField(promptText: "2", title: "Count of parallel procedures", input: $parallelQuantity)
                         .keyboardType(.numberPad)
                     
-                    AccentInputField(promptText: "Price", input: $cost)
+                    AccentInputField(promptText: "1000", title: "Price", input: $cost)
                         .keyboardType(.numberPad)
                 }
             }
@@ -96,6 +96,7 @@ struct ProcedureView: View {
                     duration = String(procedure.duration)
                     cost = String(procedure.cost)
                     availableDoctors = procedure.availableDoctors
+                    parallelQuantity = String(procedure.parallelQuantity)
                 }
             }
         }
@@ -165,15 +166,21 @@ fileprivate struct DeleteButton: View {
 struct AccentInputField: View {
     
     var promptText: String
+    var title: String
     @Binding var input: String
     
     var body: some View {
-        TextField("", text: $input, prompt: Text(promptText))
-            .bold()
-            .padding(.leading)
-            .frame(maxWidth: .infinity)
-            .frame(height: ScreenSize.height * 0.06)
-            .background(Color.secondary.opacity(0.1))
-            .cornerRadius(ScreenSize.width / 30)
+        VStack(alignment: .leading) {
+            Text(title)
+                .font(.subheadline.bold())
+            
+            TextField("", text: $input, prompt: Text(promptText))
+                .bold()
+                .padding(.leading)
+                .frame(maxWidth: .infinity)
+                .frame(height: ScreenSize.height * 0.06)
+                .background(Color.secondary.opacity(0.1))
+                .cornerRadius(ScreenSize.width / 30)
+        }
     }
 }

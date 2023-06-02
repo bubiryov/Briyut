@@ -54,12 +54,12 @@ struct EditProfileView: View {
                     }
                 }
                 
-                AccentInputField(promptText: "Name", input: $name)
+                AccentInputField(promptText: "Maria", title: "Name", input: $name)
                 
-                AccentInputField(promptText: "Last name", input: $lastName)
+                AccentInputField(promptText: "Shevchenko", title: "Last name", input: $lastName)
                 
                 if !vm.authProviders.contains(.phone) {
-                    AccentInputField(promptText: "+38 (099)-999-99-99", input: $phoneNumber)
+                    AccentInputField(promptText: "+38 (099)-999-99-99", title: "Phone number", input: $phoneNumber)
                         .keyboardType(.phonePad)
                 }
                                                 

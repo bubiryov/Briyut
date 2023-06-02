@@ -26,102 +26,93 @@ struct DateTimeSelectionView: View {
     @State private var disabledAllButtons: Bool = true
     @Binding var selectedTab: Tab
     @Binding var doneAnimation: Bool
-                            
-    let dayMonthFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d MMMM yyyy"
-        return formatter
-    }()
-    
-                
+                                            
     var body: some View {
-//        VStack {
-            VStack {
-                
-                BarTitle<BackButton?, Text>(text: dayMonthFormatter.string(from: selectedDate), leftButton: procedure != nil ? BackButton() : nil)
-                
-                CustomDatePicker(selectedDate: $selectedDate, selectedTime: $selectedTime)
-                                
-                Spacer()
-    
-                LazyVGrid(columns: Array(repeating: GridItem(), count: 4), spacing: 20) {
-                    ForEach(timeSlots, id: \.self) { timeSlot in
-                        Button(action: {
-                            withAnimation(nil) {
-                                selectedTime = timeSlot
-                            }
-                        }) {
-                            Text(timeSlot)
-                                .foregroundColor(selectedTime == timeSlot ? .white : .black)
-                                .bold()
-                                .frame(width: ScreenSize.width * 0.2, height: ScreenSize.height * 0.05)
-                                .background(
-                                    RoundedRectangle(cornerRadius: ScreenSize.width / 30)
-                                        .strokeBorder(Color.mainColor, lineWidth: 2)
-                                        .background(
-                                            selectedTime == timeSlot ? Color.mainColor : Color.clear
-                                        )
-                                )
+
+        VStack {
+            
+            BarTitle<BackButton?, Text>(text: DateFormatter.customFormatter(format: "d MMMM yyyy").string(from: selectedDate), leftButton: procedure != nil ? BackButton() : nil)
+            
+            CustomDatePicker(selectedDate: $selectedDate, selectedTime: $selectedTime)
+            
+            Spacer()
+            
+            LazyVGrid(columns: Array(repeating: GridItem(), count: 4), spacing: 20) {
+                ForEach(timeSlots, id: \.self) { timeSlot in
+                    Button(action: {
+                        withAnimation(nil) {
+                            selectedTime = timeSlot
                         }
-                        .buttonStyle(.plain)
-                        .disabled(disabledAllButtons ? true : checkIfDisabled(time: timeSlot))
-                        .opacity(disabledAllButtons ? 0.5 : checkIfDisabled(time: timeSlot) ? 0.5 : 1)
-                        .cornerRadius(ScreenSize.width / 30)
+                    }) {
+                        Text(timeSlot)
+                            .foregroundColor(selectedTime == timeSlot ? .white : .black)
+                            .bold()
+                            .frame(width: ScreenSize.width * 0.2, height: ScreenSize.height * 0.05)
+                            .background(
+                                RoundedRectangle(cornerRadius: ScreenSize.width / 30)
+                                    .strokeBorder(Color.mainColor, lineWidth: 2)
+                                    .background(
+                                        selectedTime == timeSlot ? Color.mainColor : Color.clear
+                                    )
+                            )
                     }
+                    .buttonStyle(.plain)
+                    .disabled(disabledAllButtons ? true : checkIfDisabled(time: timeSlot))
+                    .opacity(disabledAllButtons ? 0.5 : checkIfDisabled(time: timeSlot) ? 0.5 : 1)
+                    .cornerRadius(ScreenSize.width / 30)
                 }
-                .padding(.horizontal)
-                .alert("Sorry, this time has just been taken", isPresented: $showAlert) {
-                    Button("Got it", role: .cancel) { }
-                }
-                .contentShape(Rectangle())
-                .gesture(
-                    DragGesture()
-                        .onEnded { gesture in
+            }
+            .padding(.horizontal)
+            .alert("Sorry, this time has just been taken", isPresented: $showAlert) {
+                Button("Got it", role: .cancel) { }
+            }
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture()
+                    .onEnded { gesture in
                         if gesture.translation.width > 100 && procedure != nil {
                             presentationMode.wrappedValue.dismiss()
                         }
                     }
-                )
-
-                Spacer()
-                
-                Button {
-                    if let procedure {
-                        Task {
-                            try await addNewOrderAction(procedure: procedure)
-                        }
-                    } else if let order {
-                        Task {
-                            try await editOrderAction(order: order)
-                        }
+            )
+            
+            Spacer()
+            
+            Button {
+                if let procedure {
+                    Task {
+                        try await addNewOrderAction(procedure: procedure)
                     }
-                } label: {
-                    AccentButton(text: mainButtonTitle, isButtonActive: selectedTime != "" ? true : false)
+                } else if let order {
+                    Task {
+                        try await editOrderAction(order: order)
+                    }
                 }
-                .disabled(selectedTime != "" ? false : true)
-                
+            } label: {
+                AccentButton(text: mainButtonTitle, isButtonActive: selectedTime != "" ? true : false)
             }
-            .navigationBarBackButtonHidden(true)
-            .onChange(of: selectedDate) { newDate in
-                Task {
-                    disabledAllButtons = true
-                    personalOrdersTime = try await vm.getDayOrderTimes(date: newDate, doctorId: doctor?.userId)
-                    allOrders = try await vm.getDayOrders(date: newDate, doctorId: nil)
-                    generateTimeSlots()
-                    disabledAllButtons = false
-                }
+            .disabled(selectedTime != "" ? false : true)
+            
+        }
+        .navigationBarBackButtonHidden(true)
+        .onChange(of: selectedDate) { newDate in
+            Task {
+                disabledAllButtons = true
+                personalOrdersTime = try await vm.getDayOrderTimes(date: newDate, doctorId: doctor?.userId)
+                allOrders = try await vm.getDayOrders(date: newDate, doctorId: nil)
+                generateTimeSlots()
+                disabledAllButtons = false
             }
-            .onAppear {
-                Task {
-                    disabledAllButtons = true
-                    personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, doctorId: doctor?.userId)
-                    allOrders = try await vm.getDayOrders(date: selectedDate, doctorId: nil)
-                    generateTimeSlots()
-                    disabledAllButtons = false
-                }
+        }
+        .onAppear {
+            Task {
+                disabledAllButtons = true
+                personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, doctorId: doctor?.userId)
+                allOrders = try await vm.getDayOrders(date: selectedDate, doctorId: nil)
+                generateTimeSlots()
+                disabledAllButtons = false
             }
-//        }
-//        .padding(.horizontal, 20)
+        }
     }
     
     func addNewOrderAction(procedure: ProcedureModel) async throws {
@@ -229,53 +220,6 @@ struct DateTimeSelectionView: View {
         timeSlots = slots
     }
 
-    
-//    func generateTimeSlots() {
-//        var slots = [String]()
-//
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "HH:mm"
-//
-//        let calendar = Calendar.current
-//
-//        var currentTime = calendar.date(bySettingHour: 8, minute: 0, second: 0, of: selectedDate)!
-//        let endTime = calendar.date(bySettingHour: 21, minute: 0, second: 0, of: selectedDate)!
-//
-//        let interval = 30 * 60
-//
-//        for _ in 0..<28 {
-//            let nextTime = calendar.date(byAdding: .second, value: interval, to: currentTime)!
-//
-//            if personalOrdersTime.isEmpty {
-//                guard currentTime <= endTime else { break }
-//                let timeString = formatter.string(from: currentTime)
-//                slots.append(timeString)
-//                currentTime = nextTime
-//                continue
-//            }
-//
-//            if slots.isEmpty {
-//                let timeString = formatter.string(from: currentTime)
-//                slots.append(timeString)
-//                currentTime = nextTime
-//            }
-//
-//            if let time = personalOrdersTime.first(where: { $0.value > currentTime && $0.value < nextTime }) {
-//                let timeString = formatter.string(from: time.value)
-//                slots.append(timeString)
-//                currentTime = time.value
-//            } else {
-//                if nextTime <= endTime {
-//                    let timeString = formatter.string(from: nextTime)
-//                    slots.append(timeString)
-//                    currentTime = nextTime
-//                }
-//            }
-//        }
-//
-//        timeSlots = slots
-//    }
-    
     private func createTimestamp(from date: Date, time: String, procedure: ProcedureModel?) -> Timestamp? {
         
         if let procedure {
@@ -409,8 +353,8 @@ struct CustomDatePicker: View {
                 .disabled(shouldEnableLeftButton(selectedDate: selectedDate))
                 .opacity(shouldEnableLeftButton(selectedDate: selectedDate) ? 0.5 : 1)
                                 
-                ForEach(-2...2, id: \.self) { offset in
-                    let date = Calendar.current.date(byAdding: .day, value: offset, to: selectedDate) ?? selectedDate
+                ForEach(-2...2, id: \.self) { day in
+                    let date = Calendar.current.date(byAdding: .day, value: day, to: selectedDate) ?? selectedDate
                     let isSelected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
                     
                     Button(action: {
@@ -432,6 +376,7 @@ struct CustomDatePicker: View {
                     }
                     .disabled(checkIfDisabled(date: date))
                     .opacity(checkIfDisabled(date: date) ? 0.3 : 1)
+                    .scaleEffect(day == -2 || day == 2 ? 0.7 : (day == -1 || day == 1 ? 0.8 : 1))
                 }
                                 
                 Button(action: {
@@ -449,7 +394,7 @@ struct CustomDatePicker: View {
                         )
                 }
             }
-            .padding(.horizontal)
+//            .padding(.horizontal)
         }
         .gesture(
             DragGesture()

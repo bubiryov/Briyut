@@ -20,7 +20,7 @@ struct ClientOrders: View {
             VStack {
                 BarTitle<Text, Text>(text: "Appointments")
                 
-                CustomSegmentedPicker(options: ["Upcoming", "Recent"], selectedIndex: $selectedIndex)
+                CustomSegmentedPicker(options: ["Upcoming", "Past"], selectedIndex: $selectedIndex)
                                 
                 if selectedIndex == 0 {
                     OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.activeOrders, doneAnimation: $doneAnimation, selectedTab: $selectedTab)
@@ -90,7 +90,7 @@ struct OrderList: View {
         List {
             ForEach(orderArray, id: \.orderId) { order in
                 
-                OrderRow(vm: vm, order: order, withButtons: order.isDone ? false : true, color: nil, fontColor: nil, doneAnimation: $doneAnimation, selectedTab: $selectedTab)
+                OrderRow(vm: vm, order: order, withButtons: order.isDone ? false : true, color: nil, fontColor: nil, photoBackgroundColor: Color.secondary.opacity(0.1), doneAnimation: $doneAnimation, selectedTab: $selectedTab)
                     .listRowInsets(EdgeInsets())
                     .padding(.bottom, 7)
                 
@@ -101,7 +101,7 @@ struct OrderList: View {
                     .frame(height: 1)
                     .onAppear {
                         Task {
-                            try await vm.getAllClientOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
+                            try await vm.getAllOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
                         }
                     }
                 }
@@ -112,7 +112,7 @@ struct OrderList: View {
         .scrollIndicators(.hidden)
         .onAppear {
             Task {
-                try await vm.getAllClientOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
+                try await vm.getAllOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
             }
         }
 //        .refreshable {

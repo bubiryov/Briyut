@@ -80,3 +80,13 @@ extension UINavigationController: UIGestureRecognizerDelegate {
 extension URLCache {
     static let imageCache = URLCache(memoryCapacity: 512*1000*1000, diskCapacity: 10*1000*1000*1000)
 }
+
+extension DateFormatter {
+    static func customFormatter(format: String) -> DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        return formatter
+    }
+}
+
+

@@ -16,6 +16,7 @@ struct OrderRow: View {
     let withButtons: Bool
     let color: Color?
     let fontColor: Color?
+    let photoBackgroundColor: Color
     @State private var showAlert: Bool = false
     @Binding var doneAnimation: Bool
     @Binding var selectedTab: Tab
@@ -25,23 +26,32 @@ struct OrderRow: View {
         
         VStack(spacing: 15) {
             HStack {
-                let doc = vm.doctors?.first(where: { $0.userId == order.doctorId })
+                let doc = vm.doctors.first(where: { $0.userId == order.doctorId })
                 let procedure = vm.procedures.first(where: { $0.procedureId == order.procedureId })
+                let user = vm.users.first(where: { $0.userId == order.clientId })
                 
-                ProfileImage(photoURL: doc?.photoUrl, frame: ScreenSize.height * 0.1, color: Color.secondary.opacity(0.1))
+                ProfileImage(photoURL: vm.user?.isDoctor ?? false ? user?.photoUrl : doc?.photoUrl, frame: ScreenSize.height * 0.1, color: photoBackgroundColor)
                     .cornerRadius(ScreenSize.width / 20)
                 
                 VStack(alignment: .leading) {
+                    
                     Text(procedure?.name ?? "")
                         .font(.title3.bold())
                         .lineLimit(1)
                         .foregroundColor(fontColor != nil ? fontColor : .primary)
 
                     Spacer()
-                    
-                    Text("\(doc?.name ?? "") \(doc?.lastName ?? "")")
-                        .font(.subheadline)
-                        .foregroundColor(fontColor != nil ? fontColor : .secondary)
+                                        
+                    if vm.user?.isDoctor ?? false {
+                        Text("\(user?.name ?? "") \(user?.lastName ?? "")")
+                            .font(.subheadline)
+                            .foregroundColor(fontColor != nil ? fontColor : .secondary)
+                    } else {
+                        Text("\(doc?.name ?? "") \(doc?.lastName ?? "")")
+                            .font(.subheadline)
+                            .foregroundColor(fontColor != nil ? fontColor : .secondary)
+                    }
+
                     
                     Spacer()
                     
@@ -111,7 +121,7 @@ struct OrderRow: View {
             )
         }
         .sheet(isPresented: $fullCover) {
-            let doctor = vm.doctors?.first(where: { $0.userId == order.doctorId })
+            let doctor = vm.doctors.first(where: { $0.userId == order.doctorId })
             DateTimeSelectionView(doctor: doctor, order: order, mainButtonTitle: "Change appoinment", selectedTab: $selectedTab, doneAnimation: $doneAnimation)
                 .padding()
                 .padding(.bottom)
@@ -128,9 +138,9 @@ struct OrderRow: View {
 
 struct OrderRow_Previews: PreviewProvider {
     static var previews: some View {
-//        VStack {
-        OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: true, color: .secondaryColor, fontColor: .black, doneAnimation: .constant(false), selectedTab: .constant(.calendar))
-//        }
-//        .padding(.horizontal, 20)
+        VStack {
+            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: true, color: .secondaryColor, fontColor: .black, photoBackgroundColor: .secondary.opacity(0.1), doneAnimation: .constant(false), selectedTab: .constant(.calendar))
+        }
+        .padding(.horizontal, 20)
     }
 }

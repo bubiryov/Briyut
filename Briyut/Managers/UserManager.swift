@@ -34,6 +34,11 @@ final class UserManager {
         }
     }
     
+    func getAllUsers() async throws -> [DBUser] {
+        try await userCollection
+            .getDocuments(as: DBUser.self)
+    }
+    
     @discardableResult
     func getUser(userId: String) async throws -> DBUser {
         try await userDocument(userId: userId).getDocument(as: DBUser.self)

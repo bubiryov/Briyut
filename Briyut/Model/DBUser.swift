@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DBUser: Codable {
+struct DBUser: Codable, Equatable {
     let userId: String
     let name: String?
     let lastName: String?
