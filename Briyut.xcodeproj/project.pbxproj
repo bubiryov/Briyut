@@ -77,6 +77,7 @@
 		89CFDD722A12824200159C4B /* DoctorOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD712A12824200159C4B /* DoctorOrders.swift */; };
 		89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */; };
 		89D37B792A0A87D100A7C933 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B782A0A87D100A7C933 /* EditProfileView.swift */; };
+		89D6C8192A2B529500A38CEB /* ChooseClientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D6C8182A2B529500A38CEB /* ChooseClientView.swift */; };
 		89E8AB342A14DD52000661E6 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AB332A14DD51000661E6 /* SplashView.swift */; };
 		89E8AB382A154D73000661E6 /* OrderInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AB372A154D73000661E6 /* OrderInformationView.swift */; };
 		89EEC9AF2A21FBB60069A711 /* OrderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EEC9AE2A21FBB60069A711 /* OrderRow.swift */; };
@@ -163,6 +164,7 @@
 		89CFDD712A12824200159C4B /* DoctorOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorOrders.swift; sourceTree = "<group>"; };
 		89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureManager.swift; sourceTree = "<group>"; };
 		89D37B782A0A87D100A7C933 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		89D6C8182A2B529500A38CEB /* ChooseClientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseClientView.swift; sourceTree = "<group>"; };
 		89E8AB332A14DD51000661E6 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		89E8AB372A154D73000661E6 /* OrderInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderInformationView.swift; sourceTree = "<group>"; };
 		89EEC9AE2A21FBB60069A711 /* OrderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderRow.swift; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 				898FD9B62A08FDE000725697 /* ProcedureView.swift */,
 				898FD9BF2A096D4B00725697 /* AvailableDoctorsView.swift */,
 				89CFDD6D2A126F5600159C4B /* ChooseDoctorView.swift */,
+				89D6C8182A2B529500A38CEB /* ChooseClientView.swift */,
 				89CFDD6B2A126BCB00159C4B /* AddOrderView.swift */,
 				890ECEDE2A162F0500BEE3CC /* DateTimeSelectionView.swift */,
 			);
@@ -620,6 +623,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89BFAA3D2A1F5B1900DF2D0B /* StorageManager.swift in Sources */,
+				89D6C8192A2B529500A38CEB /* ChooseClientView.swift in Sources */,
 				89CFDD702A12823700159C4B /* ClientOrders.swift in Sources */,
 				89C590542A05642B00975E50 /* TabBar.swift in Sources */,
 				89A17E5C2A03C9B200C92A58 /* AuthProviderOption.swift in Sources */,

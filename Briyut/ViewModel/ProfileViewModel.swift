@@ -152,9 +152,9 @@ extension ProfileViewModel {
     
     func editOrderTime(orderId: String, date: Timestamp, end: Timestamp) async throws {
         try await OrderManager.shared.editOrderTime(orderId: orderId, date: date, end: end)
-        activeLastDocument = nil
-        activeOrders = []
-        try await getAllOrders(isDone: false, countLimit: 6)
+//        activeLastDocument = nil
+//        activeOrders = []
+//        try await getAllOrders(isDone: false, countLimit: 6)
     }
     
     func removeOrder(orderId: String) async throws {

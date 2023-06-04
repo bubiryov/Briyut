@@ -77,7 +77,8 @@ struct OrderRow: View {
                         Text("Cancel")
                             .foregroundColor(.black)
                             .font(.headline.bold())
-                            .frame(width: ScreenSize.width * 0.39, height: ScreenSize.height * 0.055)
+                            .frame(height: ScreenSize.height * 0.055)
+                            .frame(maxWidth: .infinity)
                             .background(Color.white)
                             .cornerRadius(ScreenSize.width / 30)
                     }
@@ -91,7 +92,8 @@ struct OrderRow: View {
                         Text("Reschedule")
                             .foregroundColor(.white)
                             .font(.headline.bold())
-                            .frame(width: ScreenSize.width * 0.39, height: ScreenSize.height * 0.055)
+                            .frame(height: ScreenSize.height * 0.055)
+                            .frame(maxWidth: .infinity)
                             .background(Color.mainColor)
                             .cornerRadius(ScreenSize.width / 30)
                     }
@@ -110,8 +112,8 @@ struct OrderRow: View {
                 title: Text("Are you sure you want to remove the appointment?"),
                 primaryButton: .destructive(Text("Remove"), action: {
                     Task {
-                        vm.activeOrders = []
-                        vm.activeLastDocument = nil
+//                        vm.activeOrders = []
+//                        vm.activeLastDocument = nil
                         try await vm.removeOrder(orderId: order.orderId)
                     }
                 }),
@@ -122,7 +124,7 @@ struct OrderRow: View {
         }
         .sheet(isPresented: $fullCover) {
             let doctor = vm.doctors.first(where: { $0.userId == order.doctorId })
-            DateTimeSelectionView(doctor: doctor, order: order, mainButtonTitle: "Change appoinment", selectedTab: $selectedTab, doneAnimation: $doneAnimation)
+            DateTimeSelectionView(doctor: doctor, order: order, mainButtonTitle: "Edit an appoinment", selectedTab: $selectedTab, doneAnimation: $doneAnimation)
                 .padding()
                 .padding(.bottom)
         }

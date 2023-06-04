@@ -23,11 +23,11 @@ struct ProfileView: View {
                     .cornerRadius(ScreenSize.width / 20)
                 
                 HStack {
-                    Text(vm.user?.name ?? (vm.user?.userId ?? ""))
+                    Text(vm.user?.name ?? (vm.user?.userId ?? "No"))
                         .font(.title.bold())
                         .lineLimit(1)
                     
-                    Text(vm.user?.lastName ?? "")
+                    Text(vm.user?.lastName ?? "name")
                         .font(.title.bold())
                         .lineLimit(1)
                 }

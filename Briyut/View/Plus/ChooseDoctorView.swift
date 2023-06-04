@@ -13,7 +13,7 @@ struct ChooseDoctorView: View {
     @Environment(\.presentationMode) var presentationMode
     var procedure: ProcedureModel
     var cornerRadius = ScreenSize.width / 30
-    @State var ordersTime = [Date: Date]()
+//    @State var ordersTime = [Date: Date]()
     @Binding var selectedTab: Tab
     @Binding var doneAnimation: Bool
     
@@ -26,7 +26,7 @@ struct ChooseDoctorView: View {
                     ForEach(vm.doctors, id: \.userId) { doctor in
                         NavigationLink {
                             
-                            DateTimeSelectionView(doctor: doctor, procedure: procedure, mainButtonTitle: "Add appoinment", selectedTab: $selectedTab, doneAnimation: $doneAnimation)
+                            DateTimeSelectionView(doctor: doctor, procedure: procedure, mainButtonTitle: "Add appoinment", client: vm.user, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
                             
                         } label: {
                             
@@ -47,7 +47,7 @@ struct ChooseDoctorView: View {
                             .cornerRadius(cornerRadius)
                         }
                     }
-                    .listRowSeparator(.hidden)
+//                    .listRowSeparator(.hidden)
 //                }
             }
             

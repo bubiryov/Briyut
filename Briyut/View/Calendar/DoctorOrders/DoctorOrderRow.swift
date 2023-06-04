@@ -9,176 +9,136 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-//struct DoctorOrderRow: View {
-//
-//    let vm: ProfileViewModel
-//    var dayOrders: [OrderModel]
-//    var order: OrderModel
-//    @Binding var mediumSizeArray: [Bool]
-//
-//    var body: some View {
-//        let orderIndex = dayOrders.firstIndex(where: { order.orderId == $0.orderId })
-//        let client = vm.users.first(where: { $0.userId == dayOrders[orderIndex ?? 0].clientId })
-//        let procedure = vm.procedures.first(where: { $0.procedureId == dayOrders[orderIndex ?? 0].procedureId })
-//
-//        if !mediumSizeArray.isEmpty {
-//
-//            let index = mediumSizeArray.indices.first(where: { $0 == orderIndex })!
-//
-//            HStack {
-//                VStack {
-//
-//                    Circle()
-//                        .stroke(Color.mainColor, lineWidth: 1)
-//                        .background(
-//                            mediumSizeArray[index] ?
-//                            Circle()
-//                                .fill(Color.mainColor)
-//                                .padding(3) : nil
-//                        )
-//                        .frame(width: 20, height: 20)
-//
-//                    Rectangle()
-//                        .fill(Color.mainColor)
-//                        .frame(width: 3)
-//                }
-////                .background(Color.red)
-//
-//                HStack(alignment: .top) {
-//
-//                    VStack(alignment: .leading) {
-//
-//                        Text(procedure?.name ?? "Massage")
-//                            .font(.title3.bold())
-//                            .lineLimit(1)
-//                            .foregroundColor(mediumSizeArray[index] ? .white : .primary)
-//
-//                        if mediumSizeArray[index] {
-//
-//                            Spacer()
-//
-//                            Text("\(client?.name ?? "Alex") \(client?.lastName ?? "Shevchenko")")
-//                                .font(.subheadline.bold())
-//                                .foregroundColor(.white)
-//
-//                            Spacer()
-//
-//                            Text("₴ \(procedure?.cost ?? 1000)")
-//                                .font(.subheadline.bold())
-//                                .foregroundColor(.white)
-//                        }
-//                    }
-//
-//                    Spacer()
-//
-//                    Text(DateFormatter.customFormatter(format: "HH:mm").string(from: dayOrders[index].date.dateValue()))
-//                        .foregroundColor(mediumSizeArray[index] ? .white : .primary)
-//                        .font(mediumSizeArray[index] ? .title2.bold() : .body)
-//
-//                }
-//                .padding()
-//                .frame(height: mediumSizeArray[index] ? ScreenSize.height * 0.12 : ScreenSize.height * 0.05)
-//                .background(mediumSizeArray[index] ? Color.mainColor : .clear)
-//                .cornerRadius(ScreenSize.width / 20)
-//                .padding(.leading)
-//                .opacity(dayOrders[index].end.dateValue() < Date() && !mediumSizeArray[index] ? 0.5 : 1)
-//            }
-//            .contentShape(Rectangle())
-//            .onTapGesture {
-//                withAnimation(.easeInOut(duration: 0.2)) {
-//                    mediumSizeArray[index].toggle()
-//                }
-//            }
-//            .frame(height: mediumSizeArray[index] ? ScreenSize.height * 0.13 : ScreenSize.height * 0.05)
-////            .background(Color.yellow)
-//        }
-//    }
-//}
-
 struct DoctorOrderRow: View {
     
     let vm: ProfileViewModel
-    var dayOrders: [OrderModel]
-    var order: OrderModel
-    @Binding var mediumSizeArray: [Bool]
+    @Binding var dayOrders: [(OrderModel, Bool)]
+    @Binding var order: (OrderModel, Bool)
+    @Binding var isEditing: Bool
+    @State private var showAlert: Bool = false
+    @State var fullCover: Bool = false
+    var selectedDoctor: DBUser?
+    var selectedDate: Date
             
     var body: some View {
-        let orderIndex = dayOrders.firstIndex(where: { order.orderId == $0.orderId })
-        let client = vm.users.first(where: { $0.userId == dayOrders[orderIndex ?? 0].clientId })
-        let procedure = vm.procedures.first(where: { $0.procedureId == dayOrders[orderIndex ?? 0].procedureId })
-                
-        if !mediumSizeArray.isEmpty {
+        
+        let procedure = vm.procedures.first(where: { $0.procedureId == order.0.procedureId })
+        let client = vm.users.first(where: { $0.userId == order.0.clientId })
+        
+        HStack(alignment: .top) {
+            LeftLineCircleImage(order: order)
             
-            let index = mediumSizeArray.indices.first(where: { $0 == orderIndex })!
-            
-            VStack {
-                HStack {
-                    VStack {
-                        
-                        Circle()
-                            .stroke(Color.mainColor, lineWidth: 1)
-                            .background(
-                                mediumSizeArray[index] ?
-                                Circle()
-                                    .fill(Color.mainColor)
-                                    .padding(3) : nil
-                            )
-                            .frame(width: 20, height: 20)
-                        
-                        Rectangle()
-                            .fill(Color.mainColor)
-                            .frame(width: 3)
-                    }
+            VStack(alignment: .leading) {
+                HStack(alignment: .top) {
+                    Text(procedure?.name ?? "Massage")
+                        .font(.title3.bold())
+                        .lineLimit(1)
+                        .foregroundColor(order.1 ? .white : .primary)
                     
-                    HStack(alignment: .top) {
-                        
-                        VStack(alignment: .leading) {
-                            
-                            Text(procedure?.name ?? "Massage")
-                                .font(.title3.bold())
-                                .lineLimit(1)
-                                .foregroundColor(mediumSizeArray[index] ? .white : .primary)
-                            
-                            if mediumSizeArray[index] {
-                                
-                                Spacer()
-                                
-                                Text("\(client?.name ?? "Alex") \(client?.lastName ?? "Shevchenko")")
-                                    .font(.subheadline.bold())
-                                    .foregroundColor(.white)
-                                
-                                Spacer()
-                                
-                                Text("₴ \(procedure?.cost ?? 1000)")
-                                    .font(.subheadline.bold())
-                                    .foregroundColor(.white)
+                    Spacer()
+                    
+                    Text(DateFormatter.customFormatter(format: "HH:mm").string(from: order.0.date.dateValue()))
+                        .foregroundColor(order.1 ? .white : .primary)
+                        .font(order.1 ? .title2.bold() : .body)
+                }
+                
+                Spacer()
+                
+                if order.1 {
+                    Text("\(client?.name ?? "Alex") \(client?.lastName ?? "Shevchenko")")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Text("₴ \(order.0.price)")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                }
+                
+                if isEditing && order.1 && order.0.end.dateValue() > Date() {
+                    HStack {
+                        Button {
+                            Task {
+                                showAlert = true
                             }
+                        } label: {
+                            Text("Cancel")
+                                .foregroundColor(.black)
+                                .font(.headline.bold())
+                                .frame(maxWidth: .infinity)
+                                .frame(height: ScreenSize.height * 0.055)
+                                .background(Color.white)
+                                .cornerRadius(ScreenSize.width / 30)
                         }
+                        .buttonStyle(.plain)
                         
                         Spacer()
                         
-                        Text(DateFormatter.customFormatter(format: "HH:mm").string(from: dayOrders[index].date.dateValue()))
-                            .foregroundColor(mediumSizeArray[index] ? .white : .primary)
-                            .font(mediumSizeArray[index] ? .title2.bold() : .body)
-                        
+                        Button {
+                            fullCover.toggle()
+                        } label: {
+                            Text("Reschedule")
+                                .foregroundColor(.black)
+                                .font(.headline.bold())
+                                .frame(maxWidth: .infinity)
+                                .frame(height: ScreenSize.height * 0.055)
+                                .background(Color.white)
+                                .cornerRadius(ScreenSize.width / 30)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .padding()
-                    .frame(height: mediumSizeArray[index] ? ScreenSize.height * 0.12 : ScreenSize.height * 0.05)
-                    .padding(.leading)
-                    .opacity(dayOrders[index].end.dateValue() < Date() && !mediumSizeArray[index] ? 0.5 : 1)
-                }
-                .background(mediumSizeArray[index] ? Color.mainColor : .clear)
-                .cornerRadius(ScreenSize.width / 20)
 
-                Text("Hello")
+                }
+                
             }
-            .contentShape(Rectangle())
-            .onTapGesture {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    mediumSizeArray[index].toggle()
+            .padding(.horizontal)
+            .padding(.vertical, order.1 ? 10 : 0)
+            .background(order.1 ? Color.mainColor : .clear)
+            .cornerRadius(ScreenSize.width / 20)
+            .padding(.leading)
+            .opacity(order.0.end.dateValue() < Date() && !order.1 ? 0.5 : 1)
+        }
+        .frame(maxHeight: ScreenSize.height * 0.21)
+        .frame(minHeight: ScreenSize.height * 0.05)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                order.1.toggle()
+            }
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("Are you sure you want to remove the appointment?"),
+                primaryButton: .destructive(Text("Remove"), action: {
+                    Task {
+                        try await vm.removeOrder(orderId: order.0.orderId)
+                        let orders = try await vm.getDayOrders(date: selectedDate, doctorId: selectedDoctor?.userId)
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            dayOrders = orders.map {($0, false)}
+                            isEditing = false
+                        }
+                    }
+                }),
+                secondaryButton: .default(Text("Cancel"), action: {
+                })
+            )
+        }
+        .sheet(isPresented: $fullCover) {
+            DateTimeSelectionView(doctor: vm.user, order: order.0, mainButtonTitle: "Edit an appointment", selectedTab: .constant(.home), doneAnimation: .constant(false))
+                .padding()
+                .padding(.bottom)
+        }
+        .onChange(of: fullCover) { newValue in
+            if newValue == false {
+                Task {
+                    let orders = try await vm.getDayOrders(date: selectedDate, doctorId: selectedDoctor?.userId)
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        dayOrders = orders.map {($0, false)}
+                        isEditing = false
+                    }
                 }
             }
-            .frame(height: mediumSizeArray[index] ? ScreenSize.height * 0.13 : ScreenSize.height * 0.05)
         }
     }
 }
@@ -187,7 +147,32 @@ struct DoctorOrderRow: View {
 struct DoctorOrderRow_Previews: PreviewProvider {
     static var previews: some View {
         let vm = ProfileViewModel()
+        VStack {
+            DoctorOrderRow(vm: vm, dayOrders: .constant([]), order: .constant(( OrderModel(orderId: "", procedureId: "", doctorId: "", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 1000), false)), isEditing: .constant(true), selectedDoctor: nil, selectedDate: Date())
+        }
+        .padding(.horizontal, 20)
+    }
+}
 
-        DoctorOrderRow(vm: vm, dayOrders: [], order: OrderModel(orderId: "", procedureId: "", doctorId: "", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), mediumSizeArray: .constant([false]))
+struct LeftLineCircleImage: View {
+    
+    var order: (OrderModel, Bool)
+    
+    var body: some View {
+        VStack {
+            Circle()
+                .stroke(Color.mainColor, lineWidth: 1)
+                .background(
+                    order.1 ?
+                    Circle()
+                        .fill(Color.mainColor)
+                        .padding(3) : nil
+                )
+                .frame(width: 20, height: 20)
+            
+            Rectangle()
+                .fill(Color.mainColor)
+                .frame(width: 3)
+        }
     }
 }

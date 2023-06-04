@@ -17,6 +17,7 @@ struct DateTimeSelectionView: View {
     var procedure: ProcedureModel? = nil
     var order: OrderModel? = nil
     var mainButtonTitle: String
+    var client: DBUser? = nil
     @State private var selectedTime = ""
     @State private var selectedDate = Date()
     @State var personalOrdersTime: [(Date, Date)] = []
@@ -116,7 +117,9 @@ struct DateTimeSelectionView: View {
     }
     
     func addNewOrderAction(procedure: ProcedureModel) async throws {
-        let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure.procedureId, doctorId: doctor?.userId ?? "", clientId: vm.user?.userId ?? "", date: createTimestamp(from: selectedDate, time: selectedTime, procedure: nil)!, end: createTimestamp(from: selectedDate, time: selectedTime, procedure: procedure)!, isDone: false, price: procedure.cost)
+        guard let client else { return }
+        
+        let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure.procedureId, doctorId: doctor?.userId ?? "", clientId: client.userId, date: createTimestamp(from: selectedDate, time: selectedTime, procedure: nil)!, end: createTimestamp(from: selectedDate, time: selectedTime, procedure: procedure)!, isDone: false, price: procedure.cost)
         
         allOrders = try await vm.getDayOrders(date: selectedDate, doctorId: nil)
         personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, doctorId: doctor?.userId)
@@ -154,6 +157,13 @@ struct DateTimeSelectionView: View {
 
         if !checkIfDisabled(time: selectedTime) {
             try await vm.editOrderTime(orderId: order.orderId, date: date, end: end)
+            
+            if vm.user?.isDoctor ?? false {
+                vm.activeLastDocument = nil
+                vm.activeOrders = []
+                try await vm.getAllOrders(isDone: false, countLimit: 6)
+            }
+
 
             presentationMode.wrappedValue.dismiss()
 

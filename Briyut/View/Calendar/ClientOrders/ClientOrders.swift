@@ -115,15 +115,5 @@ struct OrderList: View {
                 try await vm.getAllOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
             }
         }
-//        .refreshable {
-//            vm.activeOrders = []
-//            vm.doneOrders = []
-//            vm.activeLastDocument = nil
-//            vm.doneLastDocument = nil
-//            Task {
-//                try await vm.getAllOrders(isDone: false, countLimit: 6)
-//                try await vm.getAllOrders(isDone: true, countLimit: 6)
-//            }
-//        }
     }
 }

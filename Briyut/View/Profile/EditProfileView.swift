@@ -114,6 +114,7 @@ struct EditProfileView: View {
             }
             .photosPicker(isPresented: $showPhotosPicker, selection: $selectedPhoto, matching: .images, photoLibrary: .shared())
         }
+        .padding(.bottom, 20)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if let user = vm.user {

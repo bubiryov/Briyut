@@ -84,6 +84,7 @@ struct ProcedureView: View {
             }
             .disabled(!validateFields())
         }
+        .padding(.bottom, 20)
         .ignoresSafeArea(.keyboard)
         .onTapGesture {
             hideKeyboard()
@@ -166,13 +167,15 @@ fileprivate struct DeleteButton: View {
 struct AccentInputField: View {
     
     var promptText: String
-    var title: String
+    var title: String?
     @Binding var input: String
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(title)
-                .font(.subheadline.bold())
+            if let title {
+                Text(title)
+                    .font(.subheadline.bold())
+            }
             
             TextField("", text: $input, prompt: Text(promptText))
                 .bold()

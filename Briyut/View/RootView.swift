@@ -18,7 +18,7 @@ struct RootView: View {
     
     var body: some View {
         ZStack {
-            VStack {
+            VStack(spacing: 0) {
                 VStack {
                     switch selectedTab {
                     case .home:
@@ -38,9 +38,7 @@ struct RootView: View {
                 .padding(.top, topPadding())
                 .padding(.horizontal, 20)
                 .animation(nil, value: selectedTab)
-                
-                Spacer()
-                
+                                
                 TabBar(selectedTab: $selectedTab)
                                 
             }

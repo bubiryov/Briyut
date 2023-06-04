@@ -36,6 +36,7 @@ final class UserManager {
     
     func getAllUsers() async throws -> [DBUser] {
         try await userCollection
+            .whereField(DBUser.CodingKeys.isDoctor.rawValue, isEqualTo: false)
             .getDocuments(as: DBUser.self)
     }
     

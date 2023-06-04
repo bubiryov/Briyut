@@ -55,7 +55,7 @@ struct AllProcedures: View {
                 }
                 
                 if showSearch {
-                    AccentInputField(promptText: "Massage", title: "Procedure", input: $searchText)
+                    AccentInputField(promptText: "Massage", title: nil, input: $searchText)
                         .focused($focus)
                         .onAppear {
                             focus = true
@@ -138,7 +138,7 @@ struct ProcedureRow: View {
                 ProcedureView(title: "Editing procedure", buttonText: "Save changes", procedure: procedure, isEditing: $isEditing)
             } else {
                 if vm.user?.isDoctor == true {
-                    
+                    ChooseClientView(procedure: procedure, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
                 } else {
                     ChooseDoctorView(procedure: procedure, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
                 }
@@ -169,13 +169,15 @@ struct ProcedureRow: View {
     }
 }
 
-fileprivate struct EditButton: View {
+struct EditButton: View {
     
     @Binding var isEditing: Bool
     
     var body: some View {
         Button {
-            isEditing.toggle()
+            withAnimation(.easeInOut(duration: 0.15)) {
+                isEditing.toggle()
+            }
         } label: {
             BarButtonView(image: "pencil", textColor: isEditing ? .white : nil, backgroundColor: isEditing ? .mainColor : nil)
         }

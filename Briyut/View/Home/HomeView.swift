@@ -72,43 +72,42 @@ struct HomeView: View {
             
             Spacer()
             
-//            VStack(alignment: .leading) {
-//                Text("Specialists")
-//                    .font(.title2.bold())
-//
-//                ScrollView(.horizontal) {
-//                    LazyHStack(spacing: 15) {
-////                        Spacer()
-//                        if let doctors = vm.doctors {
-//                            ForEach(doctors, id: \.userId) { doctor in
-//                                VStack(alignment: .center) {
-//                                    ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.1, color: .lightBlueColor)
-//                                        .cornerRadius(ScreenSize.width / 20)
-//
-//                                    Spacer()
-//
-//                                    Text("\(doctor.lastName ?? "") \(doctor.name ?? "")")
-//                                        .font(.callout.bold())
-//                                        .multilineTextAlignment(.center)
-//                                        .lineLimit(2)
-//
-//                                    Spacer()
-//
-//                                    Text("Rehabilitator")
-//                                        .font(.footnote)
-//                                        .foregroundColor(.secondary)
-//                                }
-//                                .padding()
-//                                .frame(width: ScreenSize.height * 0.2, height: ScreenSize.height * 0.2)
-//                                .background(Color.secondaryColor)
-//                                .cornerRadius(ScreenSize.width / 20)
-//                            }
-//                        }
-//                    }
-//                }
-//                .scrollIndicators(.hidden)
-//                .frame(height: ScreenSize.height * 0.2)
-//            }
+            VStack(alignment: .leading) {
+                Text("Specialists")
+                    .font(.title2.bold())
+
+                ScrollView(.horizontal) {
+                    LazyHStack(spacing: 15) {
+//                        Spacer()
+                        let doctors = vm.doctors
+                            ForEach(doctors, id: \.userId) { doctor in
+                                VStack(alignment: .center) {
+                                    ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.05, color: .lightBlueColor)
+                                        .cornerRadius(ScreenSize.width / 30)
+
+                                    Spacer()
+
+                                    Text("\(doctor.lastName ?? "")\n\(doctor.name ?? "")")
+                                        .font(.callout.bold())
+                                        .multilineTextAlignment(.center)
+                                        .lineLimit(2)
+
+                                    Spacer()
+
+                                    Text("Rehabilitator")
+                                        .font(.footnote)
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding()
+                                .frame(width: ScreenSize.height * 0.14, height: ScreenSize.height * 0.18)
+                                .background(Color.secondaryColor)
+                                .cornerRadius(ScreenSize.width / 20)
+                            }
+                    }
+                }
+                .scrollIndicators(.hidden)
+                .frame(height: ScreenSize.height * 0.18)
+            }
         }
         .onAppear {
             Task {
