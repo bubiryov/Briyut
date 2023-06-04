@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseStorage
 import UIKit
+import UniformTypeIdentifiers
 
 final class StorageManager {
     static let shared = StorageManager()
@@ -20,11 +21,20 @@ final class StorageManager {
         storage.child("users").child(userId)
     }
     
-    func saveImage(data: Data, userID: String) async throws -> String {
+    func saveImage(data: Data, userID: String, contentTypes: [String]) async throws -> String {
         let meta = StorageMetadata()
-        meta.contentType = "image/jpeg"
+        meta.contentType = contentTypes.first // Устанавливаем первый тип контента по умолчанию
         
-        let path = "\(UUID().uuidString).jpeg"
+        let fileExtension: String
+        if let firstContentType = contentTypes.first,
+           let firstExtension = UTType(filenameExtension: firstContentType)?.preferredFilenameExtension {
+            fileExtension = firstExtension
+        } else {
+            fileExtension = "jpeg" // Если не удалось определить расширение, используем "jpeg" в качестве значения по умолчанию
+        }
+        
+        let path = "\(UUID().uuidString).\(fileExtension)"
+        
         let returnedMetaData = try await userReference(userId: userID).child(path).putDataAsync(data, metadata: meta)
         guard let returnedPath = returnedMetaData.path else {
             throw URLError(.badServerResponse)
@@ -32,6 +42,20 @@ final class StorageManager {
         
         return returnedPath
     }
+
+    
+//    func saveImage(data: Data, userID: String) async throws -> String {
+//        let meta = StorageMetadata()
+//        meta.contentType = "image/jpeg"
+//
+//        let path = "\(UUID().uuidString).jpeg"
+//        let returnedMetaData = try await userReference(userId: userID).child(path).putDataAsync(data, metadata: meta)
+//        guard let returnedPath = returnedMetaData.path else {
+//            throw URLError(.badServerResponse)
+//        }
+//
+//        return returnedPath
+//    }
     
     func deletePreviousPhoto(url: String) async throws {
         guard let path = getPathForURL(url: url) else { return }

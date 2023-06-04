@@ -89,7 +89,8 @@ struct DoctorMenuPicker: View {
                 }
             }
         } label: {
-            ProfileImage(photoURL: selectedDoctor?.photoUrl ?? vm.user?.photoUrl ?? "", frame: ScreenSize.height * 0.06, color: Color.secondary.opacity(0.1))
+            let doctor = selectedDoctor ?? vm.user
+            ProfileImage(photoURL: doctor?.photoUrl ?? "", frame: ScreenSize.height * 0.06, color: Color.secondary.opacity(0.1))
                 .buttonStyle(.plain)
                 .cornerRadius(ScreenSize.width / 30)
         }

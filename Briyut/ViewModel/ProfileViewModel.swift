@@ -76,13 +76,14 @@ final class ProfileViewModel: ObservableObject {
     }
     
     func saveProfilePhoto(item: PhotosPickerItem) async throws -> String {
+        let contentTypes: [String] = ["image/jpeg", "image/png", "image/heif", "image/heic"]
         guard let data = try await item.loadTransferable(type: Data.self) else {
             throw URLError(.badServerResponse)
         }
         guard let user = user else {
             throw URLError(.badServerResponse)
         }
-        return try await StorageManager.shared.saveImage(data: data, userID: user.userId)
+        return try await StorageManager.shared.saveImage(data: data, userID: user.userId, contentTypes: contentTypes)
     }
     
     func deletePreviousPhoto(url: String) async throws {

@@ -82,7 +82,7 @@ struct HomeView: View {
                         let doctors = vm.doctors
                             ForEach(doctors, id: \.userId) { doctor in
                                 VStack(alignment: .center) {
-                                    ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.05, color: .lightBlueColor)
+                                    ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
                                         .cornerRadius(ScreenSize.width / 30)
 
                                     Spacer()
@@ -99,14 +99,15 @@ struct HomeView: View {
                                         .foregroundColor(.secondary)
                                 }
                                 .padding()
-                                .frame(width: ScreenSize.height * 0.14, height: ScreenSize.height * 0.18)
+                                .frame(width: ScreenSize.height * 0.18)
+                                .frame(maxHeight: ScreenSize.height * 0.22)
                                 .background(Color.secondaryColor)
                                 .cornerRadius(ScreenSize.width / 20)
                             }
                     }
                 }
                 .scrollIndicators(.hidden)
-                .frame(height: ScreenSize.height * 0.18)
+                .frame(maxHeight: ScreenSize.height * 0.22)
             }
         }
         .onAppear {
