@@ -24,9 +24,9 @@ struct EditProfileView: View {
     
     var body: some View {
         VStack {
-            BarTitle<BackButton, LogOutButton>(text: "Edit", leftButton: BackButton(), rightButton: LogOutButton(showAlert: $showAlert))
+            BarTitle<BackButton, DeleteAccountButton>(text: "Edit", leftButton: BackButton(), rightButton: DeleteAccountButton())
                 .padding(.bottom)
-            
+                        
             VStack(spacing: ScreenSize.height * 0.02) {
                 
                 Button {
@@ -52,6 +52,21 @@ struct EditProfileView: View {
                         guard let data = try await item.loadTransferable(type: Data.self) else { return }
                         self.data = data
                     }
+                }
+                .overlay {
+                    VStack {
+                        Spacer()
+                        Image("pencil")
+                            .resizable()
+                            .foregroundColor(.white)
+                            .scaledToFit()
+                            .frame(width: ScreenSize.height * 0.02)
+                            .padding(7)
+                            .background(Color.mainColor)
+                            .cornerRadius(ScreenSize.width / 50)
+                            .offset(x: 5, y: 5)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 
                 AccentInputField(promptText: "Maria", title: "Name", input: $name)
@@ -123,20 +138,6 @@ struct EditProfileView: View {
                 phoneNumber = user.phoneNumber ?? ""
             }
         }
-        .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text("Are you sure you want to log out?"),
-                primaryButton: .destructive(Text("Log out"), action: {
-                    Task {
-                        try vm.signOut()
-                        notEntered = true
-                    }
-                }),
-                secondaryButton: .default(Text("Cancel"), action: {
-                    
-                })
-            )
-        }
         .contentShape(Rectangle())
         .gesture(
             DragGesture()
@@ -159,15 +160,12 @@ struct EditProfileView_Previews: PreviewProvider {
     }
 }
 
-struct LogOutButton: View {
-    
-    @Binding var showAlert: Bool
-    
+struct DeleteAccountButton: View {
     var body: some View {
         Button {
-            showAlert = true
+            //
         } label: {
-            BarButtonView(image: "exit")
+            BarButtonView(image: "trash", textColor: .white, backgroundColor: .mainColor)
         }
         .buttonStyle(.plain)
     }

@@ -15,7 +15,7 @@ struct DateTimeSelectionView: View {
     @Environment(\.presentationMode) var presentationMode
     var doctor: DBUser? = nil
     var procedure: ProcedureModel? = nil
-    var order: OrderModel? = nil
+    @State var order: OrderModel? = nil
     var mainButtonTitle: String
     var client: DBUser? = nil
     @State private var selectedTime = ""
@@ -25,16 +25,16 @@ struct DateTimeSelectionView: View {
     @State private var showAlert: Bool = false
     @State var timeSlots: [String] = []
     @State private var disabledAllButtons: Bool = true
+    @State private var fullCover: Bool = false
     @Binding var selectedTab: Tab
-    @Binding var doneAnimation: Bool
                                             
     var body: some View {
 
         VStack {
             
-            BarTitle<BackButton?, Text>(text: DateFormatter.customFormatter(format: "d MMMM yyyy").string(from: selectedDate), leftButton: procedure != nil ? BackButton() : nil)
+            BarTitle<BackButton?, Text>(text: selectedDate.barTitleDate(), leftButton: procedure != nil ? BackButton() : nil, action: { selectedDate = Date() })
             
-            CustomDatePicker(selectedDate: $selectedDate, selectedTime: $selectedTime)
+            CustomDatePicker(selectedDate: $selectedDate, selectedTime: $selectedTime, pastTime: false)
             
             Spacer()
             
@@ -93,8 +93,8 @@ struct DateTimeSelectionView: View {
                 AccentButton(text: mainButtonTitle, isButtonActive: selectedTime != "" ? true : false)
             }
             .disabled(selectedTime != "" ? false : true)
-            
         }
+        .padding(.bottom, 20)
         .navigationBarBackButtonHidden(true)
         .onChange(of: selectedDate) { newDate in
             Task {
@@ -114,6 +114,12 @@ struct DateTimeSelectionView: View {
                 disabledAllButtons = false
             }
         }
+        .fullScreenCover(isPresented: $fullCover, content: {
+            if let order {
+                DoneOrderView(order: order, selectedTab: $selectedTab, fullCover: $fullCover)
+            }
+        })
+
     }
     
     func addNewOrderAction(procedure: ProcedureModel) async throws {
@@ -126,17 +132,19 @@ struct DateTimeSelectionView: View {
 
         if !checkIfDisabled(time: selectedTime) {
             try await vm.addNewOrder(order: order)
+            self.order = order
+            fullCover = true
 
-            withAnimation {
-                doneAnimation = true
-            }
-
-            try await Task.sleep(nanoseconds: 3_000_000_000)
-
-            withAnimation {
-                doneAnimation = false
-                selectedTab = .home
-            }
+//            withAnimation {
+//                doneAnimation = true
+//            }
+//
+//            try await Task.sleep(nanoseconds: 3_000_000_000)
+//
+//            withAnimation {
+//                doneAnimation = false
+//                selectedTab = .home
+//            }
         } else {
             showAlert = true
             selectedTime = ""
@@ -158,24 +166,14 @@ struct DateTimeSelectionView: View {
         if !checkIfDisabled(time: selectedTime) {
             try await vm.editOrderTime(orderId: order.orderId, date: date, end: end)
             
-            if vm.user?.isDoctor ?? false {
+//            if vm.user?.isDoctor ?? false {
                 vm.activeLastDocument = nil
                 vm.activeOrders = []
                 try await vm.getAllOrders(isDone: false, countLimit: 6)
-            }
-
+//            }
 
             presentationMode.wrappedValue.dismiss()
 
-            withAnimation {
-                doneAnimation = true
-            }
-
-            try await Task.sleep(nanoseconds: 3_000_000_000)
-
-            withAnimation {
-                doneAnimation = false
-            }
         } else {
             showAlert = true
             selectedTime = ""
@@ -321,7 +319,7 @@ struct DateTimeSelectionView: View {
 
 struct DateTimeSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        DateTimeSelectionView(mainButtonTitle: "Add appoinment", selectedTab: .constant(.plus), doneAnimation: .constant(false))
+        DateTimeSelectionView(mainButtonTitle: "Add appoinment", selectedTab: .constant(.plus))
             .environmentObject(ProfileViewModel())
     }
 }
@@ -329,6 +327,7 @@ struct DateTimeSelectionView_Previews: PreviewProvider {
 struct CustomDatePicker: View {
     @Binding var selectedDate: Date
     @Binding var selectedTime: String
+    let pastTime: Bool
 
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -346,7 +345,7 @@ struct CustomDatePicker: View {
         VStack {
             HStack {
                 Button(action: {
-                    let value = leftButtonStep()
+                    let value = leftButtonStep(pastTime: pastTime)
                     selectedDate = Calendar.current.date(byAdding: .day, value: -value, to: selectedDate) ?? selectedDate
                     selectedTime = ""
                 }) {
@@ -360,8 +359,8 @@ struct CustomDatePicker: View {
                                 .foregroundColor(.white)
                         )
                 }
-                .disabled(shouldEnableLeftButton(selectedDate: selectedDate))
-                .opacity(shouldEnableLeftButton(selectedDate: selectedDate) ? 0.5 : 1)
+                .disabled(pastTime ? false : shouldEnableLeftButton(selectedDate: selectedDate))
+                .opacity(pastTime ? 1 : shouldEnableLeftButton(selectedDate: selectedDate) ? 0.5 : 1)
                                 
                 ForEach(-2...2, id: \.self) { day in
                     let date = Calendar.current.date(byAdding: .day, value: day, to: selectedDate) ?? selectedDate
@@ -384,8 +383,8 @@ struct CustomDatePicker: View {
                         .background(isSelected ? Color.mainColor : Color.clear)
                         .cornerRadius(ScreenSize.width / 30)
                     }
-                    .disabled(checkIfDisabled(date: date))
-                    .opacity(checkIfDisabled(date: date) ? 0.3 : 1)
+                    .disabled(pastTime ? false : checkIfDisabled(date: date))
+                    .opacity(pastTime ? 1 : checkIfDisabled(date: date) ? 0.3 : 1)
                     .scaleEffect(day == -2 || day == 2 ? 0.7 : (day == -1 || day == 1 ? 0.8 : 1))
                 }
                                 
@@ -435,15 +434,19 @@ struct CustomDatePicker: View {
         return selectedDate >= startDate && selectedDate <= endDate
     }
     
-    func leftButtonStep() -> Int {
+    func leftButtonStep(pastTime: Bool) -> Int {
         let currentDate = Calendar.current.startOfDay(for: Date())
         let difference = Calendar.current.dateComponents([.day], from: currentDate, to: selectedDate).day ?? 0
         
         var value: Int {
-            if difference >= 5 {
+            if pastTime {
                 return 5
             } else {
-                return difference
+                if difference >= 5 {
+                    return 5
+                } else {
+                    return difference
+                }
             }
         }
         return value

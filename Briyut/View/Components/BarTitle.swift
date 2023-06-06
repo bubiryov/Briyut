@@ -12,8 +12,8 @@ struct BarTitle<V1: View, V2: View>: View {
     var text: String
     var leftButton: V1? = nil
     var rightButton: V2? = nil
+    var action: (() -> ())?
     var frame: CGFloat = ScreenSize.height * 0.06
-
     
     var body: some View {
         ZStack {
@@ -33,6 +33,13 @@ struct BarTitle<V1: View, V2: View>: View {
                 Text(text)
                     .font(.title2)
                     .bold()
+                    .onTapGesture {
+                        if let action {
+                            withAnimation(.easeInOut(duration: 0.15)) {
+                                action()
+                            }
+                        }
+                    }
             }
         }
         .frame(maxWidth: .infinity)
@@ -42,6 +49,6 @@ struct BarTitle<V1: View, V2: View>: View {
 
 struct BarTittle_Previews: PreviewProvider {
     static var previews: some View {
-        BarTitle<Text, Text>(text: "Title")
+        BarTitle<Text, Text>(text: "Title", action: {})
     }
 }

@@ -11,6 +11,7 @@
 		890C28BC2A06D3F1000DB1A6 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */; };
 		890ECEDF2A162F0500BEE3CC /* DateTimeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890ECEDE2A162F0500BEE3CC /* DateTimeSelectionView.swift */; };
 		891198FC2A29155400D6756F /* DoctorOrderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891198FB2A29155400D6756F /* DoctorOrderRow.swift */; };
+		89804BDA2A2E1C66002E2282 /* AllUsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89804BD92A2E1C66002E2282 /* AllUsersView.swift */; };
 		898FD9B52A08F4E000725697 /* AllProcedures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B42A08F4E000725697 /* AllProcedures.swift */; };
 		898FD9B72A08FDE000725697 /* ProcedureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B62A08FDE000725697 /* ProcedureView.swift */; };
 		898FD9BA2A0908FD00725697 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B92A0908FD00725697 /* CalendarView.swift */; };
@@ -81,6 +82,8 @@
 		89E8AB342A14DD52000661E6 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AB332A14DD51000661E6 /* SplashView.swift */; };
 		89E8AB382A154D73000661E6 /* OrderInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AB372A154D73000661E6 /* OrderInformationView.swift */; };
 		89EEC9AF2A21FBB60069A711 /* OrderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EEC9AE2A21FBB60069A711 /* OrderRow.swift */; };
+		89F71FF72A2F2A4C006DE84D /* AllDoctorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F71FF62A2F2A4C006DE84D /* AllDoctorsView.swift */; };
+		89F71FF92A2F416E006DE84D /* DoneOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F71FF82A2F416E006DE84D /* DoneOrderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +108,7 @@
 		890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		890ECEDE2A162F0500BEE3CC /* DateTimeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeSelectionView.swift; sourceTree = "<group>"; };
 		891198FB2A29155400D6756F /* DoctorOrderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorOrderRow.swift; sourceTree = "<group>"; };
+		89804BD92A2E1C66002E2282 /* AllUsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllUsersView.swift; sourceTree = "<group>"; };
 		898FD9B42A08F4E000725697 /* AllProcedures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllProcedures.swift; sourceTree = "<group>"; };
 		898FD9B62A08FDE000725697 /* ProcedureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureView.swift; sourceTree = "<group>"; };
 		898FD9B92A0908FD00725697 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
@@ -168,6 +172,8 @@
 		89E8AB332A14DD51000661E6 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		89E8AB372A154D73000661E6 /* OrderInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderInformationView.swift; sourceTree = "<group>"; };
 		89EEC9AE2A21FBB60069A711 /* OrderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderRow.swift; sourceTree = "<group>"; };
+		89F71FF62A2F2A4C006DE84D /* AllDoctorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllDoctorsView.swift; sourceTree = "<group>"; };
+		89F71FF82A2F416E006DE84D /* DoneOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneOrderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +221,7 @@
 				89D6C8182A2B529500A38CEB /* ChooseClientView.swift */,
 				89CFDD6B2A126BCB00159C4B /* AddOrderView.swift */,
 				890ECEDE2A162F0500BEE3CC /* DateTimeSelectionView.swift */,
+				89F71FF82A2F416E006DE84D /* DoneOrderView.swift */,
 			);
 			path = Plus;
 			sourceTree = "<group>";
@@ -447,6 +454,8 @@
 				890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */,
 				898FD9BB2A0910F100725697 /* AddDoctorView.swift */,
 				89D37B782A0A87D100A7C933 /* EditProfileView.swift */,
+				89804BD92A2E1C66002E2282 /* AllUsersView.swift */,
+				89F71FF62A2F2A4C006DE84D /* AllDoctorsView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -647,12 +656,14 @@
 				89C5904E2A051AFB00975E50 /* BackButton.swift in Sources */,
 				89E8AB382A154D73000661E6 /* OrderInformationView.swift in Sources */,
 				890C28BA2A0652FE000DB1A6 /* ProcedureModel.swift in Sources */,
+				89F71FF72A2F2A4C006DE84D /* AllDoctorsView.swift in Sources */,
 				899EC5CF2A0057EE00C90D49 /* RegistrationView.swift in Sources */,
 				898FD9BA2A0908FD00725697 /* CalendarView.swift in Sources */,
 				89EEC9AF2A21FBB60069A711 /* OrderRow.swift in Sources */,
 				89CFDD682A122E7200159C4B /* OrderManager.swift in Sources */,
 				899EC5CB2A00574700C90D49 /* AuthenticationViewModel.swift in Sources */,
 				89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */,
+				89F71FF92A2F416E006DE84D /* DoneOrderView.swift in Sources */,
 				898FD9BC2A0910F100725697 /* AddDoctorView.swift in Sources */,
 				899EC5A62A000E6500C90D49 /* AppDelegate.swift in Sources */,
 				89CFDD6A2A122ED700159C4B /* OrderModel.swift in Sources */,
@@ -675,6 +686,7 @@
 				899EC5BF2A002FF400C90D49 /* AccentButton.swift in Sources */,
 				899EC5B62A001A7600C90D49 /* AuthInputField.swift in Sources */,
 				89CFDD6C2A126BCB00159C4B /* AddOrderView.swift in Sources */,
+				89804BDA2A2E1C66002E2282 /* AllUsersView.swift in Sources */,
 				89A17E582A03C8BD00C92A58 /* AppleAuthenticationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

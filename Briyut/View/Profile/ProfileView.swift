@@ -12,131 +12,93 @@ struct ProfileView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
     @Binding var notEntered: Bool
+    @State private var logOutAlert: Bool = false
+    @State private var copyIdAlert: Bool = false
     
     var body: some View {
         
         NavigationView {
-            
-            ScrollView {
-                VStack(spacing: 20) {
-                    VStack {
-                        
-                        HStack {
-                            Spacer()
-                            BarButton(notEntered: $notEntered)
-                        }
-                        
-                        Spacer()
-                        
-                        ProfileImage(photoURL: vm.user?.photoUrl, frame: ScreenSize.height * 0.12, color: Color.secondary.opacity(0.1))
-                            .cornerRadius(ScreenSize.width / 20)
-                        
-                        HStack {
-                            Text(vm.user?.name ?? (vm.user?.userId ?? "No"))
-                                .font(.title.bold())
-                                .lineLimit(1)
-                            
-                            Text(vm.user?.lastName ?? "name")
-                                .font(.title.bold())
-                                .lineLimit(1)
-                        }
-                        
-                        Spacer()
-                        
-                        BarButton(notEntered: $notEntered)
-                            .disabled(true)
-                            .opacity(0)
-                    }
-                    .padding(20)
-                    .frame(maxWidth: .infinity, maxHeight: ScreenSize.width * 0.85)
-                    .background(Color.secondary.opacity(0.1))
-                    .cornerRadius(ScreenSize.width / 15)
+            VStack(spacing: 20) {
+                BarTitle<CopyIdButton, LogOutButton>(text: "", leftButton: CopyIdButton(vm: vm, copyIdAlert: $copyIdAlert), rightButton: LogOutButton(logOutAlert: $logOutAlert))
+                
+                ProfileImage(photoURL: vm.user?.photoUrl, frame: ScreenSize.height * 0.12, color: Color.secondary.opacity(0.1))
+                    .cornerRadius(ScreenSize.width / 20)
+                
+                HStack {
+                    Text(vm.user?.name ?? (vm.user?.userId ?? "Arkadiy"))
+                        .font(.title2.bold())
+                        .lineLimit(1)
                     
-    //                if vm.user?.isDoctor == true {
-                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 20), GridItem(.flexible(), spacing: 20)], spacing: 20) {
-                        
-                        NavigationLink {
-                            //
-                        } label: {
-                            VStack {
-                                Image("users")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: ScreenSize.width * 0.06)
-                                Text("Users")
-                                    .font(.title3.bold())
-                            }
-                            .foregroundColor(.mainColor)
-                            .frame(maxWidth: ScreenSize.height * 0.3)
-                            .frame(height: ScreenSize.height * 0.14)
-                            .background(Color.secondaryColor)
-                            .cornerRadius(ScreenSize.width / 20)
-                        }
-
-                        NavigationLink {
-                            AddDoctorView()
-                        } label: {
-                            VStack {
-                                Image("stethoscope")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: ScreenSize.width * 0.06)
-                                Text("Doctors")
-                                    .font(.title3.bold())
-                            }
-                            .foregroundColor(.mainColor)
-                            .frame(maxWidth: ScreenSize.height * 0.3)
-                            .frame(height: ScreenSize.height * 0.14)
-                            .background(Color.secondaryColor)
-                            .cornerRadius(ScreenSize.width / 20)
-                        }
-
-                        NavigationLink {
-                            //
-                        } label: {
-                            VStack {
-                                Image("history")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: ScreenSize.width * 0.06)
-                                Text("History")
-                                    .font(.title3.bold())
-                            }
-                            .foregroundColor(.mainColor)
-                            .frame(maxWidth: ScreenSize.height * 0.3)
-                            .frame(height: ScreenSize.height * 0.14)
-                            .background(Color.secondaryColor)
-                            .cornerRadius(ScreenSize.width / 20)
-                        }
-                        
-                        NavigationLink {
-                            //
-                        } label: {
-                            VStack {
-                                Image("stats")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: ScreenSize.width * 0.06)
-                                Text("Statistics")
-                                    .font(.title3.bold())
-                            }
-                            .foregroundColor(.mainColor)
-                            .frame(maxWidth: ScreenSize.height * 0.3)
-                            .frame(height: ScreenSize.height * 0.14)
-                            .background(Color.secondaryColor)
-                            .cornerRadius(ScreenSize.width / 20)
-                        }
-
-
-                    }
-    //                }
-                    
-                    Spacer()
-                    
+                    Text(vm.user?.lastName ?? "Rubin")
+                        .font(.title2.bold())
+                        .lineLimit(1)
                 }
+                                
+                NavigationLink {
+                    EditProfileView(notEntered: $notEntered)
+                } label: {
+                    Text("Edit profile")
+                        .frame(width: ScreenSize.height * 0.2, height: ScreenSize.height * 0.06)
+                        .buttonStyle(.plain)
+                        .foregroundColor(.white)
+                        .bold()
+                        .background(Color.mainColor)
+                        .cornerRadius(ScreenSize.width / 30)
+                }
+                                                
+                VStack {
+                    if vm.user?.isDoctor ?? false {
+                        
+                        NavigationRow(destination: AllUsersView(), imageName: "users", title: "User managment")
+                        
+                        NavigationRow(destination: AddDoctorView(), imageName: "stethoscope", title: "Doctor managment")
+                        
+                        NavigationRow(destination: AddDoctorView(), imageName: "stats", title: "Stats")
+                        
+//                        Button {
+//                            testFull = true
+//                        } label: {
+//                            Text("Open")
+//                        }
+
+                        
+//                        NavigationRow(destination: DoneOrderView(order: nil, selectedTab: .constant(.home)), imageName: "history", title: "History")
+                        
+                    } else {
+                        
+                        NavigationRow(destination: AllDoctorsView(), imageName: "stethoscope", title: "Specialists")
+                    }
+
+                    if !vm.authProviders.contains(.phone) {
+                        NavigationRow(destination: AddDoctorView(), imageName: "lock", title: "Change password")
+                    }
+                }
+                
+                Spacer()
+                
             }
-            .scrollIndicators(.hidden)
+            .alert(isPresented: $logOutAlert) {
+                Alert(
+                    title: Text("Are you sure you want to log out?"),
+                    primaryButton: .destructive(Text("Log out"), action: {
+                        Task {
+                            try vm.signOut()
+                            notEntered = true
+                        }
+                    }),
+                    secondaryButton: .default(Text("Cancel"), action: {
+                        
+                    })
+                )
+            }
         }
+        .alert(isPresented: $copyIdAlert) {
+            Alert(
+                title: Text("UserID has been copied"),
+                dismissButton: .default(Text("Got it!"))
+            )
+        }
+
     }
 }
 
@@ -150,7 +112,7 @@ struct ProfileView_Previews: PreviewProvider {
     }
 }
 
-struct BarButton: View {
+struct SettingsButton: View {
     
     @Binding var notEntered: Bool
     
@@ -158,7 +120,7 @@ struct BarButton: View {
         NavigationLink {
             EditProfileView(notEntered: $notEntered)
         } label: {
-            BarButtonView(image: "settings", backgroundColor: .white)
+            BarButtonView(image: "settings", backgroundColor: .secondary.opacity(0.1))
         }
         .buttonStyle(.plain)
     }
@@ -190,5 +152,67 @@ struct ProfileImage: View {
                     .background(color)
             }
         }
+    }
+}
+
+struct CopyIdButton: View {
+    
+    let vm: ProfileViewModel
+    @Binding var copyIdAlert: Bool
+    
+    var body: some View {
+        Button {
+            UIPasteboard.general.string = vm.user?.userId
+            copyIdAlert = true
+        } label: {
+            BarButtonView(image: "copy")
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+struct NavigationRow<Destination: View>: View {
+    var destination: Destination
+    var imageName: String
+    var title: String
+    
+    var body: some View {
+        NavigationLink(destination: destination) {
+            HStack {
+                Image(imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .scaleEffect(0.5)
+                    .frame(width: ScreenSize.height * 0.04)
+                    .foregroundColor(.white)
+                    .background(Color.mainColor)
+                    .cornerRadius(10)
+                
+                Text(title)
+                    .foregroundColor(.primary)
+                    .bold()
+                    .padding(.leading, 8)
+                    .lineLimit(1)
+            }
+            .padding(.horizontal)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(height: ScreenSize.height * 0.06)
+            .background(Color.secondaryColor)
+            .cornerRadius(ScreenSize.width / 30)
+        }
+    }
+}
+
+struct LogOutButton: View {
+    
+    @Binding var logOutAlert: Bool
+    
+    var body: some View {
+        Button {
+            logOutAlert = true
+        } label: {
+            BarButtonView(image: "exit")
+        }
+        .buttonStyle(.plain)
     }
 }

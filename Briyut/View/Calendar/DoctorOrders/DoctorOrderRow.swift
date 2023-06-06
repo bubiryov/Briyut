@@ -125,7 +125,7 @@ struct DoctorOrderRow: View {
             )
         }
         .sheet(isPresented: $fullCover) {
-            DateTimeSelectionView(doctor: vm.user, order: order.0, mainButtonTitle: "Edit an appointment", selectedTab: .constant(.home), doneAnimation: .constant(false))
+            DateTimeSelectionView(doctor: vm.user, order: order.0, mainButtonTitle: "Edit an appointment", selectedTab: .constant(.home))
                 .padding()
                 .padding(.bottom)
         }

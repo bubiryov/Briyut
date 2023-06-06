@@ -15,7 +15,6 @@ struct ChooseClientView: View {
     @State private var showSearch: Bool = false
     @State private var searchText: String = ""
     @Binding var selectedTab: Tab
-    @Binding var doneAnimation: Bool
     @FocusState var focus: Bool
     
     var filteredUsers: [DBUser] {
@@ -23,7 +22,6 @@ struct ChooseClientView: View {
             searchText.isEmpty ? true : (user.name ?? "").localizedCaseInsensitiveContains(searchText) || (user.lastName ?? "").localizedCaseInsensitiveContains(searchText)
         }
     }
-
     
     var body: some View {
         VStack {
@@ -36,6 +34,7 @@ struct ChooseClientView: View {
                         focus = true
                     }
                     .onDisappear {
+                        focus = false
                         showSearch = false
                         searchText = ""
                     }
@@ -45,7 +44,7 @@ struct ChooseClientView: View {
                 ForEach(filteredUsers, id: \.userId) { user in
                     NavigationLink {
                         
-                        DateTimeSelectionView(doctor: vm.user, procedure: procedure, mainButtonTitle: "Add appoinment", client: user, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
+                        DateTimeSelectionView(doctor: vm.user, procedure: procedure, mainButtonTitle: "Add appoinment", client: user, selectedTab: $selectedTab)
 
                     } label: {
                         HStack {
@@ -85,7 +84,7 @@ struct ChooseClientView: View {
 
 struct ChooseClienView_Previews: PreviewProvider {
     static var previews: some View {
-        ChooseClientView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, parallelQuantity: 1, availableDoctors: []), selectedTab: .constant(.home), doneAnimation: .constant(false))
+        ChooseClientView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, parallelQuantity: 1, availableDoctors: []), selectedTab: .constant(.home))
             .environmentObject(ProfileViewModel())
     }
 }

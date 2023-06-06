@@ -18,9 +18,14 @@ struct DoctorOrders: View {
         
     var body: some View {
         VStack {
-            BarTitle<EditButton, DoctorMenuPicker>(text: DateFormatter.customFormatter(format: "d MMMM yyyy").string(from: selectedDate), leftButton: selectedDoctor == vm.user ?  EditButton(isEditing: $isEditing) : nil, rightButton: DoctorMenuPicker(vm: vm, selectedDoctor: $selectedDoctor))
+            BarTitle<EditButton, DoctorMenuPicker>(
+                text: selectedDate.barTitleDate(),
+                leftButton: selectedDoctor == vm.user ?  EditButton(isEditing: $isEditing) : nil,
+                rightButton: DoctorMenuPicker(vm: vm, selectedDoctor: $selectedDoctor),
+                action: { selectedDate = Date() }
+            )
                         
-            CustomDatePicker(selectedDate: $selectedDate, selectedTime: Binding(projectedValue: .constant("")))
+            CustomDatePicker(selectedDate: $selectedDate, selectedTime: Binding(projectedValue: .constant("")), pastTime: true)
             
             ScrollView {
                 LazyVStack {

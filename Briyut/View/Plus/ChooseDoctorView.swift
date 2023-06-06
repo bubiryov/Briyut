@@ -13,20 +13,21 @@ struct ChooseDoctorView: View {
     @Environment(\.presentationMode) var presentationMode
     var procedure: ProcedureModel
     var cornerRadius = ScreenSize.width / 30
-//    @State var ordersTime = [Date: Date]()
     @Binding var selectedTab: Tab
-    @Binding var doneAnimation: Bool
     
     var body: some View {
         VStack {
             BarTitle<BackButton, Text>(text: "Choose a doctor", leftButton: BackButton())
             
             ScrollView {
-//                if let doctors = vm.doctors {
-                    ForEach(vm.doctors, id: \.userId) { doctor in
+                                
+                ForEach(procedure.availableDoctors, id: \.self) { doctorId in
+                    
+                    if let doctor = vm.doctors.first(where: { $0.userId == doctorId }) {
+                        
                         NavigationLink {
                             
-                            DateTimeSelectionView(doctor: doctor, procedure: procedure, mainButtonTitle: "Add appoinment", client: vm.user, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
+                            DateTimeSelectionView(doctor: doctor, procedure: procedure, mainButtonTitle: "Add appoinment", client: vm.user, selectedTab: $selectedTab)
                             
                         } label: {
                             
@@ -47,8 +48,7 @@ struct ChooseDoctorView: View {
                             .cornerRadius(cornerRadius)
                         }
                     }
-//                    .listRowSeparator(.hidden)
-//                }
+                }
             }
             
             Spacer()
@@ -68,7 +68,7 @@ struct ChooseDoctorView: View {
 
 struct ChooseDoctorView_Previews: PreviewProvider {
     static var previews: some View {
-        ChooseDoctorView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, parallelQuantity: 1, availableDoctors: []), selectedTab: .constant(.plus), doneAnimation:.constant(false))
+        ChooseDoctorView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, parallelQuantity: 1, availableDoctors: []), selectedTab: .constant(.plus))
             .environmentObject(ProfileViewModel())
     }
 }

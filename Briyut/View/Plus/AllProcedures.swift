@@ -15,7 +15,6 @@ struct AllProcedures: View {
     @Binding var notEntered: Bool
     @Binding var showSearch: Bool
     @Binding var selectedTab: Tab
-    @Binding var doneAnimation: Bool
     @FocusState var focus: Bool
     
     var body: some View {
@@ -72,7 +71,7 @@ struct AllProcedures: View {
                         searchText.isEmpty ? true : procedure.name.localizedCaseInsensitiveContains(searchText) == true
                     }, id: \.procedureId) { procedure in
                         
-                        ProcedureRow(vm: vm, procedure: procedure, isEditing: $isEditing, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
+                        ProcedureRow(vm: vm, procedure: procedure, isEditing: $isEditing, selectedTab: $selectedTab)
                             .offset(x: isEditing ? 2 : 0)
                             .offset(x: isEditing ? -2 : 0)
                             .animation(.easeInOut(duration: randomize(
@@ -105,7 +104,7 @@ struct AllProcedures: View {
 
 struct AddProcedureView_Previews: PreviewProvider {
     static var previews: some View {
-        AllProcedures(notEntered: .constant(false), showSearch: .constant(false), selectedTab: .constant(.plus), doneAnimation: .constant(false))
+        AllProcedures(notEntered: .constant(false), showSearch: .constant(false), selectedTab: .constant(.plus))
             .environmentObject(ProfileViewModel())
     }
 }
@@ -129,7 +128,6 @@ struct ProcedureRow: View {
     var cornerRadius = ScreenSize.width / 20
     @Binding var isEditing: Bool
     @Binding var selectedTab: Tab
-    @Binding var doneAnimation: Bool
     
     var body: some View {
         
@@ -138,9 +136,9 @@ struct ProcedureRow: View {
                 ProcedureView(title: "Editing procedure", buttonText: "Save changes", procedure: procedure, isEditing: $isEditing)
             } else {
                 if vm.user?.isDoctor == true {
-                    ChooseClientView(procedure: procedure, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
+                    ChooseClientView(procedure: procedure, selectedTab: $selectedTab)
                 } else {
-                    ChooseDoctorView(procedure: procedure, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
+                    ChooseDoctorView(procedure: procedure, selectedTab: $selectedTab)
                 }
             }
         } label: {

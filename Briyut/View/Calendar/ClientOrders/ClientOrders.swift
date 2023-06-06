@@ -12,7 +12,6 @@ struct ClientOrders: View {
     
     @EnvironmentObject var vm: ProfileViewModel
     @State private var selectedIndex = 0
-    @Binding var doneAnimation: Bool
     @Binding var selectedTab: Tab
     
     var body: some View {
@@ -23,12 +22,12 @@ struct ClientOrders: View {
                 CustomSegmentedPicker(options: ["Upcoming", "Past"], selectedIndex: $selectedIndex)
                                 
                 if selectedIndex == 0 {
-                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.activeOrders, doneAnimation: $doneAnimation, selectedTab: $selectedTab)
+                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.activeOrders, selectedTab: $selectedTab)
                 } else {
-                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.doneOrders, doneAnimation: $doneAnimation, selectedTab: $selectedTab)
+                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.doneOrders, selectedTab: $selectedTab)
                 }
                 
-                Spacer()
+//                Spacer()
             }
         }
     }
@@ -36,7 +35,7 @@ struct ClientOrders: View {
 
 struct ClientOrders_Previews: PreviewProvider {
     static var previews: some View {
-        ClientOrders(doneAnimation: .constant(false), selectedTab: .constant(.calendar))
+        ClientOrders(selectedTab: .constant(.calendar))
             .environmentObject(ProfileViewModel())
     }
 }
@@ -83,14 +82,13 @@ struct OrderList: View {
     let vm: ProfileViewModel
     var selectedIndex: Int
     var orderArray: [OrderModel]
-    @Binding var doneAnimation: Bool
     @Binding var selectedTab: Tab
     
     var body: some View {
         List {
             ForEach(orderArray, id: \.orderId) { order in
                 
-                OrderRow(vm: vm, order: order, withButtons: order.isDone ? false : true, color: nil, fontColor: nil, photoBackgroundColor: Color.secondary.opacity(0.1), doneAnimation: $doneAnimation, selectedTab: $selectedTab)
+                OrderRow(vm: vm, order: order, withButtons: order.isDone ? false : true, color: nil, fontColor: nil, photoBackgroundColor: Color.secondary.opacity(0.1), selectedTab: $selectedTab)
                     .listRowInsets(EdgeInsets())
                     .padding(.bottom, 7)
                 

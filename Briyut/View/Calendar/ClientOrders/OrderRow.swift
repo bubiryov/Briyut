@@ -18,7 +18,6 @@ struct OrderRow: View {
     let fontColor: Color?
     let photoBackgroundColor: Color
     @State private var showAlert: Bool = false
-    @Binding var doneAnimation: Bool
     @Binding var selectedTab: Tab
     @State var fullCover: Bool = false
     
@@ -124,7 +123,7 @@ struct OrderRow: View {
         }
         .sheet(isPresented: $fullCover) {
             let doctor = vm.doctors.first(where: { $0.userId == order.doctorId })
-            DateTimeSelectionView(doctor: doctor, order: order, mainButtonTitle: "Edit an appoinment", selectedTab: $selectedTab, doneAnimation: $doneAnimation)
+            DateTimeSelectionView(doctor: doctor, order: order, mainButtonTitle: "Edit an appoinment", selectedTab: $selectedTab)
                 .padding()
                 .padding(.bottom)
         }
@@ -141,7 +140,7 @@ struct OrderRow: View {
 struct OrderRow_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: true, color: .secondaryColor, fontColor: .black, photoBackgroundColor: .secondary.opacity(0.1), doneAnimation: .constant(false), selectedTab: .constant(.calendar))
+            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: true, color: .secondaryColor, fontColor: .black, photoBackgroundColor: .secondary.opacity(0.1), selectedTab: .constant(.calendar))
         }
         .padding(.horizontal, 20)
     }

@@ -13,7 +13,6 @@ struct RootView: View {
     @State private var selectedTab: Tab = .home
     @Binding var notEntered: Bool
     @State var justOpened: Bool = true
-    @State var doneAnimation: Bool = false
     @State var showSearch: Bool = false
     
     var body: some View {
@@ -25,10 +24,10 @@ struct RootView: View {
                         HomeView(selectedTab: $selectedTab, justOpened: $justOpened, showSearch: $showSearch)
                             .environmentObject(vm)
                     case .plus:
-                        AllProcedures(notEntered: $notEntered, showSearch: $showSearch, selectedTab: $selectedTab, doneAnimation: $doneAnimation)
+                        AllProcedures(notEntered: $notEntered, showSearch: $showSearch, selectedTab: $selectedTab)
                             .environmentObject(vm)
                     case .calendar:
-                        CalendarView(doneAnimation: $doneAnimation, selectedTab: $selectedTab)
+                        CalendarView(selectedTab: $selectedTab)
                             .environmentObject(vm)
                     case .profile:
                         ProfileView(notEntered: $notEntered)
@@ -43,13 +42,6 @@ struct RootView: View {
                                 
             }
             .edgesIgnoringSafeArea(.bottom)
-            .blur(radius: doneAnimation ? 20 : 0)
-            
-            if doneAnimation {
-                DoneAnimation()
-                    .frame(width: 250)
-            }
-            
         }
         .onAppear {
             print("Appear root view")

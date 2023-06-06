@@ -89,4 +89,24 @@ extension DateFormatter {
     }
 }
 
+extension Date {
+    func barTitleDate() -> String {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: today)!
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
+        
+        if calendar.isDate(self, inSameDayAs: today) {
+            return "Today"
+        } else if calendar.isDate(self, inSameDayAs: tomorrow) {
+            return "Tomorrow"
+        } else if calendar.isDate(self, inSameDayAs: yesterday) {
+            return "Yesterday"
+        } else {
+            let formatter = DateFormatter.customFormatter(format: "d MMMM yyyy")
+            return formatter.string(from: self)
+        }
+    }
+}
+
 
