@@ -54,15 +54,8 @@ struct ProfileView: View {
                         NavigationRow(destination: AddDoctorView(), imageName: "stethoscope", title: "Doctor managment")
                         
                         NavigationRow(destination: AddDoctorView(), imageName: "stats", title: "Stats")
-                        
-//                        Button {
-//                            testFull = true
-//                        } label: {
-//                            Text("Open")
-//                        }
-
-                        
-//                        NavigationRow(destination: DoneOrderView(order: nil, selectedTab: .constant(.home)), imageName: "history", title: "History")
+                                                
+                        NavigationRow(destination: HistoryView(), imageName: "history", title: "History")
                         
                     } else {
                         

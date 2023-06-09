@@ -15,46 +15,66 @@ struct DoctorOrders: View {
     @State private var dayOrders: [(OrderModel, Bool)] = []
     @State private var isEditing: Bool = false
     @State private var showAlert: Bool = false
+    @State private var noOrders: Bool? = nil
         
     var body: some View {
         VStack {
             BarTitle<EditButton, DoctorMenuPicker>(
                 text: selectedDate.barTitleDate(),
-                leftButton: selectedDoctor == vm.user ?  EditButton(isEditing: $isEditing) : nil,
+                leftButton: selectedDoctor == vm.user ? EditButton(isEditing: $isEditing) : nil,
                 rightButton: DoctorMenuPicker(vm: vm, selectedDoctor: $selectedDoctor),
                 action: { selectedDate = Date() }
             )
                         
             CustomDatePicker(selectedDate: $selectedDate, selectedTime: Binding(projectedValue: .constant("")), pastTime: true)
             
-            ScrollView {
-                LazyVStack {
-                    ForEach($dayOrders, id: \.0.orderId) { order in
-                        DoctorOrderRow(vm: vm, dayOrders: $dayOrders, order: order, isEditing: $isEditing, selectedDoctor: selectedDoctor, selectedDate: selectedDate)
-                            .onAppear {
-                                if let currentIndex = dayOrders.firstIndex(where: { $0.0.date.dateValue() <= Date() && $0.0.end.dateValue() > Date()}) {
-                                    dayOrders[currentIndex] = (dayOrders[currentIndex].0, true)
+            if !(noOrders ?? false) {
+                ScrollView {
+                    LazyVStack {
+                        ForEach($dayOrders, id: \.0.orderId) { order in
+                            DoctorOrderRow(vm: vm, dayOrders: $dayOrders, order: order, isEditing: $isEditing, selectedDoctor: selectedDoctor, selectedDate: selectedDate)
+                                .onAppear {
+                                    if let currentIndex = dayOrders.firstIndex(where: { $0.0.date.dateValue() <= Date() && $0.0.end.dateValue() > Date()}) {
+                                        dayOrders[currentIndex] = (dayOrders[currentIndex].0, true)
+                                    }
                                 }
-                            }
+                        }
                     }
+                    .padding(.top, 5)
                 }
-                .padding(.top, 5)
+                .scrollIndicators(.hidden)
+            } else {
+                Spacer()
+                Text(selectedDate < Date() ? "There were no appointments on this day" : "You don't have any appointments yet")
+                    .foregroundColor(.secondary)
+                Spacer()
             }
-            .scrollIndicators(.hidden)
         }
         .onAppear {
             selectedDoctor = vm.user
         }
         .onChange(of: selectedDate) { _ in
             Task {
-                let orders = try await vm.getDayOrders(date: selectedDate, doctorId: selectedDoctor?.userId)
+                let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId)
                 dayOrders = orders.map {($0, false)}
+                isEditing = false
+                if orders.isEmpty {
+                    noOrders = true
+                } else {
+                    noOrders = false
+                }
             }
         }
         .onChange(of: selectedDoctor) { _ in
             Task {
-                let orders = try await vm.getDayOrders(date: selectedDate, doctorId: selectedDoctor?.userId)
+                let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId)
                 dayOrders = orders.map {($0, false)}
+                isEditing = false
+                if orders.isEmpty {
+                    noOrders = true
+                } else {
+                    noOrders = false
+                }
             }
         }
         .onChange(of: isEditing) { newValue in

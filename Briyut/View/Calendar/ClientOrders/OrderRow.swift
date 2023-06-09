@@ -9,6 +9,11 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
+enum RowUser {
+    case client
+    case doctor
+}
+
 struct OrderRow: View {
     
     let vm: ProfileViewModel
@@ -16,10 +21,12 @@ struct OrderRow: View {
     let withButtons: Bool
     let color: Color?
     let fontColor: Color?
+    let bigDate: Bool
+    let userInformation: RowUser
     let photoBackgroundColor: Color
     @State private var showAlert: Bool = false
-    @Binding var selectedTab: Tab
-    @State var fullCover: Bool = false
+    @State var rescheduleFullCover: Bool = false
+    @State private var showFullOrder: Bool = false
     
     var body: some View {
         
@@ -29,7 +36,11 @@ struct OrderRow: View {
                 let procedure = vm.procedures.first(where: { $0.procedureId == order.procedureId })
                 let user = vm.users.first(where: { $0.userId == order.clientId })
                 
-                ProfileImage(photoURL: vm.user?.isDoctor ?? false ? user?.photoUrl : doc?.photoUrl, frame: ScreenSize.height * 0.1, color: photoBackgroundColor)
+                ProfileImage(
+                    photoURL: userInformation == .client ? user?.photoUrl : doc?.photoUrl,
+                    frame: ScreenSize.height * 0.1,
+                    color: photoBackgroundColor
+                )
                     .cornerRadius(ScreenSize.width / 20)
                 
                 VStack(alignment: .leading) {
@@ -41,7 +52,7 @@ struct OrderRow: View {
 
                     Spacer()
                                         
-                    if vm.user?.isDoctor ?? false {
+                    if userInformation == .client {
                         Text("\(user?.name ?? "") \(user?.lastName ?? "")")
                             .font(.subheadline)
                             .foregroundColor(fontColor != nil ? fontColor : .secondary)
@@ -54,8 +65,8 @@ struct OrderRow: View {
                     
                     Spacer()
                     
-                    Text(orderDate())
-                        .font(!order.isDone && !withButtons ? .title3.bold() : .subheadline.bold())
+                    Text(DateFormatter.customFormatter(format: "dd MMM yyyy, HH:mm").string(from: order.date.dateValue()))
+                        .font(bigDate ? .title3.bold() : .subheadline.bold())
                         .foregroundColor(fontColor != nil ? fontColor : .primary)
                     
                 }
@@ -86,7 +97,7 @@ struct OrderRow: View {
                     Spacer()
                     
                     Button {
-                        fullCover.toggle()
+                        rescheduleFullCover.toggle()
                     } label: {
                         Text("Reschedule")
                             .foregroundColor(.white)
@@ -121,26 +132,32 @@ struct OrderRow: View {
                 })
             )
         }
-        .sheet(isPresented: $fullCover) {
+        .sheet(isPresented: $rescheduleFullCover) {
             let doctor = vm.doctors.first(where: { $0.userId == order.doctorId })
-            DateTimeSelectionView(doctor: doctor, order: order, mainButtonTitle: "Edit an appoinment", selectedTab: $selectedTab)
+            DateTimeSelectionView(doctor: doctor, order: order, mainButtonTitle: "Edit an appoinment", selectedTab: .constant(.calendar))
                 .padding()
                 .padding(.bottom)
         }
+        .onTapGesture {
+            showFullOrder = true
+        }
+        .fullScreenCover(isPresented: $showFullOrder) {
+            DoneOrderView(order: order, withPhoto: true, selectedTab: .constant(.calendar))
+        }
     }
     
-    func orderDate() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd MMM yyyy, HH:mm"
-        return dateFormatter.string(from: order.date.dateValue())
-    }
+//    func orderDate() -> String {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "dd MMM yyyy, HH:mm"
+//        return dateFormatter.string(from: order.date.dateValue())
+//    }
     
 }
 
 struct OrderRow_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: true, color: .secondaryColor, fontColor: .black, photoBackgroundColor: .secondary.opacity(0.1), selectedTab: .constant(.calendar))
+            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: false, color: .secondaryColor, fontColor: .black, bigDate: false, userInformation: .client, photoBackgroundColor: .secondary.opacity(0.1))
         }
         .padding(.horizontal, 20)
     }

@@ -159,7 +159,7 @@ struct ProcedureRow: View {
                 }
             }
             .padding(.horizontal, 20)
-            .frame(height: ScreenSize.height * 0.12)
+            .frame(height: ScreenSize.height * 0.1)
             .background(Color.secondaryColor)
             .cornerRadius(cornerRadius)
         }

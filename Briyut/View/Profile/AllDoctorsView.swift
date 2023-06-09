@@ -17,7 +17,7 @@ struct AllDoctorsView: View {
             BarTitle<BackButton, Text>(text: "Doctors", leftButton: BackButton())
             
             ForEach(vm.doctors, id: \.userId) { doctor in
-                UserRow(user: doctor)
+                UserRow(user: doctor, showCallButton: true)
             }
             
             Spacer()

@@ -24,21 +24,22 @@ struct AddDoctorView: View {
             
             ScrollView {
                 ForEach(vm.doctors, id: \.userId) { doctor in
-                    HStack {
-                        
-                        ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
-                            .cornerRadius(ScreenSize.width / 30)
-                        
-                        Text("\(doctor.name ?? doctor.userId) \(doctor.lastName ?? "")")
-                            .bold()
-                            .padding(.leading, 8)
-                            .lineLimit(1)
-                    }
-                    .padding(.horizontal)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .frame(height: ScreenSize.height * 0.09)
-                    .background(Color.secondaryColor)
-                    .cornerRadius(cornerRadius)
+                    UserRow(user: doctor, showCallButton: doctor.userId != vm.user?.userId)
+//                    HStack {
+//
+//                        ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
+//                            .cornerRadius(ScreenSize.width / 30)
+//
+//                        Text("\(doctor.name ?? doctor.userId) \(doctor.lastName ?? "")")
+//                            .bold()
+//                            .padding(.leading, 8)
+//                            .lineLimit(1)
+//                    }
+//                    .padding(.horizontal)
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    .frame(height: ScreenSize.height * 0.09)
+//                    .background(Color.secondaryColor)
+//                    .cornerRadius(cornerRadius)
                     .contextMenu {
                         Button(role: .destructive) {
                             Task {

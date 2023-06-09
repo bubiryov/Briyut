@@ -36,7 +36,6 @@ struct ContentView: View {
                 try await Task.sleep(nanoseconds: 2_000_000_000)
                 withAnimation {
                     splashView = false
-                    print("SPLASH")
                 }
             }
         }

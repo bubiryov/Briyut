@@ -10,20 +10,19 @@ import SwiftUI
 struct CalendarView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
-    @Binding var selectedTab: Tab
     
     var body: some View {
         if vm.user?.isDoctor == true {
             DoctorOrders()
         } else {
-            ClientOrders(selectedTab: $selectedTab)
+            ClientOrders()
         }
     }
 }
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarView(selectedTab: .constant(.calendar))
+        CalendarView()
             .environmentObject(ProfileViewModel())
     }
 }

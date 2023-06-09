@@ -12,22 +12,30 @@ struct ClientOrders: View {
     
     @EnvironmentObject var vm: ProfileViewModel
     @State private var selectedIndex = 0
-    @Binding var selectedTab: Tab
     
     var body: some View {
         NavigationView {
             VStack {
                 BarTitle<Text, Text>(text: "Appointments")
                 
-                CustomSegmentedPicker(options: ["Upcoming", "Past"], selectedIndex: $selectedIndex)
+                CustomSegmentedPicker(
+                    options: ["Upcoming", "Past"],
+                    selectedIndex: $selectedIndex
+                )
                                 
                 if selectedIndex == 0 {
-                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.activeOrders, selectedTab: $selectedTab)
+                    OrderList(
+                        vm: vm,
+                        selectedIndex: selectedIndex,
+                        orderArray: vm.activeOrders)
+                    
                 } else {
-                    OrderList(vm: vm, selectedIndex: selectedIndex, orderArray: vm.doneOrders, selectedTab: $selectedTab)
+                    OrderList(
+                        vm: vm,
+                        selectedIndex: selectedIndex,
+                        orderArray: vm.doneOrders
+                    )
                 }
-                
-//                Spacer()
             }
         }
     }
@@ -35,7 +43,7 @@ struct ClientOrders: View {
 
 struct ClientOrders_Previews: PreviewProvider {
     static var previews: some View {
-        ClientOrders(selectedTab: .constant(.calendar))
+        ClientOrders()
             .environmentObject(ProfileViewModel())
     }
 }
@@ -82,13 +90,21 @@ struct OrderList: View {
     let vm: ProfileViewModel
     var selectedIndex: Int
     var orderArray: [OrderModel]
-    @Binding var selectedTab: Tab
     
     var body: some View {
         List {
             ForEach(orderArray, id: \.orderId) { order in
                 
-                OrderRow(vm: vm, order: order, withButtons: order.isDone ? false : true, color: nil, fontColor: nil, photoBackgroundColor: Color.secondary.opacity(0.1), selectedTab: $selectedTab)
+                OrderRow(
+                    vm: vm,
+                    order: order,
+                    withButtons: order.isDone ? false : true,
+                    color: nil,
+                    fontColor: nil,
+                    bigDate: false,
+                    userInformation: .doctor,
+                    photoBackgroundColor: Color.secondary.opacity(0.1)
+                )
                     .listRowInsets(EdgeInsets())
                     .padding(.bottom, 7)
                 
@@ -99,7 +115,7 @@ struct OrderList: View {
                     .frame(height: 1)
                     .onAppear {
                         Task {
-                            try await vm.getAllOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
+                            try await vm.getRequiredOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
                         }
                     }
                 }
@@ -110,7 +126,7 @@ struct OrderList: View {
         .scrollIndicators(.hidden)
         .onAppear {
             Task {
-                try await vm.getAllOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
+                try await vm.getRequiredOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
             }
         }
     }

@@ -32,9 +32,17 @@ struct DateTimeSelectionView: View {
 
         VStack {
             
-            BarTitle<BackButton?, Text>(text: selectedDate.barTitleDate(), leftButton: procedure != nil ? BackButton() : nil, action: { selectedDate = Date() })
+            BarTitle<BackButton?, Text>(
+                text: selectedDate.barTitleDate(),
+                leftButton: procedure != nil ? BackButton() : nil,
+                action: { selectedDate = Date() }
+            )
             
-            CustomDatePicker(selectedDate: $selectedDate, selectedTime: $selectedTime, pastTime: false)
+            CustomDatePicker(
+                selectedDate: $selectedDate,
+                selectedTime: $selectedTime,
+                pastTime: false
+            )
             
             Spacer()
             
@@ -99,8 +107,8 @@ struct DateTimeSelectionView: View {
         .onChange(of: selectedDate) { newDate in
             Task {
                 disabledAllButtons = true
-                personalOrdersTime = try await vm.getDayOrderTimes(date: newDate, doctorId: doctor?.userId)
-                allOrders = try await vm.getDayOrders(date: newDate, doctorId: nil)
+                personalOrdersTime = try await vm.getDayOrderTimes(date: newDate, selectionMode: .day, doctorId: doctor?.userId)
+                allOrders = try await vm.getDayMonthOrders(date: newDate, selectionMode: .day, doctorId: nil)
                 generateTimeSlots()
                 disabledAllButtons = false
             }
@@ -108,15 +116,15 @@ struct DateTimeSelectionView: View {
         .onAppear {
             Task {
                 disabledAllButtons = true
-                personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, doctorId: doctor?.userId)
-                allOrders = try await vm.getDayOrders(date: selectedDate, doctorId: nil)
+                personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: doctor?.userId)
+                allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil)
                 generateTimeSlots()
                 disabledAllButtons = false
             }
         }
         .fullScreenCover(isPresented: $fullCover, content: {
             if let order {
-                DoneOrderView(order: order, selectedTab: $selectedTab, fullCover: $fullCover)
+                DoneOrderView(order: order, withPhoto: false, selectedTab: $selectedTab)
             }
         })
 
@@ -127,24 +135,13 @@ struct DateTimeSelectionView: View {
         
         let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure.procedureId, doctorId: doctor?.userId ?? "", clientId: client.userId, date: createTimestamp(from: selectedDate, time: selectedTime, procedure: nil)!, end: createTimestamp(from: selectedDate, time: selectedTime, procedure: procedure)!, isDone: false, price: procedure.cost)
         
-        allOrders = try await vm.getDayOrders(date: selectedDate, doctorId: nil)
-        personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, doctorId: doctor?.userId)
-
+        allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil)
+        personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: doctor?.userId)
+        
         if !checkIfDisabled(time: selectedTime) {
             try await vm.addNewOrder(order: order)
             self.order = order
             fullCover = true
-
-//            withAnimation {
-//                doneAnimation = true
-//            }
-//
-//            try await Task.sleep(nanoseconds: 3_000_000_000)
-//
-//            withAnimation {
-//                doneAnimation = false
-//                selectedTab = .home
-//            }
         } else {
             showAlert = true
             selectedTime = ""
@@ -160,8 +157,8 @@ struct DateTimeSelectionView: View {
             throw URLError(.badServerResponse)
         }
                 
-        allOrders = try await vm.getDayOrders(date: selectedDate, doctorId: nil)
-        personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, doctorId: order.doctorId)
+        allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil)
+        personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: order.doctorId)
 
         if !checkIfDisabled(time: selectedTime) {
             try await vm.editOrderTime(orderId: order.orderId, date: date, end: end)
@@ -169,7 +166,7 @@ struct DateTimeSelectionView: View {
 //            if vm.user?.isDoctor ?? false {
                 vm.activeLastDocument = nil
                 vm.activeOrders = []
-                try await vm.getAllOrders(isDone: false, countLimit: 6)
+                try await vm.getRequiredOrders(isDone: false, countLimit: 6)
 //            }
 
             presentationMode.wrappedValue.dismiss()
@@ -329,17 +326,17 @@ struct CustomDatePicker: View {
     @Binding var selectedTime: String
     let pastTime: Bool
 
-    let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d"
-        return formatter
-    }()
-    
-    let weekdayFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "E"
-        return formatter
-    }()
+//    let dateFormatter: DateFormatter = {
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "d"
+//        return formatter
+//    }()
+//    
+//    let weekdayFormatter: DateFormatter = {
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "E"
+//        return formatter
+//    }()
 
     var body: some View {
         VStack {
@@ -371,11 +368,13 @@ struct CustomDatePicker: View {
                         selectedTime = ""
                     }) {
                         VStack(spacing: 2) {
-                            Text(dateFormatter.string(from: date))
+                            Text(DateFormatter.customFormatter(format: "d").string(from: date))
+//                            Text(dateFormatter.string(from: date))
                                 .foregroundColor(isSelected ? .white : .primary)
                                 .bold()
                                 .font(.system(size: 16))
-                            Text(weekdayFormatter.string(from: date))
+                            Text(DateFormatter.customFormatter(format: "E").string(from: date))
+//                            Text(weekdayFormatter.string(from: date))
                                 .foregroundColor(isSelected ? .white : .primary)
                                 .font(.system(size: 12))
                         }

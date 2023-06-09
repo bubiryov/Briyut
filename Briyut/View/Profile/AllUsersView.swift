@@ -11,15 +11,35 @@ struct AllUsersView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
     @Environment(\.presentationMode) var presentationMode
+    @State private var showSearch: Bool = false
+    @State private var searchable: String = ""
+    @FocusState var focus: Bool
+    var filteredUsers: [DBUser] {
+        return vm.users.filter { user in
+            searchable.isEmpty ? true : (user.name ?? "").localizedCaseInsensitiveContains(searchable) || (user.lastName ?? "").localizedCaseInsensitiveContains(searchable)
+        }
+    }
     
     var body: some View {
         VStack {
-            BarTitle<BackButton, Text>(text: "Users", leftButton: BackButton())
+            BarTitle<BackButton, SearchButton>(text: "Users", leftButton: BackButton(), rightButton: SearchButton(showSearch: $showSearch, searchText: $searchable))
+            
+            if showSearch {
+                AccentInputField(promptText: "Arkadiy Rubin", title: nil, input: $searchable)
+                    .focused($focus)
+                    .onAppear {
+                        focus = true
+                    }
+                    .onDisappear {
+                        showSearch = false
+                        searchable = ""
+                    }
+            }
             
             ScrollView {
                 LazyVStack {
-                    ForEach(vm.users, id: \.userId) { user in
-                        UserRow(user: user)
+                    ForEach(filteredUsers, id: \.userId) { user in
+                        UserRow(user: user, showCallButton: true)
                     }
                 }
                 .onAppear {
@@ -57,10 +77,11 @@ struct AllUsersView_Previews: PreviewProvider {
 struct UserRow: View {
     
     let user: DBUser
+    let showCallButton: Bool
     
     var body: some View {
         HStack {
-            ProfileImage(photoURL: user.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
+            ProfileImage(photoURL: user.photoUrl, frame: ScreenSize.height * 0.08, color: .lightBlueColor)
                 .cornerRadius(ScreenSize.width / 30)
             
             Text("\(user.name ?? user.userId) \(user.lastName ?? "")")
@@ -71,7 +92,7 @@ struct UserRow: View {
             
             Spacer()
             
-            if let phoneNumber = user.phoneNumber {
+            if let phoneNumber = user.phoneNumber, showCallButton == true {
                 Button {
                     guard let url = URL(string: "tel://\(phoneNumber)"), UIApplication.shared.canOpenURL(url) else {
                         return
@@ -91,7 +112,7 @@ struct UserRow: View {
         }
         .padding(.horizontal)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .frame(height: ScreenSize.height * 0.09)
+        .frame(height: ScreenSize.height * 0.1)
         .background(Color.secondaryColor)
         .cornerRadius(ScreenSize.width / 30)
     }

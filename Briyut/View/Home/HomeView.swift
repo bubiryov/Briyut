@@ -13,6 +13,7 @@ struct HomeView: View {
     @Binding var selectedTab: Tab
     @Binding var justOpened: Bool
     @Binding var showSearch: Bool
+    @State private var showFullOrder: Bool = false
     
     var body: some View {
         
@@ -54,7 +55,14 @@ struct HomeView: View {
                                 .scaleEffect(0.85)
                                 .foregroundColor(.mainColor.opacity(0.7))
                         }
-                        OrderRow(vm: vm, order: nearestOrder, withButtons: false, color: .mainColor, fontColor: .white, photoBackgroundColor: .white, selectedTab: $selectedTab)
+                        OrderRow(
+                            vm: vm,
+                            order: nearestOrder,
+                            withButtons: false,
+                            color: .mainColor,
+                            fontColor: .white,
+                            bigDate: true,
+                            userInformation: vm.user?.isDoctor ?? false ? .client : .doctor, photoBackgroundColor: .white)
                     }
                 } else {
                     Button {
@@ -76,7 +84,7 @@ struct HomeView: View {
                 
                 VStack(alignment: .leading) {
                     
-                    HStack {
+                    HStack(alignment: .center) {
                         Text("Specialists")
                             .font(.title2.bold())
                         
@@ -90,6 +98,8 @@ struct HomeView: View {
                             }
                         } label: {
                             Text("See all")
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
                         }
                         .buttonStyle(.plain)
                         .foregroundColor(.primary)
@@ -97,7 +107,6 @@ struct HomeView: View {
 
                     ScrollView(.horizontal) {
                         LazyHStack(spacing: 15) {
-    //                        Spacer()
                             let doctors = vm.doctors
                                 ForEach(doctors, id: \.userId) { doctor in
                                     VStack(alignment: .center, spacing: 7) {
@@ -137,15 +146,15 @@ struct HomeView: View {
                 Task {
                     try await vm.loadCurrentUser()
                     try await vm.getAllDoctors()
+                    if vm.user?.isDoctor ?? false {
+                        try await vm.getAllUsers()
+                    }
                     if justOpened {
                         vm.addListenerForProcuderes()
                         try await vm.updateOrdersStatus()
                         justOpened = false
                     } else {
-                        try await vm.getAllOrders(isDone: false, countLimit: 2)
-                    }
-                    if vm.user?.isDoctor ?? false {
-                        try await vm.getAllUsers()
+                        try await vm.getRequiredOrders(isDone: false, countLimit: 2)
                     }
                 }
         }

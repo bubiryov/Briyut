@@ -43,26 +43,32 @@ struct ChooseClientView: View {
             ScrollView {
                 ForEach(filteredUsers, id: \.userId) { user in
                     NavigationLink {
-                        
                         DateTimeSelectionView(doctor: vm.user, procedure: procedure, mainButtonTitle: "Add appoinment", client: user, selectedTab: $selectedTab)
-
                     } label: {
-                        HStack {
-                            ProfileImage(photoURL: user.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
-                                .cornerRadius(ScreenSize.width / 30)
-                            
-                            Text("\(user.name ?? user.userId) \(user.lastName ?? "")")
-                                .foregroundColor(.primary)
-                                .bold()
-                                .padding(.leading, 8)
-                                .lineLimit(1)
-                        }
-                        .padding(.horizontal)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .frame(height: ScreenSize.height * 0.09)
-                        .background(Color.secondaryColor)
-                        .cornerRadius(ScreenSize.width / 30)
+                        UserRow(user: user, showCallButton: false)
                     }
+
+//                    NavigationLink {
+//
+//                        DateTimeSelectionView(doctor: vm.user, procedure: procedure, mainButtonTitle: "Add appoinment", client: user, selectedTab: $selectedTab)
+//
+//                    } label: {
+//                        HStack {
+//                            ProfileImage(photoURL: user.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
+//                                .cornerRadius(ScreenSize.width / 30)
+//
+//                            Text("\(user.name ?? user.userId) \(user.lastName ?? "")")
+//                                .foregroundColor(.primary)
+//                                .bold()
+//                                .padding(.leading, 8)
+//                                .lineLimit(1)
+//                        }
+//                        .padding(.horizontal)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .frame(height: ScreenSize.height * 0.09)
+//                        .background(Color.secondaryColor)
+//                        .cornerRadius(ScreenSize.width / 30)
+//                    }
                 }
             }
             .scrollIndicators(.hidden)

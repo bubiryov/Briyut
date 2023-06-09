@@ -61,6 +61,7 @@
 		89C5905B2A058B0C00975E50 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 89C5905A2A058B0C00975E50 /* FirebaseFirestoreSwift */; };
 		89C5905E2A059DD800975E50 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C5905D2A059DD800975E50 /* UserManager.swift */; };
 		89C590602A059EF300975E50 /* DBUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C5905F2A059EF300975E50 /* DBUser.swift */; };
+		89C9C16C2A3215CD0078A042 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C9C16B2A3215CD0078A042 /* HistoryView.swift */; };
 		89C9E2F02A0BC8F600B16CBF /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 89C9E2EF2A0BC8F600B16CBF /* CachedAsyncImage */; };
 		89CA5AAC2A027A1E00695069 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AAB2A027A1E00695069 /* ResetPasswordView.swift */; };
 		89CA5AAE2A02911600695069 /* PhoneAuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5AAD2A02911600695069 /* PhoneAuthenticationView.swift */; };
@@ -154,6 +155,7 @@
 		89C590552A0570B000975E50 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		89C5905D2A059DD800975E50 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		89C5905F2A059EF300975E50 /* DBUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBUser.swift; sourceTree = "<group>"; };
+		89C9C16B2A3215CD0078A042 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		89CA5AAB2A027A1E00695069 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		89CA5AAD2A02911600695069 /* PhoneAuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthenticationView.swift; sourceTree = "<group>"; };
 		89CA5AAF2A02D9E000695069 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -456,6 +458,7 @@
 				89D37B782A0A87D100A7C933 /* EditProfileView.swift */,
 				89804BD92A2E1C66002E2282 /* AllUsersView.swift */,
 				89F71FF62A2F2A4C006DE84D /* AllDoctorsView.swift */,
+				89C9C16B2A3215CD0078A042 /* HistoryView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -634,6 +637,7 @@
 				89BFAA3D2A1F5B1900DF2D0B /* StorageManager.swift in Sources */,
 				89D6C8192A2B529500A38CEB /* ChooseClientView.swift in Sources */,
 				89CFDD702A12823700159C4B /* ClientOrders.swift in Sources */,
+				89C9C16C2A3215CD0078A042 /* HistoryView.swift in Sources */,
 				89C590542A05642B00975E50 /* TabBar.swift in Sources */,
 				89A17E5C2A03C9B200C92A58 /* AuthProviderOption.swift in Sources */,
 				898FD9C02A096D4B00725697 /* AvailableDoctorsView.swift in Sources */,

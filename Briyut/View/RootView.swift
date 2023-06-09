@@ -27,7 +27,7 @@ struct RootView: View {
                         AllProcedures(notEntered: $notEntered, showSearch: $showSearch, selectedTab: $selectedTab)
                             .environmentObject(vm)
                     case .calendar:
-                        CalendarView(selectedTab: $selectedTab)
+                        CalendarView()
                             .environmentObject(vm)
                     case .profile:
                         ProfileView(notEntered: $notEntered)
@@ -44,7 +44,6 @@ struct RootView: View {
             .edgesIgnoringSafeArea(.bottom)
         }
         .onAppear {
-            print("Appear root view")
             Task {
                 vm.getProvider()
             }
