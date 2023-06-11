@@ -38,7 +38,7 @@ struct HistoryView: View {
                             .frame(height: 1)
                             .onAppear {
                                 Task {
-                                    try await vm.getAllOrders()
+                                    try await vm.getAllOrders(count: 10, isDone: nil)
                                 }
                             }
                         }
@@ -48,7 +48,7 @@ struct HistoryView: View {
             .scrollIndicators(.hidden)
             .onAppear {
                 Task {
-                    try await vm.getAllOrders()
+                    try await vm.getAllOrders(count: 10, isDone: nil)
                 }
             }
             Spacer()

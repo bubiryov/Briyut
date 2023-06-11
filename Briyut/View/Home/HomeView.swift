@@ -151,7 +151,7 @@ struct HomeView: View {
                     }
                     if justOpened {
                         vm.addListenerForProcuderes()
-                        try await vm.updateOrdersStatus()
+                        try await vm.updateOrdersStatus(isDone: false)
                         justOpened = false
                     } else {
                         try await vm.getRequiredOrders(isDone: false, countLimit: 2)

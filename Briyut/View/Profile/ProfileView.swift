@@ -19,10 +19,18 @@ struct ProfileView: View {
         
         NavigationView {
             VStack(spacing: 20) {
-                BarTitle<CopyIdButton, LogOutButton>(text: "", leftButton: CopyIdButton(vm: vm, copyIdAlert: $copyIdAlert), rightButton: LogOutButton(logOutAlert: $logOutAlert))
+                BarTitle<CopyIdButton, LogOutButton>(
+                    text: "",
+                    leftButton: CopyIdButton(vm: vm, copyIdAlert: $copyIdAlert),
+                    rightButton: LogOutButton(logOutAlert: $logOutAlert)
+                )
                 
-                ProfileImage(photoURL: vm.user?.photoUrl, frame: ScreenSize.height * 0.12, color: Color.secondary.opacity(0.1))
-                    .cornerRadius(ScreenSize.width / 20)
+                ProfileImage(
+                    photoURL: vm.user?.photoUrl,
+                    frame: ScreenSize.height * 0.12,
+                    color: Color.secondary.opacity(0.1)
+                )
+                .cornerRadius(ScreenSize.width / 20)
                 
                 HStack {
                     Text(vm.user?.name ?? (vm.user?.userId ?? "Arkadiy"))
@@ -175,10 +183,9 @@ struct NavigationRow<Destination: View>: View {
                 Image(imageName)
                     .resizable()
                     .scaledToFit()
-                    .scaleEffect(0.5)
-                    .frame(width: ScreenSize.height * 0.04)
-                    .foregroundColor(.white)
-                    .background(Color.mainColor)
+                    .scaleEffect(0.8)
+                    .frame(width: ScreenSize.height * 0.03)
+                    .foregroundColor(.mainColor)
                     .cornerRadius(10)
                 
                 Text(title)

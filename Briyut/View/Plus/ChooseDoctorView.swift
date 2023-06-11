@@ -28,7 +28,12 @@ struct ChooseDoctorView: View {
                         NavigationLink {
                             DateTimeSelectionView(doctor: doctor, procedure: procedure, mainButtonTitle: "Add appoinment", client: vm.user, selectedTab: $selectedTab)
                         } label: {
-                            UserRow(user: doctor, showCallButton: false)
+                            UserRow(
+                                vm: vm,
+                                user: doctor,
+                                showButtons: false,
+                                userStatus: .doctor
+                            )
                         }
 
                         

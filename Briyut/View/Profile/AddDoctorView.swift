@@ -14,6 +14,7 @@ struct AddDoctorView: View {
     @State private var futureDoctorID: String = ""
     @State private var isEditing = false
     @State private var showAlert = false
+    @State private var tupleDoctors: [(DBUser, Bool)] = []
     var cornerRadius = ScreenSize.width / 30
     
     var body: some View {
@@ -23,32 +24,30 @@ struct AddDoctorView: View {
             AccentInputField(promptText: vm.user?.userId ?? "", title: "UserID", input: $futureDoctorID)
             
             ScrollView {
-                ForEach(vm.doctors, id: \.userId) { doctor in
-                    UserRow(user: doctor, showCallButton: doctor.userId != vm.user?.userId)
-//                    HStack {
-//
-//                        ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
-//                            .cornerRadius(ScreenSize.width / 30)
-//
-//                        Text("\(doctor.name ?? doctor.userId) \(doctor.lastName ?? "")")
-//                            .bold()
-//                            .padding(.leading, 8)
-//                            .lineLimit(1)
-//                    }
-//                    .padding(.horizontal)
-//                    .frame(maxWidth: .infinity, alignment: .leading)
-//                    .frame(height: ScreenSize.height * 0.09)
-//                    .background(Color.secondaryColor)
-//                    .cornerRadius(cornerRadius)
-                    .contextMenu {
-                        Button(role: .destructive) {
-                            Task {
-                                try await vm.removeDoctor(userID: doctor.userId)
+                ForEach(tupleDoctors, id: \.0.userId) { doctor in
+                    UserRow(
+                        vm: vm,
+                        user: doctor.0,
+                        showButtons: doctor.1 && doctor.0.userId != vm.user?.userId,
+                        userStatus: .doctor
+                    )
+                    .onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            if let index = tupleDoctors.firstIndex(where: { $0.0.userId == doctor.0.userId }) {
+                                tupleDoctors[index].1.toggle()
                             }
-                        } label: {
-                            Label("Delete", systemImage: "trash")
                         }
                     }
+
+//                    .contextMenu {
+//                        Button(role: .destructive) {
+//                            Task {
+//                                try await vm.removeDoctor(userID: doctor.userId)
+//                            }
+//                        } label: {
+//                            Label("Delete", systemImage: "trash")
+//                        }
+//                    }
                 }
             }
             .scrollIndicators(.hidden)
@@ -67,9 +66,12 @@ struct AddDoctorView: View {
 
         }
         .navigationBarBackButtonHidden(true)
-        .onDisappear {
-            isEditing = false
+        .onAppear {
+            tupleDoctors = vm.doctors.map {($0, false)}
         }
+//        .onDisappear {
+//            isEditing = false
+//        }
         .contentShape(Rectangle())
         .gesture(
             DragGesture()

@@ -45,7 +45,7 @@ struct ChooseClientView: View {
                     NavigationLink {
                         DateTimeSelectionView(doctor: vm.user, procedure: procedure, mainButtonTitle: "Add appoinment", client: user, selectedTab: $selectedTab)
                     } label: {
-                        UserRow(user: user, showCallButton: false)
+                        UserRow(vm: vm, user: user, showButtons: false, userStatus: .client)
                     }
 
 //                    NavigationLink {

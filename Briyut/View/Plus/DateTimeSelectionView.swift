@@ -407,7 +407,7 @@ struct CustomDatePicker: View {
         .gesture(
             DragGesture()
                 .onEnded { gesture in
-                    if gesture.translation.width > 100 && selectedDate >= Date() {
+                    if gesture.translation.width > 100 && (selectedDate >= Date() || pastTime) {
                         selectedDate = Calendar.current.date(byAdding: .day, value: -1, to: selectedDate) ?? selectedDate
                     } else if gesture.translation.width < 100 {
                         selectedDate = Calendar.current.date(byAdding: .day, value: 1, to: selectedDate) ?? selectedDate

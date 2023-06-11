@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-enum RowUser {
+enum UserStatus {
     case client
     case doctor
 }
@@ -22,7 +22,7 @@ struct OrderRow: View {
     let color: Color?
     let fontColor: Color?
     let bigDate: Bool
-    let userInformation: RowUser
+    let userInformation: UserStatus
     let photoBackgroundColor: Color
     @State private var showAlert: Bool = false
     @State var rescheduleFullCover: Bool = false

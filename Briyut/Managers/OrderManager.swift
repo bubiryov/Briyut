@@ -58,18 +58,23 @@ final class OrderManager {
         }
     }
         
-    func getAllOrders(userId: String, isDoctor: Bool, isDone: Bool?, countLimit: Int, lastDocument: DocumentSnapshot?) async throws -> (orders: [OrderModel], lastDocument: DocumentSnapshot?) {
+    func getRequiredOrders(userId: String, isDoctor: Bool, isDone: Bool?, countLimit: Int?, lastDocument: DocumentSnapshot?) async throws -> (orders: [OrderModel], lastDocument: DocumentSnapshot?) {
 
         let query = filter(userId: userId, isDoctor: isDoctor, isDone: isDone)
 
-        if let lastDocument {
-            return try await query
-                .limit(to: countLimit)
-                .start(afterDocument: lastDocument)
-                .getDocumentsWithSnapshot(as: OrderModel.self)
+        if let countLimit {
+            if let lastDocument {
+                return try await query
+                    .limit(to: countLimit)
+                    .start(afterDocument: lastDocument)
+                    .getDocumentsWithSnapshot(as: OrderModel.self)
+            } else {
+                return try await query
+                    .limit(to: countLimit)
+                    .getDocumentsWithSnapshot(as: OrderModel.self)
+            }
         } else {
             return try await query
-                .limit(to: countLimit)
                 .getDocumentsWithSnapshot(as: OrderModel.self)
         }
     }

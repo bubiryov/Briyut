@@ -14,11 +14,7 @@ struct AllUsersView: View {
     @State private var showSearch: Bool = false
     @State private var searchable: String = ""
     @FocusState var focus: Bool
-    var filteredUsers: [DBUser] {
-        return vm.users.filter { user in
-            searchable.isEmpty ? true : (user.name ?? "").localizedCaseInsensitiveContains(searchable) || (user.lastName ?? "").localizedCaseInsensitiveContains(searchable)
-        }
-    }
+    @State private var tupleUsers: [(DBUser, Bool)] = []
     
     var body: some View {
         VStack {
@@ -38,18 +34,35 @@ struct AllUsersView: View {
             
             ScrollView {
                 LazyVStack {
-                    ForEach(filteredUsers, id: \.userId) { user in
-                        UserRow(user: user, showCallButton: true)
+                    let filteredUsers = tupleUsers.filter { user in
+                        searchable.isEmpty ? true : (user.0.name ?? "").localizedCaseInsensitiveContains(searchable) || (user.0.lastName ?? "").localizedCaseInsensitiveContains(searchable)
+                    }
+                    
+                    ForEach(filteredUsers, id: \.0.userId) { user in
+                        UserRow(
+                            vm: vm,
+                            user: user.0,
+                            showButtons: user.1,
+                            userStatus: .client
+                        )
+                        .onTapGesture {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                if let index = tupleUsers.firstIndex(where: { $0.0.userId == user.0.userId }) {
+                                    tupleUsers[index].1.toggle()
+                                }
+                            }
+                        }
                     }
                 }
-                .onAppear {
-                    Task {
-                        try await vm.getAllUsers()
-                    }
             }
-            }
-            
+
             Spacer()
+        }
+        .onAppear {
+            Task {
+                try await vm.getAllUsers()
+                tupleUsers = vm.users.map {($0, false)}
+            }
         }
         .navigationBarBackButtonHidden(true)
         .contentShape(Rectangle())
@@ -76,43 +89,108 @@ struct AllUsersView_Previews: PreviewProvider {
 
 struct UserRow: View {
     
+    let vm: ProfileViewModel
     let user: DBUser
-    let showCallButton: Bool
+    let showButtons: Bool
+    let userStatus: UserStatus
+    @State private var deleteAlert: Bool = false
+    var alertTitle: String {
+        userStatus == .doctor ?
+        "Are you sure you want to delete the specialist?" :
+        "Are you sure you want to block the user?"
+    }
+    var alertMessage: String {
+        userStatus == .doctor ?
+        "This action will not be undone. All apppointments will be cancelled." :
+        "The user will be blocked and his apppointments will be cancelled."
+    }
+    var deleteButtonTitle: String {
+        userStatus == .doctor ? "Delete" : "Block"
+    }
     
     var body: some View {
-        HStack {
-            ProfileImage(photoURL: user.photoUrl, frame: ScreenSize.height * 0.08, color: .lightBlueColor)
+        VStack {
+            HStack {
+                ProfileImage(
+                    photoURL: user.photoUrl,
+                    frame: ScreenSize.height * 0.08,
+                    color: .secondary.opacity(0.1)
+                )
                 .cornerRadius(ScreenSize.width / 30)
+                
+                Text("\(user.name ?? user.userId) \(user.lastName ?? "")")
+                    .foregroundColor(.primary)
+                    .bold()
+                    .padding(.leading, 8)
+                    .lineLimit(1)
+                
+                Spacer()
+                
+            }
             
-            Text("\(user.name ?? user.userId) \(user.lastName ?? "")")
-                .foregroundColor(.primary)
-                .bold()
-                .padding(.leading, 8)
-                .lineLimit(1)
-            
-            Spacer()
-            
-            if let phoneNumber = user.phoneNumber, showCallButton == true {
-                Button {
-                    guard let url = URL(string: "tel://\(phoneNumber)"), UIApplication.shared.canOpenURL(url) else {
-                        return
+            if showButtons {
+                HStack {
+                    if vm.user?.isDoctor ?? false {
+                        Button {
+                            Task {
+                                deleteAlert = true
+                            }
+                        } label: {
+                            Text(deleteButtonTitle)
+                                .foregroundColor(.black)
+                                .font(.headline.bold())
+                                .frame(height: ScreenSize.height * 0.055)
+                                .frame(maxWidth: .infinity)
+                                .background(Color.white)
+                                .cornerRadius(ScreenSize.width / 30)
+                        }
+                        .buttonStyle(.plain)
+                        
+                        Spacer()
                     }
-                    UIApplication.shared.open(url)
-                } label: {
-                    Image("call")
-                        .resizable()
-                        .scaledToFit()
-                        .scaleEffect(0.4)
-                        .frame(width: ScreenSize.height * 0.05)
-                        .foregroundColor(.white)
-                        .background(Color.mainColor)
-                        .cornerRadius(ScreenSize.width / 30)
+                    
+                    Button {
+                        guard let url = URL(string: "tel://\(user.phoneNumber ?? "")"), UIApplication.shared.canOpenURL(url) else {
+                            return
+                        }
+                        UIApplication.shared.open(url)
+                        
+                    } label: {
+                        Text("Call")
+                            .foregroundColor(.white)
+                            .font(.headline.bold())
+                            .frame(height: ScreenSize.height * 0.055)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.mainColor)
+                            .cornerRadius(ScreenSize.width / 30)
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(user.phoneNumber == nil && user.phoneNumber?.count ?? 0 < 8 ? true : false)
+                }
+                .alert(isPresented: $deleteAlert) {
+                    Alert(
+                        title: Text(alertTitle),
+                        message: Text(alertMessage),
+                        primaryButton: .destructive(Text(deleteButtonTitle), action: {
+                            Task {
+                                if userStatus == .doctor {
+                                    try await vm.removeDoctor(userID: user.userId)
+                                } else {
+
+                                }
+                            }
+                        }),
+                        secondaryButton: .default(Text("Cancel"), action: {
+                            
+                        })
+                    )
                 }
             }
         }
         .padding(.horizontal)
+        .padding(.vertical, 10)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .frame(height: ScreenSize.height * 0.1)
+        .frame(minHeight: ScreenSize.height * 0.1, maxHeight: ScreenSize.height * 0.21)
         .background(Color.secondaryColor)
         .cornerRadius(ScreenSize.width / 30)
     }
