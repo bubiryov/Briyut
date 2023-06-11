@@ -91,11 +91,12 @@ struct HomeView: View {
                         Spacer()
                         
                         NavigationLink {
-                            if vm.user?.isDoctor ?? false {
-                                AddDoctorView()
-                            } else {
-                                AllDoctorsView()
-                            }
+                            AllDoctorsView()
+//                            if vm.user?.isDoctor ?? false {
+//                                AddDoctorView()
+//                            } else {
+//                                AllDoctorsView()
+//                            }
                         } label: {
                             Text("See all")
                                 .font(.footnote)

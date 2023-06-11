@@ -55,23 +55,20 @@ struct ProfileView: View {
                 }
                                                 
                 VStack {
+                    NavigationRow(destination: AllDoctorsView(), imageName: "stethoscope", title: "Specialists")
+
                     if vm.user?.isDoctor ?? false {
                         
                         NavigationRow(destination: AllUsersView(), imageName: "users", title: "User managment")
-                        
-                        NavigationRow(destination: AddDoctorView(), imageName: "stethoscope", title: "Doctor managment")
-                        
-                        NavigationRow(destination: AddDoctorView(), imageName: "stats", title: "Stats")
+                                                
+                        NavigationRow(destination: AllDoctorsView(), imageName: "stats", title: "Stats")
                                                 
                         NavigationRow(destination: HistoryView(), imageName: "history", title: "History")
                         
-                    } else {
-                        
-                        NavigationRow(destination: AllDoctorsView(), imageName: "stethoscope", title: "Specialists")
                     }
-
+                    
                     if !vm.authProviders.contains(.phone) {
-                        NavigationRow(destination: AddDoctorView(), imageName: "lock", title: "Change password")
+                        NavigationRow(destination: AllDoctorsView(), imageName: "lock", title: "Change password")
                     }
                 }
                 

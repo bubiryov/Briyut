@@ -40,9 +40,12 @@ struct DateTimeSelectionView: View {
             
             CustomDatePicker(
                 selectedDate: $selectedDate,
-                selectedTime: $selectedTime,
+//                selectedTime: $selectedTime,
                 pastTime: false
             )
+            .onChange(of: selectedDate) { _ in
+                selectedTime = ""
+            }
             
             Spacer()
             
@@ -323,20 +326,8 @@ struct DateTimeSelectionView_Previews: PreviewProvider {
 
 struct CustomDatePicker: View {
     @Binding var selectedDate: Date
-    @Binding var selectedTime: String
+//    @Binding var selectedTime: String
     let pastTime: Bool
-
-//    let dateFormatter: DateFormatter = {
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "d"
-//        return formatter
-//    }()
-//    
-//    let weekdayFormatter: DateFormatter = {
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "E"
-//        return formatter
-//    }()
 
     var body: some View {
         VStack {
@@ -344,7 +335,7 @@ struct CustomDatePicker: View {
                 Button(action: {
                     let value = leftButtonStep(pastTime: pastTime)
                     selectedDate = Calendar.current.date(byAdding: .day, value: -value, to: selectedDate) ?? selectedDate
-                    selectedTime = ""
+//                    selectedTime = ""
                 }) {
                     Circle()
                         .frame(width: 40, height: 40)
@@ -358,23 +349,21 @@ struct CustomDatePicker: View {
                 }
                 .disabled(pastTime ? false : shouldEnableLeftButton(selectedDate: selectedDate))
                 .opacity(pastTime ? 1 : shouldEnableLeftButton(selectedDate: selectedDate) ? 0.5 : 1)
-                                
+                
                 ForEach(-2...2, id: \.self) { day in
                     let date = Calendar.current.date(byAdding: .day, value: day, to: selectedDate) ?? selectedDate
                     let isSelected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
                     
                     Button(action: {
                         selectedDate = date
-                        selectedTime = ""
+//                        selectedTime = ""
                     }) {
                         VStack(spacing: 2) {
                             Text(DateFormatter.customFormatter(format: "d").string(from: date))
-//                            Text(dateFormatter.string(from: date))
                                 .foregroundColor(isSelected ? .white : .primary)
                                 .bold()
                                 .font(.system(size: 16))
                             Text(DateFormatter.customFormatter(format: "E").string(from: date))
-//                            Text(weekdayFormatter.string(from: date))
                                 .foregroundColor(isSelected ? .white : .primary)
                                 .font(.system(size: 12))
                         }
@@ -386,10 +375,10 @@ struct CustomDatePicker: View {
                     .opacity(pastTime ? 1 : checkIfDisabled(date: date) ? 0.3 : 1)
                     .scaleEffect(day == -2 || day == 2 ? 0.7 : (day == -1 || day == 1 ? 0.8 : 1))
                 }
-                                
+                
                 Button(action: {
                     selectedDate = Calendar.current.date(byAdding: .day, value: 5, to: selectedDate) ?? selectedDate
-                    selectedTime = ""
+//                    selectedTime = ""
                 }) {
                     Circle()
                         .frame(width: 40, height: 40)
@@ -402,7 +391,6 @@ struct CustomDatePicker: View {
                         )
                 }
             }
-//            .padding(.horizontal)
         }
         .gesture(
             DragGesture()

@@ -26,7 +26,7 @@ struct DoctorOrders: View {
                 action: { selectedDate = Date() }
             )
                         
-            CustomDatePicker(selectedDate: $selectedDate, selectedTime: Binding(projectedValue: .constant("")), pastTime: true)
+            CustomDatePicker(selectedDate: $selectedDate, pastTime: true)
             
             if !(noOrders ?? false) {
                 ScrollView {
