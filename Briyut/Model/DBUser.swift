@@ -16,8 +16,7 @@ struct DBUser: Codable, Equatable {
     let dateCreated: Date?
     let isDoctor: Bool
     let phoneNumber: String?
-//    let profileImagePath: String?
-
+    
     init(auth: AuthDataResultModel, name: String?, lastName: String?, dateCreated: Date?, isDoctor: Bool, phoneNumber: String?) {
         self.userId = auth.uid
         self.name = name
@@ -27,7 +26,6 @@ struct DBUser: Codable, Equatable {
         self.dateCreated = dateCreated
         self.isDoctor = isDoctor
         self.phoneNumber = phoneNumber
-//        self.profileImagePath = profileImagePath
     }
 
     enum CodingKeys: String, CodingKey {
@@ -68,3 +66,28 @@ struct DBUser: Codable, Equatable {
 //        self.profileImagePath = try container.decodeIfPresent(String.self, forKey: .profileImagePath)
     }
 }
+
+extension DBUser: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(userId)
+        hasher.combine(name)
+        hasher.combine(lastName)
+        hasher.combine(email)
+        hasher.combine(photoUrl)
+        hasher.combine(dateCreated)
+        hasher.combine(isDoctor)
+        hasher.combine(phoneNumber)
+    }
+
+    static func ==(lhs: DBUser, rhs: DBUser) -> Bool {
+        return lhs.userId == rhs.userId &&
+            lhs.name == rhs.name &&
+            lhs.lastName == rhs.lastName &&
+            lhs.email == rhs.email &&
+            lhs.photoUrl == rhs.photoUrl &&
+            lhs.dateCreated == rhs.dateCreated &&
+            lhs.isDoctor == rhs.isDoctor &&
+            lhs.phoneNumber == rhs.phoneNumber
+    }
+}
+

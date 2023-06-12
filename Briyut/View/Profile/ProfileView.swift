@@ -61,7 +61,7 @@ struct ProfileView: View {
                         
                         NavigationRow(destination: AllUsersView(), imageName: "users", title: "User managment")
                                                 
-                        NavigationRow(destination: AllDoctorsView(), imageName: "stats", title: "Stats")
+                        NavigationRow(destination: StatsView(), imageName: "stats", title: "Stats")
                                                 
                         NavigationRow(destination: HistoryView(), imageName: "history", title: "History")
                         
