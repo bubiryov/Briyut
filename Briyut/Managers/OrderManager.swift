@@ -41,22 +41,54 @@ final class OrderManager {
     
     private func filter(userId: String, isDoctor: Bool, isDone: Bool?) -> Query {
         if let isDone {
-            if isDoctor {
+            if userId == "" {
                 return orderCollection
-                    .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
                     .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
                     .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
             } else {
-                return orderCollection
-                    .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
-                    .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
-                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone ? true : false)
+                if isDoctor {
+                    return orderCollection
+                        .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
+                        .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
+                } else {
+                    return orderCollection
+                        .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
+                        .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone ? true : false)
+                }
             }
         } else {
             return orderCollection
                 .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
         }
     }
+    
+//    private func filter(userId: String, isDoctor: Bool, isDone: Bool?) -> Query {
+//        if let isDone {
+//            if isDoctor {
+//                if userId == "" {
+//                    return orderCollection
+////                        .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
+//                        .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+//                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
+//                } else {
+//                    return orderCollection
+//                        .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
+//                        .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+//                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
+//                }
+//            } else {
+//                return orderCollection
+//                    .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
+//                    .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+//                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone ? true : false)
+//            }
+//        } else {
+//            return orderCollection
+//                .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
+//        }
+//    }
         
     func getRequiredOrders(userId: String, isDoctor: Bool, isDone: Bool?, countLimit: Int?, lastDocument: DocumentSnapshot?) async throws -> (orders: [OrderModel], lastDocument: DocumentSnapshot?) {
 

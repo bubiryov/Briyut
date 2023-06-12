@@ -142,8 +142,8 @@ extension ProfileViewModel {
         }
     }
     
-    func getAllOrders(count: Int?, isDone: Bool?) async throws {
-        let (orders, lastDocument) = try await OrderManager.shared.getRequiredOrders(userId: "", isDoctor: true, isDone: isDone, countLimit: count, lastDocument: allLastDocument)
+    func getAllOrders(userId: String, count: Int?, isDoctor: Bool, isDone: Bool?) async throws {
+        let (orders, lastDocument) = try await OrderManager.shared.getRequiredOrders(userId: userId, isDoctor: isDoctor, isDone: isDone, countLimit: count, lastDocument: allLastDocument)
         self.allOrders.append(contentsOf: orders)
         if let lastDocument {
             self.allLastDocument = lastDocument
@@ -172,8 +172,8 @@ extension ProfileViewModel {
         try await getRequiredOrders(isDone: false, countLimit: 6)
     }
         
-    func updateOrdersStatus(isDone: Bool) async throws {
-        try await getAllOrders(count: nil, isDone: isDone)
+    func updateOrdersStatus(isDone: Bool, isDoctor: Bool) async throws {
+        try await getAllOrders(userId: "", count: nil, isDoctor: isDoctor, isDone: isDone)
 //        try await getRequiredOrders(isDone: false, countLimit: 30)
 //        for order in activeOrders {
         for order in allOrders {
