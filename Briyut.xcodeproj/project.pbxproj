@@ -11,6 +11,7 @@
 		890C28BC2A06D3F1000DB1A6 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */; };
 		890ECEDF2A162F0500BEE3CC /* DateTimeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890ECEDE2A162F0500BEE3CC /* DateTimeSelectionView.swift */; };
 		891198FC2A29155400D6756F /* DoctorOrderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891198FB2A29155400D6756F /* DoctorOrderRow.swift */; };
+		895E8EAC2A377D140076E58D /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 895E8EAB2A377D140076E58D /* SwiftUICharts */; };
 		89804BDA2A2E1C66002E2282 /* AllUsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89804BD92A2E1C66002E2282 /* AllUsersView.swift */; };
 		898FD9B52A08F4E000725697 /* AllProcedures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B42A08F4E000725697 /* AllProcedures.swift */; };
 		898FD9B72A08FDE000725697 /* ProcedureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B62A08FDE000725697 /* ProcedureView.swift */; };
@@ -50,7 +51,6 @@
 		89A17E582A03C8BD00C92A58 /* AppleAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E572A03C8BD00C92A58 /* AppleAuthenticationManager.swift */; };
 		89A17E5A2A03C8E300C92A58 /* AppleSignInResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E592A03C8E300C92A58 /* AppleSignInResultModel.swift */; };
 		89A17E5C2A03C9B200C92A58 /* AuthProviderOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E5B2A03C9B200C92A58 /* AuthProviderOption.swift */; };
-		89BDBA6A2A35D415008449BE /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 89BDBA692A35D415008449BE /* SwiftUICharts */; };
 		89BDBA6C2A35D428008449BE /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDBA6B2A35D428008449BE /* StatsView.swift */; };
 		89BFAA3B2A1F5A3400DF2D0B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 89BFAA3A2A1F5A3400DF2D0B /* FirebaseStorage */; };
 		89BFAA3D2A1F5B1900DF2D0B /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BFAA3C2A1F5B1900DF2D0B /* StorageManager.swift */; };
@@ -104,6 +104,19 @@
 			remoteInfo = Briyut;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		895E8E9C2A375DA30076E58D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		890C28B92A0652FE000DB1A6 /* ProcedureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureModel.swift; sourceTree = "<group>"; };
@@ -191,7 +204,7 @@
 				899EC5A22A000E1300C90D49 /* FirebaseAnalyticsSwift in Frameworks */,
 				89CA5AB32A02F40E00695069 /* GoogleSignIn in Frameworks */,
 				89C5905B2A058B0C00975E50 /* FirebaseFirestoreSwift in Frameworks */,
-				89BDBA6A2A35D415008449BE /* SwiftUICharts in Frameworks */,
+				895E8EAC2A377D140076E58D /* SwiftUICharts in Frameworks */,
 				899EC5A42A000E1300C90D49 /* FirebaseAuth in Frameworks */,
 				899EC5A02A000E1300C90D49 /* FirebaseAnalytics in Frameworks */,
 				89C590592A058B0C00975E50 /* FirebaseFirestore in Frameworks */,
@@ -494,6 +507,7 @@
 				899EC5692A000A1C00C90D49 /* Sources */,
 				899EC56A2A000A1C00C90D49 /* Frameworks */,
 				899EC56B2A000A1C00C90D49 /* Resources */,
+				895E8E9C2A375DA30076E58D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -511,7 +525,7 @@
 				89C9E2EF2A0BC8F600B16CBF /* CachedAsyncImage */,
 				89988BE92A1A3D35004DB4C6 /* Lottie */,
 				89BFAA3A2A1F5A3400DF2D0B /* FirebaseStorage */,
-				89BDBA692A35D415008449BE /* SwiftUICharts */,
+				895E8EAB2A377D140076E58D /* SwiftUICharts */,
 			);
 			productName = Briyut;
 			productReference = 899EC56D2A000A1C00C90D49 /* Briyut.app */;
@@ -590,7 +604,7 @@
 				89CA5AB12A02F40E00695069 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				89C9E2EE2A0BC8F600B16CBF /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				89988BE82A1A3D35004DB4C6 /* XCRemoteSwiftPackageReference "lottie-ios" */,
-				89BDBA682A35D414008449BE /* XCRemoteSwiftPackageReference "ChartView" */,
+				895E8EAA2A377D130076E58D /* XCRemoteSwiftPackageReference "ChartView" */,
 			);
 			productRefGroup = 899EC56E2A000A1C00C90D49 /* Products */;
 			projectDirPath = "";
@@ -1052,6 +1066,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		895E8EAA2A377D130076E58D /* XCRemoteSwiftPackageReference "ChartView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppPear/ChartView.git";
+			requirement = {
+				kind = exactVersion;
+				version = "2.0.0-beta.2";
+			};
+		};
 		89988BE82A1A3D35004DB4C6 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
@@ -1066,14 +1088,6 @@
 			requirement = {
 				kind = exactVersion;
 				version = 10.9.0;
-			};
-		};
-		89BDBA682A35D414008449BE /* XCRemoteSwiftPackageReference "ChartView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/AppPear/ChartView";
-			requirement = {
-				kind = exactVersion;
-				version = "2.0.0-beta.2";
 			};
 		};
 		89C9E2EE2A0BC8F600B16CBF /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
@@ -1095,6 +1109,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		895E8EAB2A377D140076E58D /* SwiftUICharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 895E8EAA2A377D130076E58D /* XCRemoteSwiftPackageReference "ChartView" */;
+			productName = SwiftUICharts;
+		};
 		89988BE92A1A3D35004DB4C6 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 89988BE82A1A3D35004DB4C6 /* XCRemoteSwiftPackageReference "lottie-ios" */;
@@ -1114,11 +1133,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 899EC59E2A000E1300C90D49 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
-		};
-		89BDBA692A35D415008449BE /* SwiftUICharts */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 89BDBA682A35D414008449BE /* XCRemoteSwiftPackageReference "ChartView" */;
-			productName = SwiftUICharts;
 		};
 		89BFAA3A2A1F5A3400DF2D0B /* FirebaseStorage */ = {
 			isa = XCSwiftPackageProductDependency;

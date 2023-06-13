@@ -41,27 +41,47 @@ final class OrderManager {
     
     private func filter(userId: String, isDoctor: Bool, isDone: Bool?) -> Query {
         if let isDone {
+            let query = orderCollection
+                .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
             if userId == "" {
-                return orderCollection
-                    .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+                return query
+                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
+            } else if isDoctor {
+                return query
+                    .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
                     .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
             } else {
-                if isDoctor {
-                    return orderCollection
-                        .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
-                        .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
-                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
-                } else {
-                    return orderCollection
-                        .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
-                        .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
-                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone ? true : false)
-                }
+                return query
+                    .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
+                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone)
             }
         } else {
             return orderCollection
                 .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
         }
+
+//        if let isDone {
+//            if userId == "" {
+//                return orderCollection
+//                    .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+//                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
+//            } else {
+//                if isDoctor {
+//                    return orderCollection
+//                        .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
+//                        .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+//                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
+//                } else {
+//                    return orderCollection
+//                        .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
+//                        .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+//                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone ? true : false)
+//                }
+//            }
+//        } else {
+//            return orderCollection
+//                .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
+//        }
     }
     
 //    private func filter(userId: String, isDoctor: Bool, isDone: Bool?) -> Query {
@@ -131,7 +151,6 @@ final class OrderManager {
         case .month:
             let components = calendar.dateComponents([.year, .month], from: date)
             startDate = calendar.date(from: components)!
-//            endDate = calendar.date(byAdding: .month, value: 1, to: startDate.addingTimeInterval(-1))!
             endDate = calendar.date(byAdding: .month, value: 1, to: startDate)!
         }
         
