@@ -115,7 +115,7 @@ struct OrderList: View {
                     .frame(height: 1)
                     .onAppear {
                         Task {
-                            try await vm.getRequiredOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
+                            try await vm.getRequiredOrders(dataFetchMode: .user, isDone: selectedIndex == 0 ? false : true, countLimit: 6)
                         }
                     }
                 }
@@ -126,7 +126,7 @@ struct OrderList: View {
         .scrollIndicators(.hidden)
         .onAppear {
             Task {
-                try await vm.getRequiredOrders(isDone: selectedIndex == 0 ? false : true, countLimit: 6)
+                try await vm.getRequiredOrders(dataFetchMode: .user, isDone: selectedIndex == 0 ? false : true, countLimit: 6)
             }
         }
     }

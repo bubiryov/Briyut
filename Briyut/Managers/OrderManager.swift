@@ -15,6 +15,11 @@ enum DateSelectionMode {
     case month
 }
 
+enum DataFetchMode {
+    case all
+    case user
+}
+
 final class OrderManager {
     
     static let shared = OrderManager()
@@ -39,14 +44,14 @@ final class OrderManager {
         try await orderDocument(orderId: orderId).delete()
     }
     
-    private func filter(userId: String, isDoctor: Bool, isDone: Bool?) -> Query {
-        if let isDone {
+    private func filter(dataFetchMode: DataFetchMode, userId: String, isDoctor: Bool, isDone: Bool) -> Query {
+        if dataFetchMode == .all {
+            return orderCollection
+                .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
+        } else {
             let query = orderCollection
                 .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
-            if userId == "" {
-                return query
-                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
-            } else if isDoctor {
+            if isDoctor {
                 return query
                     .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
                     .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
@@ -55,34 +60,33 @@ final class OrderManager {
                     .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
                     .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone)
             }
-        } else {
-            return orderCollection
-                .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
         }
-
+    }
+    
+//    private func filter(dataFetchMode: DataFetchMode, userId: String, isDoctor: Bool, isDone: Bool?) -> Query {
 //        if let isDone {
-//            if userId == "" {
-//                return orderCollection
-//                    .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+//            let query = orderCollection
+//                .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+//
+//            if dataFetchMode == .all {
+//                return query
 //                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
 //            } else {
 //                if isDoctor {
-//                    return orderCollection
+//                    return query
 //                        .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
-//                        .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
 //                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
 //                } else {
-//                    return orderCollection
+//                    return query
 //                        .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
-//                        .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
-//                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone ? true : false)
+//                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone)
 //                }
 //            }
 //        } else {
 //            return orderCollection
 //                .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
 //        }
-    }
+//    }
     
 //    private func filter(userId: String, isDoctor: Bool, isDone: Bool?) -> Query {
 //        if let isDone {
@@ -110,9 +114,9 @@ final class OrderManager {
 //        }
 //    }
         
-    func getRequiredOrders(userId: String, isDoctor: Bool, isDone: Bool?, countLimit: Int?, lastDocument: DocumentSnapshot?) async throws -> (orders: [OrderModel], lastDocument: DocumentSnapshot?) {
+    func getRequiredOrders(dataFetchMode: DataFetchMode, userId: String, isDoctor: Bool, isDone: Bool?, countLimit: Int?, lastDocument: DocumentSnapshot?) async throws -> (orders: [OrderModel], lastDocument: DocumentSnapshot?) {
 
-        let query = filter(userId: userId, isDoctor: isDoctor, isDone: isDone)
+        let query = filter(dataFetchMode: dataFetchMode, userId: userId, isDoctor: isDoctor, isDone: isDone)
 
         if let countLimit {
             if let lastDocument {

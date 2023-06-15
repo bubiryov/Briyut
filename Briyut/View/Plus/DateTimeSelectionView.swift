@@ -170,7 +170,7 @@ struct DateTimeSelectionView: View {
 //            if vm.user?.isDoctor ?? false {
                 vm.activeLastDocument = nil
                 vm.activeOrders = []
-                try await vm.getRequiredOrders(isDone: false, countLimit: 6)
+            try await vm.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
 //            }
 
             presentationMode.wrappedValue.dismiss()

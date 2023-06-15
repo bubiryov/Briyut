@@ -130,15 +130,15 @@ extension ProfileViewModel {
 
 extension ProfileViewModel {
         
-    func getRequiredOrders(isDone: Bool, countLimit: Int) async throws {
+    func getRequiredOrders(dataFetchMode: DataFetchMode, isDone: Bool, countLimit: Int) async throws {
         if !isDone {
-            let (activeOrders, activeLastDocument) = try await OrderManager.shared.getRequiredOrders(userId: user?.userId ?? ".", isDoctor: user?.isDoctor ?? false, isDone: false, countLimit: countLimit, lastDocument: activeLastDocument)
+            let (activeOrders, activeLastDocument) = try await OrderManager.shared.getRequiredOrders(dataFetchMode: dataFetchMode, userId: user?.userId ?? "", isDoctor: user?.isDoctor ?? false, isDone: false, countLimit: countLimit, lastDocument: activeLastDocument)
             self.activeOrders.append(contentsOf: activeOrders)
             if let activeLastDocument {
                 self.activeLastDocument = activeLastDocument
             }
         } else {
-            let (doneOrders, doneLastDocument) = try await OrderManager.shared.getRequiredOrders(userId: user?.userId ?? ".", isDoctor: user?.isDoctor ?? false, isDone: true, countLimit: countLimit, lastDocument: doneLastDocument)
+            let (doneOrders, doneLastDocument) = try await OrderManager.shared.getRequiredOrders(dataFetchMode: dataFetchMode, userId: user?.userId ?? ".", isDoctor: user?.isDoctor ?? false, isDone: true, countLimit: countLimit, lastDocument: doneLastDocument)
             self.doneOrders.append(contentsOf: doneOrders)
             if let doneLastDocument {
                 self.doneLastDocument = doneLastDocument
@@ -146,8 +146,8 @@ extension ProfileViewModel {
         }
     }
     
-    func getAllOrders(userId: String, count: Int?, isDoctor: Bool, isDone: Bool?) async throws {
-        let (orders, lastDocument) = try await OrderManager.shared.getRequiredOrders(userId: userId, isDoctor: isDoctor, isDone: isDone, countLimit: count, lastDocument: allLastDocument)
+    func getAllOrders(dataFetchMode: DataFetchMode, count: Int?, isDone: Bool?) async throws {
+        let (orders, lastDocument) = try await OrderManager.shared.getRequiredOrders(dataFetchMode: dataFetchMode, userId: "", isDoctor: false, isDone: isDone, countLimit: count, lastDocument: allLastDocument)
         self.allOrders.append(contentsOf: orders)
         if let lastDocument {
             self.allLastDocument = lastDocument
@@ -159,7 +159,7 @@ extension ProfileViewModel {
         try await OrderManager.shared.createNewOrder(order: order)
         activeLastDocument = nil
         activeOrders = []
-        try await getRequiredOrders(isDone: false, countLimit: 6)
+        try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
     }
     
     func editOrderTime(orderId: String, date: Timestamp, end: Timestamp) async throws {
@@ -173,11 +173,11 @@ extension ProfileViewModel {
         try await OrderManager.shared.removeOrder(orderId: orderId)
         activeLastDocument = nil
         activeOrders = []
-        try await getRequiredOrders(isDone: false, countLimit: 6)
+        try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
     }
         
     func updateOrdersStatus(isDone: Bool, isDoctor: Bool) async throws {
-        try await getAllOrders(userId: "", count: nil, isDoctor: isDoctor, isDone: isDone)
+        try await getAllOrders(dataFetchMode: .all, count: nil, isDone: isDone)
 //        try await getRequiredOrders(isDone: false, countLimit: 30)
 //        for order in activeOrders {
         for order in allOrders {
@@ -193,8 +193,8 @@ extension ProfileViewModel {
 //        doneLastDocument = nil
 //        activeOrders = []
 //        doneOrders = []
-        try await getRequiredOrders(isDone: false, countLimit: 6)
-        try await getRequiredOrders(isDone: true, countLimit: 6)
+        try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
+        try await getRequiredOrders(dataFetchMode: .user, isDone: true, countLimit: 6)
     }
     
     func getDayMonthOrders(date: Date, selectionMode: DateSelectionMode, doctorId: String?) async throws -> [OrderModel] {

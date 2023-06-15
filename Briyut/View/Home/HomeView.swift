@@ -155,7 +155,7 @@ struct HomeView: View {
                         try await vm.updateOrdersStatus(isDone: false, isDoctor: vm.user?.isDoctor ?? false)
                         justOpened = false
                     } else {
-                        try await vm.getRequiredOrders(isDone: false, countLimit: 2)
+                        try await vm.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 2)
                     }
                 }
         }
