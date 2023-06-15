@@ -16,8 +16,9 @@ struct DBUser: Codable, Equatable {
     let dateCreated: Date?
     let isDoctor: Bool
     let phoneNumber: String?
+    let isBlocked: Bool?
     
-    init(auth: AuthDataResultModel, name: String?, lastName: String?, dateCreated: Date?, isDoctor: Bool, phoneNumber: String?) {
+    init(auth: AuthDataResultModel, name: String?, lastName: String?, dateCreated: Date?, isDoctor: Bool, phoneNumber: String?, isBlocked: Bool?) {
         self.userId = auth.uid
         self.name = name
         self.lastName = lastName
@@ -26,6 +27,7 @@ struct DBUser: Codable, Equatable {
         self.dateCreated = dateCreated
         self.isDoctor = isDoctor
         self.phoneNumber = phoneNumber
+        self.isBlocked = isBlocked
     }
 
     enum CodingKeys: String, CodingKey {
@@ -37,7 +39,7 @@ struct DBUser: Codable, Equatable {
         case dateCreated = "date_created"
         case isDoctor = "is_doctor"
         case phoneNumber = "phone_number"
-//        case profileImagePath = "profile_image_path"
+        case isBlocked = "is_blocked"
     }
 
     func encode(to encoder: Encoder) throws {
@@ -50,7 +52,7 @@ struct DBUser: Codable, Equatable {
         try container.encodeIfPresent(self.dateCreated, forKey: .dateCreated)
         try container.encodeIfPresent(self.isDoctor, forKey: .isDoctor)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
-//        try container.encodeIfPresent(self.profileImagePath, forKey: .profileImagePath)
+        try container.encodeIfPresent(self.isBlocked, forKey: .isBlocked)
     }
 
     init(from decoder: Decoder) throws {
@@ -63,7 +65,7 @@ struct DBUser: Codable, Equatable {
         self.photoUrl = try container.decodeIfPresent(String.self, forKey: .photoUrl)
         self.dateCreated = try container.decodeIfPresent(Date.self, forKey: .dateCreated)
         self.phoneNumber = try container.decodeIfPresent(String.self, forKey: .phoneNumber)
-//        self.profileImagePath = try container.decodeIfPresent(String.self, forKey: .profileImagePath)
+        self.isBlocked = try container.decodeIfPresent(Bool.self, forKey: .isBlocked) ?? false
     }
 }
 
@@ -77,17 +79,19 @@ extension DBUser: Hashable {
         hasher.combine(dateCreated)
         hasher.combine(isDoctor)
         hasher.combine(phoneNumber)
+        hasher.combine(isBlocked)
     }
-
+    
     static func ==(lhs: DBUser, rhs: DBUser) -> Bool {
         return lhs.userId == rhs.userId &&
-            lhs.name == rhs.name &&
-            lhs.lastName == rhs.lastName &&
-            lhs.email == rhs.email &&
-            lhs.photoUrl == rhs.photoUrl &&
-            lhs.dateCreated == rhs.dateCreated &&
-            lhs.isDoctor == rhs.isDoctor &&
-            lhs.phoneNumber == rhs.phoneNumber
+        lhs.name == rhs.name &&
+        lhs.lastName == rhs.lastName &&
+        lhs.email == rhs.email &&
+        lhs.photoUrl == rhs.photoUrl &&
+        lhs.dateCreated == rhs.dateCreated &&
+        lhs.isDoctor == rhs.isDoctor &&
+        lhs.phoneNumber == rhs.phoneNumber &&
+        lhs.isBlocked == rhs.isBlocked
     }
 }
 

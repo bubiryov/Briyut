@@ -53,12 +53,16 @@ final class ProfileViewModel: ObservableObject {
         }
     }
     
+    func updateBlockStatus(userID: String, isBlocked: Bool) async throws {
+        try await UserManager.shared.updateBlockStatus(userID: userID, isBlocked: isBlocked)
+    }
+    
     func addDoctor(userID: String) async throws {
         guard try await UserManager.shared.checkIfUserExists(userId: userID) else {
             return
         }
         try await UserManager.shared.makeDoctor(userID: userID)
-        self.doctors = try await UserManager.shared.getAllDoctors()
+        try await getAllDoctors()
     }
     
     func removeDoctor(userID: String) async throws {
@@ -128,13 +132,13 @@ extension ProfileViewModel {
         
     func getRequiredOrders(isDone: Bool, countLimit: Int) async throws {
         if !isDone {
-            let (activeOrders, activeLastDocument) = try await OrderManager.shared.getRequiredOrders(userId: user?.userId ?? "", isDoctor: user?.isDoctor ?? false, isDone: false, countLimit: countLimit, lastDocument: activeLastDocument)
+            let (activeOrders, activeLastDocument) = try await OrderManager.shared.getRequiredOrders(userId: user?.userId ?? ".", isDoctor: user?.isDoctor ?? false, isDone: false, countLimit: countLimit, lastDocument: activeLastDocument)
             self.activeOrders.append(contentsOf: activeOrders)
             if let activeLastDocument {
                 self.activeLastDocument = activeLastDocument
             }
         } else {
-            let (doneOrders, doneLastDocument) = try await OrderManager.shared.getRequiredOrders(userId: user?.userId ?? "", isDoctor: user?.isDoctor ?? false, isDone: true, countLimit: countLimit, lastDocument: doneLastDocument)
+            let (doneOrders, doneLastDocument) = try await OrderManager.shared.getRequiredOrders(userId: user?.userId ?? ".", isDoctor: user?.isDoctor ?? false, isDone: true, countLimit: countLimit, lastDocument: doneLastDocument)
             self.doneOrders.append(contentsOf: doneOrders)
             if let doneLastDocument {
                 self.doneLastDocument = doneLastDocument

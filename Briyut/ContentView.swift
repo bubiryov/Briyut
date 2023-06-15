@@ -24,7 +24,7 @@ struct ContentView: View {
             AuthenticationView(notEntered: $notEntered)
                 .offset(y: notEntered2 ? 0 : -ScreenSize.height * 1.2)
                 .animation(.easeInOut, value: notEntered2)
-            
+                        
             if splashView {
                 SplashView()
             }

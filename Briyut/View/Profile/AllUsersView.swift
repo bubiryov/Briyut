@@ -105,7 +105,7 @@ struct UserRow: View {
         "The user will be blocked and his apppointments will be cancelled."
     }
     var deleteButtonTitle: String {
-        userStatus == .doctor ? "Delete" : "Block"
+        userStatus == .doctor ? "Delete" : (user.isBlocked ?? false ? "Unblock" : "Block")
     }
     
     var body: some View {
@@ -114,7 +114,7 @@ struct UserRow: View {
                 ProfileImage(
                     photoURL: user.photoUrl,
                     frame: ScreenSize.height * 0.08,
-                    color: .secondary.opacity(0.1)
+                    color: .white
                 )
                 .cornerRadius(ScreenSize.width / 30)
                 
@@ -175,8 +175,11 @@ struct UserRow: View {
                             Task {
                                 if userStatus == .doctor {
                                     try await vm.removeDoctor(userID: user.userId)
+// MARK: Возможно вернуть
+//                                    vm.doctors = []
+//                                    try await vm.getAllDoctors()
                                 } else {
-
+                                    try await vm.updateBlockStatus(userID: user.userId, isBlocked: user.isBlocked != true ? true : false)
                                 }
                             }
                         }),

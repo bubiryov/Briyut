@@ -50,7 +50,6 @@ struct AllDoctorsView: View {
                 Button {
                     Task {
                         try await vm.addDoctor(userID: futureDoctorID)
-                        try await vm.getAllDoctors()
                         futureDoctorID = ""
                     }
                 } label: {
@@ -58,13 +57,15 @@ struct AllDoctorsView: View {
                 }
             }
         }
+        .onChange(of: vm.doctors, perform: { _ in
+            withAnimation {
+                tupleDoctors = vm.doctors.map {($0, false)}
+            }
+        })
         .navigationBarBackButtonHidden(true)
         .onAppear {
             tupleDoctors = vm.doctors.map {($0, false)}
         }
-//        .onDisappear {
-//            isEditing = false
-//        }
         .contentShape(Rectangle())
         .gesture(
             DragGesture()

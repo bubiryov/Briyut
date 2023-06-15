@@ -73,7 +73,7 @@ extension AuthenticationViewModel {
     func createUserWithEmail() async throws {
         do {
             let authDataResult = try await AuthenticationManager.shared.createUser(email: email, password: password)
-            let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil)
+            let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil, isBlocked: false)
             try await UserManager.shared.createNewUser(user: user)
             email = ""
             password = ""
@@ -136,7 +136,7 @@ extension AuthenticationViewModel {
         if let ID {
             do {
                 let (authDataResult, phoneNumber) = try await AuthenticationManager.shared.verifyCode(ID: ID, code: code)
-                let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: phoneNumber)
+                let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: phoneNumber, isBlocked: false)
                 try await UserManager.shared.createNewUser(user: user)
 
                 errorText = nil
@@ -166,7 +166,7 @@ extension AuthenticationViewModel {
         do {
             try await UserManager.shared.getUser(userId: authDataResult.uid)
         } catch {
-            let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil)
+            let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil, isBlocked: false)
             try await UserManager.shared.createNewUser(user: user)
         }
     }
@@ -180,7 +180,7 @@ extension AuthenticationViewModel {
         let appleManager = AppleAuthenticationManager()
         let tokens = try await appleManager.startSignInWithAppleFlow()
         let authDataResult = try await AuthenticationManager.shared.signInWithApple(tokens: tokens)
-        let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil)
+        let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil, isBlocked: false)
         try await UserManager.shared.createNewUser(user: user)
     }
 }

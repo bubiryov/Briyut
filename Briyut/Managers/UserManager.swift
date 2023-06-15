@@ -24,7 +24,7 @@ final class UserManager {
     private func doctorDocument(doctorID: String) -> DocumentReference {
         doctorCollection.document(doctorID)
     }
-
+    
     func createNewUser(user: DBUser) async throws {
         do {
             try userDocument(userId: user.userId).setData(from: user, merge: false)
@@ -62,13 +62,25 @@ final class UserManager {
         try await userDocument(userId: userID).updateData(data)
     }
     
-//    func updateProfileImagePath(userID: String, path: String) async throws {
-//        let data: [String : Any] = [
-//            DBUser.CodingKeys.profileImagePath.rawValue : path
-//        ]
-//        try await userDocument(userId: userID).updateData(data)
-//    }
-
+    func updateBlockStatus(userID: String, isBlocked: Bool) async throws {
+        let data: [String : Any] = [
+            DBUser.CodingKeys.isBlocked.rawValue : isBlocked
+        ]
+        try await userDocument(userId: userID).updateData(data)
+        
+        if isBlocked {
+            let orderQuery = Firestore.firestore().collection("orders").whereField("client_id", isEqualTo: userID)
+            let ordersSnapshot = try await orderQuery.getDocuments(as: OrderModel.self)
+            
+            for order in ordersSnapshot {
+                let orderDocument = Firestore.firestore().collection("orders").document(order.orderId)
+                if !order.isDone {
+                    try await orderDocument.delete()
+                }
+            }
+        }
+    }
+    
     func makeDoctor(userID: String) async throws {
         try await updateDoctorStatus(userID: userID, isDoctor: true)
         try await doctorDocument(doctorID: userID).setData(["id" : userID])
@@ -95,17 +107,6 @@ final class UserManager {
                 try await orderDocument.delete()
             }
         }
-        
-//        query.getDocuments { (snapshot, error) in
-//            if let error {
-//                print("Error getting documents: \(error)")
-//            } else {
-//                for document in snapshot!.documents {
-//                    let docRef = Firestore.firestore().collection("procedures").document(document.documentID)
-//                    docRef.updateData(["available_doctors": FieldValue.arrayRemove([userID])])
-//                }
-//            }
-//        }
     }
     
     func checkIfUserExists(userId: String) async throws -> Bool {
