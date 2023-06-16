@@ -58,6 +58,11 @@ struct AllUsersView: View {
 
             Spacer()
         }
+        .onChange(of: vm.users, perform: { _ in
+            withAnimation(.easeInOut(duration: 0.15)) {
+                tupleUsers = vm.users.map {($0, false)}
+            }
+        })
         .onAppear {
             Task {
                 try await vm.getAllUsers()
@@ -94,15 +99,16 @@ struct UserRow: View {
     let showButtons: Bool
     let userStatus: UserStatus
     @State private var deleteAlert: Bool = false
+    
     var alertTitle: String {
         userStatus == .doctor ?
         "Are you sure you want to delete the specialist?" :
-        "Are you sure you want to block the user?"
+        (user.isBlocked ?? false ? "Are you sure you want to unblock the user?" : "Are you sure you want to block the user?")
     }
     var alertMessage: String {
         userStatus == .doctor ?
         "This action will not be undone. All apppointments will be cancelled." :
-        "The user will be blocked and his apppointments will be cancelled."
+        (user.isBlocked ?? false ? "The user will again be able to create new appointments" : "The user will be blocked and his apppointments will be cancelled.")
     }
     var deleteButtonTitle: String {
         userStatus == .doctor ? "Delete" : (user.isBlocked ?? false ? "Unblock" : "Block")
@@ -175,17 +181,12 @@ struct UserRow: View {
                             Task {
                                 if userStatus == .doctor {
                                     try await vm.removeDoctor(userID: user.userId)
-// MARK: Возможно вернуть
-//                                    vm.doctors = []
-//                                    try await vm.getAllDoctors()
                                 } else {
                                     try await vm.updateBlockStatus(userID: user.userId, isBlocked: user.isBlocked != true ? true : false)
                                 }
                             }
                         }),
-                        secondaryButton: .default(Text("Cancel"), action: {
-                            
-                        })
+                        secondaryButton: .default(Text("Cancel"), action: { })
                     )
                 }
             }

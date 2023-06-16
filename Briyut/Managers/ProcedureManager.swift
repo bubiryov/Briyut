@@ -30,30 +30,23 @@ final class ProcedureManager {
             .setData(from: procedure, merge: false)
     }
     
-//    func getAllProcedures() async throws -> [ProcedureModel] {
+    func getAllProcedures() async throws -> [ProcedureModel] {
+        let query = proceduresCollection
+        return try await query
+            .getDocuments(as: ProcedureModel.self)
+    }
+        
+//    func addListenerForProcedures(completion: @escaping (_ products: [ProcedureModel]) -> Void) {
+//        proceduresCollection.addSnapshotListener { querySnapshot, error in
+//            guard let documents = querySnapshot?.documents else {
+//                return
+//            }
 //
-//        let query = proceduresCollection
-//
-//        return try await query
-//            .getDocuments(as: ProcedureModel.self)
+//            let procedures: [ProcedureModel] = documents.compactMap({ try? $0.data(as: ProcedureModel.self) })
+//            completion(procedures)
+//        }
 //    }
         
-    func addListenerForProcedures(completion: @escaping (_ products: [ProcedureModel]) -> Void) {
-        proceduresCollection.addSnapshotListener { querySnapshot, error in
-            guard let documents = querySnapshot?.documents else {
-                return
-            }
-            
-            let procedures: [ProcedureModel] = documents.compactMap({ try? $0.data(as: ProcedureModel.self) })
-            completion(procedures)
-        }
-    }
-    
-//    func addListenerForProcedures() -> AnyPublisher<[ProcedureModel], Error> {
-//        return proceduresCollection
-//            .addSnapshotListener(as: ProcedureModel.self)
-//    }
-    
     func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, parallelQuantity: Int, availableDoctors: [String]) async throws {
         let data: [String : Any] = [
             ProcedureModel.CodingKeys.name.rawValue : name,

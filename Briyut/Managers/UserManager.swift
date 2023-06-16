@@ -69,17 +69,22 @@ final class UserManager {
         try await userDocument(userId: userID).updateData(data)
         
         if isBlocked {
-            let orderQuery = Firestore.firestore().collection("orders").whereField("client_id", isEqualTo: userID)
-            let ordersSnapshot = try await orderQuery.getDocuments(as: OrderModel.self)
-            
-            for order in ordersSnapshot {
-                let orderDocument = Firestore.firestore().collection("orders").document(order.orderId)
-                if !order.isDone {
-                    try await orderDocument.delete()
-                }
+            try await deleteUnfinishedOrders(for: userID)
+        }
+    }
+    
+    func deleteUnfinishedOrders(for userID: String) async throws {
+        let orderQuery = Firestore.firestore().collection("orders").whereField("client_id", isEqualTo: userID)
+        let ordersSnapshot = try await orderQuery.getDocuments(as: OrderModel.self)
+        
+        for order in ordersSnapshot {
+            let orderDocument = Firestore.firestore().collection("orders").document(order.orderId)
+            if !order.isDone {
+                try await orderDocument.delete()
             }
         }
     }
+
     
     func makeDoctor(userID: String) async throws {
         try await updateDoctorStatus(userID: userID, isDoctor: true)

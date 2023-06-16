@@ -24,6 +24,7 @@ extension Color {
     static let secondaryColor = Color("SecondaryColor")
     static let darkColor = Color("DarkColor")
     static let lightBlueColor = Color("LightBlueColor")
+    static let destructiveColor = Color("DestructiveColor")
 }
 
 func bottomPadding() -> CGFloat {

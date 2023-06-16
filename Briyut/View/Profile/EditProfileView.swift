@@ -165,7 +165,7 @@ struct DeleteAccountButton: View {
         Button {
             //
         } label: {
-            BarButtonView(image: "trash", textColor: .white, backgroundColor: .mainColor)
+            BarButtonView(image: "trash", textColor: .white, backgroundColor: Color.destructiveColor)
         }
         .buttonStyle(.plain)
     }

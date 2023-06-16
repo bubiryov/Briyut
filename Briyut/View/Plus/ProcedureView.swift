@@ -54,6 +54,7 @@ struct ProcedureView: View {
                         Task {
                             try await vm.removeProcedure(procedureId: procedure!.procedureId)
                             isEditing = false
+                            presentationMode.wrappedValue.dismiss()
                         }
                     }),
                     secondaryButton: .default(Text("Cancel"), action: {
@@ -158,7 +159,7 @@ fileprivate struct DeleteButton: View {
         Button {
             showAlert = true
         } label: {
-            BarButtonView(image: "trash", textColor: .red)
+            BarButtonView(image: "trash", textColor: .white, backgroundColor: Color.destructiveColor)
         }
         .buttonStyle(.plain)
     }

@@ -151,10 +151,12 @@ struct HomeView: View {
                         try await vm.getAllUsers()
                     }
                     if justOpened {
-                        vm.addListenerForProcuderes()
+//                        vm.addListenerForProcuderes()
+                        try await vm.getAllProcedures()
                         try await vm.updateOrdersStatus(isDone: false, isDoctor: vm.user?.isDoctor ?? false)
                         justOpened = false
                     } else {
+                        try await vm.getAllProcedures()
                         try await vm.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 2)
                     }
                 }

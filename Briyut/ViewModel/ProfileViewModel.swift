@@ -55,6 +55,8 @@ final class ProfileViewModel: ObservableObject {
     
     func updateBlockStatus(userID: String, isBlocked: Bool) async throws {
         try await UserManager.shared.updateBlockStatus(userID: userID, isBlocked: isBlocked)
+        users = []
+        try await getAllUsers()
     }
     
     func addDoctor(userID: String) async throws {
@@ -105,24 +107,31 @@ extension ProfileViewModel {
     
     func addNewProcedure(procedure: ProcedureModel) async throws {
         try await ProcedureManager.shared.createNewProcedure(procedure: procedure)
+        try await getAllProcedures()
     }
         
     func getProcedure(procedureId: String) async throws -> ProcedureModel {
         try await ProcedureManager.shared.getProduct(procedureId: procedureId)
     }
-        
-    func addListenerForProcuderes() {
-        ProcedureManager.shared.addListenerForProcedures { [weak self] products in
-            self?.procedures = products
-        }
+    
+    func getAllProcedures() async throws {
+        procedures = try await ProcedureManager.shared.getAllProcedures()
     }
+    
+//    func addListenerForProcuderes() {
+//        ProcedureManager.shared.addListenerForProcedures { [weak self] products in
+//            self?.procedures = products
+//        }
+//    }
         
     func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, parallelQuantity: Int, availableDoctors: [String]) async throws {
         try await ProcedureManager.shared.editProcedure(procedureId: procedureId, name: name, duration: duration, cost: cost, parallelQuantity: parallelQuantity, availableDoctors: availableDoctors)
+        try await getAllProcedures()
     }
     
     func removeProcedure(procedureId: String) async throws {
         try await ProcedureManager.shared.removeProcedure(procedureId: procedureId)
+        try await getAllProcedures()
     }
 }
 

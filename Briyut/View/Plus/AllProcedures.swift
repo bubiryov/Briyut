@@ -16,6 +16,17 @@ struct AllProcedures: View {
     @Binding var showSearch: Bool
     @Binding var selectedTab: Tab
     @FocusState var focus: Bool
+    private var procedures: [ProcedureModel] {
+        var procedures: [ProcedureModel] = []
+        if let user = vm.user, user.isDoctor {
+            procedures = vm.procedures.filter({ $0.availableDoctors.contains(user.userId) })
+        } else {
+            procedures = vm.procedures
+        }
+        return procedures.filter { procedure in
+            searchText.isEmpty ? true : procedure.name.localizedCaseInsensitiveContains(searchText) == true
+        }
+    }
     
     var body: some View {
         NavigationView {
@@ -54,33 +65,39 @@ struct AllProcedures: View {
                 }
                 
                 if showSearch {
-                    AccentInputField(promptText: "Massage", title: nil, input: $searchText)
-                        .focused($focus)
-                        .onAppear {
-                            focus = true
-                        }
-                        .onDisappear {
-                            showSearch = false
-                            searchText = ""
-                        }
+                    AccentInputField(
+                        promptText: "Massage",
+                        title: nil,
+                        input: $searchText
+                    )
+                    .focused($focus)
+                    .onAppear {
+                        focus = true
+                    }
+                    .onDisappear {
+                        showSearch = false
+                        searchText = ""
+                    }
                 }
                 
                 ScrollView {
                     
-                    ForEach(vm.procedures.filter { procedure in
-                        searchText.isEmpty ? true : procedure.name.localizedCaseInsensitiveContains(searchText) == true
-                    }, id: \.procedureId) { procedure in
+                    ForEach(procedures, id: \.procedureId) { procedure in
                         
-                        ProcedureRow(vm: vm, procedure: procedure, isEditing: $isEditing, selectedTab: $selectedTab)
-                            .offset(x: isEditing ? 2 : 0)
-                            .offset(x: isEditing ? -2 : 0)
-                            .animation(.easeInOut(duration: randomize(
-                                interval: 0.12,
-                                withVariance: 0.055
-                            )).repeat(while: isEditing), value: isEditing)
-                            .padding(.horizontal, isEditing ? 3 : 0)
-                            .disabled(vm.user?.isDoctor != true && alertContition() ? true : false)
-                            
+                        ProcedureRow(
+                            vm: vm,
+                            procedure: procedure,
+                            isEditing: $isEditing,
+                            selectedTab: $selectedTab
+                        )
+                        .offset(x: isEditing ? 2 : 0)
+                        .offset(x: isEditing ? -2 : 0)
+                        .animation(.easeInOut(duration: randomize(
+                            interval: 0.12,
+                            withVariance: 0.055
+                        )).repeat(while: isEditing), value: isEditing)
+                        .padding(.horizontal, isEditing ? 3 : 0)
+                        .disabled(vm.user?.isDoctor != true && alertContition() ? true : false)
                     }
                 }
                 .scrollIndicators(.hidden)

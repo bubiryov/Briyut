@@ -44,49 +44,49 @@ final class OrderManager {
         try await orderDocument(orderId: orderId).delete()
     }
     
-    private func filter(dataFetchMode: DataFetchMode, userId: String, isDoctor: Bool, isDone: Bool) -> Query {
-        if dataFetchMode == .all {
-            return orderCollection
-                .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
-        } else {
-            let query = orderCollection
-                .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
-            if isDoctor {
-                return query
-                    .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
-                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
-            } else {
-                return query
-                    .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
-                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone)
-            }
-        }
-    }
-    
-//    private func filter(dataFetchMode: DataFetchMode, userId: String, isDoctor: Bool, isDone: Bool?) -> Query {
-//        if let isDone {
-//            let query = orderCollection
-//                .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
-//
-//            if dataFetchMode == .all {
-//                return query
-//                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
-//            } else {
-//                if isDoctor {
-//                    return query
-//                        .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
-//                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
-//                } else {
-//                    return query
-//                        .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
-//                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone)
-//                }
-//            }
-//        } else {
+//    private func filter(dataFetchMode: DataFetchMode, userId: String, isDoctor: Bool, isDone: Bool) -> Query {
+//        if dataFetchMode == .all {
 //            return orderCollection
 //                .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
+//        } else {
+//            let query = orderCollection
+//                .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+//            if isDoctor {
+//                return query
+//                    .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
+//                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
+//            } else {
+//                return query
+//                    .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
+//                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone)
+//            }
 //        }
 //    }
+    
+    private func filter(dataFetchMode: DataFetchMode, userId: String, isDoctor: Bool, isDone: Bool?) -> Query {
+        if let isDone {
+            let query = orderCollection
+                .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
+
+            if dataFetchMode == .all {
+                return query
+                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
+            } else {
+                if isDoctor {
+                    return query
+                        .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
+                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
+                } else {
+                    return query
+                        .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
+                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone)
+                }
+            }
+        } else {
+            return orderCollection
+                .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
+        }
+    }
     
 //    private func filter(userId: String, isDoctor: Bool, isDone: Bool?) -> Query {
 //        if let isDone {
