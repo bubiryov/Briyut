@@ -45,7 +45,7 @@ struct OrderRow: View {
                 
                 VStack(alignment: .leading) {
                     
-                    Text(procedure?.name ?? "")
+                    Text(procedure?.name ?? "Deleted procedure")
                         .font(.title3.bold())
                         .lineLimit(1)
                         .foregroundColor(fontColor != nil ? fontColor : .primary)
@@ -53,11 +53,11 @@ struct OrderRow: View {
                     Spacer()
                                         
                     if userInformation == .client {
-                        Text("\(user?.name ?? "") \(user?.lastName ?? "")")
+                        Text("\(user?.name ?? "\(user?.userId ?? "Deleted user")") \(((user?.name) != nil) ? user?.lastName ?? "" : "")")
                             .font(.subheadline)
                             .foregroundColor(fontColor != nil ? fontColor : .secondary)
                     } else {
-                        Text("\(doc?.name ?? "") \(doc?.lastName ?? "")")
+                        Text("\(doc?.name ?? "\(doc?.userId ?? "Deleted specialist")") \(doc?.lastName ?? "")")
                             .font(.subheadline)
                             .foregroundColor(fontColor != nil ? fontColor : .secondary)
                     }
@@ -157,7 +157,7 @@ struct OrderRow: View {
 struct OrderRow_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: false, color: .secondaryColor, fontColor: .black, bigDate: false, userInformation: .client, photoBackgroundColor: .secondary.opacity(0.1))
+            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: false, color: .secondaryColor, fontColor: .black, bigDate: false, userInformation: .doctor, photoBackgroundColor: .secondary.opacity(0.1))
         }
         .padding(.horizontal, 20)
     }

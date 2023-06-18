@@ -44,7 +44,7 @@ final class ProfileViewModel: ObservableObject {
             authProviders = providers
         }
     }
-        
+            
     func signOut() throws {
         do {
             try AuthenticationManager.shared.signOut()
@@ -53,9 +53,28 @@ final class ProfileViewModel: ObservableObject {
         }
     }
     
+    func deleteStorageFolderContents(userId: String) async throws {
+        try await StorageManager.shared.deleteFolderContents(userId: userId)
+    }
+    
+    func deleteAccount() async throws {
+        guard let user = user else { throw URLError(.badServerResponse) }
+        try await deleteUnfinishedOrders(idType: .client, id: user.userId)
+        try await UserManager.shared.deleteUser(userId: user.userId)
+        try await deleteStorageFolderContents(userId: user.userId)
+        try await AuthenticationManager.shared.deleteAccount()
+        self.user = nil
+    }
+    
     func updateBlockStatus(userID: String, isBlocked: Bool) async throws {
         try await UserManager.shared.updateBlockStatus(userID: userID, isBlocked: isBlocked)
-        users = []
+//        users = []
+        if isBlocked {
+            try await deleteUnfinishedOrders(idType: .client, id: userID)
+        }
+        activeLastDocument = nil
+        activeOrders = []
+        try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 2)
         try await getAllUsers()
     }
     
@@ -70,6 +89,8 @@ final class ProfileViewModel: ObservableObject {
     func removeDoctor(userID: String) async throws {
         guard userID != user?.userId else { return }
         try await UserManager.shared.removeDoctor(userID: userID)
+        try await deleteUnfinishedOrders(idType: .doctor, id: userID)
+        try await updateProceduresForDoctor(userID: userID)
         try await getAllDoctors()
     }
     
@@ -131,7 +152,15 @@ extension ProfileViewModel {
     
     func removeProcedure(procedureId: String) async throws {
         try await ProcedureManager.shared.removeProcedure(procedureId: procedureId)
+        try await deleteUnfinishedOrders(idType: .procedure, id: procedureId)
         try await getAllProcedures()
+        activeLastDocument = nil
+        activeOrders = []
+        try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 2)
+    }
+    
+    func updateProceduresForDoctor(userID: String) async throws {
+        try await ProcedureManager.shared.updateProceduresForDoctor(userID: userID)
     }
 }
 
@@ -147,7 +176,7 @@ extension ProfileViewModel {
                 self.activeLastDocument = activeLastDocument
             }
         } else {
-            let (doneOrders, doneLastDocument) = try await OrderManager.shared.getRequiredOrders(dataFetchMode: dataFetchMode, userId: user?.userId ?? ".", isDoctor: user?.isDoctor ?? false, isDone: true, countLimit: countLimit, lastDocument: doneLastDocument)
+            let (doneOrders, doneLastDocument) = try await OrderManager.shared.getRequiredOrders(dataFetchMode: dataFetchMode, userId: user?.userId ?? "", isDoctor: user?.isDoctor ?? false, isDone: true, countLimit: countLimit, lastDocument: doneLastDocument)
             self.doneOrders.append(contentsOf: doneOrders)
             if let doneLastDocument {
                 self.doneLastDocument = doneLastDocument
@@ -208,6 +237,16 @@ extension ProfileViewModel {
     
     func getDayMonthOrders(date: Date, selectionMode: DateSelectionMode, doctorId: String?) async throws -> [OrderModel] {
         return try await OrderManager.shared.getDayMounthOrders(for: date, selectionMode: selectionMode, doctorId: doctorId)
+    }
+    
+    func deleteUnfinishedOrders(idType: IdType, id: String) async throws {
+        do {
+            try await OrderManager.shared.deleteUnfinishedOrders(idType: idType, id: id)
+            print("Active orders deleted")
+        } catch {
+            print("Error with deleting active orders")
+            throw URLError(.badURL)
+        }
     }
     
 //    func getDayOrders(date: Date, doctorId: String?) async throws -> [OrderModel] {

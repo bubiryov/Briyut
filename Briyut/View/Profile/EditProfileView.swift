@@ -24,16 +24,24 @@ struct EditProfileView: View {
     
     var body: some View {
         VStack {
-            BarTitle<BackButton, DeleteAccountButton>(text: "Edit", leftButton: BackButton(), rightButton: DeleteAccountButton())
-                .padding(.bottom)
-                        
+            BarTitle<BackButton, DeleteAccountButton>(
+                text: "Edit",
+                leftButton: BackButton(),
+                rightButton: DeleteAccountButton(showAlert: $showAlert)
+            )
+            .padding(.bottom)
+            
             VStack(spacing: ScreenSize.height * 0.02) {
                 
                 Button {
                     showActionSheet = true
                 } label: {
                     if selectedPhoto == nil {
-                        ProfileImage(photoURL: vm.user?.photoUrl, frame: ScreenSize.height * 0.12, color: Color.secondary.opacity(0.1))
+                        ProfileImage(
+                            photoURL: vm.user?.photoUrl,
+                            frame: ScreenSize.height * 0.12,
+                            color: Color.secondary.opacity(0.1)
+                        )
                     } else {
                         if let data = data, let image = UIImage(data: data) {
                             Image(uiImage: image)
@@ -69,9 +77,17 @@ struct EditProfileView: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 
-                AccentInputField(promptText: "Maria", title: "Name", input: $name)
+                AccentInputField(
+                    promptText: "Maria",
+                    title: "Name",
+                    input: $name
+                )
                 
-                AccentInputField(promptText: "Shevchenko", title: "Last name", input: $lastName)
+                AccentInputField(
+                    promptText: "Shevchenko",
+                    title: "Last name",
+                    input: $lastName
+                )
                 
                 if !vm.authProviders.contains(.phone) {
                     AccentInputField(promptText: "+38 (099)-999-99-99", title: "Phone number", input: $phoneNumber)
@@ -85,9 +101,7 @@ struct EditProfileView: View {
                     Task {
                         var url: String = user.photoUrl ?? ""
                         if let selectedPhoto {
-                            if url != "" {
-                                try await vm.deletePreviousPhoto(url: url)
-                            }
+                            try await vm.deleteStorageFolderContents(userId: user.userId)
                             let path = try await vm.saveProfilePhoto(item: selectedPhoto)
                             url = try await vm.getUrlForImage(path: path)
                         }
@@ -138,6 +152,23 @@ struct EditProfileView: View {
                 phoneNumber = user.phoneNumber ?? ""
             }
         }
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("Are you sure you want to delete your account?"),
+                message: Text("All your data will be permanently deleted"),
+                primaryButton: .destructive(Text("Yes, I am sure"), action: {
+                    Task {
+                        do {
+                            try await vm.deleteAccount()
+                            notEntered = true
+                        } catch {
+                            print("Something went wrong")
+                        }
+                    }
+                }),
+                secondaryButton: .default(Text("Cancel"), action: { })
+            )
+        }
         .contentShape(Rectangle())
         .gesture(
             DragGesture()
@@ -155,15 +186,21 @@ struct EditProfileView: View {
 
 struct EditProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        EditProfileView(notEntered: .constant(false))
-            .environmentObject(ProfileViewModel())
+        VStack {
+            EditProfileView(notEntered: .constant(false))
+                .environmentObject(ProfileViewModel())
+        }
+        .padding(.horizontal)
     }
 }
 
 struct DeleteAccountButton: View {
+    
+    @Binding var showAlert: Bool
+    
     var body: some View {
         Button {
-            //
+            showAlert = true
         } label: {
             BarButtonView(image: "trash", textColor: .white, backgroundColor: Color.destructiveColor)
         }

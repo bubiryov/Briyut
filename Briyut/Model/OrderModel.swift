@@ -12,9 +12,7 @@ import FirebaseFirestoreSwift
 struct OrderModel: Codable, Equatable {
     let orderId: String
     let procedureId: String
-//    let procedureName: String
     let doctorId: String
-//    let doctorName: String
     let clientId: String
     let date: Timestamp
     let end: Timestamp

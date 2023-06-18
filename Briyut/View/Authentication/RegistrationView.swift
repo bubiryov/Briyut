@@ -15,45 +15,68 @@ struct RegistrationView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
-        ScrollView {
+        GeometryReader { _ in
             VStack(spacing: 20) {
                 
-                BarTitle<BackButton, Text>(text: "New account", leftButton: BackButton(presentationMode: _presentationMode))
-                            
-                AuthInputField(field: $vm.email, isSecureField: false, title: "briyut@gmail.com", header: "Your email address")
+                BarTitle<BackButton, Text>(
+                    text: "New account",
+                    leftButton: BackButton(presentationMode: _presentationMode)
+                )
                 
-                AuthInputField(field: $vm.password, isSecureField: true, title: "min. 6 characters", header: "Choose your password")
+                AuthInputField(
+                    field: $vm.email,
+                    isSecureField: false,
+                    title: "briyut@gmail.com",
+                    header: "Your email address"
+                )
                 
-                AuthInputField(field: $repeatPassword, isSecureField: true, title: "min. 6 characters", header: "Repeat password")
+                AuthInputField(
+                    field: $vm.password,
+                    isSecureField: true,
+                    title: "min. 6 characters",
+                    header: "Choose your password"
+                )
+                
+                AuthInputField(
+                    field: $repeatPassword,
+                    isSecureField: true,
+                    title: "min. 6 characters",
+                    header: "Repeat password"
+                )
+                
+                Spacer()
                 
                 Button {
                     Task {
                         try await vm.createUserWithEmail()
                         notEntered = false
+                        presentationMode.wrappedValue.dismiss()
                     }
                 } label: {
-                    AccentButton(text: "Create an account", isButtonActive: vm.validate(email: vm.email, password: vm.password, repeatPassword: repeatPassword))
+                    AccentButton(
+                        text: "Create an account",
+                        isButtonActive: vm.validate(email: vm.email, password: vm.password, repeatPassword: repeatPassword))
                     
                 }
                 .disabled(!vm.validate(email: vm.email, password: vm.password, repeatPassword: repeatPassword))
-                
-                Spacer()
             }
-            .padding(.top)
+            .padding(.bottom)
             .padding(.horizontal, 20)
             .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.large)
-        }
-        .scrollDisabled(true)
-        .contentShape(Rectangle())
-        .gesture(
-            DragGesture()
-                .onEnded { gesture in
-                if gesture.translation.width > 100 {
-                    presentationMode.wrappedValue.dismiss()
-                }
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture()
+                    .onEnded { gesture in
+                        if gesture.translation.width > 100 {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+            )
+            .onTapGesture {
+                hideKeyboard()
             }
-        )
+        }
+        .ignoresSafeArea(.keyboard)
     }
 }
 

@@ -16,55 +16,57 @@ struct AuthenticationView: View {
     @Binding var notEntered: Bool
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                VStack {
-                    Text("Briyut")
-                        .foregroundColor(.white)
-                        .font(.custom("Alokary", size: 25))
-                        .padding(.top, ScreenSize.height * 0.12)
-                    Spacer()
-                }
-                .edgesIgnoringSafeArea(.all)
-                .ignoresSafeArea(.keyboard)
-                
-                VStack {
+        GeometryReader { _ in
+            NavigationView {
+                ZStack {
+                    VStack {
+                        Text("Briyut")
+                            .foregroundColor(.white)
+                            .font(.custom("Alokary", size: 25))
+                            .padding(.top, ScreenSize.height * 0.12)
+                        Spacer()
+                    }
+                    .edgesIgnoringSafeArea(.all)
+//                    .ignoresSafeArea(.keyboard)
                     
-                    LoginView(notEntered: $notEntered)
-                    
-                    Spacer()
+                    VStack {
+                        
+                        LoginView(notEntered: $notEntered)
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, ScreenSize.height * 0.03)
+                    .background(Color.white)
+                    .cornerRadius(ScreenSize.width / 30)
+                    .shadow(radius: 10, y: -10)
+                    .offset(y: ScreenSize.height / 3.5)
+                    .edgesIgnoringSafeArea(.all)
+//                    .ignoresSafeArea(.keyboard)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, ScreenSize.height * 0.03)
-                .background(Color.white)
-                .cornerRadius(ScreenSize.width / 30)
-                .shadow(radius: 10, y: -10)
-                .offset(y: ScreenSize.height / 3.5)
-                .edgesIgnoringSafeArea(.all)
-                .ignoresSafeArea(.keyboard)
-            }
-            .background(Color.mainColor)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        Button {
-                            showResetPasswordView = true
+                .background(Color.mainColor)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Menu {
+                            Button {
+                                showResetPasswordView = true
+                            } label: {
+                                Text("Reset password")
+                            }
                         } label: {
-                            Text("Reset password")
+                            Image(systemName: "questionmark.circle")
+                                .foregroundColor(.secondary)
+                                .bold()
                         }
-                    } label: {
-                        Image(systemName: "questionmark.circle")
-                            .foregroundColor(.secondary)
-                            .bold()
                     }
                 }
             }
+            .sheet(isPresented: $showResetPasswordView) {
+                ResetPasswordView(showResetPasswordView: $showResetPasswordView)
+                    .presentationDetents([.medium, .large])
+                    .presentationCornerRadius(30)
         }
-        .sheet(isPresented: $showResetPasswordView) {
-            ResetPasswordView(showResetPasswordView: $showResetPasswordView)
-                .presentationDetents([.medium, .large])
-                .presentationCornerRadius(30)
-        }
+        }.ignoresSafeArea(.keyboard)
     }
 }
 struct AuthenticationView_Previews: PreviewProvider {

@@ -13,6 +13,7 @@ final class AuthenticationManager {
     static let shared = AuthenticationManager()
     private init() { }
     
+    @discardableResult
     func getAuthenticatedUser() throws -> AuthDataResultModel {
         guard let user = Auth.auth().currentUser else {
             throw URLError(.badServerResponse)
@@ -40,6 +41,16 @@ final class AuthenticationManager {
         }
         return providers
     }
+    
+    func deleteAccount() async throws {
+        guard let user = Auth.auth().currentUser else { throw URLError(.badServerResponse) }
+        do {
+            try await user.delete()
+            print("Auth user is deleted")
+        } catch {
+            print("Auth user was not deleted")
+        }
+    }
 
 }
 
@@ -64,6 +75,22 @@ extension AuthenticationManager {
             print("Sent")
         } catch {
             print("Error")
+        }
+    }
+    
+    func changePassword(currentPassword: String, newPassword: String) async throws {
+        guard let user = Auth.auth().currentUser else {
+            throw URLError(.badServerResponse)
+        }
+        guard let userEmail = user.email else { throw URLError(.badServerResponse) }
+
+        let credential = EmailAuthProvider.credential(withEmail: userEmail, password: currentPassword)
+
+        do {
+            try await user.reauthenticate(with: credential)
+            try await user.updatePassword(to: newPassword)
+        } catch {
+            throw error
         }
     }
 }

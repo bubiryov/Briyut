@@ -195,7 +195,7 @@ struct UserRow: View {
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(minHeight: ScreenSize.height * 0.1, maxHeight: ScreenSize.height * 0.21)
-        .background(Color.secondaryColor)
+        .background(user.isBlocked ?? false ? Color.secondary.opacity(0.1) : Color.secondaryColor)
         .cornerRadius(ScreenSize.width / 30)
     }
 }

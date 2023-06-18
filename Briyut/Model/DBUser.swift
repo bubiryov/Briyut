@@ -35,7 +35,7 @@ struct DBUser: Codable, Equatable {
         case name = "name"
         case lastName = "last_name"
         case email = "email"
-        case photoUrl = "phoro_url"
+        case photoUrl = "photo_url"
         case dateCreated = "date_created"
         case isDoctor = "is_doctor"
         case phoneNumber = "phone_number"

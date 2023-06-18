@@ -27,30 +27,66 @@ final class AuthenticationViewModel: ObservableObject {
 extension AuthenticationViewModel {
     
     func validate(email: String, password: String?, repeatPassword: String?) -> Bool {
-        
+        return validateEmail(email) && validatePassword(password, repeatPassword: repeatPassword)
+    }
+
+    func validateEmail(_ email: String) -> Bool {
         let emailRegex = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$"
-        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailRegex)
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
         
         guard
             !email.isEmpty,
             email.lowercased() == email,
             emailPredicate.evaluate(with: email),
-            email.filter({$0 == "."}).count == 1 else {
+            email.filter({ $0 == "." }).count == 1 else {
             return false
         }
+        
+        return true
+    }
 
-        if let password {
+    func validatePassword(_ password: String?, repeatPassword: String?) -> Bool {
+        if let password = password {
             guard password.count > 5, password.contains(where: { $0.isLetter }), password.contains(where: { $0.isNumber }) else {
                 return false
             }
         }
-        if let repeatPassword {
+        
+        if let repeatPassword = repeatPassword {
             guard repeatPassword == password else {
                 return false
             }
         }
+        
         return true
     }
+
+    
+//    func validate(email: String, password: String?, repeatPassword: String?) -> Bool {
+//
+//        let emailRegex = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$"
+//        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailRegex)
+//
+//        guard
+//            !email.isEmpty,
+//            email.lowercased() == email,
+//            emailPredicate.evaluate(with: email),
+//            email.filter({$0 == "."}).count == 1 else {
+//            return false
+//        }
+//
+//        if let password {
+//            guard password.count > 5, password.contains(where: { $0.isLetter }), password.contains(where: { $0.isNumber }) else {
+//                return false
+//            }
+//        }
+//        if let repeatPassword {
+//            guard repeatPassword == password else {
+//                return false
+//            }
+//        }
+//        return true
+//    }
 
     func logInWithEmail() async throws {
         do {
@@ -85,6 +121,11 @@ extension AuthenticationViewModel {
     
     func resetPassword() async throws {
         try await AuthenticationManager.shared.resetPassword(email: email)
+    }
+    
+    func changePassword(currentPassword: String, newPassword: String) async throws {
+        guard validatePassword(newPassword, repeatPassword: newPassword) else { throw URLError(.badServerResponse) }
+        try await AuthenticationManager.shared.changePassword(currentPassword: currentPassword, newPassword: newPassword)
     }
 }
 

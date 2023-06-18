@@ -80,9 +80,8 @@ struct LoginView: View {
                 RegistrationView(notEntered: $notEntered)
             } label: {
                 Text("Create an account")
-                    .font(.subheadline)
+                    .font(.subheadline.bold())
                     .foregroundColor(.black)
-                    .bold()
             }
 
         }

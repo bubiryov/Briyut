@@ -10,37 +10,39 @@ import SwiftUI
 struct ContentView: View {
     
     @EnvironmentObject var vm: AuthenticationViewModel
-    @AppStorage("notEntered") var notEntered2 = true
+    @AppStorage("notEntered") var localNotEntered = true
     @State private var notEntered = true
     @State private var splashView: Bool = true
 
     var body: some View {
         
         ZStack {
-            if !notEntered2 {
+            if !localNotEntered {
                 RootView(notEntered: $notEntered)
             }
             
             AuthenticationView(notEntered: $notEntered)
-                .offset(y: notEntered2 ? 0 : -ScreenSize.height * 1.2)
-                .animation(.easeInOut, value: notEntered2)
+                .offset(y: localNotEntered ? 0 : -ScreenSize.height * 1.2)
+                .animation(.easeInOut, value: localNotEntered)
                         
             if splashView {
                 SplashView()
+//                    .animation(.easeInOut(duration: 2), value: splashView)
             }
         }
         .onAppear {
             let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
             notEntered = authUser == nil
+            localNotEntered = authUser == nil
             Task {
-                try await Task.sleep(nanoseconds: 2_000_000_000)
-                withAnimation {
+                try await Task.sleep(nanoseconds: 2_500_000_000)
+//                withAnimation {
                     splashView = false
-                }
+//                }
             }
         }
         .onChange(of: notEntered) { newValue in
-            notEntered2 = newValue
+            localNotEntered = newValue
         }
     }
 }

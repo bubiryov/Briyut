@@ -14,12 +14,13 @@ struct HomeView: View {
     @Binding var justOpened: Bool
     @Binding var showSearch: Bool
     @State private var showFullOrder: Bool = false
+    @State private var showMap: Bool = false
     
     var body: some View {
         
         NavigationView {
             VStack(alignment: .leading, spacing: 10) {
-                BarTitle<MapButton, ProfileButton>(text: "", leftButton: MapButton(image: "pin"), rightButton: ProfileButton(selectedTab: $selectedTab, photo: vm.user?.photoUrl ?? ""), action: {})
+                BarTitle<MapButton, ProfileButton>(text: "", leftButton: MapButton(image: "pin", showMap: $showMap), rightButton: ProfileButton(selectedTab: $selectedTab, photo: vm.user?.photoUrl ?? ""), action: {})
                 
                 Text("Find your procedure")
                     .font(.largeTitle.bold())
@@ -82,38 +83,34 @@ struct HomeView: View {
                 
                 Spacer()
                 
-                VStack(alignment: .leading) {
-                    
-                    HStack(alignment: .center) {
-                        Text("Specialists")
-                            .font(.title2.bold())
+                if !vm.doctors.isEmpty {
+                    VStack(alignment: .leading) {
                         
-                        Spacer()
-                        
-                        NavigationLink {
-                            AllDoctorsView()
-//                            if vm.user?.isDoctor ?? false {
-//                                AddDoctorView()
-//                            } else {
-//                                AllDoctorsView()
-//                            }
-                        } label: {
-                            Text("See all")
-                                .font(.footnote)
-                                .foregroundColor(.secondary)
+                        HStack(alignment: .center) {
+                            Text("Specialists")
+                                .font(.title2.bold())
+                            
+                            Spacer()
+                            
+                            NavigationLink {
+                                AllDoctorsView()
+                            } label: {
+                                Text("See all")
+                                    .font(.footnote)
+                                    .foregroundColor(.secondary)
+                            }
+                            .buttonStyle(.plain)
+                            .foregroundColor(.primary)
                         }
-                        .buttonStyle(.plain)
-                        .foregroundColor(.primary)
-                    }
-
-                    ScrollView(.horizontal) {
-                        LazyHStack(spacing: 15) {
-                            let doctors = vm.doctors
+                        
+                        ScrollView(.horizontal) {
+                            LazyHStack(spacing: 15) {
+                                let doctors = vm.doctors
                                 ForEach(doctors, id: \.userId) { doctor in
                                     VStack(alignment: .center, spacing: 7) {
                                         ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
                                             .cornerRadius(ScreenSize.width / 30)
-
+                                        
                                         VStack {
                                             Text(doctor.lastName ?? "")
                                                 .font(.callout.bold())
@@ -125,7 +122,7 @@ struct HomeView: View {
                                                 .multilineTextAlignment(.center)
                                                 .lineLimit(1)
                                         }
-
+                                        
                                         Text("Rehabilitator")
                                             .font(.footnote)
                                             .foregroundColor(.secondary)
@@ -137,10 +134,11 @@ struct HomeView: View {
                                     .background(Color.secondaryColor)
                                     .cornerRadius(ScreenSize.width / 20)
                                 }
+                            }
                         }
+                        .scrollIndicators(.hidden)
+                        .frame(maxHeight: ScreenSize.height * 0.18)
                     }
-                    .scrollIndicators(.hidden)
-                    .frame(maxHeight: ScreenSize.height * 0.18)
                 }
             }
             .onAppear {
@@ -151,7 +149,6 @@ struct HomeView: View {
                         try await vm.getAllUsers()
                     }
                     if justOpened {
-//                        vm.addListenerForProcuderes()
                         try await vm.getAllProcedures()
                         try await vm.updateOrdersStatus(isDone: false, isDoctor: vm.user?.isDoctor ?? false)
                         justOpened = false
@@ -160,15 +157,21 @@ struct HomeView: View {
                         try await vm.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 2)
                     }
                 }
+            }
         }
+        .fullScreenCover(isPresented: $showMap) {
+            ClinicMapView()
         }
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(selectedTab: .constant(.profile), justOpened: .constant(false), showSearch: .constant(false))
-            .environmentObject(ProfileViewModel())
+        VStack {
+            HomeView(selectedTab: .constant(.profile), justOpened: .constant(false), showSearch: .constant(false))
+                .environmentObject(ProfileViewModel())
+        }
+        .padding(.horizontal)
     }
 }
 
@@ -193,14 +196,15 @@ struct ProfileButton: View {
 struct MapButton: View {
 
     var image: String
+    @Binding var showMap: Bool
 
     var body: some View {
+                
         Button {
-            //
+            showMap = true
         } label: {
             BarButtonView(image: image)
         }
         .buttonStyle(.plain)
-
     }
 }

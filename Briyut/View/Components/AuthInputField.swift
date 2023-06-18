@@ -21,11 +21,12 @@ struct AuthInputField: View {
         VStack(alignment: .leading) {
             if let header {
                 Text(header)
-                    .font(.headline)
+                    .font(.subheadline.bold())
             }
             if isSecureField {
                 if showEye {
                     TextField(title, text: $field)
+                        .bold()
                         .padding()
                         .frame(height: heightFrame)
                         .textInputAutocapitalization(.never)
@@ -42,10 +43,11 @@ struct AuthInputField: View {
                         .cornerRadius(cornerRadius)
                         .overlay(
                             RoundedRectangle(cornerRadius: cornerRadius)
-                                .strokeBorder(Color.secondary, lineWidth: 0.5)
+                                .strokeBorder(Color.secondary, lineWidth: 1)
                         )
                 } else {
                     SecureField(title, text: $field)
+                        .bold()
                         .padding()
                         .frame(height: heightFrame)
                         .textInputAutocapitalization(.never)
@@ -67,6 +69,7 @@ struct AuthInputField: View {
                 }
             } else {
                 TextField(title, text: $field)
+                    .bold()
                     .padding()
                     .frame(height: heightFrame)
                     .textInputAutocapitalization(.never)

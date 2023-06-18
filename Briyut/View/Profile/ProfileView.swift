@@ -33,7 +33,7 @@ struct ProfileView: View {
                 .cornerRadius(ScreenSize.width / 20)
                 
                 HStack {
-                    Text(vm.user?.name ?? (vm.user?.userId ?? ""))
+                    Text(vm.user?.name ?? (vm.user?.userId ?? "Blocked user"))
                         .font(.title2.bold())
                         .lineLimit(1)
                     
@@ -68,7 +68,7 @@ struct ProfileView: View {
                     }
                     
                     if !vm.authProviders.contains(.phone) {
-                        NavigationRow(destination: AllDoctorsView(), imageName: "lock", title: "Change password")
+                        NavigationRow(destination: ChangePasswordView(), imageName: "lock", title: "Change password")
                     }
                 }
                 

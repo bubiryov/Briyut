@@ -60,14 +60,25 @@ final class ProcedureManager {
     
     func removeProcedure(procedureId: String) async throws {
         try await procedureDocument(procedureId: procedureId).delete()
-        let orderQuery = Firestore.firestore().collection("orders").whereField("procedure_id", isEqualTo: procedureId)
-        let ordersSnapshot = try await orderQuery.getDocuments(as: OrderModel.self)
+//        let orderQuery = Firestore.firestore().collection("orders").whereField("procedure_id", isEqualTo: procedureId)
+//        let ordersSnapshot = try await orderQuery.getDocuments(as: OrderModel.self)
+//
+//        for order in ordersSnapshot {
+//            let orderDocument = Firestore.firestore().collection("orders").document(order.orderId)
+//            if !order.isDone {
+//                try await orderDocument.delete()
+//            }
+//        }
+    }
+    
+    func updateProceduresForDoctor(userID: String) async throws {
+        let proceduresQuery = proceduresCollection.whereField("available_doctors", arrayContains: userID)
         
-        for order in ordersSnapshot {
-            let orderDocument = Firestore.firestore().collection("orders").document(order.orderId)
-            if !order.isDone {
-                try await orderDocument.delete()
-            }
+        let proceduresSnapshot = try await proceduresQuery.getDocuments(as: ProcedureModel.self)
+        
+        for procedure in proceduresSnapshot {
+            let procedureDocument = proceduresCollection.document(procedure.procedureId)
+            try await procedureDocument.updateData(["available_doctors": FieldValue.arrayRemove([userID])])
         }
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
-import Combine
+//import Combine
 
 enum DateSelectionMode {
     case day
@@ -203,4 +203,31 @@ final class OrderManager {
         ]
         try await orderDocument(orderId: orderId).updateData(data)
     }
+    
+    func deleteUnfinishedOrders(idType: IdType, id: String) async throws {
+        let orderQuery: Query
+        
+        switch idType {
+        case .client:
+            orderQuery = orderCollection.whereField("client_id", isEqualTo: id)
+        case .doctor:
+            orderQuery = orderCollection.whereField("doctor_id", isEqualTo: id)
+        case .procedure:
+            orderQuery = orderCollection.whereField("procedure_id", isEqualTo: id)
+        }
+        let ordersSnapshot = try await orderQuery.getDocuments(as: OrderModel.self)
+        
+        for order in ordersSnapshot {
+            let orderDocument = orderCollection.document(order.orderId)
+            if !order.isDone {
+                try await orderDocument.delete()
+            }
+        }
+    }
+}
+
+enum IdType {
+    case client
+    case doctor
+    case procedure
 }

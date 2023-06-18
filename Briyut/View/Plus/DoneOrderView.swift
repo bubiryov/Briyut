@@ -65,25 +65,35 @@ struct DoneOrderView: View {
                 
                 Spacer()
                 
-                DoneOrderViewRow(leftText: "Date", rightText: DateFormatter.customFormatter(format: "dd MMM yyyy").string(from: order.date.dateValue()))
+                DoneOrderViewRow(
+                    leftText: "Date",
+                    rightText: DateFormatter.customFormatter(format: "dd MMM yyyy").string(from: order.date.dateValue()))
                 
                 Spacer()
                 
-                DoneOrderViewRow(leftText: "Time", rightText: DateFormatter.customFormatter(format: "HH:mm").string(from: order.date.dateValue()))
+                DoneOrderViewRow(
+                    leftText: "Time",
+                    rightText: DateFormatter.customFormatter(format: "HH:mm").string(from: order.date.dateValue()))
                 
                 Spacer()
                 
-                DoneOrderViewRow(leftText: "Specialist", rightText: "\(specialist?.name ?? "") \(specialist?.lastName ?? "")")
+                DoneOrderViewRow(
+                    leftText: "Specialist",
+                    rightText: "\(specialist?.name ?? "Deleted specialist") \((specialist?.name != nil) ? specialist?.lastName ?? "" : "")")
                 
                 Spacer()
                 
                 if vm.user?.isDoctor ?? false {
-                    DoneOrderViewRow(leftText: "Client", rightText: "\(client?.name ?? "") \(client?.lastName ?? "")")
+                    DoneOrderViewRow(
+                        leftText: "Client",
+                        rightText: "\(client?.name ?? "\(client?.userId ?? "Deleted client")") \((client?.name != nil) ? client?.lastName ?? "" : "")")
                     
                     Spacer()
                 }
                 
-                DoneOrderViewRow(leftText: "Total", rightText: "₴ \(order.price)")
+                DoneOrderViewRow(
+                    leftText: "Total",
+                    rightText: "₴ \(order.price)")
                 
                 Spacer()
                 
