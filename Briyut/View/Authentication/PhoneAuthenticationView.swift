@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OtpView_SwiftUI
 
 struct PhoneAuthenticationView: View {
     
@@ -23,14 +24,26 @@ struct PhoneAuthenticationView: View {
     }
         
     var body: some View {
-        VStack(spacing: ScreenSize.height * 0.03) {
+        VStack {
             
             BarTitle<BackButton, Text>(text: "Phone Sign In", leftButton: BackButton(presentationMode: _presentationMode))
             
             if sentSms {
-                AuthInputField(field: $code, isSecureField: false, title: "", header: "Code")
-                    .keyboardType(.numberPad)
-
+                Spacer()
+            }
+                                    
+            if sentSms {
+                OtpView_SwiftUI(
+                    otpCode: $code,
+                    otpCodeLength: 6,
+                    textColor: .black,
+                    textSize: CGFloat(25)
+                )
+                .keyboardType(.numberPad)
+                .textContentType(.oneTimeCode)
+                
+                Spacer()
+                
                 Button {
                     Task {
                         try await vm.verifyCode(code: code)
@@ -42,32 +55,37 @@ struct PhoneAuthenticationView: View {
                 }
                 
             } else {
+                
                 AuthInputField(field: $phoneNumber, isSecureField: false, title: "+380", header: "Your phone number")
                     .keyboardType(.numberPad)
+                    .padding(.top)
+                
+                Spacer()
                 
                 Button {
                     Task {
                         try await vm.sendCode(phoneNumber)
-                        sentSms = true
+                        withAnimation(.easeInOut(duration: 0.1)) {
+                            sentSms = true
+                        }
                     }
                 } label: {
                     AccentButton(text: "Send SMS", isButtonActive: activeButton)
                 }
                 
-                HStack {
-                    if let error = vm.errorText {
-                        Text(error)
-                            .font(.subheadline)
-                            .foregroundColor(.red)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: ScreenSize.height * 0.02)
+//                HStack {
+//                    if let error = vm.errorText {
+//                        Text(error)
+//                            .font(.subheadline)
+//                            .foregroundColor(.red)
+//                    }
+//                }
+//                .frame(maxWidth: .infinity)
+//                .frame(height: ScreenSize.height * 0.02)
             }
-            
-            Spacer()
         }
-        .padding(.top)
+        .padding(.top, topPadding())
+        .padding(.bottom, 20)
         .padding(.horizontal, 20)
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.large)
@@ -85,3 +103,4 @@ struct PhoneAuthenticationView_Previews: PreviewProvider {
         }
     }
 }
+

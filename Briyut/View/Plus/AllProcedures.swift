@@ -57,7 +57,7 @@ struct AllProcedures: View {
                             .padding(5)
                         }
                         .frame(maxWidth: .infinity)
-                        .frame(height: ScreenSize.height * 0.06)
+                        .frame(minHeight: ScreenSize.height * 0.06)
                         .background(Color.mainColor)
                         .cornerRadius(ScreenSize.width / 30)
                     }
@@ -121,8 +121,11 @@ struct AllProcedures: View {
 
 struct AddProcedureView_Previews: PreviewProvider {
     static var previews: some View {
-        AllProcedures(notEntered: .constant(false), showSearch: .constant(false), selectedTab: .constant(.plus))
-            .environmentObject(ProfileViewModel())
+        VStack {
+            AllProcedures(notEntered: .constant(false), showSearch: .constant(false), selectedTab: .constant(.plus))
+                .environmentObject(ProfileViewModel())
+        }
+        .padding(.horizontal, 20)
     }
 }
 

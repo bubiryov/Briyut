@@ -20,8 +20,9 @@ struct AuthenticationView: View {
             NavigationView {
                 ZStack {
                     VStack {
-                        Text("Briyut")
+                        Text("Rubinko")
                             .foregroundColor(.white)
+                            .tracking(4)
                             .font(.custom("Alokary", size: 25))
                             .padding(.top, ScreenSize.height * 0.12)
                         Spacer()

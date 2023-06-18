@@ -16,6 +16,7 @@
 		896D3D0A2A3DDBF10053E873 /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896D3D092A3DDBF10053E873 /* LocationModel.swift */; };
 		896D3D0C2A3E28170053E873 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896D3D0B2A3E28170053E873 /* LocationManager.swift */; };
 		89804BDA2A2E1C66002E2282 /* AllUsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89804BD92A2E1C66002E2282 /* AllUsersView.swift */; };
+		8987712B2A3F91CB00F40467 /* OtpView-SwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8987712A2A3F91CB00F40467 /* OtpView-SwiftUI */; };
 		898FD9B52A08F4E000725697 /* AllProcedures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B42A08F4E000725697 /* AllProcedures.swift */; };
 		898FD9B72A08FDE000725697 /* ProcedureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B62A08FDE000725697 /* ProcedureView.swift */; };
 		898FD9BA2A0908FD00725697 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B92A0908FD00725697 /* CalendarView.swift */; };
@@ -204,6 +205,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89CA5AB52A02F40E00695069 /* GoogleSignInSwift in Frameworks */,
+				8987712B2A3F91CB00F40467 /* OtpView-SwiftUI in Frameworks */,
 				89C9E2F02A0BC8F600B16CBF /* CachedAsyncImage in Frameworks */,
 				89988BEA2A1A3D35004DB4C6 /* Lottie in Frameworks */,
 				89BFAA3B2A1F5A3400DF2D0B /* FirebaseStorage in Frameworks */,
@@ -535,6 +537,7 @@
 				89988BE92A1A3D35004DB4C6 /* Lottie */,
 				89BFAA3A2A1F5A3400DF2D0B /* FirebaseStorage */,
 				895E8EAB2A377D140076E58D /* SwiftUICharts */,
+				8987712A2A3F91CB00F40467 /* OtpView-SwiftUI */,
 			);
 			productName = Briyut;
 			productReference = 899EC56D2A000A1C00C90D49 /* Briyut.app */;
@@ -614,6 +617,7 @@
 				89C9E2EE2A0BC8F600B16CBF /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				89988BE82A1A3D35004DB4C6 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				895E8EAA2A377D130076E58D /* XCRemoteSwiftPackageReference "ChartView" */,
+				898771292A3F91CB00F40467 /* XCRemoteSwiftPackageReference "OtpView-SwiftUI" */,
 			);
 			productRefGroup = 899EC56E2A000A1C00C90D49 /* Products */;
 			projectDirPath = "";
@@ -1094,6 +1098,14 @@
 				version = "2.0.0-beta.2";
 			};
 		};
+		898771292A3F91CB00F40467 /* XCRemoteSwiftPackageReference "OtpView-SwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kenagt/OtpView-SwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		89988BE82A1A3D35004DB4C6 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
@@ -1133,6 +1145,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 895E8EAA2A377D130076E58D /* XCRemoteSwiftPackageReference "ChartView" */;
 			productName = SwiftUICharts;
+		};
+		8987712A2A3F91CB00F40467 /* OtpView-SwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 898771292A3F91CB00F40467 /* XCRemoteSwiftPackageReference "OtpView-SwiftUI" */;
+			productName = "OtpView-SwiftUI";
 		};
 		89988BE92A1A3D35004DB4C6 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
