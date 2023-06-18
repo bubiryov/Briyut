@@ -11,9 +11,10 @@ struct SplashView: View {
             
     var body: some View {
         VStack {
-            Text("Briyut")
+            Text("Rubinko")
                 .foregroundColor(.white)
                 .font(.custom("Alokary", size: 25))
+                .tracking(4)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.mainColor)
