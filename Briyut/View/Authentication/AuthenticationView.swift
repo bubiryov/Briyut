@@ -25,6 +25,7 @@ struct AuthenticationView: View {
                             .tracking(4)
                             .font(.custom("Alokary", size: 25))
                             .padding(.top, ScreenSize.height * 0.12)
+
                         Spacer()
                     }
                     .edgesIgnoringSafeArea(.all)
@@ -65,8 +66,8 @@ struct AuthenticationView: View {
             .sheet(isPresented: $showResetPasswordView) {
                 ResetPasswordView(showResetPasswordView: $showResetPasswordView)
                     .presentationDetents([.medium, .large])
-                    .presentationCornerRadius(30)
-        }
+                    .presentationCornerRadius(20)
+            }
         }.ignoresSafeArea(.keyboard)
     }
 }

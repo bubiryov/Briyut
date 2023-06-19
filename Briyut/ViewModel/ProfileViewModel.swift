@@ -190,7 +190,6 @@ extension ProfileViewModel {
         if let lastDocument {
             self.allLastDocument = lastDocument
         }
-        print("Download")
     }
 
     func addNewOrder(order: OrderModel) async throws {
@@ -216,8 +215,6 @@ extension ProfileViewModel {
         
     func updateOrdersStatus(isDone: Bool, isDoctor: Bool) async throws {
         try await getAllOrders(dataFetchMode: .all, count: nil, isDone: isDone)
-//        try await getRequiredOrders(isDone: false, countLimit: 30)
-//        for order in activeOrders {
         for order in allOrders {
             let calendar = Calendar.current
             let procedureDuration = try await ProcedureManager.shared.getProduct(procedureId: order.procedureId).duration
@@ -227,10 +224,6 @@ extension ProfileViewModel {
         }
         allLastDocument = nil
         allOrders = []
-//        activeLastDocument = nil
-//        doneLastDocument = nil
-//        activeOrders = []
-//        doneOrders = []
         try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
         try await getRequiredOrders(dataFetchMode: .user, isDone: true, countLimit: 6)
     }

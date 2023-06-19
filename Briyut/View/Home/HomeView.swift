@@ -145,16 +145,13 @@ struct HomeView: View {
                 Task {
                     try await vm.loadCurrentUser()
                     try await vm.getAllDoctors()
+                    try await vm.getAllProcedures()
                     if vm.user?.isDoctor ?? false {
                         try await vm.getAllUsers()
                     }
                     if justOpened {
-                        try await vm.getAllProcedures()
                         try await vm.updateOrdersStatus(isDone: false, isDoctor: vm.user?.isDoctor ?? false)
                         justOpened = false
-                    } else {
-                        try await vm.getAllProcedures()
-                        try await vm.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 2)
                     }
                 }
             }

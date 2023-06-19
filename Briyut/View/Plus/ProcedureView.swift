@@ -22,10 +22,9 @@ struct ProcedureView: View {
     @State var availableDoctors: [String] = []
     @State private var showAlert = false
     @Binding var isEditing: Bool
-    
-    @State var test: Int = 0
-        
+            
     var body: some View {
+        
         VStack {
             BarTitle<BackButton, DeleteButton?>(text: title, leftButton: BackButton(), rightButton: procedure != nil ? DeleteButton(showAlert: $showAlert) : nil)
                 .padding(.bottom)
@@ -57,9 +56,7 @@ struct ProcedureView: View {
                             presentationMode.wrappedValue.dismiss()
                         }
                     }),
-                    secondaryButton: .default(Text("Cancel"), action: {
-                        
-                    })
+                    secondaryButton: .default(Text("Cancel"), action: { })
                 )
             }
             
@@ -70,7 +67,7 @@ struct ProcedureView: View {
             } label: {
                 AccentButton(text: "Choose available doctors", isButtonActive: true)
             }
-
+            
             Button {
                 Task {
                     if procedure == nil {
@@ -86,10 +83,6 @@ struct ProcedureView: View {
             .disabled(!validateFields())
         }
         .padding(.bottom, 20)
-        .ignoresSafeArea(.keyboard)
-        .onTapGesture {
-            hideKeyboard()
-        }
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if let procedure {
@@ -106,11 +99,17 @@ struct ProcedureView: View {
         .gesture(
             DragGesture()
                 .onEnded { gesture in
-                if gesture.translation.width > 100 {
-                    presentationMode.wrappedValue.dismiss()
+                    if gesture.translation.width > 100 {
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 }
-            }
+                .onEnded { gesture in
+                    if gesture.translation.height > 100 {
+                        hideKeyboard()
+                    }
+                }
         )
+        .ignoresSafeArea(.keyboard)
     }
     
     func validateFields() -> Bool {
@@ -146,8 +145,11 @@ struct ProcedureView: View {
 
 struct AddProcedure_Previews: PreviewProvider {
     static var previews: some View {
-        ProcedureView(title: "Edit procedure", buttonText: "Save changes", isEditing: .constant(false))
-            .environmentObject(ProfileViewModel())
+        VStack {
+            ProcedureView(title: "Edit procedure", buttonText: "Save changes", isEditing: .constant(false))
+                .environmentObject(ProfileViewModel())
+        }
+        .padding(.horizontal, 20)
     }
 }
 

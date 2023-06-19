@@ -71,10 +71,12 @@ struct RegistrationView: View {
                             presentationMode.wrappedValue.dismiss()
                         }
                     }
+                    .onEnded { gesture in
+                        if gesture.translation.height > 100 {
+                            hideKeyboard()
+                        }
+                    }
             )
-            .onTapGesture {
-                hideKeyboard()
-            }
         }
         .ignoresSafeArea(.keyboard)
     }

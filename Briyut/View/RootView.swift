@@ -14,7 +14,7 @@ struct RootView: View {
     @Binding var notEntered: Bool
     @State var justOpened: Bool = true
     @State var showSearch: Bool = false
-    
+        
     var body: some View {
         ZStack {
             VStack(spacing: 0) {

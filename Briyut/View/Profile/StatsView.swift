@@ -64,7 +64,7 @@ struct StatsView: View {
             ScrollView {
                 CustomDatePicker(selectedDate: $selectedDate, mode: .months, pastTime: true)
                 
-                ChartCardView(
+                PieChartCard(
                     total: monthOrders.reduce(0.0) { $0 + Double($1.price) },
                     firstValue: monthOrders.filter { $0.isDone }.reduce(0.0) { $0 + Double($1.price) },
                     secondValue: monthOrders.filter { !$0.isDone }.reduce(0.0) { $0 + Double($1.price) },
@@ -74,7 +74,7 @@ struct StatsView: View {
                     purpose: .earnings
                 )
                 
-                ChartCardView(
+                PieChartCard(
                     total: nil,
                     firstValue: Double(monthOrders.filter { $0.isDone }.count),
                     secondValue: Double(monthOrders.filter { !$0.isDone }.count),
@@ -154,7 +154,7 @@ struct StatsView_Previews: PreviewProvider {
     }
 }
 
-struct ChartCardView: View {
+struct PieChartCard: View {
     
     let total: Double?
     let firstValue: Double
@@ -267,7 +267,8 @@ struct ChartCardView: View {
                 }
             }
         }
-        .padding()
+        .padding(.horizontal)
+        .padding(.vertical, 15)
         .frame(minHeight: ScreenSize.height * 0.2)
         .background(Color.secondaryColor)
         .cornerRadius(ScreenSize.width / 20)
@@ -301,8 +302,8 @@ struct LineChartCard: View {
             }
             .padding(.horizontal)
         }
-        .padding(.vertical)
-        .frame(height: ScreenSize.height * 0.2)
+        .padding(.vertical, 20)
+        .frame(height: ScreenSize.height * 0.23)
         .background(Color.secondaryColor)
         .cornerRadius(ScreenSize.width / 20)
     }

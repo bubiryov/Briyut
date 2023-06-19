@@ -46,7 +46,7 @@ struct ProfileView: View {
                     EditProfileView(notEntered: $notEntered)
                 } label: {
                     Text("Edit profile")
-                        .frame(width: ScreenSize.height * 0.2, height: ScreenSize.height * 0.06)
+                        .frame(width: ScreenSize.height * 0.2, height: ScreenSize.height * 0.05)
                         .buttonStyle(.plain)
                         .foregroundColor(.white)
                         .bold()
