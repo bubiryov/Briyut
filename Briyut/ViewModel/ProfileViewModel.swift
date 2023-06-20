@@ -25,6 +25,15 @@ final class ProfileViewModel: ObservableObject {
     var activeLastDocument: DocumentSnapshot? = nil
     var doneLastDocument: DocumentSnapshot? = nil
     var allLastDocument: DocumentSnapshot? = nil
+    
+//    init() {
+//        for familyName in UIFont.familyNames {
+//            print(familyName)
+//            for fontName in UIFont.fontNames(forFamilyName: familyName) {
+//                print("--- \(fontName)")
+//            }
+//        }
+//    }
         
     func loadCurrentUser() async throws {
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
@@ -232,7 +241,7 @@ extension ProfileViewModel {
         return try await OrderManager.shared.getDayMounthOrders(for: date, selectionMode: selectionMode, doctorId: doctorId)
     }
     
-    func deleteUnfinishedOrders(idType: IdType, id: String) async throws {
+    func deleteUnfinishedOrders(idType: IDType, id: String) async throws {
         do {
             try await OrderManager.shared.deleteUnfinishedOrders(idType: idType, id: id)
             print("Active orders deleted")

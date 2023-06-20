@@ -177,10 +177,13 @@ extension AuthenticationViewModel {
         if let ID {
             do {
                 let (authDataResult, phoneNumber) = try await AuthenticationManager.shared.verifyCode(ID: ID, code: code)
-                let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: phoneNumber, isBlocked: false)
-                try await UserManager.shared.createNewUser(user: user)
-
-                errorText = nil
+                do {
+                    try await UserManager.shared.getUser(userId: authDataResult.uid)
+                } catch {
+                    let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: phoneNumber, isBlocked: false)
+                    try await UserManager.shared.createNewUser(user: user)
+                    errorText = nil
+                }
             } catch {
                 errorText = "Something went wrong"
                 Task {

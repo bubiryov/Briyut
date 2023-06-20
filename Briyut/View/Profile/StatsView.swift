@@ -11,40 +11,13 @@ import SwiftUICharts
 struct StatsView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
+    @Environment(\.presentationMode) var presentationMode
     @State private var selectedDoctor: DBUser? = nil
     @State private var selectedDate: Date = Date()
     @State private var monthOrders: [OrderModel] = []
     @State private var sorted: [Double] = []
     @State private var lineChartData: ([Double], Date, Date)  = ([], Date(), Date())
     
-//    var lineChartData: [Double] {
-//        let dailyCounts = monthOrders.reduce(into: [Date: Int]()) { counts, order in
-//            let calendar = Calendar.current
-//            let components = calendar.dateComponents([.year, .month, .day], from: order.date.dateValue())
-//            let date = calendar.date(from: components)!
-//            counts[date, default: 0] += 1
-//        }
-//
-//        let sortedDailyCounts = dailyCounts.sorted { $0.key < $1.key }
-//        let minDate = sortedDailyCounts.first?.key
-//        let maxDate = sortedDailyCounts.last?.key
-//
-//        var modifiedCounts: [Double] = []
-//
-//        if let minDate = minDate, let maxDate = maxDate {
-//            var currentDate = minDate
-//
-//            while currentDate <= maxDate {
-//                let count = sortedDailyCounts.first { $0.key == currentDate }?.value ?? 0
-//                modifiedCounts.append(Double(count))
-//
-//                currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate)!
-//            }
-//        }
-//
-//        return modifiedCounts
-//    }
-
     var body: some View {
         
         VStack {
@@ -111,7 +84,15 @@ struct StatsView: View {
                 lineChartData = calculateModifiedCounts()
             }
         }
-
+        .contentShape(Rectangle())
+        .gesture(
+            DragGesture()
+                .onEnded { gesture in
+                    if gesture.translation.width > 100 {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+        )
     }
     
     func calculateModifiedCounts() -> ([Double], Date, Date) {
@@ -167,11 +148,11 @@ struct PieChartCard: View {
     var body: some View {
         VStack(spacing: 5) {
             HStack {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 5) {
                     Text(purpose.rawValue)
-                        .font(.title2.bold())
+                        .font(Mariupol.bold, 22)
                     Text(selectedMonth == currentMonth ? "This month" : DateFormatter.customFormatter(format: "MMMM").string(from: selectedDate))
-                        .font(.title3.bold())
+                        .font(Mariupol.bold, 20)
                         .foregroundColor(.secondary)
                 }
                 Spacer()
@@ -180,6 +161,7 @@ struct PieChartCard: View {
                     Text("\(purpose == .earnings ? "₴" : "") \(String(format: "%.0f", total))")
                         .lineLimit(1)
                         .font(.largeTitle)
+                    
                 }
             }
             
@@ -212,7 +194,7 @@ struct PieChartCard: View {
                         
                         VStack(alignment: .leading) {
                             Text("Done")
-                                .font(.title3.bold())
+                                .font(Mariupol.bold, 20)
                                 .foregroundColor(.secondary)
                             
                             Text("\(purpose == .earnings ? "₴ " : "")\(String(format: "%.0f", firstValue))")
@@ -232,7 +214,7 @@ struct PieChartCard: View {
                         
                         VStack(alignment: .leading) {
                             Text("Future")
-                                .font(.title3.bold())
+                                .font(Mariupol.bold, 20)
                                 .foregroundColor(.secondary)
                             
                             Text("\(purpose == .earnings ? "₴ " : "")\(String(format: "%.0f", secondValue))")
@@ -273,11 +255,6 @@ struct PieChartCard: View {
         .background(Color.secondaryColor)
         .cornerRadius(ScreenSize.width / 20)
     }
-}
-
-enum ChartCardPurpose: String {
-    case earnings = "Earnings"
-    case appointments = "Appointments"
 }
 
 struct LineChartCard: View {

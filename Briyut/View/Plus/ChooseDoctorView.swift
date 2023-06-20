@@ -80,7 +80,10 @@ struct ChooseDoctorView: View {
 
 struct ChooseDoctorView_Previews: PreviewProvider {
     static var previews: some View {
-        ChooseDoctorView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, parallelQuantity: 1, availableDoctors: []), selectedTab: .constant(.plus))
-            .environmentObject(ProfileViewModel())
+        VStack {
+            ChooseDoctorView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, parallelQuantity: 1, availableDoctors: []), selectedTab: .constant(.plus))
+                .environmentObject(ProfileViewModel())
+        }
+        .padding(.horizontal, 20)
     }
 }

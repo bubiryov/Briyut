@@ -31,8 +31,7 @@ struct BarTitle<V1: View, V2: View>: View {
             
             HStack {
                 Text(text)
-                    .font(.title2)
-                    .bold()
+                    .font(Mariupol.bold, 22)
                     .onTapGesture {
                         if let action {
                             withAnimation(.easeInOut(duration: 0.15)) {

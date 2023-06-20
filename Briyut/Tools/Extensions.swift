@@ -27,6 +27,12 @@ extension Color {
     static let destructiveColor = Color("DestructiveColor")
 }
 
+extension View {
+    func font(_ mariupol: Mariupol, _ size: CGFloat) -> some View {
+        return self.font(.custom(mariupol.rawValue, size: size))
+    }
+}
+
 func bottomPadding() -> CGFloat {
     if ScreenSize.height < 750 {
         return ScreenSize.height * 0.02

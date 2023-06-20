@@ -166,27 +166,3 @@ fileprivate struct DeleteButton: View {
         .buttonStyle(.plain)
     }
 }
-
-struct AccentInputField: View {
-    
-    var promptText: String
-    var title: String?
-    @Binding var input: String
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            if let title {
-                Text(title)
-                    .font(.subheadline.bold())
-            }
-            
-            TextField("", text: $input, prompt: Text(promptText))
-                .bold()
-                .padding(.leading)
-                .frame(maxWidth: .infinity)
-                .frame(height: ScreenSize.height * 0.06)
-                .background(Color.secondary.opacity(0.1))
-                .cornerRadius(ScreenSize.width / 30)
-        }
-    }
-}

@@ -37,7 +37,7 @@ struct LoginView: View {
             HStack {
                 if let error = vm.errorText {
                     Text(error)
-                        .font(.subheadline)
+                        .font(Mariupol.regular, 17)
                         .foregroundColor(.red)
                 } else {
                     LabelledDivider(label: "or")
@@ -80,7 +80,8 @@ struct LoginView: View {
                 RegistrationView(notEntered: $notEntered)
             } label: {
                 Text("Create an account")
-                    .font(.subheadline.bold())
+                    .font(Mariupol.medium, 17)
+//                    .font(.subheadline.bold())
                     .foregroundColor(.black)
             }
 
@@ -90,7 +91,10 @@ struct LoginView: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView(notEntered: .constant(true))
-            .environmentObject(AuthenticationViewModel())
+        VStack {
+            LoginView(notEntered: .constant(true))
+                .environmentObject(AuthenticationViewModel())
+        }
+        .padding(.horizontal, 20)
     }
 }

@@ -31,28 +31,28 @@ struct DoctorOrderRow: View {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
                     Text(procedure?.name ?? "Massage")
-                        .font(.title3.bold())
-                        .lineLimit(1)
+                        .font(Mariupol.medium, 20)
                         .foregroundColor(order.1 ? .white : .primary)
+                        .lineLimit(1)
                     
                     Spacer()
                     
                     Text(DateFormatter.customFormatter(format: "HH:mm").string(from: order.0.date.dateValue()))
                         .foregroundColor(order.1 ? .white : .primary)
-                        .font(order.1 ? .title2.bold() : .body)
+                        .font(order.1 ? Font.custom(Mariupol.bold.rawValue, size: 22) : Font.custom(Mariupol.regular.rawValue, size: 17))
                 }
                 
                 Spacer()
                 
                 if order.1 {
                     Text("\(client?.name ?? "") \(client?.lastName ?? "")")
-                        .font(.subheadline.bold())
+                        .font(Mariupol.regular, 14)
                         .foregroundColor(.white)
                     
                     Spacer()
                     
                     Text("₴ \(order.0.price)")
-                        .font(.headline)
+                        .font(Mariupol.medium, 17)
                         .foregroundColor(.white)
                 }
                 
@@ -65,9 +65,9 @@ struct DoctorOrderRow: View {
                         } label: {
                             Text("Cancel")
                                 .foregroundColor(.black)
-                                .font(.headline.bold())
+                                .font(Mariupol.medium, 17)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: ScreenSize.height * 0.055)
+                                .frame(height: ScreenSize.height * 0.05)
                                 .background(Color.white)
                                 .cornerRadius(ScreenSize.width / 30)
                         }
@@ -80,17 +80,15 @@ struct DoctorOrderRow: View {
                         } label: {
                             Text("Reschedule")
                                 .foregroundColor(.black)
-                                .font(.headline.bold())
+                                .font(Mariupol.medium, 17)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: ScreenSize.height * 0.055)
+                                .frame(height: ScreenSize.height * 0.05)
                                 .background(Color.white)
                                 .cornerRadius(ScreenSize.width / 30)
                         }
                         .buttonStyle(.plain)
                     }
-
                 }
-                
             }
             .padding(.horizontal)
             .padding(.vertical, order.1 ? 10 : 0)
@@ -99,6 +97,7 @@ struct DoctorOrderRow: View {
             .padding(.leading)
             .opacity(order.0.end.dateValue() < Date() && !order.1 ? 0.5 : 1)
         }
+        .padding(.leading, 2)
         .frame(maxHeight: ScreenSize.height * 0.21)
         .frame(minHeight: ScreenSize.height * 0.05)
         .contentShape(Rectangle())

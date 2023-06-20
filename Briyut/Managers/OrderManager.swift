@@ -9,16 +9,6 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-enum DateSelectionMode {
-    case day
-    case month
-}
-
-enum DataFetchMode {
-    case all
-    case user
-}
-
 final class OrderManager {
     
     static let shared = OrderManager()
@@ -203,7 +193,7 @@ final class OrderManager {
         try await orderDocument(orderId: orderId).updateData(data)
     }
     
-    func deleteUnfinishedOrders(idType: IdType, id: String) async throws {
+    func deleteUnfinishedOrders(idType: IDType, id: String) async throws {
         let orderQuery: Query
         
         switch idType {
@@ -223,10 +213,4 @@ final class OrderManager {
             }
         }
     }
-}
-
-enum IdType {
-    case client
-    case doctor
-    case procedure
 }

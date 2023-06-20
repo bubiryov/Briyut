@@ -28,17 +28,18 @@ struct ProfileView: View {
                 ProfileImage(
                     photoURL: vm.user?.photoUrl,
                     frame: ScreenSize.height * 0.12,
-                    color: Color.secondary.opacity(0.1)
+                    color: Color.secondary.opacity(0.1),
+                    padding: 16
                 )
                 .cornerRadius(ScreenSize.width / 20)
                 
                 HStack {
                     Text(vm.user?.name ?? (vm.user?.userId ?? "Blocked user"))
-                        .font(.title2.bold())
+                        .font(Mariupol.bold, 22)
                         .lineLimit(1)
                     
                     Text(vm.user?.lastName ?? "")
-                        .font(.title2.bold())
+                        .font(Mariupol.bold, 22)
                         .lineLimit(1)
                 }
                                 
@@ -46,10 +47,10 @@ struct ProfileView: View {
                     EditProfileView(notEntered: $notEntered)
                 } label: {
                     Text("Edit profile")
+                        .font(Mariupol.medium, 17)
                         .frame(width: ScreenSize.height * 0.2, height: ScreenSize.height * 0.05)
                         .buttonStyle(.plain)
                         .foregroundColor(.white)
-                        .bold()
                         .background(Color.mainColor)
                         .cornerRadius(ScreenSize.width / 30)
                 }
@@ -129,6 +130,7 @@ struct ProfileImage: View {
     var photoURL: String?
     var frame: CGFloat
     var color: Color
+    var padding: CGFloat
     
     var body: some View {
         VStack {
@@ -142,7 +144,7 @@ struct ProfileImage: View {
             } placeholder: {
                 Image(systemName: "person.fill")
                     .resizable()
-                    .padding()
+                    .padding(padding)
                     .aspectRatio(contentMode: .fill)
                     .frame(width: frame, height: frame, alignment: .center)
                     .clipped()
@@ -186,14 +188,14 @@ struct NavigationRow<Destination: View>: View {
                     .cornerRadius(10)
                 
                 Text(title)
+                    .font(Mariupol.medium, 17)
                     .foregroundColor(.primary)
-                    .bold()
                     .padding(.leading, 8)
                     .lineLimit(1)
             }
             .padding(.horizontal)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .frame(height: ScreenSize.height * 0.06)
+            .frame(height: ScreenSize.height * 0.07)
             .background(Color.secondaryColor)
             .cornerRadius(ScreenSize.width / 30)
         }

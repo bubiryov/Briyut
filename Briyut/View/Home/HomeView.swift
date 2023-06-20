@@ -19,11 +19,11 @@ struct HomeView: View {
     var body: some View {
         
         NavigationView {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 25) {
                 BarTitle<MapButton, ProfileButton>(text: "", leftButton: MapButton(image: "pin", showMap: $showMap), rightButton: ProfileButton(selectedTab: $selectedTab, photo: vm.user?.photoUrl ?? ""), action: {})
                 
                 Text("Find your procedure")
-                    .font(.largeTitle.bold())
+                    .font(Mariupol.bold, 30)
                     .lineLimit(1)
                             
                 Button {
@@ -37,7 +37,7 @@ struct HomeView: View {
                         
                         Text("Search")
                             .foregroundColor(.secondary)
-                            .font(.callout.bold())
+                            .font(Mariupol.medium, 17)
                         
                         Spacer()
                     }
@@ -46,100 +46,125 @@ struct HomeView: View {
                     .background(Color.secondary.opacity(0.1))
                     .cornerRadius(ScreenSize.width / 30)
                 }
-                            
-                if let nearestOrder = vm.activeOrders.first {
-                    ZStack {
-                        if vm.activeOrders.count > 1 {
-                            RoundedRectangle(cornerRadius: ScreenSize.width / 15)
-                                .frame(height: ScreenSize.height * 0.14)
-                                .offset(y: ScreenSize.height / 35)
-                                .scaleEffect(0.85)
-                                .foregroundColor(.mainColor.opacity(0.7))
+                  
+                VStack(alignment: .leading) {
+                    
+                    HStack(alignment: .center) {
+                        Text("Appointments")
+                            .font(Mariupol.medium, 22)
+                        
+                        Spacer()
+                        
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.15)) {
+                                selectedTab = .plus
+                            }
+                        } label: {
+                            Text("See all")
+                                .font(Mariupol.medium, 17)
+                                .foregroundColor(.secondary.opacity(0.6))
                         }
-                        OrderRow(
-                            vm: vm,
-                            order: nearestOrder,
-                            withButtons: false,
-                            color: .mainColor,
-                            fontColor: .white,
-                            bigDate: true,
-                            userInformation: vm.user?.isDoctor ?? false ? .client : .doctor, photoBackgroundColor: .white)
+                        .buttonStyle(.plain)
+                        .foregroundColor(.primary)
                     }
-                } else {
-                    Button {
-                        withAnimation(.easeInOut(duration: 0.15)) {
-                            selectedTab = .plus
+
+                    if let nearestOrder = vm.activeOrders.first {
+                        ZStack {
+                            if vm.activeOrders.count > 1 {
+                                RoundedRectangle(cornerRadius: ScreenSize.width / 15)
+                                    .frame(height: ScreenSize.height * 0.14)
+                                    .offset(y: ScreenSize.height / 35)
+                                    .scaleEffect(0.85)
+                                    .foregroundColor(.mainColor.opacity(0.7))
+                            }
+                            OrderRow(
+                                vm: vm,
+                                order: nearestOrder,
+                                withButtons: false,
+                                color: .mainColor,
+                                fontColor: .white,
+                                bigDate: true,
+                                userInformation: vm.user?.isDoctor ?? false ? .client : .doctor, photoBackgroundColor: .white
+                            )
                         }
-                    } label: {
-                        Text("You don't have any appointments yet. \n Want to add?")
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .frame(height: ScreenSize.height * 0.14)
-                            .background(Color.secondaryColor)
-                            .cornerRadius(ScreenSize.width / 20)
-                            .foregroundColor(.secondary)
+                    } else {
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.15)) {
+                                selectedTab = .calendar
+                            }
+                        } label: {
+                            Text("You don't have any appointments yet")
+                                .font(Mariupol.medium, 17)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .frame(height: ScreenSize.height * 0.14)
+                                .background(Color.secondaryColor)
+                                .cornerRadius(ScreenSize.width / 20)
+                                .foregroundColor(.secondary)
+                        }
                     }
                 }
 
                 
                 Spacer()
                 
-                if !vm.doctors.isEmpty {
-                    VStack(alignment: .leading) {
-                        
-                        HStack(alignment: .center) {
-                            Text("Specialists")
-                                .font(.title2.bold())
-                            
-                            Spacer()
-                            
-                            NavigationLink {
-                                AllDoctorsView()
-                            } label: {
-                                Text("See all")
-                                    .font(.footnote)
-                                    .foregroundColor(.secondary)
-                            }
-                            .buttonStyle(.plain)
-                            .foregroundColor(.primary)
-                        }
-                        
-                        ScrollView(.horizontal) {
-                            LazyHStack(spacing: 15) {
-                                let doctors = vm.doctors
-                                ForEach(doctors, id: \.userId) { doctor in
-                                    VStack(alignment: .center, spacing: 7) {
-                                        ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
-                                            .cornerRadius(ScreenSize.width / 30)
-                                        
-                                        VStack {
-                                            Text(doctor.lastName ?? "")
-                                                .font(.callout.bold())
-                                                .multilineTextAlignment(.center)
-                                                .lineLimit(1)
-                                            
-                                            Text(doctor.name ?? "")
-                                                .font(.callout.bold())
-                                                .multilineTextAlignment(.center)
-                                                .lineLimit(1)
-                                        }
-                                        
-                                        Text("Rehabilitator")
-                                            .font(.footnote)
-                                            .foregroundColor(.secondary)
-                                    }
-                                    .padding()
-                                    .frame(maxWidth: ScreenSize.height * 0.18)
-                                    .frame(minWidth: ScreenSize.height * 0.16)
-                                    .frame(maxHeight: ScreenSize.height * 0.18)
-                                    .background(Color.secondaryColor)
-                                    .cornerRadius(ScreenSize.width / 20)
-                                }
-                            }
-                        }
-                        .scrollIndicators(.hidden)
-                        .frame(maxHeight: ScreenSize.height * 0.18)
-                    }
-                }
+//                if !vm.doctors.isEmpty {
+//                    VStack(alignment: .leading) {
+//
+//                        HStack(alignment: .center) {
+//                            Text("Specialists")
+//                                .font(Mariupol.medium, 22)
+//
+//                            Spacer()
+//
+//                            NavigationLink {
+//                                AllDoctorsView()
+//                            } label: {
+//                                Text("See all")
+//                                    .font(Mariupol.medium, 17)
+//                                    .foregroundColor(.secondary.opacity(0.6))
+//                            }
+//                            .buttonStyle(.plain)
+//                            .foregroundColor(.primary)
+//                        }
+//
+//                        ScrollView(.horizontal) {
+//                            LazyHStack(spacing: 15) {
+//                                let doctors = vm.doctors
+//                                ForEach(doctors, id: \.userId) { doctor in
+//                                    VStack(alignment: .center, spacing: 10) {
+//                                        ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .clear)
+//                                            .cornerRadius(ScreenSize.width / 30)
+//
+//                                        VStack(spacing: 2) {
+//                                            Text(doctor.lastName ?? "")
+//                                                .font(Mariupol.medium, 17)
+//                                                .multilineTextAlignment(.center)
+//                                                .lineLimit(1)
+//
+//                                            Text(doctor.name ?? "")
+//                                                .font(Mariupol.medium, 17)
+//                                                .multilineTextAlignment(.center)
+//                                                .lineLimit(1)
+//                                        }
+//
+//                                        Text("Rehabilitator")
+//                                            .font(Mariupol.regular, 14)
+//                                            .foregroundColor(.secondary)
+//                                    }
+//                                    .padding()
+//                                    .frame(width: ScreenSize.height * 0.15)
+////                                    .frame(maxWidth: ScreenSize.height * 0.18)
+////                                    .frame(minWidth: ScreenSize.height * 0.15)
+//                                    .frame(height: ScreenSize.height * 0.18)
+//                                    .background(Color.secondaryColor)
+//                                    .cornerRadius(ScreenSize.width / 20)
+//                                }
+//                            }
+//                        }
+//                        .scrollIndicators(.hidden)
+//                        .frame(height: ScreenSize.height * 0.18)
+//                    }
+//                }
             }
             .onAppear {
                 Task {
@@ -169,6 +194,7 @@ struct HomeView_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal)
+        .padding(.bottom)
     }
 }
 
@@ -183,7 +209,7 @@ struct ProfileButton: View {
                 selectedTab = .profile
             }
         } label: {
-            ProfileImage(photoURL: photo, frame: ScreenSize.height * 0.06, color: Color.secondary.opacity(0.1))
+            ProfileImage(photoURL: photo, frame: ScreenSize.height * 0.06, color: Color.secondary.opacity(0.1), padding: 16)
         }
         .buttonStyle(.plain)
         .cornerRadius(ScreenSize.width / 30)

@@ -105,6 +105,7 @@ struct UserRow: View {
         "Are you sure you want to delete the specialist?" :
         (user.isBlocked ?? false ? "Are you sure you want to unblock the user?" : "Are you sure you want to block the user?")
     }
+    
     var alertMessage: String {
         userStatus == .doctor ?
         "This action will not be undone. All apppointments will be cancelled." :
@@ -119,20 +120,22 @@ struct UserRow: View {
             HStack {
                 ProfileImage(
                     photoURL: user.photoUrl,
-                    frame: ScreenSize.height * 0.08,
-                    color: .white
+                    frame: ScreenSize.height * 0.06,
+                    color: .clear,
+                    padding: 10
                 )
                 .cornerRadius(ScreenSize.width / 30)
                 
                 Text("\(user.name ?? user.userId) \(user.lastName ?? "")")
+                    .font(Mariupol.medium, 17)
                     .foregroundColor(.primary)
-                    .bold()
                     .padding(.leading, 8)
                     .lineLimit(1)
                 
                 Spacer()
                 
             }
+            .frame(height: ScreenSize.height * 0.09)
             
             if showButtons {
                 HStack {
@@ -144,8 +147,8 @@ struct UserRow: View {
                         } label: {
                             Text(deleteButtonTitle)
                                 .foregroundColor(.black)
-                                .font(.headline.bold())
-                                .frame(height: ScreenSize.height * 0.055)
+                                .font(Mariupol.medium, 17)
+                                .frame(height: ScreenSize.height * 0.05)
                                 .frame(maxWidth: .infinity)
                                 .background(Color.white)
                                 .cornerRadius(ScreenSize.width / 30)
@@ -164,8 +167,8 @@ struct UserRow: View {
                     } label: {
                         Text("Call")
                             .foregroundColor(.white)
-                            .font(.headline.bold())
-                            .frame(height: ScreenSize.height * 0.055)
+                            .font(Mariupol.medium, 17)
+                            .frame(height: ScreenSize.height * 0.05)
                             .frame(maxWidth: .infinity)
                             .background(Color.mainColor)
                             .cornerRadius(ScreenSize.width / 30)
@@ -173,6 +176,9 @@ struct UserRow: View {
                     .buttonStyle(.plain)
                     .disabled(user.phoneNumber == nil && user.phoneNumber?.count ?? 0 < 8 ? true : false)
                 }
+//                .padding(.bottom)
+                .offset(y: -10)
+//                .padding(.top, 10)
                 .alert(isPresented: $deleteAlert) {
                     Alert(
                         title: Text(alertTitle),
@@ -192,9 +198,8 @@ struct UserRow: View {
             }
         }
         .padding(.horizontal)
-        .padding(.vertical, 10)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .frame(minHeight: ScreenSize.height * 0.1, maxHeight: ScreenSize.height * 0.21)
+//        .frame(minHeight: ScreenSize.height * 0.09, maxHeight: 200)
         .background(user.isBlocked ?? false ? Color.secondary.opacity(0.1) : Color.secondaryColor)
         .cornerRadius(ScreenSize.width / 30)
     }

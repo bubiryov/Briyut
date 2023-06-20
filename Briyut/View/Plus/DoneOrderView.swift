@@ -50,7 +50,7 @@ struct DoneOrderView: View {
                         .frame(width: 250, height: 200)
                     
                     Text("Done")
-                        .font(.largeTitle.bold())
+                        .font(Mariupol.bold, 30)
                         .foregroundColor(.mainColor)
                 }
             }
@@ -147,12 +147,12 @@ fileprivate struct DoneOrderViewRow: View {
         HStack {
             Text(leftText)
                 .foregroundColor(.secondary)
-                .font(.callout)
+                .font(Mariupol.regular, 17)
             
             Spacer()
             
             Text(rightText)
-                .font(.callout.bold())
+                .font(Mariupol.medium, 17)
         }
     }
 }

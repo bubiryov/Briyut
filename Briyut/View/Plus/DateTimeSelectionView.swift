@@ -59,7 +59,7 @@ struct DateTimeSelectionView: View {
                     }) {
                         Text(timeSlot)
                             .foregroundColor(selectedTime == timeSlot ? .white : .black)
-                            .bold()
+                            .font(Mariupol.medium, 17)
                             .frame(width: ScreenSize.width * 0.2, height: ScreenSize.height * 0.05)
                             .background(
                                 RoundedRectangle(cornerRadius: ScreenSize.width / 30)
@@ -325,11 +325,6 @@ struct DateTimeSelectionView_Previews: PreviewProvider {
     }
 }
 
-enum DatePickerMode {
-    case days
-    case months
-}
-
 struct CustomDatePicker: View {
     @Binding var selectedDate: Date
     let mode: DatePickerMode
@@ -367,13 +362,12 @@ struct CustomDatePicker: View {
                         VStack(spacing: 2) {
                             if mode == .days {
                                 Text(DateFormatter.customFormatter(format: "d").string(from: date))
+                                    .font(Mariupol.medium, 17)
                                     .foregroundColor(isSelected ? .white : .primary)
-                                    .bold()
-                                    .font(.system(size: 16))
                             }
                             Text(DateFormatter.customFormatter(format: mode == .days ? "E" : "MMM").string(from: date))
                                 .foregroundColor(isSelected ? .white : .primary)
-                                .font(.system(size: 12))
+                                .font(Mariupol.regular, 11)
                         }
                         .frame(width: ScreenSize.height * 0.05, height: ScreenSize.width * 0.15)
                         .background(isSelected ? Color.mainColor : Color.clear)

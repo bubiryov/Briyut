@@ -9,11 +9,6 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-enum UserStatus {
-    case client
-    case doctor
-}
-
 struct OrderRow: View {
     
     let vm: ProfileViewModel
@@ -30,7 +25,7 @@ struct OrderRow: View {
     
     var body: some View {
         
-        VStack(spacing: 15) {
+        VStack(spacing: 10) {
             HStack {
                 let doc = vm.doctors.first(where: { $0.userId == order.doctorId })
                 let procedure = vm.procedures.first(where: { $0.procedureId == order.procedureId })
@@ -39,14 +34,15 @@ struct OrderRow: View {
                 ProfileImage(
                     photoURL: userInformation == .client ? user?.photoUrl : doc?.photoUrl,
                     frame: ScreenSize.height * 0.1,
-                    color: photoBackgroundColor
+                    color: photoBackgroundColor,
+                    padding: 16
                 )
                     .cornerRadius(ScreenSize.width / 20)
                 
                 VStack(alignment: .leading) {
                     
                     Text(procedure?.name ?? "Deleted procedure")
-                        .font(.title3.bold())
+                        .font(Mariupol.medium, 20)
                         .lineLimit(1)
                         .foregroundColor(fontColor != nil ? fontColor : .primary)
 
@@ -54,11 +50,11 @@ struct OrderRow: View {
                                         
                     if userInformation == .client {
                         Text("\(user?.name ?? "\(user?.userId ?? "Deleted user")") \(((user?.name) != nil) ? user?.lastName ?? "" : "")")
-                            .font(.subheadline)
+                            .font(Mariupol.regular, 14)
                             .foregroundColor(fontColor != nil ? fontColor : .secondary)
                     } else {
                         Text("\(doc?.name ?? "\(doc?.userId ?? "Deleted specialist")") \(doc?.lastName ?? "")")
-                            .font(.subheadline)
+                            .font(Mariupol.regular, 14)
                             .foregroundColor(fontColor != nil ? fontColor : .secondary)
                     }
 
@@ -66,7 +62,8 @@ struct OrderRow: View {
                     Spacer()
                     
                     Text(DateFormatter.customFormatter(format: "dd MMM yyyy, HH:mm").string(from: order.date.dateValue()))
-                        .font(bigDate ? .title3.bold() : .subheadline.bold())
+                        .font(bigDate ? Font.custom(Mariupol.medium.rawValue, size: 22) : Font.custom(Mariupol.medium.rawValue, size: 17))
+
                         .foregroundColor(fontColor != nil ? fontColor : .primary)
                     
                 }
@@ -86,8 +83,8 @@ struct OrderRow: View {
                     } label: {
                         Text("Cancel")
                             .foregroundColor(.black)
-                            .font(.headline.bold())
-                            .frame(height: ScreenSize.height * 0.055)
+                            .font(Mariupol.medium, 17)
+                            .frame(height: ScreenSize.height * 0.05)
                             .frame(maxWidth: .infinity)
                             .background(Color.white)
                             .cornerRadius(ScreenSize.width / 30)
@@ -101,8 +98,8 @@ struct OrderRow: View {
                     } label: {
                         Text("Reschedule")
                             .foregroundColor(.white)
-                            .font(.headline.bold())
-                            .frame(height: ScreenSize.height * 0.055)
+                            .font(Mariupol.medium, 17)
+                            .frame(height: ScreenSize.height * 0.05)
                             .frame(maxWidth: .infinity)
                             .background(Color.mainColor)
                             .cornerRadius(ScreenSize.width / 30)
@@ -114,7 +111,7 @@ struct OrderRow: View {
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 20)
         .padding(.vertical, 7)
-        .frame(height: !withButtons ? ScreenSize.height * 0.14 : ScreenSize.height * 0.21)
+        .frame(height: withButtons ? ScreenSize.height * 0.2 : ScreenSize.height * 0.135)
         .background(color == nil ? (order.isDone ? Color.secondary.opacity(0.1) : Color.secondaryColor) : color)
         .cornerRadius(ScreenSize.width / 20)
         .alert(isPresented: $showAlert) {
@@ -122,8 +119,6 @@ struct OrderRow: View {
                 title: Text("Are you sure you want to remove the appointment?"),
                 primaryButton: .destructive(Text("Remove"), action: {
                     Task {
-//                        vm.activeOrders = []
-//                        vm.activeLastDocument = nil
                         try await vm.removeOrder(orderId: order.orderId)
                     }
                 }),
@@ -157,7 +152,7 @@ struct OrderRow: View {
 struct OrderRow_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: false, color: .secondaryColor, fontColor: .black, bigDate: false, userInformation: .doctor, photoBackgroundColor: .secondary.opacity(0.1))
+            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: true, color: .secondaryColor, fontColor: .black, bigDate: false, userInformation: .doctor, photoBackgroundColor: .secondary.opacity(0.1))
         }
         .padding(.horizontal, 20)
     }

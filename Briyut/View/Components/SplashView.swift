@@ -14,7 +14,7 @@ struct SplashView: View {
             Text("Rubinko")
                 .foregroundColor(.white)
                 .font(.custom("Alokary", size: 25))
-                .tracking(4)
+                .tracking(3)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.mainColor)

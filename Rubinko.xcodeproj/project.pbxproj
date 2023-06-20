@@ -15,6 +15,11 @@
 		896D3D082A3DC7270053E873 /* ClinicMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896D3D072A3DC7270053E873 /* ClinicMapView.swift */; };
 		896D3D0A2A3DDBF10053E873 /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896D3D092A3DDBF10053E873 /* LocationModel.swift */; };
 		896D3D0C2A3E28170053E873 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896D3D0B2A3E28170053E873 /* LocationManager.swift */; };
+		897ED61C2A41B2C700668890 /* Mariupol-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 897ED6192A41B2C700668890 /* Mariupol-Regular.ttf */; };
+		897ED61D2A41B2C700668890 /* Mariupol-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 897ED61A2A41B2C700668890 /* Mariupol-Bold.ttf */; };
+		897ED61E2A41B2C700668890 /* Mariupol-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 897ED61B2A41B2C700668890 /* Mariupol-Medium.ttf */; };
+		897ED6202A41B6D500668890 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897ED61F2A41B6D500668890 /* Enums.swift */; };
+		897ED6222A41C5EA00668890 /* AccentInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897ED6212A41C5EA00668890 /* AccentInputField.swift */; };
 		89804BDA2A2E1C66002E2282 /* AllUsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89804BD92A2E1C66002E2282 /* AllUsersView.swift */; };
 		8987712B2A3F91CB00F40467 /* OtpView-SwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8987712A2A3F91CB00F40467 /* OtpView-SwiftUI */; };
 		898FD9B52A08F4E000725697 /* AllProcedures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B42A08F4E000725697 /* AllProcedures.swift */; };
@@ -54,7 +59,6 @@
 		89A17E562A03B36100C92A58 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E552A03B36100C92A58 /* SignInWithAppleButton.swift */; };
 		89A17E582A03C8BD00C92A58 /* AppleAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E572A03C8BD00C92A58 /* AppleAuthenticationManager.swift */; };
 		89A17E5A2A03C8E300C92A58 /* AppleSignInResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E592A03C8E300C92A58 /* AppleSignInResultModel.swift */; };
-		89A17E5C2A03C9B200C92A58 /* AuthProviderOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E5B2A03C9B200C92A58 /* AuthProviderOption.swift */; };
 		89BDBA6C2A35D428008449BE /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDBA6B2A35D428008449BE /* StatsView.swift */; };
 		89BFAA3B2A1F5A3400DF2D0B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 89BFAA3A2A1F5A3400DF2D0B /* FirebaseStorage */; };
 		89BFAA3D2A1F5B1900DF2D0B /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BFAA3C2A1F5B1900DF2D0B /* StorageManager.swift */; };
@@ -130,6 +134,11 @@
 		896D3D072A3DC7270053E873 /* ClinicMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinicMapView.swift; sourceTree = "<group>"; };
 		896D3D092A3DDBF10053E873 /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
 		896D3D0B2A3E28170053E873 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		897ED6192A41B2C700668890 /* Mariupol-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Mariupol-Regular.ttf"; sourceTree = "<group>"; };
+		897ED61A2A41B2C700668890 /* Mariupol-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Mariupol-Bold.ttf"; sourceTree = "<group>"; };
+		897ED61B2A41B2C700668890 /* Mariupol-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Mariupol-Medium.ttf"; sourceTree = "<group>"; };
+		897ED61F2A41B6D500668890 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		897ED6212A41C5EA00668890 /* AccentInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentInputField.swift; sourceTree = "<group>"; };
 		89804BD92A2E1C66002E2282 /* AllUsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllUsersView.swift; sourceTree = "<group>"; };
 		898FD9B42A08F4E000725697 /* AllProcedures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllProcedures.swift; sourceTree = "<group>"; };
 		898FD9B62A08FDE000725697 /* ProcedureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureView.swift; sourceTree = "<group>"; };
@@ -167,7 +176,6 @@
 		89A17E552A03B36100C92A58 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
 		89A17E572A03C8BD00C92A58 /* AppleAuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthenticationManager.swift; sourceTree = "<group>"; };
 		89A17E592A03C8E300C92A58 /* AppleSignInResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInResultModel.swift; sourceTree = "<group>"; };
-		89A17E5B2A03C9B200C92A58 /* AuthProviderOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProviderOption.swift; sourceTree = "<group>"; };
 		89BDBA6B2A35D428008449BE /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		89BFAA3C2A1F5B1900DF2D0B /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		89C5904D2A051AFB00975E50 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
@@ -348,6 +356,9 @@
 		899EC5A82A00167400C90D49 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				897ED61A2A41B2C700668890 /* Mariupol-Bold.ttf */,
+				897ED61B2A41B2C700668890 /* Mariupol-Medium.ttf */,
+				897ED6192A41B2C700668890 /* Mariupol-Regular.ttf */,
 				899EC5A92A0016A700C90D49 /* Alokary.ttf */,
 			);
 			path = Fonts;
@@ -381,6 +392,7 @@
 			isa = PBXGroup;
 			children = (
 				899EC5B52A001A7600C90D49 /* AuthInputField.swift */,
+				897ED6212A41C5EA00668890 /* AccentInputField.swift */,
 				89C5904D2A051AFB00975E50 /* BackButton.swift */,
 				89C5904F2A05291800975E50 /* BarButtonView.swift */,
 				899EC5BE2A002FF400C90D49 /* AccentButton.swift */,
@@ -420,11 +432,11 @@
 				899EC5C82A00434A00C90D49 /* AuthDataResultModel.swift */,
 				89CA5AB82A02FCE100695069 /* GoogleSignInResultModel.swift */,
 				89A17E592A03C8E300C92A58 /* AppleSignInResultModel.swift */,
-				89A17E5B2A03C9B200C92A58 /* AuthProviderOption.swift */,
 				89C5905F2A059EF300975E50 /* DBUser.swift */,
 				890C28B92A0652FE000DB1A6 /* ProcedureModel.swift */,
 				89CFDD692A122ED700159C4B /* OrderModel.swift */,
 				896D3D092A3DDBF10053E873 /* LocationModel.swift */,
+				897ED61F2A41B6D500668890 /* Enums.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -635,10 +647,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				897ED61C2A41B2C700668890 /* Mariupol-Regular.ttf in Resources */,
 				899EC5792A000A1E00C90D49 /* Preview Assets.xcassets in Resources */,
 				89988BF32A1A3EF9004DB4C6 /* Done.json in Resources */,
 				899EC5752A000A1E00C90D49 /* Assets.xcassets in Resources */,
+				897ED61D2A41B2C700668890 /* Mariupol-Bold.ttf in Resources */,
 				899EC5AA2A0016A700C90D49 /* Alokary.ttf in Resources */,
+				897ED61E2A41B2C700668890 /* Mariupol-Medium.ttf in Resources */,
 				899EC59C2A000C3300C90D49 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -671,7 +686,6 @@
 				89C6096B2A3C770200D5BF00 /* ChangePasswordView.swift in Sources */,
 				89C9C16C2A3215CD0078A042 /* HistoryView.swift in Sources */,
 				89C590542A05642B00975E50 /* TabBar.swift in Sources */,
-				89A17E5C2A03C9B200C92A58 /* AuthProviderOption.swift in Sources */,
 				898FD9C02A096D4B00725697 /* AvailableDoctorsView.swift in Sources */,
 				89A17E562A03B36100C92A58 /* SignInWithAppleButton.swift in Sources */,
 				89CFDD722A12824200159C4B /* DoctorOrders.swift in Sources */,
@@ -679,6 +693,7 @@
 				89C590562A0570B000975E50 /* RootView.swift in Sources */,
 				899EC5D12A00596D00C90D49 /* LabelledDivider.swift in Sources */,
 				898FD9B52A08F4E000725697 /* AllProcedures.swift in Sources */,
+				897ED6202A41B6D500668890 /* Enums.swift in Sources */,
 				89988BEE2A1A3DFB004DB4C6 /* DoneAnimation.swift in Sources */,
 				890ECEDF2A162F0500BEE3CC /* DateTimeSelectionView.swift in Sources */,
 				89E8AB342A14DD52000661E6 /* SplashView.swift in Sources */,
@@ -702,6 +717,7 @@
 				898FD9BC2A0910F100725697 /* AllDoctorsView.swift in Sources */,
 				899EC5A62A000E6500C90D49 /* AppDelegate.swift in Sources */,
 				89CFDD6A2A122ED700159C4B /* OrderModel.swift in Sources */,
+				897ED6222A41C5EA00668890 /* AccentInputField.swift in Sources */,
 				898FD9B72A08FDE000725697 /* ProcedureView.swift in Sources */,
 				899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */,
 				899EC5C92A00434A00C90D49 /* AuthDataResultModel.swift in Sources */,

@@ -43,8 +43,11 @@ struct ClientOrders: View {
 
 struct ClientOrders_Previews: PreviewProvider {
     static var previews: some View {
-        ClientOrders()
-            .environmentObject(ProfileViewModel())
+        VStack {
+            ClientOrders()
+                .environmentObject(ProfileViewModel())
+        }
+        .padding(.horizontal, 20)
     }
 }
 
@@ -72,7 +75,7 @@ struct CustomSegmentedPicker: View {
                         }
                     } label: {
                         Text(options[index])
-                            .bold()
+                            .font(Mariupol.medium, 17)
                             .foregroundColor(selectedIndex == index ? .white : .black)
                             .frame(maxWidth: .infinity)
                     }

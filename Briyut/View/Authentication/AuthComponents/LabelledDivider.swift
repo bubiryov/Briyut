@@ -22,7 +22,9 @@ struct LabelledDivider: View {
     var body: some View {
         HStack {
             line
-            Text(label).foregroundColor(color)
+            Text(label)
+                .font(Mariupol.regular, 17)
+                .foregroundColor(color)
                 .padding(.horizontal)
             line
         }

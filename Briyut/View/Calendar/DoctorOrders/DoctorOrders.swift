@@ -108,21 +108,6 @@ struct DoctorOrders_Previews: PreviewProvider {
     }
 }
 
-enum DoctorOption: Hashable {
-    case allDoctors
-    case user(DBUser)
-
-    func hash(into hasher: inout Hasher) {
-        switch self {
-        case .allDoctors:
-            hasher.combine(0)
-        case .user(let user):
-            hasher.combine(1)
-            hasher.combine(user)
-        }
-    }
-}
-
 struct DoctorMenuPicker: View {
     
     let vm: ProfileViewModel
@@ -148,7 +133,8 @@ struct DoctorMenuPicker: View {
             ProfileImage(
                 photoURL: doctor == selectedDoctor ? doctor?.photoUrl ?? "" : "",
                 frame: ScreenSize.height * 0.06,
-                color: Color.secondary.opacity(0.1)
+                color: Color.secondary.opacity(0.1),
+                padding: 16
             )
             .buttonStyle(.plain)
             .cornerRadius(ScreenSize.width / 30)

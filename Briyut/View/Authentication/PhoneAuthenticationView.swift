@@ -41,6 +41,7 @@ struct PhoneAuthenticationView: View {
                 )
                 .keyboardType(.numberPad)
                 .textContentType(.oneTimeCode)
+                .padding(.horizontal)
                 
                 Spacer()
                 
@@ -49,6 +50,7 @@ struct PhoneAuthenticationView: View {
                         try await vm.verifyCode(code: code)
                         hideKeyboard()
                         notEntered = false
+                        sentSms = false
                     }
                 } label: {
                     AccentButton(text: "Done", isButtonActive: code.count != 6 ? false : true)
@@ -91,7 +93,17 @@ struct PhoneAuthenticationView: View {
         .navigationBarTitleDisplayMode(.large)
         .onDisappear {
             vm.errorText = nil
+            print("Disappear")
         }
+        .contentShape(Rectangle())
+        .gesture(
+            DragGesture()
+                .onEnded { gesture in
+                    if gesture.translation.width > 100 {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+        )
     }
 }
 

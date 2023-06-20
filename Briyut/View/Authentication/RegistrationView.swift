@@ -26,7 +26,7 @@ struct RegistrationView: View {
                 AuthInputField(
                     field: $vm.email,
                     isSecureField: false,
-                    title: "briyut@gmail.com",
+                    title: "rubinko@gmail.com",
                     header: "Your email address"
                 )
                 

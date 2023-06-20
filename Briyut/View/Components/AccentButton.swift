@@ -23,9 +23,9 @@ struct AccentButton: View {
         }
     }
     
-    var bold: Bool {
-        isButtonActive ? true : false
-    }
+//    var bold: Bool {
+//        isButtonActive ? true : false
+//    }
     
     var height: CGFloat = ScreenSize.height * 0.06
     var filled: Bool = true
@@ -38,8 +38,8 @@ struct AccentButton: View {
         
         if filled {
             Text(text)
+                .font(Mariupol.medium, 17)
                 .foregroundColor(textColor)
-                .bold(bold)
                 .frame(height: height)
                 .frame(maxWidth: .infinity)
                 .background(buttonColor)
@@ -55,7 +55,7 @@ struct AccentButton: View {
                 }
                 Text(text)
                     .foregroundColor(textColor)
-                    .bold(bold)
+                    .font(Mariupol.medium, 17)
             }
             .frame(height: height)
             .frame(maxWidth: .infinity)
@@ -70,6 +70,6 @@ struct AccentButton: View {
 
 struct AccentButton_Previews: PreviewProvider {
     static var previews: some View {
-        AccentButton(filled: false, text: "Continue", isButtonActive: true, logo: "googleLogo")
+        AccentButton(filled: true, text: "Continue", isButtonActive: true, logo: "googleLogo")
     }
 }

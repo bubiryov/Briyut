@@ -43,7 +43,8 @@ struct EditProfileView: View {
                             ProfileImage(
                                 photoURL: vm.user?.photoUrl,
                                 frame: ScreenSize.height * 0.12,
-                                color: Color.secondary.opacity(0.1)
+                                color: Color.secondary.opacity(0.1),
+                                padding: 16
                             )
                         } else {
                             if let data = data, let image = UIImage(data: data) {

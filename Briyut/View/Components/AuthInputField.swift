@@ -21,12 +21,14 @@ struct AuthInputField: View {
         VStack(alignment: .leading) {
             if let header {
                 Text(header)
-                    .font(.subheadline.bold())
+                    .font(Mariupol.medium, 17)
+//                    .font(.subheadline.bold())
             }
             if isSecureField {
                 if showEye {
                     TextField(title, text: $field)
-                        .bold()
+                        .font(Mariupol.medium, 17)
+//                        .bold()
                         .padding()
                         .frame(height: heightFrame)
                         .textInputAutocapitalization(.never)
@@ -47,7 +49,8 @@ struct AuthInputField: View {
                         )
                 } else {
                     SecureField(title, text: $field)
-                        .bold()
+                        .font(Mariupol.medium, 17)
+//                        .bold()
                         .padding()
                         .frame(height: heightFrame)
                         .textInputAutocapitalization(.never)
@@ -97,6 +100,9 @@ extension AuthInputField {
 
 struct InputField_Previews: PreviewProvider {
     static var previews: some View {
-        AuthInputField(field: .constant(""), showEye: false, isSecureField: false, title: "briyut@gmail.com", header: "Your email address")
+        VStack {
+            AuthInputField(field: .constant(""), showEye: true, isSecureField: true, title: "rubinko@gmail.com", header: "Your email address")
+        }
+        .padding()
     }
 }

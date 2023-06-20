@@ -27,7 +27,11 @@ struct ChooseClientView: View {
     
     var body: some View {
         VStack {
-            BarTitle<BackButton, SearchButton>(text: "Choose a client", leftButton: BackButton(), rightButton: SearchButton(showSearch: $showSearch, searchText: $searchText))
+            BarTitle<BackButton, SearchButton>(
+                text: "Choose a client",
+                leftButton: BackButton(),
+                rightButton: SearchButton(showSearch: $showSearch, searchText: $searchText)
+            )
             
             if showSearch {
                 AccentInputField(promptText: "User's name", title: nil, input: $searchText)
@@ -45,9 +49,20 @@ struct ChooseClientView: View {
             ScrollView {
                 ForEach(filteredUsers, id: \.userId) { user in
                     NavigationLink {
-                        DateTimeSelectionView(doctor: vm.user, procedure: procedure, mainButtonTitle: "Add appoinment", client: user, selectedTab: $selectedTab)
+                        DateTimeSelectionView(
+                            doctor: vm.user,
+                            procedure: procedure,
+                            mainButtonTitle: "Add appoinment",
+                            client: user,
+                            selectedTab: $selectedTab
+                        )
                     } label: {
-                        UserRow(vm: vm, user: user, showButtons: false, userStatus: .client)
+                        UserRow(
+                            vm: vm,
+                            user: user,
+                            showButtons: false,
+                            userStatus: .client
+                        )
                     }
                 }
             }
@@ -70,7 +85,10 @@ struct ChooseClientView: View {
 
 struct ChooseClienView_Previews: PreviewProvider {
     static var previews: some View {
-        ChooseClientView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, parallelQuantity: 1, availableDoctors: []), selectedTab: .constant(.home))
-            .environmentObject(ProfileViewModel())
+        VStack {
+            ChooseClientView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, parallelQuantity: 1, availableDoctors: []), selectedTab: .constant(.home))
+                .environmentObject(ProfileViewModel())
+        }
+        .padding(.horizontal, 20)
     }
 }

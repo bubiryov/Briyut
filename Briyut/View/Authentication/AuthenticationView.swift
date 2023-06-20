@@ -22,14 +22,13 @@ struct AuthenticationView: View {
                     VStack {
                         Text("Rubinko")
                             .foregroundColor(.white)
-                            .tracking(4)
+                            .tracking(3)
                             .font(.custom("Alokary", size: 25))
                             .padding(.top, ScreenSize.height * 0.12)
 
                         Spacer()
                     }
                     .edgesIgnoringSafeArea(.all)
-//                    .ignoresSafeArea(.keyboard)
                     
                     VStack {
                         
@@ -44,7 +43,6 @@ struct AuthenticationView: View {
                     .shadow(radius: 10, y: -10)
                     .offset(y: ScreenSize.height / 3.5)
                     .edgesIgnoringSafeArea(.all)
-//                    .ignoresSafeArea(.keyboard)
                 }
                 .background(Color.mainColor)
                 .toolbar {

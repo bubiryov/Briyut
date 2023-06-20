@@ -102,6 +102,12 @@ struct AllProcedures: View {
                 }
                 .scrollIndicators(.hidden)
             }
+//
+            .onAppear {
+                Task {
+                    try await vm.getAllProcedures()
+                }
+            }
         }
     }
     
@@ -145,7 +151,7 @@ struct ProcedureRow: View {
     
     var vm: ProfileViewModel
     var procedure: ProcedureModel
-    var cornerRadius = ScreenSize.width / 20
+    var cornerRadius = ScreenSize.width / 30
     @Binding var isEditing: Bool
     @Binding var selectedTab: Tab
     
@@ -165,9 +171,9 @@ struct ProcedureRow: View {
             HStack {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(procedure.name)
-                        .font(.title3.bold())
+                        .font(Mariupol.medium, 20)
                     Text("\(procedure.duration) min")
-                        .font(.subheadline)
+                        .font(Mariupol.regular, 14)
                 }
                 .padding(.vertical, 7)
                 
@@ -175,11 +181,11 @@ struct ProcedureRow: View {
                 
                 VStack {
                     Text("₴ \(procedure.cost)")
-                        .font(.title2)
+                        .font(Mariupol.regular, 22)
                 }
             }
             .padding(.horizontal, 20)
-            .frame(height: ScreenSize.height * 0.1)
+            .frame(minHeight: ScreenSize.height * 0.09)
             .background(Color.secondaryColor)
             .cornerRadius(cornerRadius)
         }

@@ -28,7 +28,7 @@ struct HistoryView: View {
                             fontColor: nil,
                             bigDate: false,
                             userInformation: .doctor,
-                            photoBackgroundColor: Color.secondary.opacity(0.1)
+                            photoBackgroundColor: .clear
                         )
                         
                         if order == vm.allOrders.last {
