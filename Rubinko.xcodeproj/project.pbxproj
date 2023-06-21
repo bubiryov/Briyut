@@ -15,7 +15,7 @@
 		894068762A42FA1800DC16F4 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894068752A42FA1800DC16F4 /* LocationView.swift */; };
 		894068782A432C8700DC16F4 /* LocationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894068772A432C8700DC16F4 /* LocationsViewModel.swift */; };
 		894068812A43893500DC16F4 /* LoadingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894068802A43893500DC16F4 /* LoadingAnimation.swift */; };
-		894068832A438AA000DC16F4 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 894068822A438AA000DC16F4 /* loading.json */; };
+		894068892A4393B000DC16F4 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 894068882A4393B000DC16F4 /* loading.json */; };
 		895E8EAC2A377D140076E58D /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 895E8EAB2A377D140076E58D /* SwiftUICharts */; };
 		896D3D082A3DC7270053E873 /* ClinicMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896D3D072A3DC7270053E873 /* ClinicMapView.swift */; };
 		896D3D0A2A3DDBF10053E873 /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896D3D092A3DDBF10053E873 /* LocationModel.swift */; };
@@ -140,7 +140,7 @@
 		894068752A42FA1800DC16F4 /* LocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
 		894068772A432C8700DC16F4 /* LocationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsViewModel.swift; sourceTree = "<group>"; };
 		894068802A43893500DC16F4 /* LoadingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingAnimation.swift; sourceTree = "<group>"; };
-		894068822A438AA000DC16F4 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
+		894068882A4393B000DC16F4 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		896D3D072A3DC7270053E873 /* ClinicMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinicMapView.swift; sourceTree = "<group>"; };
 		896D3D092A3DDBF10053E873 /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
 		896D3D0B2A3E28170053E873 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -268,7 +268,7 @@
 			isa = PBXGroup;
 			children = (
 				894068802A43893500DC16F4 /* LoadingAnimation.swift */,
-				894068822A438AA000DC16F4 /* loading.json */,
+				894068882A4393B000DC16F4 /* loading.json */,
 			);
 			path = Loading;
 			sourceTree = "<group>";
@@ -680,12 +680,12 @@
 			files = (
 				897ED61C2A41B2C700668890 /* Mariupol-Regular.ttf in Resources */,
 				899EC5792A000A1E00C90D49 /* Preview Assets.xcassets in Resources */,
-				894068832A438AA000DC16F4 /* loading.json in Resources */,
 				89988BF32A1A3EF9004DB4C6 /* Done.json in Resources */,
 				899EC5752A000A1E00C90D49 /* Assets.xcassets in Resources */,
 				897ED61D2A41B2C700668890 /* Mariupol-Bold.ttf in Resources */,
 				899EC5AA2A0016A700C90D49 /* Alokary.ttf in Resources */,
 				897ED61E2A41B2C700668890 /* Mariupol-Medium.ttf in Resources */,
+				894068892A4393B000DC16F4 /* loading.json in Resources */,
 				899EC59C2A000C3300C90D49 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

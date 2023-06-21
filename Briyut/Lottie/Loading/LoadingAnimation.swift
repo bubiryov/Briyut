@@ -14,7 +14,7 @@ struct LoadingAnimation: UIViewRepresentable {
         let animationView = LottieAnimationView()
         let animation = LottieAnimation.named("loading")
         animationView.animation = animation
-        animationView.contentMode = .scaleAspectFill
+        animationView.contentMode = .scaleAspectFit
         animationView.loopMode = .loop
         animationView.play()
         view.addSubview(animationView)
@@ -43,5 +43,6 @@ struct LoadingAnimation: UIViewRepresentable {
 struct LoadingAnimation_Previews: PreviewProvider {
     static var previews: some View {
         LoadingAnimation()
+            .background(Color.mainColor)
     }
 }

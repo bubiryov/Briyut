@@ -29,20 +29,28 @@ struct AccentButton: View {
     var isButtonActive: Bool
     var logo: String? = nil
     var cornerRadius = ScreenSize.width / 30
+    var animation: Bool?
     
     var body: some View {
         
         if filled {
-//            DoneAnimation()
-//                .scaledToFit()
-            Text(text)
-                .font(Mariupol.medium, 17)
-                .foregroundColor(textColor)
-                .frame(height: height)
-                .frame(maxWidth: .infinity)
-                .background(buttonColor)
-                .cornerRadius(cornerRadius)
-                .padding(.horizontal, 3)
+            if animation ?? false {
+                LoadingAnimation()
+                    .scaleEffect(1.3)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: height)
+                    .background(buttonColor)
+                    .cornerRadius(cornerRadius)
+            } else {
+                Text(text)
+                    .font(Mariupol.medium, 17)
+                    .foregroundColor(textColor)
+                    .frame(height: height)
+                    .frame(maxWidth: .infinity)
+                    .background(buttonColor)
+                    .cornerRadius(cornerRadius)
+                    .padding(.horizontal, 3)
+            }
         } else {
             HStack {
                 if let logo {
@@ -72,7 +80,8 @@ struct AccentButton_Previews: PreviewProvider {
             filled: true,
             text: "Continue",
             isButtonActive: true,
-            logo: "googleLogo"
+            logo: "googleLogo",
+            animation: true
         )
         .padding(.horizontal, 20)
     }

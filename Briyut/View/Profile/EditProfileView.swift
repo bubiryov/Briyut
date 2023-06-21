@@ -22,6 +22,7 @@ struct EditProfileView: View {
     @State private var data: Data? = nil
     @State private var showActionSheet: Bool = false
     @State private var showPhotosPicker: Bool = false
+    @State private var loading: Bool = false
     
     var body: some View {
         
@@ -102,25 +103,34 @@ struct EditProfileView: View {
                     }
                                                                         
                     Button {
-                        guard let user = vm.user else { return }
                         Task {
-                            var url: String = user.photoUrl ?? ""
-                            if let selectedPhoto {
-                                try await vm.deleteStorageFolderContents(userId: user.userId)
-                                let path = try await vm.saveProfilePhoto(item: selectedPhoto)
-                                url = try await vm.getUrlForImage(path: path)
+                            loading = true
+                            do {
+                                try await saveProfileAction()
+                                loading = false
+                            } catch {
+                                print("Can't save changes")
+                                loading = false
                             }
-                            try await vm.editProfile(
-                                userID: user.userId,
-                                name: name != "" ? name : nil,
-                                lastName: lastName != "" ? lastName : nil,
-                                phoneNumber: phoneNumber.count > 5 ? phoneNumber : nil,
-                                photoURL: url)
-                            try await vm.loadCurrentUser()
-                            presentationMode.wrappedValue.dismiss()
+//                        guard let user = vm.user else { return }
+//                        Task {
+//                            var url: String = user.photoUrl ?? ""
+//                            if let selectedPhoto {
+//                                try await vm.deleteStorageFolderContents(userId: user.userId)
+//                                let path = try await vm.saveProfilePhoto(item: selectedPhoto)
+//                                url = try await vm.getUrlForImage(path: path)
+//                            }
+//                            try await vm.editProfile(
+//                                userID: user.userId,
+//                                name: name != "" ? name : nil,
+//                                lastName: lastName != "" ? lastName : nil,
+//                                phoneNumber: phoneNumber.count > 5 ? phoneNumber : nil,
+//                                photoURL: url)
+//                            try await vm.loadCurrentUser()
+//                            presentationMode.wrappedValue.dismiss()
                         }
                     } label: {
-                        AccentButton(text: "Save", isButtonActive: true)
+                        AccentButton(text: "Save", isButtonActive: true, animation: loading)
                     }
                 }
                 .ignoresSafeArea(.keyboard)
@@ -194,6 +204,25 @@ struct EditProfileView: View {
             )
         }
         .ignoresSafeArea(.keyboard)
+    }
+    
+    private func saveProfileAction() async throws {
+        guard let user = vm.user else { return }
+        var url: String = user.photoUrl ?? ""
+        if let selectedPhoto {
+            try await vm.deleteStorageFolderContents(userId: user.userId)
+            let path = try await vm.saveProfilePhoto(item: selectedPhoto)
+            url = try await vm.getUrlForImage(path: path)
+        }
+        try await vm.editProfile(
+            userID: user.userId,
+            name: name != "" ? name : nil,
+            lastName: lastName != "" ? lastName : nil,
+            phoneNumber: phoneNumber.count > 5 ? phoneNumber : nil,
+            photoURL: url
+        )
+        try await vm.loadCurrentUser()
+        presentationMode.wrappedValue.dismiss()
     }
 }
 
