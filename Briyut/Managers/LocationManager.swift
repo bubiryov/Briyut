@@ -37,4 +37,14 @@ final class LocationManager {
     func removeLocation(locationId: String) async throws {
         try await locationDocument(locationId: locationId).delete()
     }
+    
+    func editLocation(locationId: String, latitude: Double, longitude: Double, address: String) async throws {
+        let data: [String : Any] = [
+            LocationModel.CodingKeys.latitude.rawValue : latitude,
+            LocationModel.CodingKeys.longitude.rawValue : longitude,
+            LocationModel.CodingKeys.address.rawValue : address
+        ]
+        try await locationDocument(locationId: locationId).updateData(data)
+    }
+
 }

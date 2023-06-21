@@ -39,20 +39,22 @@ struct EditProfileView: View {
                     Button {
                         showActionSheet = true
                     } label: {
-                        if selectedPhoto == nil {
-                            ProfileImage(
-                                photoURL: vm.user?.photoUrl,
-                                frame: ScreenSize.height * 0.12,
-                                color: Color.secondary.opacity(0.1),
-                                padding: 16
-                            )
-                        } else {
-                            if let data = data, let image = UIImage(data: data) {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: ScreenSize.height * 0.12, height: ScreenSize.height * 0.12, alignment: .center)
-                                    .clipped()
+                        VStack {
+                            if selectedPhoto == nil {
+                                ProfileImage(
+                                    photoURL: vm.user?.photoUrl,
+                                    frame: ScreenSize.height * 0.12,
+                                    color: Color.secondary.opacity(0.1),
+                                    padding: 16
+                                )
+                            } else {
+                                if let data = data, let image = UIImage(data: data) {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: ScreenSize.height * 0.12, height: ScreenSize.height * 0.12, alignment: .center)
+                                        .clipped()
+                                }
                             }
                         }
                     }
@@ -65,41 +67,40 @@ struct EditProfileView: View {
                             self.data = data
                         }
                     }
-                    .overlay {
-                        VStack {
-                            Spacer()
-                            Image("pencil")
-                                .resizable()
-                                .foregroundColor(.white)
-                                .scaledToFit()
-                                .frame(width: ScreenSize.height * 0.02)
-                                .padding(7)
-                                .background(Color.mainColor)
-                                .cornerRadius(ScreenSize.width / 50)
-                                .offset(x: 5, y: 5)
+//                    .overlay {
+//                        VStack {
+//                            Spacer()
+//                            Image("pencil")
+//                                .resizable()
+//                                .foregroundColor(.white)
+//                                .scaledToFit()
+//                                .frame(width: ScreenSize.height * 0.02)
+//                                .padding(7)
+//                                .background(Color.mainColor)
+//                                .cornerRadius(ScreenSize.width / 50)
+//                                .offset(x: 5, y: 5)
+//                        }
+//                        .frame(maxWidth: .infinity, alignment: .trailing)
+//                    }
+                    ScrollView {
+                        AccentInputField(
+                            promptText: "Maria",
+                            title: "Name",
+                            input: $name
+                        )
+                        
+                        AccentInputField(
+                            promptText: "Shevchenko",
+                            title: "Last name",
+                            input: $lastName
+                        )
+                        
+                        if !vm.authProviders.contains(.phone) {
+                            AccentInputField(promptText: "+38 (099)-999-99-99", title: "Phone number", input: $phoneNumber)
+                                .keyboardType(.phonePad)
                         }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
                     }
-                    
-                    AccentInputField(
-                        promptText: "Maria",
-                        title: "Name",
-                        input: $name
-                    )
-                    
-                    AccentInputField(
-                        promptText: "Shevchenko",
-                        title: "Last name",
-                        input: $lastName
-                    )
-                    
-                    if !vm.authProviders.contains(.phone) {
-                        AccentInputField(promptText: "+38 (099)-999-99-99", title: "Phone number", input: $phoneNumber)
-                            .keyboardType(.phonePad)
-                    }
-                                                    
-                    Spacer()
-                    
+                                                                        
                     Button {
                         guard let user = vm.user else { return }
                         Task {
@@ -145,7 +146,11 @@ struct EditProfileView: View {
                         }
                     }
                 }
-                .photosPicker(isPresented: $showPhotosPicker, selection: $selectedPhoto, matching: .images, photoLibrary: .shared())
+                .photosPicker(
+                    isPresented: $showPhotosPicker,
+                    selection: $selectedPhoto,
+                    matching: .images,
+                    photoLibrary: .shared())
             }
             .padding(.bottom, 20)
             .navigationBarBackButtonHidden(true)

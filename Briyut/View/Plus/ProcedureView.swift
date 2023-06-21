@@ -26,7 +26,7 @@ struct ProcedureView: View {
     var body: some View {
         
         VStack {
-            BarTitle<BackButton, DeleteButton?>(text: title, leftButton: BackButton(), rightButton: procedure != nil ? DeleteButton(showAlert: $showAlert) : nil)
+            BarTitle<BackButton, DeleteProcedureButton?>(text: title, leftButton: BackButton(), rightButton: procedure != nil ? DeleteProcedureButton(showAlert: $showAlert) : nil)
                 .padding(.bottom)
             
             ScrollView {
@@ -44,7 +44,6 @@ struct ProcedureView: View {
                         .keyboardType(.numberPad)
                 }
             }
-            .scrollDisabled(true)
             .alert(isPresented: $showAlert) {
                 Alert(
                     title: Text("Are you sure you want to delete the procedure?"),
@@ -153,7 +152,7 @@ struct AddProcedure_Previews: PreviewProvider {
     }
 }
 
-fileprivate struct DeleteButton: View {
+fileprivate struct DeleteProcedureButton: View {
     
     @Binding var showAlert: Bool
     

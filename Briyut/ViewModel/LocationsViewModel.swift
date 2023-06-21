@@ -1,15 +1,16 @@
 //
-//  MapView.swift
+//  LocationsViewModel.swift
 //  Briyut
 //
-//  Created by Egor Bubiryov on 17.06.2023.
+//  Created by Egor Bubiryov on 21.06.2023.
 //
 
+import Foundation
 import SwiftUI
 import MapKit
 
 @MainActor
-class LocationsViewModel: ObservableObject {
+final class LocationsViewModel: ObservableObject {
     
     @Published var locations: [LocationModel] = []
     @Published var mapRegion: MKCoordinateRegion = MKCoordinateRegion()
@@ -28,11 +29,9 @@ class LocationsViewModel: ObservableObject {
             } catch {
                 print("Error")
             }
-//        let locationss = [
-//        LocationModel(id: "1", latitude: 50.01748624470646, longitude: 36.22833256527455, address: "Hello")
-//        ]
-//        self.locations = locationss
-//            self.mapLocation = locations.count == 1 ? locations.first : nil
+            if locations.count == 1 {
+                mapLocation = locations.first
+            }
             self.updateMapRegion(location: !locations.isEmpty ? locations.first! : nil)
         }
     }
@@ -110,19 +109,6 @@ class LocationsViewModel: ObservableObject {
         }
     }
 
-    
-//    private func updateMapRegion(location: LocationModel?) {
-//        Task {
-//            withAnimation(.easeInOut) {
-//                mapRegion = MKCoordinateRegion(
-//                    center: CLLocationCoordinate2D(
-//                        latitude: location?.latitude ?? 49.992084,
-//                        longitude: location?.longitude ?? 36.2307),
-//                    span: mapSpan)
-//            }
-//        }
-//    }
-    
     func showNextLocation(location: LocationModel) {
         withAnimation(.easeInOut) {
             mapLocation = location
@@ -142,138 +128,20 @@ class LocationsViewModel: ObservableObject {
     
     func createNewLocation(location: LocationModel) async throws {
         try await LocationManager.shared.createNewLocation(location: location)
+        try await getAllLocations()
     }
     
     func getAllLocations() async throws {
         locations = try await LocationManager.shared.getAllLocations()
     }
-}
-
-
-struct ClinicMapView: View {
     
-    @StateObject var vm: LocationsViewModel = LocationsViewModel()
-    @EnvironmentObject var profileVM: ProfileViewModel
-        
-    var body: some View {
-        
-        NavigationStack {
-            ZStack {
-                mapLayer
-                    .edgesIgnoringSafeArea(.all)
-                
-                VStack {
-                    BarTitle<BackButton, EditLocationsButton>(
-                        text: "",
-                        leftButton: BackButton(),
-                        rightButton: profileVM.user?.isDoctor ?? false ? EditLocationsButton() : nil
-                    )
-                    
-                    Spacer()
-                    
-                    Button {
-                        if let location = vm.mapLocation {
-                            vm.openMapsAppWithDirections(location: location)
-                        }
-                    } label: {
-                        AccentButton(
-                            text: vm.mapLocation == nil ? "Navigate" : vm.mapLocation?.address ?? "Navigate",
-                            isButtonActive: vm.mapLocation == nil ? false : true
-                        )
-                        .shadow(radius: 10, y: 5)
-                    }
-                    .disabled(vm.mapLocation == nil ? true : false)
-
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, topPadding())
-                .padding(.bottom, 40)
-            }
-        }
+    func editLocation(locationId: String, latitude: Double, longitude: Double, address: String) async throws {
+        try await LocationManager.shared.editLocation(locationId: locationId, latitude: latitude, longitude: longitude, address: address)
+        try await getAllLocations()
     }
     
-    private var mapLayer: some View {
-        Map(coordinateRegion: $vm.mapRegion,
-            annotationItems: vm.locations,
-            annotationContent: { location in
-            MapAnnotation(coordinate: CLLocationCoordinate2D(
-                latitude: location.latitude,
-                longitude: location.longitude)) {
-                    LocationMapAnnotationView()
-                        .shadow(color: .black.opacity(0.3), radius: 2, y: 7)
-                        .scaleEffect(vm.mapLocation == location ? 1.5 : 1)
-                        .onTapGesture {
-                            vm.showNextLocation(location: location)
-                        }
-                }
-        })
-    }
-
-}
-
-struct ClinicMapView_Previews: PreviewProvider {
-    static var previews: some View {
-        ClinicMapView()
-            .environmentObject(LocationsViewModel())
-            .environmentObject(ProfileViewModel())
-    }
-}
-
-//extension MKMapView {
-//    func overlappingMapRect(coordinates: [CoordinateModel]) -> MKMapRect {
-//        var mapRect = MKMapRect.null
-//
-//        for coordinate in coordinates {
-//            let point = MKMapPoint(CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude))
-//            let pointRect = MKMapRect(origin: point, size: MKMapSize(width: 0, height: 0))
-//            mapRect = mapRect.union(pointRect)
-//        }
-//
-//        let edgePadding = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
-//        let paddedRect = self.mapRectThatFits(mapRect, edgePadding: edgePadding)
-//
-//        return paddedRect
-//    }
-//}
-
-struct LocationMapAnnotationView: View {
-    
-    let accentColor = Color.mainColor
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            Text("R")
-                .frame(width: 30, height: 30)
-                .font(.custom("Alokary", size: 12))
-                .foregroundColor(.mainColor)
-                .padding(6)
-                .background(.white)
-                .overlay {
-                    Circle()
-                        .strokeBorder(Color.mainColor, lineWidth: 5)
-                }
-                .clipShape(Circle())
-            
-            Image(systemName: "triangle.fill")
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(accentColor)
-                .frame(width: 15, height: 10)
-                .rotationEffect(Angle(degrees: 180))
-                .offset(y: -3)
-        }
-//        .shadow(color: .black.opacity(0.3), radius: 2, y: 7)
-    }
-}
-
-struct EditLocationsButton: View {
-        
-    var body: some View {
-        NavigationLink {
-
-        } label: {
-            BarButtonView(image: "pencil")
-        }
-        .buttonStyle(.plain)
+    func removeLocation(locationId: String) async throws {
+        try await LocationManager.shared.removeLocation(locationId: locationId)
+        try await getAllLocations()
     }
 }

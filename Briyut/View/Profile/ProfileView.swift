@@ -48,7 +48,7 @@ struct ProfileView: View {
                 } label: {
                     Text("Edit profile")
                         .font(Mariupol.medium, 17)
-                        .frame(width: ScreenSize.height * 0.2, height: ScreenSize.height * 0.05)
+                        .frame(width: ScreenSize.width * 0.4, height: ScreenSize.height * 0.045)
                         .buttonStyle(.plain)
                         .foregroundColor(.white)
                         .background(Color.mainColor)

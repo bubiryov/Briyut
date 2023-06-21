@@ -14,8 +14,9 @@ struct LoginView: View {
     
     var body: some View {
         VStack(spacing: ScreenSize.height * 0.02) {
-            AuthInputField(field: $vm.email, showEye: false, isSecureField: false, title: "briyut@gmail.com", header: "Your email address")
-                .keyboardType(.URL)
+            AuthInputField(field: $vm.email, showEye: false, isSecureField: false, title: "rubinko@gmail.com", header: "Your email address")
+                .keyboardType(.emailAddress)
+                .textContentType(.emailAddress)
             
             AuthInputField(field: $vm.password, isSecureField: true, title: "min. 6 characters", header: "Choose your password")
             
@@ -30,7 +31,7 @@ struct LoginView: View {
                     }
                 }
             } label: {
-                AccentButton(text: "Login to Briyut", isButtonActive: vm.validate(email: vm.email, password: vm.password, repeatPassword: nil))
+                AccentButton(text: "Login to Rubinko", isButtonActive: vm.validate(email: vm.email, password: vm.password, repeatPassword: nil))
             }
             .disabled(!vm.validate(email: vm.email, password: vm.password, repeatPassword: nil))
             

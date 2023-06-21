@@ -20,7 +20,7 @@ struct ResetPasswordView: View {
                 BarTitle<Text, Text>(text: "Reset password")
                     .padding(.top)
                 
-                AuthInputField(field: $vm.email, isSecureField: false, title: "briyut@gmail.com", header: "Your email address")
+                AuthInputField(field: $vm.email, isSecureField: false, title: "rubinko@gmail.com", header: "Your email address")
                 
                 Button {
                     Task {

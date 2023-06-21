@@ -23,10 +23,6 @@ struct AccentButton: View {
         }
     }
     
-//    var bold: Bool {
-//        isButtonActive ? true : false
-//    }
-    
     var height: CGFloat = ScreenSize.height * 0.06
     var filled: Bool = true
     var text: String
@@ -37,6 +33,8 @@ struct AccentButton: View {
     var body: some View {
         
         if filled {
+//            DoneAnimation()
+//                .scaledToFit()
             Text(text)
                 .font(Mariupol.medium, 17)
                 .foregroundColor(textColor)
@@ -70,6 +68,12 @@ struct AccentButton: View {
 
 struct AccentButton_Previews: PreviewProvider {
     static var previews: some View {
-        AccentButton(filled: true, text: "Continue", isButtonActive: true, logo: "googleLogo")
+        AccentButton(
+            filled: true,
+            text: "Continue",
+            isButtonActive: true,
+            logo: "googleLogo"
+        )
+        .padding(.horizontal, 20)
     }
 }

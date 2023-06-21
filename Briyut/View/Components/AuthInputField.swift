@@ -101,7 +101,7 @@ extension AuthInputField {
 struct InputField_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            AuthInputField(field: .constant(""), showEye: true, isSecureField: true, title: "rubinko@gmail.com", header: "Your email address")
+            AuthInputField(field: .constant(""), showEye: false, isSecureField: true, title: "rubinko@gmail.com", header: "Your email address")
         }
         .padding()
     }

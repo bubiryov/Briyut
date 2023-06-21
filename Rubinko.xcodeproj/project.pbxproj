@@ -11,6 +11,11 @@
 		890C28BC2A06D3F1000DB1A6 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */; };
 		890ECEDF2A162F0500BEE3CC /* DateTimeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890ECEDE2A162F0500BEE3CC /* DateTimeSelectionView.swift */; };
 		891198FC2A29155400D6756F /* DoctorOrderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891198FB2A29155400D6756F /* DoctorOrderRow.swift */; };
+		894068732A42F33800DC16F4 /* LocationsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894068722A42F33800DC16F4 /* LocationsList.swift */; };
+		894068762A42FA1800DC16F4 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894068752A42FA1800DC16F4 /* LocationView.swift */; };
+		894068782A432C8700DC16F4 /* LocationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894068772A432C8700DC16F4 /* LocationsViewModel.swift */; };
+		894068812A43893500DC16F4 /* LoadingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894068802A43893500DC16F4 /* LoadingAnimation.swift */; };
+		894068832A438AA000DC16F4 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 894068822A438AA000DC16F4 /* loading.json */; };
 		895E8EAC2A377D140076E58D /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 895E8EAB2A377D140076E58D /* SwiftUICharts */; };
 		896D3D082A3DC7270053E873 /* ClinicMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896D3D072A3DC7270053E873 /* ClinicMapView.swift */; };
 		896D3D0A2A3DDBF10053E873 /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896D3D092A3DDBF10053E873 /* LocationModel.swift */; };
@@ -131,6 +136,11 @@
 		890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		890ECEDE2A162F0500BEE3CC /* DateTimeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeSelectionView.swift; sourceTree = "<group>"; };
 		891198FB2A29155400D6756F /* DoctorOrderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorOrderRow.swift; sourceTree = "<group>"; };
+		894068722A42F33800DC16F4 /* LocationsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsList.swift; sourceTree = "<group>"; };
+		894068752A42FA1800DC16F4 /* LocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
+		894068772A432C8700DC16F4 /* LocationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsViewModel.swift; sourceTree = "<group>"; };
+		894068802A43893500DC16F4 /* LoadingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingAnimation.swift; sourceTree = "<group>"; };
+		894068822A438AA000DC16F4 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		896D3D072A3DC7270053E873 /* ClinicMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinicMapView.swift; sourceTree = "<group>"; };
 		896D3D092A3DDBF10053E873 /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
 		896D3D0B2A3E28170053E873 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -244,6 +254,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		894068742A42F9FC00DC16F4 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				896D3D072A3DC7270053E873 /* ClinicMapView.swift */,
+				894068722A42F33800DC16F4 /* LocationsList.swift */,
+				894068752A42FA1800DC16F4 /* LocationView.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		894068792A43888600DC16F4 /* Loading */ = {
+			isa = PBXGroup;
+			children = (
+				894068802A43893500DC16F4 /* LoadingAnimation.swift */,
+				894068822A438AA000DC16F4 /* loading.json */,
+			);
+			path = Loading;
+			sourceTree = "<group>";
+		};
 		898FD9B32A08F4B800725697 /* Plus */ = {
 			isa = PBXGroup;
 			children = (
@@ -272,6 +301,7 @@
 		89988BEC2A1A3DE8004DB4C6 /* Lottie */ = {
 			isa = PBXGroup;
 			children = (
+				894068792A43888600DC16F4 /* Loading */,
 				89988BEF2A1A3E10004DB4C6 /* DoneAnimation */,
 			);
 			path = Lottie;
@@ -408,6 +438,7 @@
 			children = (
 				899EC5CA2A00574700C90D49 /* AuthenticationViewModel.swift */,
 				898FD9BD2A0935E100725697 /* ProfileViewModel.swift */,
+				894068772A432C8700DC16F4 /* LocationsViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -476,7 +507,7 @@
 			isa = PBXGroup;
 			children = (
 				899EC5C02A003DBF00C90D49 /* HomeView.swift */,
-				896D3D072A3DC7270053E873 /* ClinicMapView.swift */,
+				894068742A42F9FC00DC16F4 /* Map */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -649,6 +680,7 @@
 			files = (
 				897ED61C2A41B2C700668890 /* Mariupol-Regular.ttf in Resources */,
 				899EC5792A000A1E00C90D49 /* Preview Assets.xcassets in Resources */,
+				894068832A438AA000DC16F4 /* loading.json in Resources */,
 				89988BF32A1A3EF9004DB4C6 /* Done.json in Resources */,
 				899EC5752A000A1E00C90D49 /* Assets.xcassets in Resources */,
 				897ED61D2A41B2C700668890 /* Mariupol-Bold.ttf in Resources */,
@@ -681,6 +713,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89BFAA3D2A1F5B1900DF2D0B /* StorageManager.swift in Sources */,
+				894068762A42FA1800DC16F4 /* LocationView.swift in Sources */,
 				89D6C8192A2B529500A38CEB /* ChooseClientView.swift in Sources */,
 				89CFDD702A12823700159C4B /* ClientOrders.swift in Sources */,
 				89C6096B2A3C770200D5BF00 /* ChangePasswordView.swift in Sources */,
@@ -695,6 +728,7 @@
 				898FD9B52A08F4E000725697 /* AllProcedures.swift in Sources */,
 				897ED6202A41B6D500668890 /* Enums.swift in Sources */,
 				89988BEE2A1A3DFB004DB4C6 /* DoneAnimation.swift in Sources */,
+				894068732A42F33800DC16F4 /* LocationsList.swift in Sources */,
 				890ECEDF2A162F0500BEE3CC /* DateTimeSelectionView.swift in Sources */,
 				89E8AB342A14DD52000661E6 /* SplashView.swift in Sources */,
 				899EC5B82A001D5C00C90D49 /* LoginView.swift in Sources */,
@@ -717,6 +751,7 @@
 				898FD9BC2A0910F100725697 /* AllDoctorsView.swift in Sources */,
 				899EC5A62A000E6500C90D49 /* AppDelegate.swift in Sources */,
 				89CFDD6A2A122ED700159C4B /* OrderModel.swift in Sources */,
+				894068812A43893500DC16F4 /* LoadingAnimation.swift in Sources */,
 				897ED6222A41C5EA00668890 /* AccentInputField.swift in Sources */,
 				898FD9B72A08FDE000725697 /* ProcedureView.swift in Sources */,
 				899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */,
@@ -737,6 +772,7 @@
 				89C590522A052B4700975E50 /* BarTitle.swift in Sources */,
 				899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */,
 				899EC5BF2A002FF400C90D49 /* AccentButton.swift in Sources */,
+				894068782A432C8700DC16F4 /* LocationsViewModel.swift in Sources */,
 				899EC5B62A001A7600C90D49 /* AuthInputField.swift in Sources */,
 				89CFDD6C2A126BCB00159C4B /* AddOrderView.swift in Sources */,
 				896D3D0A2A3DDBF10053E873 /* LocationModel.swift in Sources */,

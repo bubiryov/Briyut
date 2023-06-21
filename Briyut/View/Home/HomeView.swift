@@ -182,7 +182,7 @@ struct HomeView: View {
             }
         }
         .fullScreenCover(isPresented: $showMap) {
-            ClinicMapView()
+            ClinicMapView(profileVM: vm)
         }
     }
 }

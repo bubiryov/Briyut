@@ -22,9 +22,9 @@ struct AuthenticationView: View {
                     VStack {
                         Text("Rubinko")
                             .foregroundColor(.white)
-                            .tracking(3)
+                            .tracking(2)
                             .font(.custom("Alokary", size: 25))
-                            .padding(.top, ScreenSize.height * 0.12)
+                            .padding(.top, ScreenSize.height * 0.14)
 
                         Spacer()
                     }
@@ -37,7 +37,7 @@ struct AuthenticationView: View {
                         Spacer()
                     }
                     .padding(.horizontal, 20)
-                    .padding(.top, ScreenSize.height * 0.03)
+                    .padding(.top, ScreenSize.height * 0.05)
                     .background(Color.white)
                     .cornerRadius(ScreenSize.width / 30)
                     .shadow(radius: 10, y: -10)
