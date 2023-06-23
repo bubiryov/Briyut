@@ -18,6 +18,7 @@ struct LocationView: View {
     @State private var buildingNumber: String = ""
     @State private var coordinates: String = ""
     @State private var showAlert: Bool = false
+    @State private var loading: Bool = false
     
     var body: some View {
         VStack {
@@ -31,29 +32,50 @@ struct LocationView: View {
             ScrollView {
                 VStack(spacing: ScreenSize.height * 0.02) {
                     
-                    AccentInputField(promptText: "Харків", title: "City", input: $city)
+                    AccentInputField(
+                        promptText: "Харків",
+                        title: "City",
+                        input: $city
+                    )
                     
-                    AccentInputField(promptText: "Сумська", title: "Street", input: $street)
+                    AccentInputField(
+                        promptText: "Сумська",
+                        title: "Street",
+                        input: $street
+                    )
                     
-                    AccentInputField(promptText: "17-А", title: "Building", input: $buildingNumber)
+                    AccentInputField(
+                        promptText: "17-А",
+                        title: "Building",
+                        input: $buildingNumber
+                    )
                     
-                    AccentInputField(promptText: "49.991236239813, 36.225463473776614", title: "Coordinates", input: $coordinates)
+                    AccentInputField(
+                        promptText: "49.991236239813, 36.225463473776614",
+                        title: "Coordinates",
+                        input: $coordinates
+                    )
                 }
             }
             Button {
                 Task {
                     if location == nil {
                         do {
+                            loading = true
                             try await addNewAddress()
+                            loading = false
                             presentationMode.wrappedValue.dismiss()
                         } catch {
                             print("Can't add new address")
                         }
                     } else {
                         do {
+                            loading = true
                             try await editAddress()
+                            loading = false
                             presentationMode.wrappedValue.dismiss()
                         } catch {
+                            loading = false
                             print("Can't edit address")
                         }
                     }
@@ -61,13 +83,15 @@ struct LocationView: View {
             } label: {
                 AccentButton(
                     text: location != nil ? "Edit" : "Add",
-                    isButtonActive: validateFields()
+                    isButtonActive: validateFields(),
+                    animation: loading
                 )
             }
-            .disabled(!validateFields())
+            .disabled(!validateFields() || loading)
         }
+        .padding(.top, topPadding())
+        .padding(.bottom, 20)
         .padding(.horizontal, 20)
-        .padding(.bottom)
         .navigationBarBackButtonHidden()
         .contentShape(Rectangle())
         .gesture(
@@ -104,8 +128,6 @@ struct LocationView: View {
                 secondaryButton: .default(Text("Cancel"), action: { })
             )
         }
-
-
     }
     
     func addNewAddress() async throws {
@@ -153,23 +175,6 @@ struct LocationView: View {
 
         return isCityValid && isStreetValid && isBuildingNumberValid && validateCoordinates()
     }
-
-//    func validateFields() -> Bool {
-//
-//        let cityRegex = "^(?!.*[\\s-]{2,})(?!^[-\\s])(?!.*[-\\s]$)[A-ZА-Я][a-zA-Zа-яА-Я\\s-]*$"
-//        let cityPredicate = NSPredicate(format: "SELF MATCHES %@", cityRegex)
-//        let isCityValid = cityPredicate.evaluate(with: city)
-//
-//        let streetRegex = "^(?!.*[\\s-]{2,})(?!^[-\\s])(?!.*[-\\s]$)(?!.*([\\s-])\\1)[a-zA-Zа-яА-Я]+(\\s+[a-zA-Zа-яА-Я]+)*$"
-//        let streetPredicate = NSPredicate(format: "SELF MATCHES %@", streetRegex)
-//        let isStreetValid = streetPredicate.evaluate(with: street) && !street.contains(where: \.isNumber)
-//
-//        let buildingNumberRegex = "^(?!^[-\\s])(?!.*[-\\s]$)(?!.*([\\s-])\\1)[^\\s]+$"
-//        let buildingNumberPredicate = NSPredicate(format: "SELF MATCHES %@", buildingNumberRegex)
-//        let isBuildingNumberValid = buildingNumberPredicate.evaluate(with: buildingNumber) && !buildingNumber.isEmpty
-//
-//        return isCityValid && isStreetValid && isBuildingNumberValid && validateCoordinates()
-//    }
     
     private func validateCoordinates() -> Bool {
         let coordinateComponents = coordinates.components(separatedBy: ", ")
@@ -234,7 +239,6 @@ struct LocationView: View {
 struct LocationView_Previews: PreviewProvider {
     static var previews: some View {
         LocationView(vm: LocationsViewModel())
-//            .environmentObject(LocationsViewModel())
     }
 }
 

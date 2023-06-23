@@ -26,6 +26,7 @@ struct DateTimeSelectionView: View {
     @State var timeSlots: [String] = []
     @State private var disabledAllButtons: Bool = true
     @State private var fullCover: Bool = false
+    @State private var loading: Bool = false
     @Binding var selectedTab: Tab
                                             
     var body: some View {
@@ -41,7 +42,6 @@ struct DateTimeSelectionView: View {
             CustomDatePicker(
                 selectedDate: $selectedDate,
                 mode: .days,
-//                selectedTime: $selectedTime,
                 pastTime: false
             )
             .onChange(of: selectedDate) { _ in
@@ -94,17 +94,35 @@ struct DateTimeSelectionView: View {
             Button {
                 if let procedure {
                     Task {
-                        try await addNewOrderAction(procedure: procedure)
+                        do {
+                            loading = true
+                            try await addNewOrderAction(procedure: procedure)
+                            loading = false
+                        } catch {
+                            print("Can't add an order")
+                            loading = false
+                        }
                     }
                 } else if let order {
                     Task {
-                        try await editOrderAction(order: order)
+                        do {
+                            loading = true
+                            try await editOrderAction(order: order)
+                            loading = false
+                        } catch {
+                            print("Can't edit the order")
+                            loading = false
+                        }
                     }
                 }
             } label: {
-                AccentButton(text: mainButtonTitle, isButtonActive: selectedTime != "" ? true : false)
+                AccentButton(
+                    text: mainButtonTitle,
+                    isButtonActive: selectedTime != "" ? true : false,
+                    animation: loading
+                )
             }
-            .disabled(selectedTime != "" ? false : true)
+            .disabled((selectedTime != "" ? false : true) || loading)
         }
         .padding(.bottom, 20)
         .navigationBarBackButtonHidden(true)

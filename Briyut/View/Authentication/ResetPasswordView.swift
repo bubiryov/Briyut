@@ -12,6 +12,7 @@ struct ResetPasswordView: View {
     @EnvironmentObject var vm: AuthenticationViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var showInfoAlert: Bool = false
+    @State private var loading: Bool = false
     @Binding var showResetPasswordView: Bool
     
     var body: some View {
@@ -20,16 +21,34 @@ struct ResetPasswordView: View {
                 BarTitle<Text, Text>(text: "Reset password")
                     .padding(.top)
                 
-                AuthInputField(field: $vm.email, isSecureField: false, title: "rubinko@gmail.com", header: "Your email address")
+                AuthInputField(
+                    field: $vm.email,
+                    isSecureField: false,
+                    title: "rubinko@gmail.com",
+                    header: "Your email address"
+                )
                 
                 Button {
                     Task {
-                        try await vm.resetPassword()
-                        showInfoAlert = true
+                        do {
+                            loading = true
+                            try await vm.resetPassword()
+                            loading = false
+                            showInfoAlert = true
+                        } catch {
+                            loading = false
+                            print("Reset password error")
+                        }
                     }
                 } label: {
-                    AccentButton(text: "Reset password", isButtonActive: vm.validate(email: vm.email, password: nil, repeatPassword: nil))
+                    AccentButton(
+                        text: "Reset password",
+                        isButtonActive: vm.validate(email: vm.email, password: nil, repeatPassword: nil),
+                        animation: loading
+                    )
                 }
+                .disabled(!vm.validate(email: vm.email, password: nil, repeatPassword: nil) || loading)
+                
                 Spacer()
             }
             .padding(.top)

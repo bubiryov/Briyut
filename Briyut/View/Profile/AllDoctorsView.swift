@@ -12,17 +12,25 @@ struct AllDoctorsView: View {
     @EnvironmentObject var vm: ProfileViewModel
     @Environment(\.presentationMode) var presentationMode
     @State private var futureDoctorID: String = ""
-//    @State private var isEditing = false
+    @State private var loading = false
     @State private var showAlert = false
     @State private var tupleDoctors: [(DBUser, Bool)] = []
     var cornerRadius = ScreenSize.width / 30
     
     var body: some View {
         VStack(spacing: ScreenSize.height * 0.02) {
-            BarTitle<BackButton, Text>(text: "Specialists", leftButton: BackButton())
+            
+            BarTitle<BackButton, Text>(
+                text: "Specialists",
+                leftButton: BackButton()
+            )
             
             if vm.user?.isDoctor ?? false {
-                AccentInputField(promptText: vm.user?.userId ?? "", title: "UserID", input: $futureDoctorID)
+                AccentInputField(
+                    promptText: vm.user?.userId ?? "",
+                    title: "UserID",
+                    input: $futureDoctorID
+                )
             }
             
             ScrollView {
@@ -49,12 +57,26 @@ struct AllDoctorsView: View {
                 
                 Button {
                     Task {
-                        try await vm.addDoctor(userID: futureDoctorID)
-                        futureDoctorID = ""
+                        do {
+                            loading = true
+                            try await vm.addDoctor(userID: futureDoctorID)
+                            withAnimation {
+                                futureDoctorID = ""
+                            }
+                            loading = false
+                        } catch {
+                            loading = false
+                            print("Can't add a doctor")
+                        }
                     }
                 } label: {
-                    AccentButton(text: "Add a doctor", isButtonActive: validateDoctor())
+                    AccentButton(
+                        text: "Add a doctor",
+                        isButtonActive: validateDoctor(),
+                        animation: loading
+                    )
                 }
+                .disabled(!validateDoctor() || loading)
             }
         }
         .onChange(of: vm.doctors, perform: { _ in

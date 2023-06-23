@@ -119,7 +119,7 @@ struct DoctorMenuPicker: View {
             ForEach(doctors, id: \.self) { doctorOption in
                 switch doctorOption {
                 case .allDoctors:
-                    Button("Все доктора") {
+                    Button("Все специалисты") {
                         selectedDoctor = nil
                     }
                 case .user(let doctor):

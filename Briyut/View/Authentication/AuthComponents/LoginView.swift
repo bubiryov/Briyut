@@ -11,6 +11,7 @@ struct LoginView: View {
     
     @EnvironmentObject var vm: AuthenticationViewModel
     @Binding var notEntered: Bool
+    @State private var loading: Bool = false
     
     var body: some View {
         VStack(spacing: ScreenSize.height * 0.02) {
@@ -23,17 +24,23 @@ struct LoginView: View {
             Button {
                 Task {
                     do {
+                        loading = true
                         hideKeyboard()
                         try await vm.logInWithEmail()
                         notEntered = false
+                        loading = false
                     } catch let error {
+                        loading = false
                         print(error.localizedDescription)
                     }
                 }
             } label: {
-                AccentButton(text: "Login to Rubinko", isButtonActive: vm.validate(email: vm.email, password: vm.password, repeatPassword: nil))
+                AccentButton(
+                    text: "Login to Rubinko",
+                    isButtonActive: vm.validate(email: vm.email, password: vm.password, repeatPassword: nil),
+                    animation: loading)
             }
-            .disabled(!vm.validate(email: vm.email, password: vm.password, repeatPassword: nil))
+            .disabled(!vm.validate(email: vm.email, password: vm.password, repeatPassword: nil) || loading)
             
             HStack {
                 if let error = vm.errorText {

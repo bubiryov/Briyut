@@ -27,7 +27,6 @@ struct ContentView: View {
                         
             if splashView {
                 SplashView()
-//                    .animation(.easeInOut(duration: 2), value: splashView)
             }
         }
         .onAppear {
@@ -35,10 +34,8 @@ struct ContentView: View {
             notEntered = authUser == nil
             localNotEntered = authUser == nil
             Task {
-                try await Task.sleep(nanoseconds: 2_500_000_000)
-//                withAnimation {
-                    splashView = false
-//                }
+                try await Task.sleep(nanoseconds: 3_000_000_000)
+                splashView = false
             }
         }
         .onChange(of: notEntered) { newValue in

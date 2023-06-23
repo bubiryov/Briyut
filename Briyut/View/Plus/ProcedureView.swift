@@ -21,6 +21,7 @@ struct ProcedureView: View {
     @State var cost: String = ""
     @State var availableDoctors: [String] = []
     @State private var showAlert = false
+    @State private var loading: Bool = false
     @Binding var isEditing: Bool
             
     var body: some View {
@@ -32,16 +33,32 @@ struct ProcedureView: View {
             ScrollView {
                 VStack(spacing: ScreenSize.height * 0.02) {
                     
-                    AccentInputField(promptText: "Massage", title: "Procedure name", input: $name)
+                    AccentInputField(
+                        promptText: "Massage",
+                        title: "Procedure name",
+                        input: $name
+                    )
                     
-                    AccentInputField(promptText: "30", title: "Duration (minutes)", input: $duration)
-                        .keyboardType(.numberPad)
+                    AccentInputField(
+                        promptText: "30",
+                        title: "Duration (minutes)",
+                        input: $duration
+                    )
+                    .keyboardType(.numberPad)
                     
-                    AccentInputField(promptText: "2", title: "Count of parallel procedures", input: $parallelQuantity)
-                        .keyboardType(.numberPad)
+                    AccentInputField(
+                        promptText: "2",
+                        title: "Count of parallel procedures",
+                        input: $parallelQuantity
+                    )
+                    .keyboardType(.numberPad)
                     
-                    AccentInputField(promptText: "1000", title: "Price", input: $cost)
-                        .keyboardType(.numberPad)
+                    AccentInputField(
+                        promptText: "1000",
+                        title: "Price",
+                        input: $cost
+                    )
+                    .keyboardType(.numberPad)
                 }
             }
             .alert(isPresented: $showAlert) {
@@ -64,7 +81,10 @@ struct ProcedureView: View {
             NavigationLink {
                 AvailableDoctorsView(choosenDoctors: $availableDoctors)
             } label: {
-                AccentButton(text: "Choose available doctors", isButtonActive: true)
+                AccentButton(
+                    text: "Choose available doctors",
+                    isButtonActive: true
+                )
             }
             
             Button {
@@ -73,13 +93,16 @@ struct ProcedureView: View {
                         try await addProcedure()
                     } else {
                         try await editProcedure()
-                        isEditing = false
                     }
                 }
             } label: {
-                AccentButton(text: buttonText, isButtonActive: validateFields())
+                AccentButton(
+                    text: buttonText,
+                    isButtonActive: validateFields(),
+                    animation: loading
+                )
             }
-            .disabled(!validateFields())
+            .disabled(!validateFields() || loading)
         }
         .padding(.bottom, 20)
         .navigationBarBackButtonHidden(true)
@@ -125,18 +148,24 @@ struct ProcedureView: View {
     func addProcedure() async throws {
         let newProcedure = ProcedureModel(procedureId: UUID().uuidString, name: name, duration: Int(duration)!, cost: Int(cost)!, parallelQuantity: Int(parallelQuantity)!, availableDoctors: availableDoctors)
         do {
+            loading = true
             try await vm.addNewProcedure(procedure: newProcedure)
+            loading = false
             presentationMode.wrappedValue.dismiss()
         } catch {
+            loading = false
             print("Can't add the procedure")
         }
     }
     
     func editProcedure() async throws {
         do {
+            loading = true
             try await vm.editProcedure(procedureId: procedure?.procedureId ?? "", name: name, duration: Int(duration)!, cost: Int(cost)!, parallelQuantity: Int(parallelQuantity)!, availableDoctors: availableDoctors)
+            loading = false
             presentationMode.wrappedValue.dismiss()
-        } catch  {
+        } catch {
+            loading = false
             print("Can't edit the procedure")
         }
     }

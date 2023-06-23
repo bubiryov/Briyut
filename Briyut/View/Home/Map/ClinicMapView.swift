@@ -45,7 +45,7 @@ struct ClinicMapView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, topPadding())
-                .padding(.bottom, 40)
+                .padding(.bottom, 30)
             }
         }
     }

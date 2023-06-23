@@ -67,7 +67,7 @@ struct OrderRow: View {
                         .foregroundColor(fontColor != nil ? fontColor : .primary)
                     
                 }
-                .padding(.leading, 5)
+                .padding(.leading, 10)
                 .padding(.vertical, 10)
                 .frame(height: ScreenSize.height * 0.1)
                 
@@ -152,7 +152,7 @@ struct OrderRow: View {
 struct OrderRow_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: true, color: .secondaryColor, fontColor: .black, bigDate: false, userInformation: .doctor, photoBackgroundColor: .secondary.opacity(0.1))
+            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: false, color: .secondaryColor, fontColor: .black, bigDate: false, userInformation: .doctor, photoBackgroundColor: .clear)
         }
         .padding(.horizontal, 20)
     }

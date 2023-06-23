@@ -97,6 +97,9 @@
 		89D37B792A0A87D100A7C933 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B782A0A87D100A7C933 /* EditProfileView.swift */; };
 		89D6C8192A2B529500A38CEB /* ChooseClientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D6C8182A2B529500A38CEB /* ChooseClientView.swift */; };
 		89E8AB342A14DD52000661E6 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AB332A14DD51000661E6 /* SplashView.swift */; };
+		89E9B5982A45B25400B5D733 /* ArticlesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E9B5972A45B25400B5D733 /* ArticlesList.swift */; };
+		89E9B59A2A45CADF00B5D733 /* ArticleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E9B5992A45CADE00B5D733 /* ArticleManager.swift */; };
+		89E9B59C2A45CB1D00B5D733 /* ArticleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E9B59B2A45CB1D00B5D733 /* ArticleModel.swift */; };
 		89EEC9AF2A21FBB60069A711 /* OrderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EEC9AE2A21FBB60069A711 /* OrderRow.swift */; };
 		89F71FF92A2F416E006DE84D /* DoneOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F71FF82A2F416E006DE84D /* DoneOrderView.swift */; };
 /* End PBXBuildFile section */
@@ -213,6 +216,9 @@
 		89D37B782A0A87D100A7C933 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		89D6C8182A2B529500A38CEB /* ChooseClientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseClientView.swift; sourceTree = "<group>"; };
 		89E8AB332A14DD51000661E6 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		89E9B5972A45B25400B5D733 /* ArticlesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesList.swift; sourceTree = "<group>"; };
+		89E9B5992A45CADE00B5D733 /* ArticleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleManager.swift; sourceTree = "<group>"; };
+		89E9B59B2A45CB1D00B5D733 /* ArticleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleModel.swift; sourceTree = "<group>"; };
 		89EEC9AE2A21FBB60069A711 /* OrderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderRow.swift; sourceTree = "<group>"; };
 		89F71FF82A2F416E006DE84D /* DoneOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneOrderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -453,6 +459,7 @@
 				89CFDD672A122E7200159C4B /* OrderManager.swift */,
 				89BFAA3C2A1F5B1900DF2D0B /* StorageManager.swift */,
 				896D3D0B2A3E28170053E873 /* LocationManager.swift */,
+				89E9B5992A45CADE00B5D733 /* ArticleManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -467,6 +474,7 @@
 				890C28B92A0652FE000DB1A6 /* ProcedureModel.swift */,
 				89CFDD692A122ED700159C4B /* OrderModel.swift */,
 				896D3D092A3DDBF10053E873 /* LocationModel.swift */,
+				89E9B59B2A45CB1D00B5D733 /* ArticleModel.swift */,
 				897ED61F2A41B6D500668890 /* Enums.swift */,
 			);
 			path = Model;
@@ -507,6 +515,7 @@
 			isa = PBXGroup;
 			children = (
 				899EC5C02A003DBF00C90D49 /* HomeView.swift */,
+				89E9B5962A45B22600B5D733 /* Articles */,
 				894068742A42F9FC00DC16F4 /* Map */,
 			);
 			path = Home;
@@ -549,6 +558,14 @@
 				891198FB2A29155400D6756F /* DoctorOrderRow.swift */,
 			);
 			path = DoctorOrders;
+			sourceTree = "<group>";
+		};
+		89E9B5962A45B22600B5D733 /* Articles */ = {
+			isa = PBXGroup;
+			children = (
+				89E9B5972A45B25400B5D733 /* ArticlesList.swift */,
+			);
+			path = Articles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -752,6 +769,7 @@
 				899EC5A62A000E6500C90D49 /* AppDelegate.swift in Sources */,
 				89CFDD6A2A122ED700159C4B /* OrderModel.swift in Sources */,
 				894068812A43893500DC16F4 /* LoadingAnimation.swift in Sources */,
+				89E9B59C2A45CB1D00B5D733 /* ArticleModel.swift in Sources */,
 				897ED6222A41C5EA00668890 /* AccentInputField.swift in Sources */,
 				898FD9B72A08FDE000725697 /* ProcedureView.swift in Sources */,
 				899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */,
@@ -766,6 +784,7 @@
 				89CA5ABB2A02FD3200695069 /* Utilities.swift in Sources */,
 				896D3D0C2A3E28170053E873 /* LocationManager.swift in Sources */,
 				89CA5AB92A02FCE100695069 /* GoogleSignInResultModel.swift in Sources */,
+				89E9B5982A45B25400B5D733 /* ArticlesList.swift in Sources */,
 				890C28BC2A06D3F1000DB1A6 /* ProfileView.swift in Sources */,
 				89CA5AAE2A02911600695069 /* PhoneAuthenticationView.swift in Sources */,
 				89C590602A059EF300975E50 /* DBUser.swift in Sources */,
@@ -773,6 +792,7 @@
 				899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */,
 				899EC5BF2A002FF400C90D49 /* AccentButton.swift in Sources */,
 				894068782A432C8700DC16F4 /* LocationsViewModel.swift in Sources */,
+				89E9B59A2A45CADF00B5D733 /* ArticleManager.swift in Sources */,
 				899EC5B62A001A7600C90D49 /* AuthInputField.swift in Sources */,
 				89CFDD6C2A126BCB00159C4B /* AddOrderView.swift in Sources */,
 				896D3D0A2A3DDBF10053E873 /* LocationModel.swift in Sources */,

@@ -15,6 +15,7 @@ struct PhoneAuthenticationView: View {
     @State private var phoneNumber: String = ""
     @State private var code: String = ""
     @State private var sentSms: Bool = false
+    @State private var loading: Bool = false
     @Binding var notEntered: Bool
     private var activeButton: Bool {
         if phoneNumber.count < 10 || phoneNumber.count > 13 {
@@ -47,14 +48,22 @@ struct PhoneAuthenticationView: View {
                 
                 Button {
                     Task {
-                        try await vm.verifyCode(code: code)
-                        hideKeyboard()
-                        notEntered = false
-                        sentSms = false
+                        do {
+                            loading = true
+                            try await vm.verifyCode(code: code)
+                            hideKeyboard()
+                            notEntered = false
+                            sentSms = false
+                            loading = false
+                        } catch {
+                            loading = false
+                            print("Verifying code error")
+                        }
                     }
                 } label: {
                     AccentButton(text: "Done", isButtonActive: code.count != 6 ? false : true)
                 }
+                .disabled(loading)
                 
             } else {
                 
@@ -66,14 +75,22 @@ struct PhoneAuthenticationView: View {
                 
                 Button {
                     Task {
-                        try await vm.sendCode(phoneNumber)
-                        withAnimation(.easeInOut(duration: 0.1)) {
-                            sentSms = true
+                        do {
+                            loading = true
+                            try await vm.sendCode(phoneNumber)
+                            withAnimation(.easeInOut(duration: 0.1)) {
+                                sentSms = true
+                            }
+                            loading = false
+                        } catch {
+                            loading = false
+                            print("Code was not sent")
                         }
                     }
                 } label: {
-                    AccentButton(text: "Send SMS", isButtonActive: activeButton)
+                    AccentButton(text: "Send SMS", isButtonActive: activeButton, animation: loading)
                 }
+                .disabled(loading)
                 
 //                HStack {
 //                    if let error = vm.errorText {

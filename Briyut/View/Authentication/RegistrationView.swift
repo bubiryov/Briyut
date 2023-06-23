@@ -12,6 +12,7 @@ struct RegistrationView: View {
     @EnvironmentObject var vm: AuthenticationViewModel
     @Binding var notEntered: Bool
     @State private var repeatPassword: String = ""
+    @State private var loading: Bool = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
@@ -48,19 +49,28 @@ struct RegistrationView: View {
                 
                 Button {
                     Task {
-                        try await vm.createUserWithEmail()
-                        notEntered = false
-                        presentationMode.wrappedValue.dismiss()
+                        do {
+                            loading = true
+                            try await vm.createUserWithEmail()
+                            notEntered = false
+                            loading = false
+                            presentationMode.wrappedValue.dismiss()
+                        } catch {
+                            print("Can't create an account")
+                            loading = false
+                        }
                     }
                 } label: {
                     AccentButton(
                         text: "Create an account",
-                        isButtonActive: vm.validate(email: vm.email, password: vm.password, repeatPassword: repeatPassword))
-                    
+                        isButtonActive: vm.validate(email: vm.email, password: vm.password, repeatPassword: repeatPassword),
+                        animation: loading
+                    )
                 }
-                .disabled(!vm.validate(email: vm.email, password: vm.password, repeatPassword: repeatPassword))
+                .disabled(!vm.validate(email: vm.email, password: vm.password, repeatPassword: repeatPassword) || loading)
             }
-            .padding(.bottom)
+            .padding(.top, topPadding())
+            .padding(.bottom, 20)
             .padding(.horizontal, 20)
             .navigationBarBackButtonHidden(true)
             .contentShape(Rectangle())

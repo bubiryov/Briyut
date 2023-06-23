@@ -18,10 +18,10 @@ struct ProfileView: View {
     var body: some View {
         
         NavigationView {
-            VStack(spacing: 20) {
-                BarTitle<CopyIdButton, LogOutButton>(
+            VStack(spacing: 30) {
+                BarTitle<EditProfileButton, LogOutButton>(
                     text: "",
-                    leftButton: CopyIdButton(vm: vm, copyIdAlert: $copyIdAlert),
+                    leftButton: EditProfileButton(notEntered: $notEntered),
                     rightButton: LogOutButton(logOutAlert: $logOutAlert)
                 )
                 
@@ -42,18 +42,6 @@ struct ProfileView: View {
                         .font(Mariupol.bold, 22)
                         .lineLimit(1)
                 }
-                                
-                NavigationLink {
-                    EditProfileView(notEntered: $notEntered)
-                } label: {
-                    Text("Edit profile")
-                        .font(Mariupol.medium, 17)
-                        .frame(width: ScreenSize.width * 0.4, height: ScreenSize.height * 0.045)
-                        .buttonStyle(.plain)
-                        .foregroundColor(.white)
-                        .background(Color.mainColor)
-                        .cornerRadius(ScreenSize.width / 30)
-                }
                                                 
                 VStack {
                     NavigationRow(destination: AllDoctorsView(), imageName: "stethoscope", title: "Specialists")
@@ -71,6 +59,14 @@ struct ProfileView: View {
                     if !vm.authProviders.contains(.phone) {
                         NavigationRow(destination: ChangePasswordView(), imageName: "lock", title: "Change password")
                     }
+                    
+                    Button {
+                        UIPasteboard.general.string = vm.user?.userId
+                        copyIdAlert = true
+                    } label: {
+                        SettingsButtonView(imageName: "copy", title: "Copy ID")
+                    }
+
                 }
                 
                 Spacer()
@@ -111,20 +107,6 @@ struct ProfileView_Previews: PreviewProvider {
     }
 }
 
-struct SettingsButton: View {
-    
-    @Binding var notEntered: Bool
-    
-    var body: some View {
-        NavigationLink {
-            EditProfileView(notEntered: $notEntered)
-        } label: {
-            BarButtonView(image: "settings", backgroundColor: .secondary.opacity(0.1))
-        }
-        .buttonStyle(.plain)
-    }
-}
-
 struct ProfileImage: View {
     
     var photoURL: String?
@@ -155,17 +137,15 @@ struct ProfileImage: View {
     }
 }
 
-struct CopyIdButton: View {
+struct EditProfileButton: View {
     
-    let vm: ProfileViewModel
-    @Binding var copyIdAlert: Bool
-    
+    @Binding var notEntered: Bool
+        
     var body: some View {
-        Button {
-            UIPasteboard.general.string = vm.user?.userId
-            copyIdAlert = true
+        NavigationLink {
+            EditProfileView(notEntered: $notEntered)
         } label: {
-            BarButtonView(image: "copy")
+            BarButtonView(image: "gear")
         }
         .buttonStyle(.plain)
     }
@@ -178,26 +158,7 @@ struct NavigationRow<Destination: View>: View {
     
     var body: some View {
         NavigationLink(destination: destination) {
-            HStack {
-                Image(imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .scaleEffect(0.8)
-                    .frame(width: ScreenSize.height * 0.03)
-                    .foregroundColor(.mainColor)
-                    .cornerRadius(10)
-                
-                Text(title)
-                    .font(Mariupol.medium, 17)
-                    .foregroundColor(.primary)
-                    .padding(.leading, 8)
-                    .lineLimit(1)
-            }
-            .padding(.horizontal)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .frame(height: ScreenSize.height * 0.07)
-            .background(Color.secondaryColor)
-            .cornerRadius(ScreenSize.width / 30)
+            SettingsButtonView(imageName: imageName, title: title)
         }
     }
 }
@@ -213,5 +174,34 @@ struct LogOutButton: View {
             BarButtonView(image: "exit")
         }
         .buttonStyle(.plain)
+    }
+}
+
+struct SettingsButtonView: View {
+    
+    var imageName: String
+    var title: String
+    
+    var body: some View {
+        HStack {
+            Image(imageName)
+                .resizable()
+                .scaledToFit()
+                .scaleEffect(0.8)
+                .frame(width: ScreenSize.height * 0.03)
+                .foregroundColor(.mainColor)
+                .cornerRadius(10)
+            
+            Text(title)
+                .font(Mariupol.medium, 17)
+                .foregroundColor(.primary)
+                .padding(.leading, 8)
+                .lineLimit(1)
+        }
+        .padding(.horizontal)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(height: ScreenSize.height * 0.07)
+        .background(Color.secondaryColor)
+        .cornerRadius(ScreenSize.width / 30)
     }
 }

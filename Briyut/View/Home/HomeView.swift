@@ -57,7 +57,7 @@ struct HomeView: View {
                         
                         Button {
                             withAnimation(.easeInOut(duration: 0.15)) {
-                                selectedTab = .plus
+                                selectedTab = .calendar
                             }
                         } label: {
                             Text("See all")
@@ -90,7 +90,7 @@ struct HomeView: View {
                     } else {
                         Button {
                             withAnimation(.easeInOut(duration: 0.15)) {
-                                selectedTab = .calendar
+                                selectedTab = .plus
                             }
                         } label: {
                             Text("You don't have any appointments yet")
@@ -103,6 +103,62 @@ struct HomeView: View {
                         }
                     }
                 }
+                
+                VStack(alignment: .leading) {
+                    
+                    HStack(alignment: .center) {
+                        Text("Interesting")
+                            .font(Mariupol.medium, 22)
+                        
+                        Spacer()
+                        
+                        NavigationLink {
+                            ArticlesList()
+                        } label: {
+                            Text("See all")
+                                .font(Mariupol.medium, 17)
+                                .foregroundColor(.secondary.opacity(0.6))
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundColor(.primary)
+                    }
+
+                    if let nearestOrder = vm.activeOrders.first {
+                        ZStack {
+                            if vm.activeOrders.count > 1 {
+                                RoundedRectangle(cornerRadius: ScreenSize.width / 15)
+                                    .frame(height: ScreenSize.height * 0.14)
+                                    .offset(y: ScreenSize.height / 35)
+                                    .scaleEffect(0.85)
+                                    .foregroundColor(.mainColor.opacity(0.7))
+                            }
+                            OrderRow(
+                                vm: vm,
+                                order: nearestOrder,
+                                withButtons: false,
+                                color: .mainColor,
+                                fontColor: .white,
+                                bigDate: true,
+                                userInformation: vm.user?.isDoctor ?? false ? .client : .doctor, photoBackgroundColor: .white
+                            )
+                        }
+                    } else {
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.15)) {
+                                selectedTab = .plus
+                            }
+                        } label: {
+                            Text("No current news")
+                                .font(Mariupol.medium, 17)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .frame(height: ScreenSize.height * 0.14)
+                                .background(Color.secondaryColor)
+                                .cornerRadius(ScreenSize.width / 20)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+
 
                 
                 Spacer()

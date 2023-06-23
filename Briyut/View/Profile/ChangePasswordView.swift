@@ -13,6 +13,7 @@ struct ChangePasswordView: View {
     @State private var currentPassword: String = ""
     @State private var newPassword: String = ""
     @State private var repeatPassword: String = ""
+    @State private var loading: Bool = false
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -50,24 +51,29 @@ struct ChangePasswordView: View {
                 Button {
                     Task {
                         do {
+                            loading = true
                             try await vm.changePassword(
                                 currentPassword: currentPassword,
                                 newPassword: newPassword
                             )
+                            loading = false
                             presentationMode.wrappedValue.dismiss()
                         } catch {
                             currentPassword = ""
                             newPassword = ""
                             repeatPassword = ""
+                            loading = false
                             hideKeyboard()
                         }
                     }
                 } label: {
                     AccentButton(
                         text: "Change password",
-                        isButtonActive: vm.validatePassword(newPassword, repeatPassword: repeatPassword)
+                        isButtonActive: vm.validatePassword(newPassword, repeatPassword: repeatPassword),
+                        animation: loading
                     )
                 }
+                .disabled(!vm.validatePassword(newPassword, repeatPassword: repeatPassword) || loading)
             }
             .padding(.bottom)
             .navigationBarBackButtonHidden()

@@ -58,6 +58,8 @@ struct LocationsList: View {
                 }
         )
         .navigationBarBackButtonHidden()
+        .padding(.top, topPadding())
+        .padding(.bottom, 20)
         .padding(.horizontal, 20)
     }
 }

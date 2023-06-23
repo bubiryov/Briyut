@@ -24,7 +24,7 @@ struct AuthenticationView: View {
                             .foregroundColor(.white)
                             .tracking(2)
                             .font(.custom("Alokary", size: 25))
-                            .padding(.top, ScreenSize.height * 0.14)
+                            .frame(height: ScreenSize.height / 3.2)
 
                         Spacer()
                     }

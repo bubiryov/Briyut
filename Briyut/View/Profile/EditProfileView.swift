@@ -35,7 +35,7 @@ struct EditProfileView: View {
                 )
                 .padding(.bottom)
                 
-                VStack(spacing: ScreenSize.height * 0.02) {
+                VStack {
                     
                     Button {
                         showActionSheet = true
@@ -84,21 +84,23 @@ struct EditProfileView: View {
 //                        .frame(maxWidth: .infinity, alignment: .trailing)
 //                    }
                     ScrollView {
-                        AccentInputField(
-                            promptText: "Maria",
-                            title: "Name",
-                            input: $name
-                        )
-                        
-                        AccentInputField(
-                            promptText: "Shevchenko",
-                            title: "Last name",
-                            input: $lastName
-                        )
-                        
-                        if !vm.authProviders.contains(.phone) {
-                            AccentInputField(promptText: "+38 (099)-999-99-99", title: "Phone number", input: $phoneNumber)
-                                .keyboardType(.phonePad)
+                        VStack(spacing: ScreenSize.height * 0.02) {
+                            AccentInputField(
+                                promptText: "Maria",
+                                title: "Name",
+                                input: $name
+                            )
+                            
+                            AccentInputField(
+                                promptText: "Shevchenko",
+                                title: "Last name",
+                                input: $lastName
+                            )
+                            
+                            if !vm.authProviders.contains(.phone) {
+                                AccentInputField(promptText: "+38 (099)-999-99-99", title: "Phone number", input: $phoneNumber)
+                                    .keyboardType(.phonePad)
+                            }
                         }
                     }
                                                                         
@@ -132,6 +134,7 @@ struct EditProfileView: View {
                     } label: {
                         AccentButton(text: "Save", isButtonActive: true, animation: loading)
                     }
+                    .disabled(loading)
                 }
                 .ignoresSafeArea(.keyboard)
                 .confirmationDialog("Choose action", isPresented: $showActionSheet) {
