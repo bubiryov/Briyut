@@ -25,6 +25,7 @@
 		897ED61E2A41B2C700668890 /* Mariupol-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 897ED61B2A41B2C700668890 /* Mariupol-Medium.ttf */; };
 		897ED6202A41B6D500668890 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897ED61F2A41B6D500668890 /* Enums.swift */; };
 		897ED6222A41C5EA00668890 /* AccentInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897ED6212A41C5EA00668890 /* AccentInputField.swift */; };
+		897F49C22A47063D00E1E157 /* ChooseArticleProcedureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F49C12A47063D00E1E157 /* ChooseArticleProcedureView.swift */; };
 		89804BDA2A2E1C66002E2282 /* AllUsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89804BD92A2E1C66002E2282 /* AllUsersView.swift */; };
 		8987712B2A3F91CB00F40467 /* OtpView-SwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8987712A2A3F91CB00F40467 /* OtpView-SwiftUI */; };
 		898FD9B52A08F4E000725697 /* AllProcedures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898FD9B42A08F4E000725697 /* AllProcedures.swift */; };
@@ -100,6 +101,8 @@
 		89E9B5982A45B25400B5D733 /* ArticlesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E9B5972A45B25400B5D733 /* ArticlesList.swift */; };
 		89E9B59A2A45CADF00B5D733 /* ArticleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E9B5992A45CADE00B5D733 /* ArticleManager.swift */; };
 		89E9B59C2A45CB1D00B5D733 /* ArticleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E9B59B2A45CB1D00B5D733 /* ArticleModel.swift */; };
+		89E9B59E2A45F2E400B5D733 /* ArticlesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E9B59D2A45F2E400B5D733 /* ArticlesViewModel.swift */; };
+		89E9B5A02A45FEC900B5D733 /* AddArticleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E9B59F2A45FEC900B5D733 /* AddArticleView.swift */; };
 		89EEC9AF2A21FBB60069A711 /* OrderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EEC9AE2A21FBB60069A711 /* OrderRow.swift */; };
 		89F71FF92A2F416E006DE84D /* DoneOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F71FF82A2F416E006DE84D /* DoneOrderView.swift */; };
 /* End PBXBuildFile section */
@@ -152,6 +155,7 @@
 		897ED61B2A41B2C700668890 /* Mariupol-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Mariupol-Medium.ttf"; sourceTree = "<group>"; };
 		897ED61F2A41B6D500668890 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		897ED6212A41C5EA00668890 /* AccentInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentInputField.swift; sourceTree = "<group>"; };
+		897F49C12A47063D00E1E157 /* ChooseArticleProcedureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseArticleProcedureView.swift; sourceTree = "<group>"; };
 		89804BD92A2E1C66002E2282 /* AllUsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllUsersView.swift; sourceTree = "<group>"; };
 		898FD9B42A08F4E000725697 /* AllProcedures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllProcedures.swift; sourceTree = "<group>"; };
 		898FD9B62A08FDE000725697 /* ProcedureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureView.swift; sourceTree = "<group>"; };
@@ -219,6 +223,8 @@
 		89E9B5972A45B25400B5D733 /* ArticlesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesList.swift; sourceTree = "<group>"; };
 		89E9B5992A45CADE00B5D733 /* ArticleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleManager.swift; sourceTree = "<group>"; };
 		89E9B59B2A45CB1D00B5D733 /* ArticleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleModel.swift; sourceTree = "<group>"; };
+		89E9B59D2A45F2E400B5D733 /* ArticlesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesViewModel.swift; sourceTree = "<group>"; };
+		89E9B59F2A45FEC900B5D733 /* AddArticleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddArticleView.swift; sourceTree = "<group>"; };
 		89EEC9AE2A21FBB60069A711 /* OrderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderRow.swift; sourceTree = "<group>"; };
 		89F71FF82A2F416E006DE84D /* DoneOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneOrderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -445,6 +451,7 @@
 				899EC5CA2A00574700C90D49 /* AuthenticationViewModel.swift */,
 				898FD9BD2A0935E100725697 /* ProfileViewModel.swift */,
 				894068772A432C8700DC16F4 /* LocationsViewModel.swift */,
+				89E9B59D2A45F2E400B5D733 /* ArticlesViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -564,6 +571,8 @@
 			isa = PBXGroup;
 			children = (
 				89E9B5972A45B25400B5D733 /* ArticlesList.swift */,
+				89E9B59F2A45FEC900B5D733 /* AddArticleView.swift */,
+				897F49C12A47063D00E1E157 /* ChooseArticleProcedureView.swift */,
 			);
 			path = Articles;
 			sourceTree = "<group>";
@@ -735,6 +744,7 @@
 				89CFDD702A12823700159C4B /* ClientOrders.swift in Sources */,
 				89C6096B2A3C770200D5BF00 /* ChangePasswordView.swift in Sources */,
 				89C9C16C2A3215CD0078A042 /* HistoryView.swift in Sources */,
+				89E9B5A02A45FEC900B5D733 /* AddArticleView.swift in Sources */,
 				89C590542A05642B00975E50 /* TabBar.swift in Sources */,
 				898FD9C02A096D4B00725697 /* AvailableDoctorsView.swift in Sources */,
 				89A17E562A03B36100C92A58 /* SignInWithAppleButton.swift in Sources */,
@@ -770,11 +780,13 @@
 				89CFDD6A2A122ED700159C4B /* OrderModel.swift in Sources */,
 				894068812A43893500DC16F4 /* LoadingAnimation.swift in Sources */,
 				89E9B59C2A45CB1D00B5D733 /* ArticleModel.swift in Sources */,
+				89E9B59E2A45F2E400B5D733 /* ArticlesViewModel.swift in Sources */,
 				897ED6222A41C5EA00668890 /* AccentInputField.swift in Sources */,
 				898FD9B72A08FDE000725697 /* ProcedureView.swift in Sources */,
 				899EC5732A000A1C00C90D49 /* ContentView.swift in Sources */,
 				899EC5C92A00434A00C90D49 /* AuthDataResultModel.swift in Sources */,
 				89C590502A05291800975E50 /* BarButtonView.swift in Sources */,
+				897F49C22A47063D00E1E157 /* ChooseArticleProcedureView.swift in Sources */,
 				896D3D082A3DC7270053E873 /* ClinicMapView.swift in Sources */,
 				899EC5CD2A00579300C90D49 /* AuthenticationView.swift in Sources */,
 				89A17E5A2A03C8E300C92A58 /* AppleSignInResultModel.swift in Sources */,

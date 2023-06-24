@@ -19,39 +19,37 @@ struct AvailableDoctorsView: View {
             BarTitle<BackButton, Text>(text: "Doctors", leftButton: BackButton())
             
             ScrollView {
-//                if let doctors = vm.doctors {
-                    ForEach(vm.doctors, id: \.userId) { doctor in
-                        HStack {
-                            
-                            ProfileImage(
-                                photoURL: doctor.photoUrl,
-                                frame: ScreenSize.height * 0.06,
-                                color: .clear,
-                                padding: 10
-                            )
-                            .cornerRadius(ScreenSize.width / 30)
-                            
-                            Text("\(doctor.name ?? doctor.userId) \(doctor.lastName ?? "")")
-                                .font(Mariupol.medium, 17)
-                                .foregroundColor(choosenDoctors.contains(doctor.userId) ? .white : .black)
-                                .padding(.leading, 8)
-                                .lineLimit(1)
-                        }
-                        .padding(.horizontal)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .frame(height: ScreenSize.height * 0.08)
-                        .background(choosenDoctors.contains(doctor.userId) ? Color.mainColor : Color.secondaryColor)
-                        .cornerRadius(cornerRadius)
-                        .onTapGesture {
-                            if let index = choosenDoctors.firstIndex(of: doctor.userId) {
-                                choosenDoctors.remove(at: index)
-                            } else {
-                                choosenDoctors.append(doctor.userId)
-                            }
+                ForEach(vm.doctors, id: \.userId) { doctor in
+                    HStack {
+                        
+                        ProfileImage(
+                            photoURL: doctor.photoUrl,
+                            frame: ScreenSize.height * 0.06,
+                            color: .clear,
+                            padding: 10
+                        )
+                        .cornerRadius(ScreenSize.width / 30)
+                        
+                        Text("\(doctor.name ?? doctor.userId) \(doctor.lastName ?? "")")
+                            .font(Mariupol.medium, 17)
+                            .foregroundColor(choosenDoctors.contains(doctor.userId) ? .white : .black)
+                            .padding(.leading, 8)
+                            .lineLimit(1)
+                    }
+                    .padding(.horizontal)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(height: ScreenSize.height * 0.08)
+                    .background(choosenDoctors.contains(doctor.userId) ? Color.mainColor : Color.secondaryColor)
+                    .cornerRadius(cornerRadius)
+                    .onTapGesture {
+                        if let index = choosenDoctors.firstIndex(of: doctor.userId) {
+                            choosenDoctors.remove(at: index)
+                        } else {
+                            choosenDoctors.append(doctor.userId)
                         }
                     }
-                    .listRowSeparator(.hidden)
-//                }
+                }
+                .listRowSeparator(.hidden)
             }
         }
         .navigationBarBackButtonHidden(true)

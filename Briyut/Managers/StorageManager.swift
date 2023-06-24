@@ -17,11 +17,11 @@ final class StorageManager {
     
     private let storage = Storage.storage().reference()
         
-    private func userReference(userId: String) -> StorageReference {
-        storage.child("users").child(userId)
+    private func documentReference(documentId: String, childStorage: String) -> StorageReference {
+        storage.child(childStorage).child(documentId)
     }
     
-    func saveImage(data: Data, userID: String, contentTypes: [String]) async throws -> String {
+    func saveImage(data: Data, childStorage: String, documentId: String, contentTypes: [String]) async throws -> String {
         let meta = StorageMetadata()
         meta.contentType = contentTypes.first // Устанавливаем первый тип контента по умолчанию
 
@@ -35,7 +35,7 @@ final class StorageManager {
         
         let path = "\(UUID().uuidString).\(fileExtension)"
         
-        let returnedMetaData = try await userReference(userId: userID).child(path).putDataAsync(data, metadata: meta)
+        let returnedMetaData = try await documentReference(documentId: documentId, childStorage: childStorage).child(path).putDataAsync(data, metadata: meta)
         guard let returnedPath = returnedMetaData.path else {
             throw URLError(.badServerResponse)
         }
@@ -43,8 +43,8 @@ final class StorageManager {
         return returnedPath
     }
     
-    func deleteFolderContents(userId: String) async throws {
-        let folderRef = userReference(userId: userId)
+    func deleteFolderContents(documentId: String, childStorage: String) async throws {
+        let folderRef = documentReference(documentId: documentId, childStorage: childStorage)
         
         do {
             try await deleteContentsOfReference(folderRef: folderRef)
@@ -72,8 +72,8 @@ final class StorageManager {
         try await Storage.storage().reference(withPath: path).delete()
     }
         
-    func getData(userId: String, path: String) async throws -> Data {
-        try await userReference(userId: userId).child(path).data(maxSize: 3 * 1024 * 1024)
+    func getData(documentId: String, childStorage: String, path: String) async throws -> Data {
+        try await documentReference(documentId: documentId, childStorage: childStorage).child(path).data(maxSize: 3 * 1024 * 1024)
     }
     
     func getUrlForImage(path: String) async throws -> String {

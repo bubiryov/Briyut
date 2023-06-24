@@ -10,7 +10,7 @@ import MapKit
 
 struct ClinicMapView: View {
     
-    @ObservedObject var vm: LocationsViewModel = LocationsViewModel()
+    @StateObject var vm: LocationsViewModel = LocationsViewModel()
     var profileVM: ProfileViewModel
         
     var body: some View {

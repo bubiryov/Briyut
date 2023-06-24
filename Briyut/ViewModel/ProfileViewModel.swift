@@ -62,15 +62,15 @@ final class ProfileViewModel: ObservableObject {
         }
     }
     
-    func deleteStorageFolderContents(userId: String) async throws {
-        try await StorageManager.shared.deleteFolderContents(userId: userId)
+    func deleteStorageFolderContents(documentId: String, childStorage: String) async throws {
+        try await StorageManager.shared.deleteFolderContents(documentId: documentId, childStorage: childStorage)
     }
     
     func deleteAccount() async throws {
         guard let user = user else { throw URLError(.badServerResponse) }
         try await deleteUnfinishedOrders(idType: .client, id: user.userId)
         try await UserManager.shared.deleteUser(userId: user.userId)
-        try await deleteStorageFolderContents(userId: user.userId)
+        try await deleteStorageFolderContents(documentId: user.userId, childStorage: "users")
         try await AuthenticationManager.shared.deleteAccount()
         self.user = nil
     }
@@ -111,7 +111,7 @@ final class ProfileViewModel: ObservableObject {
         return try await UserManager.shared.editProfile(userID: userID, name: name, lastName: lastName, phoneNumber: phoneNumber, photoURL: photoURL)
     }
     
-    func saveProfilePhoto(item: PhotosPickerItem) async throws -> String {
+    func savePhoto(item: PhotosPickerItem, childStorage: String) async throws -> String {
         let contentTypes: [String] = ["image/jpeg", "image/png", "image/heif", "image/heic"]
         guard let data = try await item.loadTransferable(type: Data.self) else {
             throw URLError(.badServerResponse)
@@ -119,7 +119,7 @@ final class ProfileViewModel: ObservableObject {
         guard let user = user else {
             throw URLError(.badServerResponse)
         }
-        return try await StorageManager.shared.saveImage(data: data, userID: user.userId, contentTypes: contentTypes)
+        return try await StorageManager.shared.saveImage(data: data, childStorage: childStorage, documentId: user.userId, contentTypes: contentTypes)
     }
     
     func deletePreviousPhoto(url: String) async throws {

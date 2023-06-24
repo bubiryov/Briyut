@@ -50,6 +50,7 @@ struct AccentButton: View {
                     .background(buttonColor)
                     .cornerRadius(cornerRadius)
                     .padding(.horizontal, 3)
+                    .lineLimit(1)
             }
         } else {
             HStack {

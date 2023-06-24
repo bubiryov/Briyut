@@ -22,7 +22,7 @@ struct AccentInputField: View {
             
             TextField("", text: $input, prompt: Text(promptText))
                 .font(Mariupol.medium, 17)
-                .padding(.leading)
+                .padding(.horizontal)
                 .frame(maxWidth: .infinity)
                 .frame(height: ScreenSize.height * 0.06)
                 .background(Color.secondary.opacity(0.1))

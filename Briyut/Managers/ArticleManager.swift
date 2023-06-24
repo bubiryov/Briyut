@@ -15,36 +15,59 @@ final class ArticleManager {
     
     private init() { }
     
-    private let locationCollection = Firestore.firestore().collection("articles")
+    private let articleCollection = Firestore.firestore().collection("articles")
     
-    private func locationDocument(locationId: String) -> DocumentReference {
-        locationCollection.document(locationId)
+    private func articleDocument(article_id: String) -> DocumentReference {
+        articleCollection.document(article_id)
     }
     
-    func getProduct(locationId: String) async throws -> LocationModel {
-        try await locationDocument(locationId: locationId).getDocument(as: LocationModel.self)
-    }
+//    func getProduct(article_id: String) async throws -> ArticleModel {
+//        try await articleDocument(article_id: article_id).getDocument(as: ArticleModel.self)
+//    }
     
-    func getAllLocations() async throws -> [LocationModel] {
-        try await locationCollection.getDocuments(as: LocationModel.self)
-    }
+//    func getAllArticles() async throws -> [ArticleModel] {
+//        try await articleCollection.getDocuments(as: ArticleModel.self)
+//    }
     
-    func createNewLocation(location: LocationModel) async throws {
-        try locationDocument(locationId: location.id)
-            .setData(from: location, merge: false)
+    func createNewArticle(article: ArticleModel) async throws {
+        try articleDocument(article_id: article.id)
+            .setData(from: article, merge: false)
     }
 
-    func removeLocation(locationId: String) async throws {
-        try await locationDocument(locationId: locationId).delete()
+    func removeArticle(article_id: String) async throws {
+        try await articleDocument(article_id: article_id).delete()
     }
     
-    func editLocation(locationId: String, latitude: Double, longitude: Double, address: String) async throws {
-        let data: [String : Any] = [
-            LocationModel.CodingKeys.latitude.rawValue : latitude,
-            LocationModel.CodingKeys.longitude.rawValue : longitude,
-            LocationModel.CodingKeys.address.rawValue : address
-        ]
-        try await locationDocument(locationId: locationId).updateData(data)
+    func getRequiredArticles(countLimit: Int?, lastDocument: DocumentSnapshot?) async throws -> (orders: [ArticleModel], lastDocument: DocumentSnapshot?) {
+
+        let query = articleCollection
+
+        if let countLimit {
+            if let lastDocument {
+                return try await query
+                    .limit(to: countLimit)
+                    .start(afterDocument: lastDocument)
+                    .getDocumentsWithSnapshot(as: ArticleModel.self)
+            } else {
+                return try await query
+                    .limit(to: countLimit)
+                    .getDocumentsWithSnapshot(as: ArticleModel.self)
+            }
+        } else {
+            return try await query
+                .getDocumentsWithSnapshot(as: ArticleModel.self)
+        }
     }
+
+    
+//    func editArticle(article_id: String, tittle: String, body: String, pictureUrl: String?, photoUrl: String?) async throws {
+//        let data: [String : Any] = [
+//            ArticleModel.CodingKeys.tittle.rawValue : tittle,
+//            ArticleModel.CodingKeys.body.rawValue : body,
+//            ArticleModel.CodingKeys.pictureUrl.rawValue : pictureUrl as Any,
+//            ArticleModel.CodingKeys.pictureUrl.rawValue : pictureUrl as Any
+//        ]
+//        try await articleDocument(article_id: article_id).updateData(data)
+//    }
 
 }

@@ -12,7 +12,11 @@ import MapKit
 @MainActor
 final class LocationsViewModel: ObservableObject {
     
-    @Published var locations: [LocationModel] = []
+    @Published var locations: [LocationModel] = [] {
+        didSet {
+            mapLocation = nil
+        }
+    }
     @Published var mapRegion: MKCoordinateRegion = MKCoordinateRegion()
     @Published var mapLocation: LocationModel? = nil {
         didSet {
@@ -69,7 +73,7 @@ final class LocationsViewModel: ObservableObject {
                         }
                         
                         if mapLocation != nil {
-                            span = MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
+                            span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
                         } else {
                             span = MKCoordinateSpan(
                                 latitudeDelta: abs(maxLat - minLat) * 1.2,
@@ -83,13 +87,13 @@ final class LocationsViewModel: ObservableObject {
                             latitude: locations.first!.latitude,
                             longitude: locations.first!.longitude)
                         
-                        if mapLocation != nil {
-                            span = MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
-                        } else {
-                            span = MKCoordinateSpan(
-                                latitudeDelta: 0.055,
-                                longitudeDelta: 0.02)
-                        }
+//                        if mapLocation != nil {
+                            span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+//                        } else {
+//                            span = MKCoordinateSpan(
+//                                latitudeDelta: 0.055,
+//                                longitudeDelta: 0.02)
+//                        }
                         
                         coordinateRegion = MKCoordinateRegion(center: center, span: span)
                         

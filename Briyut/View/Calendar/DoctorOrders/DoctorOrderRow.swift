@@ -45,7 +45,7 @@ struct DoctorOrderRow: View {
                 Spacer()
                 
                 if order.1 {
-                    Text("\(client?.name ?? "") \(client?.lastName ?? "")")
+                    Text("\(client?.name ?? client?.userId ?? "") \(client?.name != nil ? client?.lastName ?? "" : "")")
                         .font(Mariupol.regular, 14)
                         .foregroundColor(.white)
                     

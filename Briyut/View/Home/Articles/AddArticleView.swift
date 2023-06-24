@@ -1,0 +1,211 @@
+//
+//  AddArticleView.swift
+//  Briyut
+//
+//  Created by Egor Bubiryov on 23.06.2023.
+//
+
+import SwiftUI
+import FirebaseFirestore
+import PhotosUI
+
+struct AddArticleView: View {
+    
+    @ObservedObject var articleVM: ArticlesViewModel
+    @State private var tittle: String = ""
+    @State private var textBody: String = ""
+    @Environment(\.presentationMode) var presentationMode
+    @State private var isKeyboardVisible = false
+    @State private var clippedProcedure: ProcedureModel? = nil
+    @State private var showPhotosPicker: Bool = false
+    @State private var selectedPhoto: PhotosPickerItem? = nil
+    @State private var data: Data? = nil
+    @State private var loading: Bool = false
+    
+    var body: some View {
+        
+        VStack {
+            BarTitle<BackButton, ClipButton>(
+                text: "New article",
+                leftButton: BackButton(),
+                rightButton: ClipButton(
+                    showPhotosPicker: $showPhotosPicker,
+                    selectedPhoto: selectedPhoto,
+                    data: data
+                )
+            )
+            
+            ArticleInputField(promptText: "Title", type: .tittle, input: $tittle)
+                .lineLimit(2)
+            
+            ArticleInputField(promptText: "Write your text", type: .body, input: $textBody)
+            
+            Spacer()
+            
+            if !isKeyboardVisible {
+                HStack(spacing: 0) {
+                    
+                    NavigationLink {
+                        ChooseArticleProcedureView(clippedProcedure: $clippedProcedure)
+                    } label: {
+                        AccentButton(text: clippedProcedure == nil ? "Choose procedure" : clippedProcedure!.name, isButtonActive: true)
+                    }
+                    
+                    Button {
+                        Task {
+                            do {
+                                loading = true
+                                try await addNewArticle()
+                                presentationMode.wrappedValue.dismiss()
+                                loading = false
+                            } catch {
+                                print("Can't add new article")
+                                loading = false
+                            }
+                        }
+                    } label: {
+                        AccentButton(
+                            text: "Publish",
+                            isButtonActive: validateFields(),
+                            animation: loading
+                        )
+                    }
+                    .disabled(!validateFields() || loading)
+                }
+            }
+        }
+        .padding(.bottom, 10)
+        .photosPicker(
+            isPresented: $showPhotosPicker,
+            selection: $selectedPhoto,
+            matching: .images,
+            photoLibrary: .shared())
+        .gesture(
+            DragGesture()
+                .onEnded { gesture in
+                    if gesture.translation.width > 100 {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+                .onEnded { gesture in
+                    if gesture.translation.height > 100 {
+                        hideKeyboard()
+                    }
+                }
+        )
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+            withAnimation {
+                isKeyboardVisible = true
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+            withAnimation {
+                isKeyboardVisible = false
+            }
+        }
+        .onChange(of: selectedPhoto) { _ in
+            guard let item = selectedPhoto else { return }
+            Task {
+                guard let data = try await item.loadTransferable(type: Data.self) else { return }
+                self.data = data
+            }
+        }
+        .navigationBarBackButtonHidden()
+    }
+    
+    private func addNewArticle() async throws {
+        let articleId = UUID().uuidString
+        var url: String? = nil
+        
+        if let selectedPhoto {
+            let path = try await articleVM.savePhoto(item: selectedPhoto, articleId: articleId, childStorage: "articles")
+            url = try await articleVM.getUrlForImage(path: path)
+        }
+        
+        let article = ArticleModel(
+            id: UUID().uuidString,
+            title: tittle,
+            body: textBody,
+            dateCreated: Timestamp(date: Date()),
+            pictureUrl: url,
+            procedureId: clippedProcedure?.procedureId
+        )
+        try await articleVM.createNewArticle(article: article)
+        articleVM.lastArticle = nil
+        try await articleVM.getRequiredArticles(countLimit: 6)
+    }
+
+    private func validateFields() -> Bool {
+        let isTitleEmpty = tittle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let isTextBodyEmpty = textBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        
+        return !isTitleEmpty && !isTextBodyEmpty
+    }
+}
+
+struct AddArticleView_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack {
+            AddArticleView(articleVM: ArticlesViewModel())
+        }
+        .padding(.horizontal)
+    }
+}
+
+fileprivate struct ArticleInputField: View {
+    
+    var promptText: String
+    var title: String?
+    var type: InputType
+    @Binding var input: String
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            if let title {
+                Text(title)
+                    .font(Mariupol.medium, 17)
+            }
+            
+            TextField("", text: $input, prompt: Text(promptText), axis: .vertical)
+                .font(type == .tittle ? Font.custom(Mariupol.bold.rawValue, size: 22) : Font.custom(Mariupol.medium.rawValue, size: 17) )
+                .padding()
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: ScreenSize.height * 0.06)
+                .frame(maxHeight: type == .tittle ? nil : .infinity, alignment: type == .tittle ? .center : .top)
+                .background(Color.secondary.opacity(0.1))
+                .cornerRadius(ScreenSize.width / 30)
+        }
+    }
+    
+    enum InputType {
+        case tittle
+        case body
+    }
+}
+
+struct ClipButton: View {
+    
+    @Binding var showPhotosPicker: Bool
+    var selectedPhoto: PhotosPickerItem?
+    var data: Data?
+    
+    var body: some View {
+        Button {
+            showPhotosPicker = true
+        } label: {
+            if selectedPhoto != nil {
+                if let data = data, let image = UIImage(data: data) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: ScreenSize.height * 0.06, height: ScreenSize.height * 0.06, alignment: .center)
+                        .clipped()
+                        .cornerRadius(ScreenSize.width / 30)
+                }
+            } else {
+                BarButtonView(image: "clip")
+            }
+        }
+        .buttonStyle(.plain)
+    }
+}

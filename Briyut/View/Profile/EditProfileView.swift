@@ -213,8 +213,8 @@ struct EditProfileView: View {
         guard let user = vm.user else { return }
         var url: String = user.photoUrl ?? ""
         if let selectedPhoto {
-            try await vm.deleteStorageFolderContents(userId: user.userId)
-            let path = try await vm.saveProfilePhoto(item: selectedPhoto)
+            try await vm.deleteStorageFolderContents(documentId: user.userId, childStorage: "users")
+            let path = try await vm.savePhoto(item: selectedPhoto, childStorage: "users")
             url = try await vm.getUrlForImage(path: path)
         }
         try await vm.editProfile(

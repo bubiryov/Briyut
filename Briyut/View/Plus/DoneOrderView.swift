@@ -54,52 +54,53 @@ struct DoneOrderView: View {
                         .foregroundColor(.mainColor)
                 }
             }
-            .frame(minHeight: ScreenSize.height * 0.4, maxHeight: ScreenSize.height * 0.6)
+            .frame(minHeight: ScreenSize.height * 0.4, maxHeight: .infinity)
+//            ScreenSize.height * 0.6 --- maxHeight
             .frame(maxWidth: .infinity)
             .background(Color.secondaryColor)
             .cornerRadius(ScreenSize.width / 20)
             
-            VStack {
+            VStack(spacing: ScreenSize.height * 0.02) {
                 let specialist = vm.doctors.first(where: { $0.userId == order.doctorId })
                 let client = vm.users.first(where: { $0.userId == order.clientId })
                 
-                Spacer()
+//                Spacer()
                 
                 DoneOrderViewRow(
                     leftText: "Date",
                     rightText: DateFormatter.customFormatter(format: "dd MMM yyyy").string(from: order.date.dateValue()))
                 
-                Spacer()
+//                Spacer()
                 
                 DoneOrderViewRow(
                     leftText: "Time",
                     rightText: DateFormatter.customFormatter(format: "HH:mm").string(from: order.date.dateValue()))
                 
-                Spacer()
+//                Spacer()
                 
                 DoneOrderViewRow(
                     leftText: "Specialist",
                     rightText: "\(specialist?.name ?? "Deleted specialist") \((specialist?.name != nil) ? specialist?.lastName ?? "" : "")")
                 
-                Spacer()
+//                Spacer()
                 
                 if vm.user?.isDoctor ?? false {
                     DoneOrderViewRow(
                         leftText: "Client",
                         rightText: "\(client?.name ?? "\(client?.userId ?? "Deleted client")") \((client?.name != nil) ? client?.lastName ?? "" : "")")
                     
-                    Spacer()
+//                    Spacer()
                 }
                 
                 DoneOrderViewRow(
                     leftText: "Total",
                     rightText: "₴ \(order.price)")
                 
-                Spacer()
+//                Spacer()
                 
             }
-            .padding(.horizontal, 20)
-            .frame(height: ScreenSize.height * 0.25)
+            .padding(20)
+            .frame(minHeight: ScreenSize.height * 0.135)
             .frame(maxWidth: .infinity)
             .background(Color.secondary.opacity(0.1))
             .cornerRadius(ScreenSize.width / 20)
@@ -114,7 +115,7 @@ struct DoneOrderView: View {
             } label: {
                 AccentButton(text: withPhoto ? "Back" : "Back Home", isButtonActive: true)
             }
-            .padding(.top, 10)
+//            .padding(.top, 10)
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 20)
@@ -153,6 +154,8 @@ fileprivate struct DoneOrderViewRow: View {
             
             Text(rightText)
                 .font(Mariupol.medium, 17)
+                .lineLimit(1)
+                .padding(.leading, 50)
         }
     }
 }

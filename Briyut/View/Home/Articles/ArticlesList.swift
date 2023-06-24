@@ -8,73 +8,127 @@
 import SwiftUI
 
 struct ArticlesList: View {
+    
+    @ObservedObject var articleVM: ArticlesViewModel
+    @EnvironmentObject var vm: ProfileViewModel
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
-        NavigationView {
-            VStack {
-                BarTitle<BackButton, Text>(
-                    text: "Interesting",
-                    leftButton: BackButton()
-                )
-                ScrollView {
-                    ArticleRow()
+
+        VStack {
+            BarTitle<BackButton, AddArticleButton>(
+                text: "Interesting",
+                leftButton: BackButton(),
+                rightButton: vm.user?.isDoctor ?? false ? AddArticleButton(articleVM: articleVM) : nil
+            )
+            ScrollView {
+                LazyVStack {
+                    ForEach(articleVM.articles, id: \.id) { article in
+                        
+                        ArticleRow(article: article)
+                        
+                        if article == articleVM.articles.last {
+                            HStack {
+                                
+                            }
+                            .frame(height: 1)
+                            .onAppear {
+                                Task {
+                                    try await articleVM.getRequiredArticles(countLimit: 6)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+        .onAppear {
+            Task {
+                try await articleVM.getRequiredArticles(countLimit: 6)
+            }
+        }
+        .gesture(
+            DragGesture()
+                .onEnded { gesture in
+                    if gesture.translation.width > 100 {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+        )
+        .navigationBarBackButtonHidden()
     }
 }
 
 struct ArticlesList_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            ArticlesList()
+            ArticlesList(articleVM: ArticlesViewModel())
+                .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal)
     }
 }
 
 struct ArticleRow: View {
+    
+    let article: ArticleModel
+    
     var body: some View {
         HStack {
-            Text("Rubinko")
-                .lineLimit(1)
-                .padding(5)
-                .font(.custom("Alokary", size: 11))
-                .foregroundColor(.mainColor)
-                .tracking(1)
-                .frame(width: ScreenSize.height * 0.1, height: ScreenSize.height * 0.1)
-                .background(Color.white)
+            if let url = article.pictureUrl {
+                ProfileImage(
+                    photoURL: url,
+                    frame: ScreenSize.height * 0.1,
+                    color: .clear,
+                    padding: 16
+                )
                 .cornerRadius(ScreenSize.width / 20)
-            
-//            ProfileImage(
-//                photoURL: "https://hips.hearstapps.com/hmg-prod/images/spa-woman-female-enjoying-massage-in-spa-centre-royalty-free-image-492676582-1549988720.jpg?crop=1.00xw:0.755xh;0,0&resize=1200:*",
-//                frame: ScreenSize.height * 0.1,
-//                color: .clear,
-//                padding: 16
-//            )
-//                .cornerRadius(ScreenSize.width / 20)
-
+            } else {
+                Text("Rubinko")
+                    .lineLimit(1)
+                    .padding(5)
+                    .font(.custom("Alokary", size: 11))
+                    .foregroundColor(.mainColor)
+                    .tracking(1)
+                    .frame(width: ScreenSize.height * 0.1, height: ScreenSize.height * 0.1)
+                    .background(Color.white)
+                    .cornerRadius(ScreenSize.width / 20)
+            }
             
             VStack(alignment: .leading, spacing: 10) {
-                Text("Лікування болю в шиї")
+                Text(article.title)
                     .font(Mariupol.medium, 20)
                     .lineLimit(1)
                 
-                Text("Болі в шиї — частий стан, що зустрічається у 20% дорослого населення. За статистикою хворобливі прояви у шийному відділі частіше відчувають жінки. Симптоматика носить у пацієнтів різний характер — від ниючого, наростаючого поступово болю до гострого і навіть “стріляючого”. Багато пацієнтів, не усвідомлюючи серйозність проблеми, не поспішають по медичну допомогу. При тому біль не тільки суттєво знижує якість життя, а й може вказувати на серйозні патології, які можуть призвести до паралічу.")
+                Text(article.body)
                     .font(Mariupol.regular, 14)
                     .lineLimit(4)
                     .foregroundColor(.secondary)
-                
             }
             .padding(.leading, 10)
-//            .padding(.vertical, 10)
             .frame(height: ScreenSize.height * 0.1, alignment: .top)
 
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .frame(height: ScreenSize.height * 0.135)
         .padding(.horizontal, 20)
         .padding(.vertical, 7)
+        .frame(height: ScreenSize.height * 0.135)
         .background(Color.secondaryColor)
         .cornerRadius(ScreenSize.width / 20)
     }
 }
+
+struct AddArticleButton: View {
+    
+    @ObservedObject var articleVM: ArticlesViewModel
+
+    var body: some View {
+        NavigationLink {
+            AddArticleView(articleVM: articleVM)
+        } label: {
+            BarButtonView(image: "plus", scale: 0.35)
+        }
+        .buttonStyle(.plain)
+    }
+}
+

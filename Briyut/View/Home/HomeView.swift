@@ -10,17 +10,20 @@ import SwiftUI
 struct HomeView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
+    @StateObject var articlesVM: ArticlesViewModel = ArticlesViewModel()
     @Binding var selectedTab: Tab
     @Binding var justOpened: Bool
     @Binding var showSearch: Bool
     @State private var showFullOrder: Bool = false
     @State private var showMap: Bool = false
+//    additional color (secondary)
     
     var body: some View {
         
         NavigationView {
             VStack(alignment: .leading, spacing: 25) {
-                BarTitle<MapButton, ProfileButton>(text: "", leftButton: MapButton(image: "pin", showMap: $showMap), rightButton: ProfileButton(selectedTab: $selectedTab, photo: vm.user?.photoUrl ?? ""), action: {})
+                            
+                BarTitle<MapButton, ProfileButton>(text: "", leftButton: MapButton(image: "pin", showMap: $showMap), rightButton: ProfileButton(selectedTab: $selectedTab, photo: vm.user?.photoUrl ?? ""))
                 
                 Text("Find your procedure")
                     .font(Mariupol.bold, 30)
@@ -87,6 +90,7 @@ struct HomeView: View {
                                 userInformation: vm.user?.isDoctor ?? false ? .client : .doctor, photoBackgroundColor: .white
                             )
                         }
+                        .padding(.bottom, vm.activeOrders.count > 1 ? 5 : 0)
                     } else {
                         Button {
                             withAnimation(.easeInOut(duration: 0.15)) {
@@ -113,7 +117,7 @@ struct HomeView: View {
                         Spacer()
                         
                         NavigationLink {
-                            ArticlesList()
+                            ArticlesList(articleVM: articlesVM)
                         } label: {
                             Text("See all")
                                 .font(Mariupol.medium, 17)
@@ -122,105 +126,34 @@ struct HomeView: View {
                         .buttonStyle(.plain)
                         .foregroundColor(.primary)
                     }
-
-                    if let nearestOrder = vm.activeOrders.first {
+                                        
+                    if let nearesArticle = articlesVM.articles.first {
                         ZStack {
-                            if vm.activeOrders.count > 1 {
+                            if articlesVM.articles.count > 1 {
                                 RoundedRectangle(cornerRadius: ScreenSize.width / 15)
                                     .frame(height: ScreenSize.height * 0.14)
                                     .offset(y: ScreenSize.height / 35)
                                     .scaleEffect(0.85)
-                                    .foregroundColor(.mainColor.opacity(0.7))
+                                    .foregroundColor(Color(#colorLiteral(red: 0.8550214171, green: 0.9174225926, blue: 0.9357536435, alpha: 1)))
                             }
-                            OrderRow(
-                                vm: vm,
-                                order: nearestOrder,
-                                withButtons: false,
-                                color: .mainColor,
-                                fontColor: .white,
-                                bigDate: true,
-                                userInformation: vm.user?.isDoctor ?? false ? .client : .doctor, photoBackgroundColor: .white
-                            )
+                            
+                            ArticleRow(article: nearesArticle)
+
                         }
+                        .padding(.bottom, articlesVM.articles.count > 1 ? 5 : 0)
                     } else {
-                        Button {
-                            withAnimation(.easeInOut(duration: 0.15)) {
-                                selectedTab = .plus
-                            }
-                        } label: {
-                            Text("No current news")
-                                .font(Mariupol.medium, 17)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .frame(height: ScreenSize.height * 0.14)
-                                .background(Color.secondaryColor)
-                                .cornerRadius(ScreenSize.width / 20)
-                                .foregroundColor(.secondary)
-                        }
+                        Text("No current news")
+                            .font(Mariupol.medium, 17)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame(height: ScreenSize.height * 0.14)
+                            .background(Color.secondaryColor)
+                            .cornerRadius(ScreenSize.width / 20)
+                            .foregroundColor(.secondary)
                     }
                 }
 
-
-                
                 Spacer()
                 
-//                if !vm.doctors.isEmpty {
-//                    VStack(alignment: .leading) {
-//
-//                        HStack(alignment: .center) {
-//                            Text("Specialists")
-//                                .font(Mariupol.medium, 22)
-//
-//                            Spacer()
-//
-//                            NavigationLink {
-//                                AllDoctorsView()
-//                            } label: {
-//                                Text("See all")
-//                                    .font(Mariupol.medium, 17)
-//                                    .foregroundColor(.secondary.opacity(0.6))
-//                            }
-//                            .buttonStyle(.plain)
-//                            .foregroundColor(.primary)
-//                        }
-//
-//                        ScrollView(.horizontal) {
-//                            LazyHStack(spacing: 15) {
-//                                let doctors = vm.doctors
-//                                ForEach(doctors, id: \.userId) { doctor in
-//                                    VStack(alignment: .center, spacing: 10) {
-//                                        ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .clear)
-//                                            .cornerRadius(ScreenSize.width / 30)
-//
-//                                        VStack(spacing: 2) {
-//                                            Text(doctor.lastName ?? "")
-//                                                .font(Mariupol.medium, 17)
-//                                                .multilineTextAlignment(.center)
-//                                                .lineLimit(1)
-//
-//                                            Text(doctor.name ?? "")
-//                                                .font(Mariupol.medium, 17)
-//                                                .multilineTextAlignment(.center)
-//                                                .lineLimit(1)
-//                                        }
-//
-//                                        Text("Rehabilitator")
-//                                            .font(Mariupol.regular, 14)
-//                                            .foregroundColor(.secondary)
-//                                    }
-//                                    .padding()
-//                                    .frame(width: ScreenSize.height * 0.15)
-////                                    .frame(maxWidth: ScreenSize.height * 0.18)
-////                                    .frame(minWidth: ScreenSize.height * 0.15)
-//                                    .frame(height: ScreenSize.height * 0.18)
-//                                    .background(Color.secondaryColor)
-//                                    .cornerRadius(ScreenSize.width / 20)
-//                                }
-//                            }
-//                        }
-//                        .scrollIndicators(.hidden)
-//                        .frame(height: ScreenSize.height * 0.18)
-//                    }
-//                }
             }
             .onAppear {
                 Task {
@@ -232,6 +165,8 @@ struct HomeView: View {
                     }
                     if justOpened {
                         try await vm.updateOrdersStatus(isDone: false, isDoctor: vm.user?.isDoctor ?? false)
+                        try await articlesVM.getRequiredArticles(countLimit: 2)
+                        print(articlesVM.articles.first?.title ?? "No")
                         justOpened = false
                     }
                 }
@@ -246,8 +181,12 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            HomeView(selectedTab: .constant(.profile), justOpened: .constant(false), showSearch: .constant(false))
-                .environmentObject(ProfileViewModel())
+            HomeView(
+                selectedTab: .constant(.profile),
+                justOpened: .constant(false),
+                showSearch: .constant(false)
+            )
+            .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal)
         .padding(.bottom)
