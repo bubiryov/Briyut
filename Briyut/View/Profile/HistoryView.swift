@@ -11,6 +11,7 @@ struct HistoryView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
     @Environment(\.presentationMode) var presentationMode
+    @State private var loading: Bool = false
     
     var body: some View {
         VStack {
@@ -31,6 +32,7 @@ struct HistoryView: View {
                             photoBackgroundColor: .clear
                         )
                         
+                        
                         if order == vm.allOrders.last {
                             HStack {
                                 
@@ -38,8 +40,19 @@ struct HistoryView: View {
                             .frame(height: 1)
                             .onAppear {
                                 Task {
-                                    try await vm.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
+                                    do {
+                                        loading = true
+                                        try await vm.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
+                                        loading = false
+                                    } catch {
+                                        loading = true
+                                    }
                                 }
+                            }
+                            
+                            if loading {
+                                ProgressView()
+                                    .tint(.mainColor)
                             }
                         }
                     }

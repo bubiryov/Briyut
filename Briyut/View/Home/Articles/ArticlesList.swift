@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import CachedAsyncImage
 
 struct ArticlesList: View {
     
     @ObservedObject var articleVM: ArticlesViewModel
     @EnvironmentObject var vm: ProfileViewModel
     @Environment(\.presentationMode) var presentationMode
+    @State private var loading: Bool = false
     
     var body: some View {
 
@@ -29,14 +31,26 @@ struct ArticlesList: View {
                         
                         if article == articleVM.articles.last {
                             HStack {
-                                
+
                             }
                             .frame(height: 1)
                             .onAppear {
                                 Task {
-                                    try await articleVM.getRequiredArticles(countLimit: 6)
+                                    do {
+                                        loading = true
+                                        try await articleVM.getRequiredArticles(countLimit: 6)
+                                        loading = false
+                                    } catch {
+                                        loading = false
+                                    }
                                 }
                             }
+                            
+                            if loading {
+                                ProgressView()
+                                    .tint(.mainColor)
+                            }
+
                         }
                     }
                 }
@@ -44,7 +58,13 @@ struct ArticlesList: View {
         }
         .onAppear {
             Task {
-                try await articleVM.getRequiredArticles(countLimit: 6)
+                do {
+                    loading = true
+                    try await articleVM.getRequiredArticles(countLimit: 6)
+                    loading = false
+                } catch {
+                    loading = false
+                }
             }
         }
         .gesture(
@@ -76,12 +96,26 @@ struct ArticleRow: View {
     var body: some View {
         HStack {
             if let url = article.pictureUrl {
-                ProfileImage(
-                    photoURL: url,
-                    frame: ScreenSize.height * 0.1,
-                    color: .clear,
-                    padding: 16
-                )
+                VStack {
+                    CachedAsyncImage(url: URL(string: url), urlCache: .imageCache) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: ScreenSize.height * 0.1, height: ScreenSize.height * 0.1, alignment: .center)
+                            .clipped()
+                        
+                    } placeholder: {
+                        Text("Rubinko")
+                            .lineLimit(1)
+                            .padding(5)
+                            .font(.custom("Alokary", size: 11))
+                            .foregroundColor(.mainColor)
+                            .tracking(1)
+                            .frame(width: ScreenSize.height * 0.1, height: ScreenSize.height * 0.1)
+                            .background(Color.white)
+                            .cornerRadius(ScreenSize.width / 20)
+                    }
+                }
                 .cornerRadius(ScreenSize.width / 20)
             } else {
                 Text("Rubinko")

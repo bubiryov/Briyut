@@ -14,6 +14,7 @@ struct HomeView: View {
     @Binding var selectedTab: Tab
     @Binding var justOpened: Bool
     @Binding var showSearch: Bool
+    @Binding var splashView: Bool
     @State private var showFullOrder: Bool = false
     @State private var showMap: Bool = false
 //    additional color (secondary)
@@ -156,6 +157,9 @@ struct HomeView: View {
                 
             }
             .onAppear {
+                
+                let startTime = DispatchTime.now()
+                
                 Task {
                     try await vm.loadCurrentUser()
                     try await vm.getAllDoctors()
@@ -166,7 +170,9 @@ struct HomeView: View {
                     if justOpened {
                         try await vm.updateOrdersStatus(isDone: false, isDoctor: vm.user?.isDoctor ?? false)
                         try await articlesVM.getRequiredArticles(countLimit: 2)
-                        print(articlesVM.articles.first?.title ?? "No")
+                        let endTime = DispatchTime.now()
+                        try await Task.sleep(nanoseconds: 3_000_000_000 - (endTime.uptimeNanoseconds - startTime.uptimeNanoseconds))
+                        splashView = false
                         justOpened = false
                     }
                 }
@@ -184,7 +190,8 @@ struct HomeView_Previews: PreviewProvider {
             HomeView(
                 selectedTab: .constant(.profile),
                 justOpened: .constant(false),
-                showSearch: .constant(false)
+                showSearch: .constant(false),
+                splashView: .constant(false)
             )
             .environmentObject(ProfileViewModel())
         }

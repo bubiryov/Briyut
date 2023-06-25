@@ -18,7 +18,7 @@ struct ContentView: View {
         
         ZStack {
             if !localNotEntered {
-                RootView(notEntered: $notEntered)
+                RootView(notEntered: $notEntered, splashView: $splashView)
             }
             
             AuthenticationView(notEntered: $notEntered)
@@ -33,10 +33,10 @@ struct ContentView: View {
             let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
             notEntered = authUser == nil
             localNotEntered = authUser == nil
-            Task {
-                try await Task.sleep(nanoseconds: 3_000_000_000)
-                splashView = false
-            }
+//            Task {
+//                try await Task.sleep(nanoseconds: 3_000_000_000)
+//                splashView = false
+//            }
         }
         .onChange(of: notEntered) { newValue in
             localNotEntered = newValue

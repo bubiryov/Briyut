@@ -12,6 +12,7 @@ struct RootView: View {
     @StateObject var vm = ProfileViewModel()
     @State private var selectedTab: Tab = .home
     @Binding var notEntered: Bool
+    @Binding var splashView: Bool
     @State var justOpened: Bool = true
     @State var showSearch: Bool = false
         
@@ -21,7 +22,7 @@ struct RootView: View {
                 VStack {
                     switch selectedTab {
                     case .home:
-                        HomeView(selectedTab: $selectedTab, justOpened: $justOpened, showSearch: $showSearch)
+                        HomeView(selectedTab: $selectedTab, justOpened: $justOpened, showSearch: $showSearch, splashView: $splashView)
                             .environmentObject(vm)
                     case .plus:
                         AllProcedures(notEntered: $notEntered, showSearch: $showSearch, selectedTab: $selectedTab)
@@ -53,7 +54,7 @@ struct RootView: View {
 
 struct RootView_Previews: PreviewProvider {
     static var previews: some View {
-        RootView(notEntered: .constant(true))
+        RootView(notEntered: .constant(true), splashView: .constant(false))
             .environmentObject(AuthenticationViewModel())
     }
 }
