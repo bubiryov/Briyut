@@ -105,6 +105,7 @@ struct ProcedureView: View {
             .disabled(!validateFields() || loading)
         }
         .padding(.bottom, 20)
+        .background(Color.backgroundColor)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if let procedure {
@@ -178,6 +179,7 @@ struct AddProcedure_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
     }
 }
 

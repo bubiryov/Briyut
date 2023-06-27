@@ -82,6 +82,7 @@ struct AllDoctorsView: View {
                 }
             }
             .padding(.bottom, 20)
+            .background(Color.backgroundColor)
             .onChange(of: vm.doctors, perform: { _ in
                 withAnimation {
                     tupleDoctors = vm.doctors.map {($0, false)}
@@ -117,6 +118,7 @@ struct AddDoctorView_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
     }
 }
 

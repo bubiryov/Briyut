@@ -17,7 +17,7 @@ struct AccentButton: View {
         if isButtonActive && filled {
             return .white
         } else if isButtonActive && !filled {
-            return .black
+            return .primary
         } else {
             return .secondary
         }
@@ -59,6 +59,7 @@ struct AccentButton: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 17)
+                        .foregroundColor(.primary)
                 }
                 Text(text)
                     .foregroundColor(textColor)
@@ -78,11 +79,11 @@ struct AccentButton: View {
 struct AccentButton_Previews: PreviewProvider {
     static var previews: some View {
         AccentButton(
-            filled: true,
+            filled: false,
             text: "Continue",
             isButtonActive: true,
             logo: "googleLogo",
-            animation: true
+            animation: false
         )
         .padding(.horizontal, 20)
     }

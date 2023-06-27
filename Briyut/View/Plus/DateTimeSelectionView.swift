@@ -47,7 +47,7 @@ struct DateTimeSelectionView: View {
             .onChange(of: selectedDate) { _ in
                 selectedTime = ""
             }
-                        
+                                    
             Spacer()
             
             LazyVGrid(columns: Array(repeating: GridItem(), count: 4), spacing: 20) {
@@ -58,7 +58,7 @@ struct DateTimeSelectionView: View {
                         }
                     }) {
                         Text(timeSlot)
-                            .foregroundColor(selectedTime == timeSlot ? .white : .black)
+                            .foregroundColor(selectedTime == timeSlot ? .white : .primary)
                             .font(Mariupol.medium, 17)
                             .frame(width: ScreenSize.width * 0.2, height: ScreenSize.height * 0.05)
                             .background(
@@ -123,8 +123,10 @@ struct DateTimeSelectionView: View {
                 )
             }
             .disabled((selectedTime != "" ? false : true) || loading)
+            
         }
         .padding(.bottom, 20)
+        .background(Color.backgroundColor)
         .navigationBarBackButtonHidden(true)
         .onChange(of: selectedDate) { newDate in
             Task {
@@ -149,7 +151,6 @@ struct DateTimeSelectionView: View {
                 DoneOrderView(order: order, withPhoto: false, selectedTab: $selectedTab)
             }
         })
-
     }
     
     func addNewOrderAction(procedure: ProcedureModel) async throws {
@@ -338,8 +339,12 @@ struct DateTimeSelectionView: View {
 
 struct DateTimeSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        DateTimeSelectionView(mainButtonTitle: "Add appoinment", selectedTab: .constant(.plus))
-            .environmentObject(ProfileViewModel())
+        VStack {
+            DateTimeSelectionView(mainButtonTitle: "Add appoinment", selectedTab: .constant(.plus))
+                .environmentObject(ProfileViewModel())
+        }
+        .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
     }
 }
 
@@ -347,7 +352,7 @@ struct CustomDatePicker: View {
     @Binding var selectedDate: Date
     let mode: DatePickerMode
     let pastTime: Bool
-
+    
     var body: some View {
         VStack {
             HStack {

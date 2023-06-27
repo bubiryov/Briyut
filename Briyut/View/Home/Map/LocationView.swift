@@ -12,7 +12,6 @@ struct LocationView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var vm: LocationsViewModel
     var location: LocationModel? = nil
-//    LocationModel(id: "", latitude: 0, longitude: 0, address: "Sumskaya, 17-А, Kharkiv")
     @State private var city: String = ""
     @State private var street: String = ""
     @State private var buildingNumber: String = ""
@@ -22,10 +21,10 @@ struct LocationView: View {
     
     var body: some View {
         VStack {
-            BarTitle<BackButton, DeleteAddressButton>(
+            BarTitle<BackButton, DeleteButton>(
                 text: location != nil ? "Edit address" : "New address",
                 leftButton: BackButton(),
-                rightButton: location != nil ? DeleteAddressButton(showAlert: $showAlert) : nil
+                rightButton: location != nil ? DeleteButton(showAlert: $showAlert) : nil
             )
             .padding(.bottom)
             
@@ -57,6 +56,8 @@ struct LocationView: View {
                     )
                 }
             }
+            .scrollIndicators(.hidden)
+            
             Button {
                 Task {
                     if location == nil {
@@ -92,6 +93,7 @@ struct LocationView: View {
         .padding(.top, topPadding())
         .padding(.bottom, 20)
         .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
         .navigationBarBackButtonHidden()
         .contentShape(Rectangle())
         .gesture(
@@ -241,18 +243,3 @@ struct LocationView_Previews: PreviewProvider {
         LocationView(vm: LocationsViewModel())
     }
 }
-
-fileprivate struct DeleteAddressButton: View {
-    
-    @Binding var showAlert: Bool
-    
-    var body: some View {
-        Button {
-            showAlert = true
-        } label: {
-            BarButtonView(image: "trash", textColor: .white, backgroundColor: Color.destructiveColor)
-        }
-        .buttonStyle(.plain)
-    }
-}
-

@@ -10,12 +10,13 @@ import SwiftUI
 struct BackButton: View {
     
     @Environment(\.presentationMode) var presentationMode
+    var backgorundColor: Color? = nil
 
     var body : some View {
         Button {
             presentationMode.wrappedValue.dismiss()
         } label: {
-            BarButtonView(image: "back", scale: 0.35)
+            BarButtonView(image: "back", scale: 0.35, backgroundColor: backgorundColor)
         }
         .buttonStyle(.plain)
 

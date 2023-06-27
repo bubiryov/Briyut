@@ -10,6 +10,7 @@ import SwiftUI
 struct RootView: View {
     
     @StateObject var vm = ProfileViewModel()
+    @StateObject var articlesVM: ArticlesViewModel = ArticlesViewModel()
     @State private var selectedTab: Tab = .home
     @Binding var notEntered: Bool
     @Binding var splashView: Bool
@@ -18,12 +19,16 @@ struct RootView: View {
         
     var body: some View {
         ZStack {
+            
+            Color.backgroundColor.edgesIgnoringSafeArea(.all)
+            
             VStack(spacing: 0) {
                 VStack {
                     switch selectedTab {
                     case .home:
                         HomeView(selectedTab: $selectedTab, justOpened: $justOpened, showSearch: $showSearch, splashView: $splashView)
                             .environmentObject(vm)
+                            .environmentObject(articlesVM)
                     case .plus:
                         AllProcedures(notEntered: $notEntered, showSearch: $showSearch, selectedTab: $selectedTab)
                             .environmentObject(vm)
@@ -43,7 +48,9 @@ struct RootView: View {
                                 
             }
             .edgesIgnoringSafeArea(.bottom)
+
         }
+        .background(Color.backgroundColor)
         .onAppear {
             Task {
                 vm.getProvider()

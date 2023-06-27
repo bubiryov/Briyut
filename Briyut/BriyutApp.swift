@@ -13,7 +13,7 @@ struct BriyutApp: App {
 
     @StateObject var vm = AuthenticationViewModel()
     @UIApplicationDelegateAdaptor (AppDelegate.self) var delegate
-
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

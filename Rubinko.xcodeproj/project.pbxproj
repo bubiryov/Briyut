@@ -105,6 +105,7 @@
 		89E9B5A02A45FEC900B5D733 /* AddArticleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E9B59F2A45FEC900B5D733 /* AddArticleView.swift */; };
 		89EEC9AF2A21FBB60069A711 /* OrderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EEC9AE2A21FBB60069A711 /* OrderRow.swift */; };
 		89F71FF92A2F416E006DE84D /* DoneOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F71FF82A2F416E006DE84D /* DoneOrderView.swift */; };
+		89FD353C2A48771400E72D0A /* ArticleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FD353B2A48771400E72D0A /* ArticleView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -227,6 +228,7 @@
 		89E9B59F2A45FEC900B5D733 /* AddArticleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddArticleView.swift; sourceTree = "<group>"; };
 		89EEC9AE2A21FBB60069A711 /* OrderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderRow.swift; sourceTree = "<group>"; };
 		89F71FF82A2F416E006DE84D /* DoneOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneOrderView.swift; sourceTree = "<group>"; };
+		89FD353B2A48771400E72D0A /* ArticleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -573,6 +575,7 @@
 				89E9B5972A45B25400B5D733 /* ArticlesList.swift */,
 				89E9B59F2A45FEC900B5D733 /* AddArticleView.swift */,
 				897F49C12A47063D00E1E157 /* ChooseArticleProcedureView.swift */,
+				89FD353B2A48771400E72D0A /* ArticleView.swift */,
 			);
 			path = Articles;
 			sourceTree = "<group>";
@@ -810,6 +813,7 @@
 				896D3D0A2A3DDBF10053E873 /* LocationModel.swift in Sources */,
 				89804BDA2A2E1C66002E2282 /* AllUsersView.swift in Sources */,
 				89A17E582A03C8BD00C92A58 /* AppleAuthenticationManager.swift in Sources */,
+				89FD353C2A48771400E72D0A /* ArticleView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

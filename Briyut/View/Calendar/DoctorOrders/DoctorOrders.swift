@@ -57,6 +57,7 @@ struct DoctorOrders: View {
                 Spacer()
             }
         }
+        .background(Color.backgroundColor)
         .onAppear {
             selectedDoctor = vm.user
         }
@@ -105,6 +106,7 @@ struct DoctorOrders_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
     }
 }
 

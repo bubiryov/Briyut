@@ -65,7 +65,12 @@ struct LoginView: View {
                     }
                 }
             } label: {
-                AccentButton(filled: false, text: "Sign in with Google", isButtonActive: true, logo: "googleLogo")
+                AccentButton(
+                    filled: false,
+                    text: "Sign in with Google",
+                    isButtonActive: true,
+                    logo: "googleLogo"
+                )
             }
             
             NavigationLink {
@@ -90,7 +95,7 @@ struct LoginView: View {
                 Text("Create an account")
                     .font(Mariupol.medium, 17)
 //                    .font(.subheadline.bold())
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
             }
 
         }

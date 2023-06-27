@@ -18,79 +18,84 @@ struct ChangePasswordView: View {
     
     var body: some View {
         GeometryReader { _ in
-            VStack(spacing: 20) {
+            ZStack {
                 
-                BarTitle<BackButton, Text>(
-                    text: "Change password",
-                    leftButton: BackButton()
-                )
+                Color.backgroundColor.edgesIgnoringSafeArea(.all)
                 
-                AuthInputField(
-                    field: $currentPassword,
-                    isSecureField: true,
-                    title: "currentpassword123",
-                    header: "Current password"
-                )
-                
-                AuthInputField(
-                    field: $newPassword,
-                    isSecureField: true,
-                    title: "newpassword123",
-                    header: "New password"
-                )
-                
-                AuthInputField(
-                    field: $repeatPassword,
-                    isSecureField: true,
-                    title: "newpassword123",
-                    header: "Repeat password"
-                )
-                
-                Spacer()
-                
-                Button {
-                    Task {
-                        do {
-                            loading = true
-                            try await vm.changePassword(
-                                currentPassword: currentPassword,
-                                newPassword: newPassword
-                            )
-                            loading = false
-                            presentationMode.wrappedValue.dismiss()
-                        } catch {
-                            currentPassword = ""
-                            newPassword = ""
-                            repeatPassword = ""
-                            loading = false
-                            hideKeyboard()
-                        }
-                    }
-                } label: {
-                    AccentButton(
+                VStack(spacing: 20) {
+                    
+                    BarTitle<BackButton, Text>(
                         text: "Change password",
-                        isButtonActive: vm.validatePassword(newPassword, repeatPassword: repeatPassword),
-                        animation: loading
+                        leftButton: BackButton()
                     )
+                    
+                    AuthInputField(
+                        field: $currentPassword,
+                        isSecureField: true,
+                        title: "currentpassword123",
+                        header: "Current password"
+                    )
+                    
+                    AuthInputField(
+                        field: $newPassword,
+                        isSecureField: true,
+                        title: "newpassword123",
+                        header: "New password"
+                    )
+                    
+                    AuthInputField(
+                        field: $repeatPassword,
+                        isSecureField: true,
+                        title: "newpassword123",
+                        header: "Repeat password"
+                    )
+                    
+                    Spacer()
+                    
+                    Button {
+                        Task {
+                            do {
+                                loading = true
+                                try await vm.changePassword(
+                                    currentPassword: currentPassword,
+                                    newPassword: newPassword
+                                )
+                                loading = false
+                                presentationMode.wrappedValue.dismiss()
+                            } catch {
+                                currentPassword = ""
+                                newPassword = ""
+                                repeatPassword = ""
+                                loading = false
+                                hideKeyboard()
+                            }
+                        }
+                    } label: {
+                        AccentButton(
+                            text: "Change password",
+                            isButtonActive: vm.validatePassword(newPassword, repeatPassword: repeatPassword),
+                            animation: loading
+                        )
+                    }
+                    .disabled(!vm.validatePassword(newPassword, repeatPassword: repeatPassword) || loading)
                 }
-                .disabled(!vm.validatePassword(newPassword, repeatPassword: repeatPassword) || loading)
-            }
-            .padding(.bottom)
-            .navigationBarBackButtonHidden()
-            .contentShape(Rectangle())
-            .gesture(
-                DragGesture()
-                    .onEnded { gesture in
-                        if gesture.translation.width > 100 {
-                            presentationMode.wrappedValue.dismiss()
+                .padding(.bottom)
+                .navigationBarBackButtonHidden()
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture()
+                        .onEnded { gesture in
+                            if gesture.translation.width > 100 {
+                                presentationMode.wrappedValue.dismiss()
+                            }
                         }
-                    }
-                    .onEnded { gesture in
-                        if gesture.translation.height > 100 {
-                            hideKeyboard()
+                        .onEnded { gesture in
+                            if gesture.translation.height > 100 {
+                                hideKeyboard()
+                            }
                         }
-                    }
             )
+            }
         }
         .ignoresSafeArea(.keyboard)
     }
@@ -103,5 +108,6 @@ struct ChangePasswordView_Previews: PreviewProvider {
                 .environmentObject(AuthenticationViewModel())
         }
         .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
     }
 }

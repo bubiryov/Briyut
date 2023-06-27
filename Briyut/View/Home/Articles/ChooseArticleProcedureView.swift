@@ -56,6 +56,7 @@ struct ChooseArticleProcedureView: View {
             }
             
         }
+        .background(Color.backgroundColor)
         .navigationBarBackButtonHidden()
         .gesture(
             DragGesture()

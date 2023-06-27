@@ -48,13 +48,14 @@ import SwiftUI
 
 struct SplashView: View {
     
+    @Environment(\.colorScheme) var colorScheme
     @State private var isAnimating = false
     
     var body: some View {
         HStack(spacing: 1) {
             ForEach(Array("Rubinko").indices, id: \.self) { index in
                 Text(String(Array("Rubinko")[index]))
-                    .foregroundColor(.mainColor)
+                    .foregroundColor(.staticMainColor)
                     .font(.custom("Alokary", size: 25))
                     .tracking(2)
                     .offset(y: isAnimating ? 0 : -ScreenSize.height)
@@ -62,7 +63,8 @@ struct SplashView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white)
+        .background(Color.backgroundColor)
+//        .background(colorScheme == .dark ? .black : .white)
         .onAppear {
             Task {
                 try await Task.sleep(nanoseconds: 300_000_000)

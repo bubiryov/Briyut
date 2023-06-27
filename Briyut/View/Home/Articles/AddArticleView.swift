@@ -11,46 +11,44 @@ import PhotosUI
 
 struct AddArticleView: View {
     
-    @ObservedObject var articleVM: ArticlesViewModel
+    @EnvironmentObject var articleVM: ArticlesViewModel
     @State private var tittle: String = ""
     @State private var textBody: String = ""
     @Environment(\.presentationMode) var presentationMode
     @State private var isKeyboardVisible = false
     @State private var clippedProcedure: ProcedureModel? = nil
     @State private var showPhotosPicker: Bool = false
+    @State private var showActionSheet: Bool = false
     @State private var selectedPhoto: PhotosPickerItem? = nil
     @State private var data: Data? = nil
     @State private var loading: Bool = false
-    
+        
     var body: some View {
         
-        VStack {
-            BarTitle<BackButton, ClipButton>(
-                text: "New article",
-                leftButton: BackButton(),
-                rightButton: ClipButton(
-                    showPhotosPicker: $showPhotosPicker,
-                    selectedPhoto: selectedPhoto,
-                    data: data
+        ZStack {
+            
+            Color.backgroundColor.edgesIgnoringSafeArea(.all)
+            
+            VStack {
+                
+                BarTitle<BackButton, ClipButton>(
+                    text: "New article",
+                    leftButton: BackButton(),
+                    rightButton: ClipButton(
+                        showActionSheet: $showActionSheet,
+                        selectedPhoto: selectedPhoto,
+                        data: data
+                    )
                 )
-            )
-            
-            ArticleInputField(promptText: "Title", type: .tittle, input: $tittle)
-                .lineLimit(2)
-            
-            ArticleInputField(promptText: "Write your text", type: .body, input: $textBody)
-            
-            Spacer()
-            
-            if !isKeyboardVisible {
-                HStack(spacing: 0) {
-                    
-                    NavigationLink {
-                        ChooseArticleProcedureView(clippedProcedure: $clippedProcedure)
-                    } label: {
-                        AccentButton(text: clippedProcedure == nil ? "Choose procedure" : clippedProcedure!.name, isButtonActive: true)
-                    }
-                    
+                
+                ArticleInputField(promptText: "Title", type: .tittle, input: $tittle)
+                    .lineLimit(2)
+                
+                ArticleInputField(promptText: "Write your text", type: .body, input: $textBody)
+                
+                Spacer()
+                
+                if !isKeyboardVisible {
                     Button {
                         Task {
                             do {
@@ -73,44 +71,59 @@ struct AddArticleView: View {
                     .disabled(!validateFields() || loading)
                 }
             }
-        }
-        .padding(.bottom, 10)
-        .photosPicker(
-            isPresented: $showPhotosPicker,
-            selection: $selectedPhoto,
-            matching: .images,
-            photoLibrary: .shared())
-        .gesture(
-            DragGesture()
-                .onEnded { gesture in
-                    if gesture.translation.width > 100 {
-                        presentationMode.wrappedValue.dismiss()
-                    }
+            .padding(.bottom, 10)
+            .confirmationDialog("Choose an action", isPresented: $showActionSheet) {
+                
+                Button("Choose new photo") {
+                    showPhotosPicker = true
                 }
-                .onEnded { gesture in
-                    if gesture.translation.height > 100 {
-                        hideKeyboard()
+                
+                if selectedPhoto != nil {
+                    Button(role: .destructive) {
+                        selectedPhoto = nil
+                    } label: {
+                        Text("Delete current photo")
                     }
+
                 }
-        )
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
-            withAnimation {
-                isKeyboardVisible = true
             }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
-            withAnimation {
-                isKeyboardVisible = false
+            .photosPicker(
+                isPresented: $showPhotosPicker,
+                selection: $selectedPhoto,
+                matching: .images,
+                photoLibrary: .shared())
+            .gesture(
+                DragGesture()
+                    .onEnded { gesture in
+                        if gesture.translation.width > 100 {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+                    .onEnded { gesture in
+                        if gesture.translation.height > 100 {
+                            hideKeyboard()
+                        }
+                    }
+            )
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+                withAnimation {
+                    isKeyboardVisible = true
+                }
             }
-        }
-        .onChange(of: selectedPhoto) { _ in
-            guard let item = selectedPhoto else { return }
-            Task {
-                guard let data = try await item.loadTransferable(type: Data.self) else { return }
-                self.data = data
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+                withAnimation {
+                    isKeyboardVisible = false
+                }
             }
-        }
+            .onChange(of: selectedPhoto) { _ in
+                guard let item = selectedPhoto else { return }
+                Task {
+                    guard let data = try await item.loadTransferable(type: Data.self) else { return }
+                    self.data = data
+                }
+            }
         .navigationBarBackButtonHidden()
+        }
     }
     
     private func addNewArticle() async throws {
@@ -127,10 +140,11 @@ struct AddArticleView: View {
             title: tittle,
             body: textBody,
             dateCreated: Timestamp(date: Date()),
-            pictureUrl: url,
-            procedureId: clippedProcedure?.procedureId
+            pictureUrl: url
+//            procedureId: clippedProcedure?.procedureId
         )
         try await articleVM.createNewArticle(article: article)
+        articleVM.articles = []
         articleVM.lastArticle = nil
         try await articleVM.getRequiredArticles(countLimit: 6)
     }
@@ -146,7 +160,8 @@ struct AddArticleView: View {
 struct AddArticleView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            AddArticleView(articleVM: ArticlesViewModel())
+            AddArticleView()
+                .environmentObject(ArticlesViewModel())
         }
         .padding(.horizontal)
     }
@@ -185,13 +200,13 @@ fileprivate struct ArticleInputField: View {
 
 struct ClipButton: View {
     
-    @Binding var showPhotosPicker: Bool
+    @Binding var showActionSheet : Bool
     var selectedPhoto: PhotosPickerItem?
     var data: Data?
     
     var body: some View {
         Button {
-            showPhotosPicker = true
+            showActionSheet = true
         } label: {
             if selectedPhoto != nil {
                 if let data = data, let image = UIImage(data: data) {

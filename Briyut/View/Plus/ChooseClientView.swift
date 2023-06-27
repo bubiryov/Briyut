@@ -16,7 +16,7 @@ struct ChooseClientView: View {
     @State private var searchText: String = ""
     @Binding var selectedTab: Tab
     @FocusState var focus: Bool
-    
+        
     var filteredUsers: [DBUser] {
         return vm.users
             .filter {!($0.isBlocked ?? false)}
@@ -26,60 +26,99 @@ struct ChooseClientView: View {
     }
     
     var body: some View {
-        VStack {
-            BarTitle<BackButton, SearchButton>(
-                text: "Choose a client",
-                leftButton: BackButton(),
-                rightButton: SearchButton(showSearch: $showSearch, searchText: $searchText)
-            )
+
+        ZStack {
             
-            if showSearch {
-                AccentInputField(promptText: "User's name", title: nil, input: $searchText)
-                    .focused($focus)
-                    .onAppear {
-                        focus = true
+            Color.backgroundColor.edgesIgnoringSafeArea(.all)
+
+            VStack {
+                BarTitle<BackButton, SearchButton>(
+                    text: "Choose a client",
+                    leftButton: BackButton(),
+                    rightButton: SearchButton(showSearch: $showSearch)
+                )
+                
+                if showSearch {
+                    AccentInputField(promptText: "User's name", title: nil, input: $searchText)
+                        .overlay(content: {
+                            HStack {
+                                Spacer()
+                                Button {
+                                    withAnimation(.easeInOut(duration: 0.15)) {
+                                        searchText = ""
+                                        showSearch = false
+                                        hideKeyboard()
+                                    }
+                                } label: {
+                                    Image(systemName: "xmark.circle")
+                                }
+                            }
+                            .padding(.horizontal)
+                            .foregroundColor(.secondary)
+                            .buttonStyle(.plain)
+                        })
+                        .focused($focus)
+                        .onAppear {
+                            focus = true
+                        }
+                        .onDisappear {
+                            focus = false
+                        }
+                        .gesture(
+                            DragGesture()
+                                .onEnded { gesture in
+                                    if gesture.translation.height < 30 {
+                                        withAnimation(.easeInOut(duration: 0.15)) {
+                                            showSearch = false
+                                            hideKeyboard()
+                                        }
+                                    }
+                                }
+                        )
+                }
+                
+                ScrollView {
+                    ForEach(filteredUsers, id: \.userId) { user in
+                        NavigationLink {
+                            DateTimeSelectionView(
+                                doctor: vm.user,
+                                procedure: procedure,
+                                mainButtonTitle: "Add appoinment",
+                                client: user,
+                                selectedTab: $selectedTab
+                            )
+                        } label: {
+                            UserRow(
+                                vm: vm,
+                                user: user,
+                                showButtons: false,
+                                userStatus: .client
+                            )
+                        }
+                        .disabled(showSearch)
+                        .opacity(showSearch ? 0.4 : 1)
                     }
-                    .onDisappear {
-                        focus = false
+                }
+                .scrollIndicators(.hidden)
+                .onTapGesture {
+                    withAnimation(.easeInOut(duration: 0.15)) {
                         showSearch = false
-                        searchText = ""
-                    }
-            }
-            
-            ScrollView {
-                ForEach(filteredUsers, id: \.userId) { user in
-                    NavigationLink {
-                        DateTimeSelectionView(
-                            doctor: vm.user,
-                            procedure: procedure,
-                            mainButtonTitle: "Add appoinment",
-                            client: user,
-                            selectedTab: $selectedTab
-                        )
-                    } label: {
-                        UserRow(
-                            vm: vm,
-                            user: user,
-                            showButtons: false,
-                            userStatus: .client
-                        )
+                        hideKeyboard()
                     }
                 }
+                
             }
-            .scrollIndicators(.hidden)
-            
-            Spacer()
+            .navigationBarBackButtonHidden(true)
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture()
+                    .onEnded { gesture in
+                        if gesture.translation.width > 100 {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+            )
         }
-        .navigationBarBackButtonHidden(true)
-        .contentShape(Rectangle())
-        .gesture(
-            DragGesture()
-                .onEnded { gesture in
-                if gesture.translation.width > 100 {
-                    presentationMode.wrappedValue.dismiss()
-                }
-            }
-        )
     }
 }
 
@@ -90,5 +129,6 @@ struct ChooseClienView_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
     }
 }

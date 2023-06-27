@@ -37,6 +37,7 @@ struct ClientOrders: View {
                     )
                 }
             }
+            .background(Color.backgroundColor)
         }
     }
 }
@@ -48,6 +49,7 @@ struct ClientOrders_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
     }
 }
 
@@ -76,7 +78,7 @@ struct CustomSegmentedPicker: View {
                     } label: {
                         Text(options[index])
                             .font(Mariupol.medium, 17)
-                            .foregroundColor(selectedIndex == index ? .white : .black)
+                            .foregroundColor(selectedIndex == index ? .white : .primary)
                             .frame(maxWidth: .infinity)
                     }
                 }

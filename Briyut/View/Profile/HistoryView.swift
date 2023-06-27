@@ -66,6 +66,7 @@ struct HistoryView: View {
             }
             Spacer()
         }
+        .background(Color.backgroundColor)
         .onDisappear {
             vm.allOrders = []
             vm.allLastDocument = nil
@@ -91,5 +92,6 @@ struct HistoryView_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
     }
 }

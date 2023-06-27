@@ -27,7 +27,7 @@ struct StatsView: View {
             let currentMonth = calendar.component(.month, from: Date())
             
             BarTitle<BackButton, DoctorMenuPicker>(
-                text: DateFormatter.customFormatter(format: "MMMM").string(from: selectedDate),
+                text: DateFormatter.customFormatter(format: "MMMM").getMonthNameInNominativeCase(from: selectedDate),
                 leftButton: BackButton(), rightButton: DoctorMenuPicker(
                     vm: vm,
                     doctors: [.allDoctors] + vm.doctors.map(DoctorOption.user),
@@ -35,7 +35,11 @@ struct StatsView: View {
                 action: { selectedDate = Date() }
             )
             ScrollView {
-                CustomDatePicker(selectedDate: $selectedDate, mode: .months, pastTime: true)
+                CustomDatePicker(
+                    selectedDate: $selectedDate,
+                    mode: .months,
+                    pastTime: true
+                )
                 
                 PieChartCard(
                     total: monthOrders.reduce(0.0) { $0 + Double($1.price) },
@@ -64,6 +68,7 @@ struct StatsView: View {
             }
             .scrollIndicators(.hidden)
         }
+        .background(Color.backgroundColor)
         .navigationBarBackButtonHidden()
         .onAppear {
             Task {
@@ -132,6 +137,7 @@ struct StatsView_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
     }
 }
 
@@ -151,7 +157,7 @@ struct PieChartCard: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(purpose.rawValue)
                         .font(Mariupol.bold, 22)
-                    Text(selectedMonth == currentMonth ? "This month" : DateFormatter.customFormatter(format: "MMMM").string(from: selectedDate))
+                    Text(selectedMonth == currentMonth ? "This month" : DateFormatter.customFormatter(format: "MMMM").getMonthNameInNominativeCase(from: selectedDate))
                         .font(Mariupol.bold, 20)
                         .foregroundColor(.secondary)
                 }
@@ -173,14 +179,18 @@ struct PieChartCard: View {
                         .chartStyle(ChartStyle(
                             backgroundColor: .white,
                             foregroundColor: [
-                                ColorGradient(.mainColor, .mainColor),
+                                ColorGradient(.staticMainColor, .staticMainColor),
                                 ColorGradient(.secondary, .secondary)
                             ]))
-                        .frame(width: ScreenSize.height * 0.15, height: ScreenSize.height * 0.15)
+                        .frame(width: ScreenSize.height * 0.135, height: ScreenSize.height * 0.135)
                         .overlay {
                             Circle()
-                                .frame(width: ScreenSize.height * 0.08)
+                                .frame(width: ScreenSize.height * 0.07)
                                 .foregroundColor(.secondaryColor)
+                                .overlay {
+                                    Circle()
+                                        .stroke(Color.white, lineWidth: 2)
+                                }
                         }
                     
                     Spacer()
@@ -189,12 +199,12 @@ struct PieChartCard: View {
                 VStack(alignment: .leading) {
                     HStack(alignment: .top) {
                         RoundedRectangle(cornerRadius: 4)
-                            .frame(width: ScreenSize.width / 20, height: ScreenSize.width / 20)
-                            .foregroundColor(.mainColor)
+                            .frame(width: ScreenSize.width / 25, height: ScreenSize.width / 25)
+                            .foregroundColor(.staticMainColor)
                         
                         VStack(alignment: .leading) {
                             Text("Done")
-                                .font(Mariupol.bold, 20)
+                                .font(Mariupol.bold, 17)
                                 .foregroundColor(.secondary)
                             
                             Text("\(purpose == .earnings ? "₴ " : "")\(String(format: "%.0f", firstValue))")
@@ -209,12 +219,12 @@ struct PieChartCard: View {
                     HStack(alignment: .top) {
                         
                         RoundedRectangle(cornerRadius: 4)
-                            .frame(width: ScreenSize.width / 20, height: ScreenSize.width / 20)
+                            .frame(width: ScreenSize.width / 25, height: ScreenSize.width / 25)
                             .foregroundColor(.secondary)
                         
                         VStack(alignment: .leading) {
                             Text("Future")
-                                .font(Mariupol.bold, 20)
+                                .font(Mariupol.bold, 17)
                                 .foregroundColor(.secondary)
                             
                             Text("\(purpose == .earnings ? "₴ " : "")\(String(format: "%.0f", secondValue))")
@@ -237,19 +247,23 @@ struct PieChartCard: View {
                         .chartStyle(ChartStyle(
                             backgroundColor: .white,
                             foregroundColor: [
-                                ColorGradient(.mainColor, .mainColor),
+                                ColorGradient(.staticMainColor, .staticMainColor),
                                 ColorGradient(.secondary, .secondary)
                             ]))
-                        .frame(width: ScreenSize.height * 0.15, height: ScreenSize.height * 0.15)
+                        .frame(width: ScreenSize.height * 0.135, height: ScreenSize.height * 0.135)
                         .overlay {
                             Circle()
-                                .frame(width: ScreenSize.height * 0.08)
+                                .frame(width: ScreenSize.height * 0.07)
                                 .foregroundColor(.secondaryColor)
+                                .overlay {
+                                    Circle()
+                                        .stroke(Color.white, lineWidth: 2)
+                                }
                         }
                 }
             }
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 20)
         .padding(.vertical, 15)
         .frame(minHeight: ScreenSize.height * 0.2)
         .background(Color.secondaryColor)
@@ -266,7 +280,7 @@ struct LineChartCard: View {
             
             LineChart()
                 .data(lineChartData.0)
-                .chartStyle(ChartStyle(backgroundColor: .secondaryColor, foregroundColor: [ColorGradient(.mainColor, .mainColor)]))
+                .chartStyle(ChartStyle(backgroundColor: .secondaryColor, foregroundColor: [ColorGradient(.staticMainColor, .staticMainColor)]))
             
             HStack {
                 Text(DateFormatter.customFormatter(format: "dd.MM").string(from: lineChartData.1))

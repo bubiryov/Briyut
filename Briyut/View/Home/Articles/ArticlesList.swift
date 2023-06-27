@@ -10,7 +10,7 @@ import CachedAsyncImage
 
 struct ArticlesList: View {
     
-    @ObservedObject var articleVM: ArticlesViewModel
+    @EnvironmentObject var articleVM: ArticlesViewModel
     @EnvironmentObject var vm: ProfileViewModel
     @Environment(\.presentationMode) var presentationMode
     @State private var loading: Bool = false
@@ -21,7 +21,7 @@ struct ArticlesList: View {
             BarTitle<BackButton, AddArticleButton>(
                 text: "Interesting",
                 leftButton: BackButton(),
-                rightButton: vm.user?.isDoctor ?? false ? AddArticleButton(articleVM: articleVM) : nil
+                rightButton: vm.user?.isDoctor ?? false ? AddArticleButton() : nil
             )
             ScrollView {
                 LazyVStack {
@@ -55,18 +55,20 @@ struct ArticlesList: View {
                     }
                 }
             }
+            .scrollIndicators(.hidden)
         }
-        .onAppear {
-            Task {
-                do {
-                    loading = true
-                    try await articleVM.getRequiredArticles(countLimit: 6)
-                    loading = false
-                } catch {
-                    loading = false
-                }
-            }
-        }
+        .background(Color.backgroundColor)
+//        .onAppear {
+//            Task {
+//                do {
+//                    loading = true
+//                    try await articleVM.getRequiredArticles(countLimit: 6)
+//                    loading = false
+//                } catch {
+//                    loading = false
+//                }
+//            }
+//        }
         .gesture(
             DragGesture()
                 .onEnded { gesture in
@@ -82,8 +84,9 @@ struct ArticlesList: View {
 struct ArticlesList_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            ArticlesList(articleVM: ArticlesViewModel())
+            ArticlesList()
                 .environmentObject(ProfileViewModel())
+                .environmentObject(ArticlesViewModel())
         }
         .padding(.horizontal)
     }
@@ -92,6 +95,8 @@ struct ArticlesList_Previews: PreviewProvider {
 struct ArticleRow: View {
     
     let article: ArticleModel
+    @EnvironmentObject var articleVM: ArticlesViewModel
+    @State private var showFullArticle: Bool = false
     
     var body: some View {
         HStack {
@@ -149,16 +154,22 @@ struct ArticleRow: View {
         .frame(height: ScreenSize.height * 0.135)
         .background(Color.secondaryColor)
         .cornerRadius(ScreenSize.width / 20)
+        .onTapGesture {
+            showFullArticle = true
+        }
+        .fullScreenCover(isPresented: $showFullArticle) {
+            ArticleView(article: article)
+        }
     }
 }
 
 struct AddArticleButton: View {
     
-    @ObservedObject var articleVM: ArticlesViewModel
+    @EnvironmentObject var articleVM: ArticlesViewModel
 
     var body: some View {
         NavigationLink {
-            AddArticleView(articleVM: articleVM)
+            AddArticleView().environmentObject(articleVM)
         } label: {
             BarButtonView(image: "plus", scale: 0.35)
         }

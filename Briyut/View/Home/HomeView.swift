@@ -10,13 +10,15 @@ import SwiftUI
 struct HomeView: View {
     
     @EnvironmentObject var vm: ProfileViewModel
-    @StateObject var articlesVM: ArticlesViewModel = ArticlesViewModel()
+    @EnvironmentObject var articlesVM: ArticlesViewModel
+    @Environment(\.colorScheme) var colorScheme
     @Binding var selectedTab: Tab
     @Binding var justOpened: Bool
     @Binding var showSearch: Bool
     @Binding var splashView: Bool
     @State private var showFullOrder: Bool = false
     @State private var showMap: Bool = false
+    
 //    additional color (secondary)
     
     var body: some View {
@@ -88,7 +90,8 @@ struct HomeView: View {
                                 color: .mainColor,
                                 fontColor: .white,
                                 bigDate: true,
-                                userInformation: vm.user?.isDoctor ?? false ? .client : .doctor, photoBackgroundColor: .white
+                                userInformation: vm.user?.isDoctor ?? false ? .client : .doctor,
+                                photoBackgroundColor: colorScheme == .dark ? .white.opacity(0.2) : .white
                             )
                         }
                         .padding(.bottom, vm.activeOrders.count > 1 ? 5 : 0)
@@ -118,7 +121,7 @@ struct HomeView: View {
                         Spacer()
                         
                         NavigationLink {
-                            ArticlesList(articleVM: articlesVM)
+                            ArticlesList()
                         } label: {
                             Text("See all")
                                 .font(Mariupol.medium, 17)
@@ -128,20 +131,21 @@ struct HomeView: View {
                         .foregroundColor(.primary)
                     }
                                         
-                    if let nearesArticle = articlesVM.articles.first {
+                    if let nearestArticle = articlesVM.articles.first {
                         ZStack {
                             if articlesVM.articles.count > 1 {
                                 RoundedRectangle(cornerRadius: ScreenSize.width / 15)
                                     .frame(height: ScreenSize.height * 0.14)
                                     .offset(y: ScreenSize.height / 35)
                                     .scaleEffect(0.85)
-                                    .foregroundColor(Color(#colorLiteral(red: 0.8550214171, green: 0.9174225926, blue: 0.9357536435, alpha: 1)))
+                                    .foregroundColor(colorScheme == .light ? Color(#colorLiteral(red: 0.8550214171, green: 0.9174225926, blue: 0.9357536435, alpha: 1)) : .secondaryColor.opacity(0.7))
                             }
-                            
-                            ArticleRow(article: nearesArticle)
 
+                            ArticleRow(article: nearestArticle)
+                            
                         }
                         .padding(.bottom, articlesVM.articles.count > 1 ? 5 : 0)
+                        
                     } else {
                         Text("No current news")
                             .font(Mariupol.medium, 17)
@@ -157,9 +161,7 @@ struct HomeView: View {
                 
             }
             .onAppear {
-                
                 let startTime = DispatchTime.now()
-                
                 Task {
                     try await vm.loadCurrentUser()
                     try await vm.getAllDoctors()
@@ -169,7 +171,7 @@ struct HomeView: View {
                     }
                     if justOpened {
                         try await vm.updateOrdersStatus(isDone: false, isDoctor: vm.user?.isDoctor ?? false)
-                        try await articlesVM.getRequiredArticles(countLimit: 2)
+                        try await articlesVM.getRequiredArticles(countLimit: 6)
                         let endTime = DispatchTime.now()
                         try await Task.sleep(nanoseconds: 3_000_000_000 - (endTime.uptimeNanoseconds - startTime.uptimeNanoseconds))
                         splashView = false
@@ -177,6 +179,7 @@ struct HomeView: View {
                     }
                 }
             }
+            .background(Color.backgroundColor)
         }
         .fullScreenCover(isPresented: $showMap) {
             ClinicMapView(profileVM: vm)
@@ -194,6 +197,7 @@ struct HomeView_Previews: PreviewProvider {
                 splashView: .constant(false)
             )
             .environmentObject(ProfileViewModel())
+            .environmentObject(ArticlesViewModel())
         }
         .padding(.horizontal)
         .padding(.bottom)
@@ -233,3 +237,5 @@ struct MapButton: View {
         .buttonStyle(.plain)
     }
 }
+
+//    .background(Color(#colorLiteral(red: 0.1098039216, green: 0.1098039216, blue: 0.1098039216, alpha: 1)))

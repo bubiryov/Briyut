@@ -11,6 +11,7 @@ import GoogleSignInSwift
 
 struct AuthenticationView: View {
     
+    @Environment(\.colorScheme) var colorScheme
     @State private var showTipsAlert: Bool = false
     @State private var showResetPasswordView: Bool = false
     @Binding var notEntered: Bool
@@ -38,8 +39,9 @@ struct AuthenticationView: View {
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, ScreenSize.height * 0.05)
-                    .background(Color.white)
-                    .cornerRadius(ScreenSize.width / 30)
+                    .background(Color.backgroundColor)
+//                    .background(colorScheme == .dark ? .black : .white)
+                    .cornerRadius(ScreenSize.width / 20)
                     .shadow(radius: 10, y: -10)
                     .offset(y: ScreenSize.height / 3.5)
                     .edgesIgnoringSafeArea(.all)

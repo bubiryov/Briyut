@@ -32,7 +32,7 @@ struct AvailableDoctorsView: View {
                         
                         Text("\(doctor.name ?? doctor.userId) \(doctor.lastName ?? "")")
                             .font(Mariupol.medium, 17)
-                            .foregroundColor(choosenDoctors.contains(doctor.userId) ? .white : .black)
+                            .foregroundColor(choosenDoctors.contains(doctor.userId) ? .white : .primary)
                             .padding(.leading, 8)
                             .lineLimit(1)
                     }
@@ -52,6 +52,7 @@ struct AvailableDoctorsView: View {
                 .listRowSeparator(.hidden)
             }
         }
+        .background(Color.backgroundColor)
         .navigationBarBackButtonHidden(true)
         .contentShape(Rectangle())
         .gesture(
@@ -70,5 +71,6 @@ struct DoctorsList_Previews: PreviewProvider {
         AvailableDoctorsView(choosenDoctors: .constant([]))
             .environmentObject(ProfileViewModel())
             .padding(.horizontal, 20)
+            .background(Color.backgroundColor)
     }
 }

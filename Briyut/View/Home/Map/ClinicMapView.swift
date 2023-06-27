@@ -11,6 +11,7 @@ import MapKit
 struct ClinicMapView: View {
     
     @StateObject var vm: LocationsViewModel = LocationsViewModel()
+    @Environment(\.colorScheme) var colorScheme
     var profileVM: ProfileViewModel
         
     var body: some View {
@@ -23,7 +24,7 @@ struct ClinicMapView: View {
                 VStack {
                     BarTitle<BackButton, EditLocationsButton>(
                         text: "",
-                        leftButton: BackButton(),
+                        leftButton: BackButton(backgorundColor: colorScheme == .dark ? Color.secondary.opacity(0.3) : nil),
                         rightButton: profileVM.user?.isDoctor ?? false ? EditLocationsButton(vm: vm) : nil
                     )
                     
@@ -110,13 +111,16 @@ struct LocationMapAnnotationView: View {
 struct EditLocationsButton: View {
         
     @ObservedObject var vm: LocationsViewModel
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         NavigationLink {
             LocationsList(vm: vm)
-//                .environmentObject(vm)
         } label: {
-            BarButtonView(image: "pencil")
+            BarButtonView(
+                image: "pencil",
+                backgroundColor: colorScheme == .dark ? Color.secondary.opacity(0.3) : nil
+            )
         }
         .buttonStyle(.plain)
     }

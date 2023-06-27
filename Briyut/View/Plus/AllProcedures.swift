@@ -30,82 +30,100 @@ struct AllProcedures: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                if vm.user?.isDoctor == true {
-                    BarTitle<EditButton, AddProcedureButton>(
-                        text: "Procedures",
-                        leftButton: EditButton(isEditing: $isEditing),
-                        rightButton: AddProcedureButton(isEditing: $isEditing))
-                } else {
-                    BarTitle<Text, SearchButton>(
-                        text: "Procedures",
-                        rightButton: SearchButton(showSearch: $showSearch, searchText: $searchText))
-                }
-                                
-                if alertContition() {
-                    NavigationLink {
-                        EditProfileView(notEntered: $notEntered)
-                    } label: {
-                        HStack {
+            ZStack {
+                
+                Color.backgroundColor.edgesIgnoringSafeArea(.all)
+                
+                VStack {
+                    if vm.user?.isDoctor == true {
+                        BarTitle<EditButton, AddProcedureButton>(
+                            text: "Procedures",
+                            leftButton: EditButton(isEditing: $isEditing),
+                            rightButton: AddProcedureButton(isEditing: $isEditing))
+                    } else {
+                        BarTitle<Text, SearchButton>(
+                            text: "Procedures",
+                            rightButton: SearchButton(showSearch: $showSearch))
+                    }
+                                    
+                    if alertContition() {
+                        NavigationLink {
+                            EditProfileView(notEntered: $notEntered)
+                        } label: {
                             HStack {
-                                Text("To create an appointment, you should provide a name and phone number")
-                                    .foregroundColor(.white)
-                                    .font(.subheadline)
-                                    .bold()
-                                    .multilineTextAlignment(.center)
+                                HStack {
+                                    Text("To create an appointment, you should provide a name and phone number")
+                                        .foregroundColor(.white)
+                                        .font(.subheadline)
+                                        .bold()
+                                        .multilineTextAlignment(.center)
+                                }
+                                .padding(5)
                             }
-                            .padding(5)
+                            .frame(maxWidth: .infinity)
+                            .frame(minHeight: ScreenSize.height * 0.06)
+                            .background(Color.mainColor)
+                            .cornerRadius(ScreenSize.width / 30)
                         }
-                        .frame(maxWidth: .infinity)
-                        .frame(minHeight: ScreenSize.height * 0.06)
-                        .background(Color.mainColor)
-                        .cornerRadius(ScreenSize.width / 30)
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
-                }
-                
-                if showSearch {
-                    AccentInputField(
-                        promptText: "Massage",
-                        title: nil,
-                        input: $searchText
-                    )
-                    .focused($focus)
-                    .onAppear {
-                        focus = true
-                    }
-                    .onDisappear {
-                        showSearch = false
-                        searchText = ""
-                    }
-                }
-                
-                ScrollView {
                     
-                    ForEach(procedures, id: \.procedureId) { procedure in
-                        
-                        ProcedureRow(
-                            vm: vm,
-                            procedure: procedure,
-                            isEditing: $isEditing,
-                            selectedTab: $selectedTab
+                    if showSearch {
+                        AccentInputField(
+                            promptText: "Massage",
+                            title: nil,
+                            input: $searchText
                         )
-                        .offset(x: isEditing ? 2 : 0)
-                        .offset(x: isEditing ? -2 : 0)
-                        .animation(.easeInOut(duration: randomize(
-                            interval: 0.12,
-                            withVariance: 0.055
-                        )).repeat(while: isEditing), value: isEditing)
-                        .padding(.horizontal, isEditing ? 3 : 0)
-                        .disabled(vm.user?.isDoctor != true && alertContition() ? true : false)
+                        .focused($focus)
+                        .onAppear {
+                            focus = true
+                        }
+                        .onDisappear {
+                            focus = false
+                            showSearch = false
+                            searchText = ""
+                        }
+                        .gesture(
+                            DragGesture()
+                                .onEnded { gesture in
+                                    if gesture.translation.height < 30 {
+                                        withAnimation(.easeInOut(duration: 0.15)) {
+                                            showSearch = false
+                                            searchText = ""
+                                            hideKeyboard()
+                                        }
+                                    }
+                                }
+                        )
+                        
                     }
+                    
+                    ScrollView {
+                        
+                        ForEach(procedures, id: \.procedureId) { procedure in
+                            
+                            ProcedureRow(
+                                vm: vm,
+                                procedure: procedure,
+                                isEditing: $isEditing,
+                                selectedTab: $selectedTab
+                            )
+                            .offset(x: isEditing ? 2 : 0)
+                            .offset(x: isEditing ? -2 : 0)
+                            .animation(.easeInOut(duration: randomize(
+                                interval: 0.12,
+                                withVariance: 0.055
+                            )).repeat(while: isEditing), value: isEditing)
+                            .padding(.horizontal, isEditing ? 3 : 0)
+                            .disabled(vm.user?.isDoctor != true && alertContition() ? true : false)
+                        }
+                    }
+                    .scrollIndicators(.hidden)
                 }
-                .scrollIndicators(.hidden)
-            }
-//
-            .onAppear {
-                Task {
-                    try await vm.getAllProcedures()
+                .onAppear {
+                    Task {
+                        try await vm.getAllProcedures()
+                    }
                 }
             }
         }
@@ -132,6 +150,7 @@ struct AddProcedureView_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
     }
 }
 
@@ -212,13 +231,16 @@ struct EditButton: View {
 struct SearchButton: View {
     
     @Binding var showSearch: Bool
-    @Binding var searchText: String
     
     var body: some View {
         Button {
             withAnimation(.easeInOut(duration: 0.15)) {
+                if showSearch {
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        hideKeyboard()
+                    }
+                }
                 showSearch.toggle()
-                searchText = ""
             }
         } label: {
             BarButtonView(image: "search")

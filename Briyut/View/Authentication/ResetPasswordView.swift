@@ -53,6 +53,7 @@ struct ResetPasswordView: View {
             }
             .padding(.top)
             .padding(.horizontal, 20)
+            .background(Color.backgroundColor)
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.large)
         }

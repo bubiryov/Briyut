@@ -25,6 +25,8 @@ extension Color {
     static let darkColor = Color("DarkColor")
     static let lightBlueColor = Color("LightBlueColor")
     static let destructiveColor = Color("DestructiveColor")
+    static let backgroundColor = Color("BackgroundColor")
+    static let staticMainColor = Color(red: 0.455, green: 0.749, blue: 0.765)
 }
 
 extension View {
@@ -93,6 +95,27 @@ extension DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = format
         return formatter
+    }
+    
+    func getMonthNameInNominativeCase(from date: Date) -> String {
+        let monthString = self.string(from: date)
+        
+        let monthMapping: [String: String] = [
+            "January": "Январь",
+            "February": "Февраль",
+            "March": "Март",
+            "April": "Апрель",
+            "May": "Май",
+            "June": "Июнь",
+            "July": "Июль",
+            "August": "Август",
+            "September": "Сентябрь",
+            "October": "Октябрь",
+            "November": "Ноябрь",
+            "December": "Декабрь"
+        ]
+        
+        return monthMapping[monthString] ?? monthString
     }
 }
 

@@ -24,5 +24,7 @@ struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView()
             .environmentObject(ProfileViewModel())
+            .padding(.horizontal, 20)
+            .background(Color.backgroundColor)
     }
 }

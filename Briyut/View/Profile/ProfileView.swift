@@ -14,11 +14,11 @@ struct ProfileView: View {
     @Binding var notEntered: Bool
     @State private var logOutAlert: Bool = false
     @State private var copyIdAlert: Bool = false
-    
+        
     var body: some View {
         
         NavigationView {
-            VStack(spacing: 30) {
+            VStack(spacing: 25) {
                 BarTitle<EditProfileButton, LogOutButton>(
                     text: "",
                     leftButton: EditProfileButton(notEntered: $notEntered),
@@ -72,6 +72,7 @@ struct ProfileView: View {
                 Spacer()
                 
             }
+            .background(Color.backgroundColor)
             .alert(isPresented: $logOutAlert) {
                 Alert(
                     title: Text("Are you sure you want to log out?"),
@@ -104,6 +105,7 @@ struct ProfileView_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
     }
 }
 
@@ -189,7 +191,7 @@ struct SettingsButtonView: View {
                 .scaledToFit()
                 .scaleEffect(0.8)
                 .frame(width: ScreenSize.height * 0.03)
-                .foregroundColor(.mainColor)
+                .foregroundColor(.staticMainColor)
                 .cornerRadius(10)
             
             Text(title)

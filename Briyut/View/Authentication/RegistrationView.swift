@@ -72,6 +72,7 @@ struct RegistrationView: View {
             .padding(.top, topPadding())
             .padding(.bottom, 20)
             .padding(.horizontal, 20)
+            .background(Color.backgroundColor)
             .navigationBarBackButtonHidden(true)
             .contentShape(Rectangle())
             .gesture(

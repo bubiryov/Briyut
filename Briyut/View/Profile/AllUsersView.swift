@@ -17,68 +17,85 @@ struct AllUsersView: View {
     @State private var tupleUsers: [(DBUser, Bool)] = []
     
     var body: some View {
-        VStack {
-            BarTitle<BackButton, SearchButton>(text: "Users", leftButton: BackButton(), rightButton: SearchButton(showSearch: $showSearch, searchText: $searchable))
+        ZStack {
             
-            if showSearch {
-                AccentInputField(promptText: "Arkadiy Rubin", title: nil, input: $searchable)
-                    .focused($focus)
-                    .onAppear {
-                        focus = true
-                    }
-                    .onDisappear {
-                        showSearch = false
-                        searchable = ""
-                    }
-            }
+            Color.backgroundColor.edgesIgnoringSafeArea(.all)
             
-            ScrollView {
-                LazyVStack {
-                    let filteredUsers = tupleUsers.filter { user in
-                        searchable.isEmpty ? true : (user.0.name ?? "").localizedCaseInsensitiveContains(searchable) || (user.0.lastName ?? "").localizedCaseInsensitiveContains(searchable)
-                    }
-                    
-                    ForEach(filteredUsers, id: \.0.userId) { user in
-                        UserRow(
-                            vm: vm,
-                            user: user.0,
-                            showButtons: user.1,
-                            userStatus: .client
+            VStack {
+                BarTitle<BackButton, SearchButton>(text: "Users", leftButton: BackButton(), rightButton: SearchButton(showSearch: $showSearch))
+                
+                if showSearch {
+                    AccentInputField(promptText: "Arkadiy Rubin", title: nil, input: $searchable)
+                        .focused($focus)
+                        .onAppear {
+                            focus = true
+                        }
+                        .onDisappear {
+                            showSearch = false
+                            searchable = ""
+                        }
+                        .gesture(
+                            DragGesture()
+                                .onEnded { gesture in
+                                    if gesture.translation.height < 30 {
+                                        withAnimation(.easeInOut(duration: 0.15)) {
+                                            showSearch = false
+                                            hideKeyboard()
+                                        }
+                                    }
+                                }
                         )
-                        .onTapGesture {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                if let index = tupleUsers.firstIndex(where: { $0.0.userId == user.0.userId }) {
-                                    tupleUsers[index].1.toggle()
+
+                }
+                
+                ScrollView {
+                    LazyVStack {
+                        let filteredUsers = tupleUsers.filter { user in
+                            searchable.isEmpty ? true : (user.0.name ?? "").localizedCaseInsensitiveContains(searchable) || (user.0.lastName ?? "").localizedCaseInsensitiveContains(searchable)
+                        }
+                        
+                        ForEach(filteredUsers, id: \.0.userId) { user in
+                            UserRow(
+                                vm: vm,
+                                user: user.0,
+                                showButtons: user.1,
+                                userStatus: .client
+                            )
+                            .onTapGesture {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    if let index = tupleUsers.firstIndex(where: { $0.0.userId == user.0.userId }) {
+                                        tupleUsers[index].1.toggle()
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            Spacer()
-        }
-        .onChange(of: vm.users, perform: { _ in
-            withAnimation(.easeInOut(duration: 0.15)) {
-                tupleUsers = vm.users.map {($0, false)}
+                Spacer()
             }
-        })
-        .onAppear {
-            Task {
-                try await vm.getAllUsers()
-                tupleUsers = vm.users.map {($0, false)}
-            }
-        }
-        .navigationBarBackButtonHidden(true)
-        .contentShape(Rectangle())
-        .gesture(
-            DragGesture()
-                .onEnded { gesture in
-                if gesture.translation.width > 100 {
-                    presentationMode.wrappedValue.dismiss()
+            .onChange(of: vm.users, perform: { _ in
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    tupleUsers = vm.users.map {($0, false)}
+                }
+            })
+            .onAppear {
+                Task {
+                    try await vm.getAllUsers()
+                    tupleUsers = vm.users.map {($0, false)}
                 }
             }
+            .navigationBarBackButtonHidden(true)
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture()
+                    .onEnded { gesture in
+                    if gesture.translation.width > 100 {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
         )
+        }
     }
 }
 
@@ -89,6 +106,7 @@ struct AllUsersView_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
     }
 }
 

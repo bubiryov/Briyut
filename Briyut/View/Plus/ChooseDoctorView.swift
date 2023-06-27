@@ -65,6 +65,7 @@ struct ChooseDoctorView: View {
             
             Spacer()
         }
+        .background(Color.backgroundColor)
         .navigationBarBackButtonHidden(true)
         .contentShape(Rectangle())
         .gesture(
@@ -85,5 +86,6 @@ struct ChooseDoctorView_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
     }
 }

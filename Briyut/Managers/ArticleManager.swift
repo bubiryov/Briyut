@@ -40,7 +40,7 @@ final class ArticleManager {
     
     func getRequiredArticles(countLimit: Int?, lastDocument: DocumentSnapshot?) async throws -> (orders: [ArticleModel], lastDocument: DocumentSnapshot?) {
 
-        let query = articleCollection
+        let query = articleCollection.order(by: ArticleModel.CodingKeys.dateCreated.rawValue, descending: true)
 
         if let countLimit {
             if let lastDocument {

@@ -41,7 +41,7 @@ struct DoneOrderView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 100)
-                                .foregroundColor(.mainColor)
+                                .foregroundColor(.staticMainColor)
                         }
                         .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
                     }
@@ -51,7 +51,7 @@ struct DoneOrderView: View {
                     
                     Text("Done")
                         .font(Mariupol.bold, 30)
-                        .foregroundColor(.mainColor)
+                        .foregroundColor(.staticMainColor)
                 }
             }
             .frame(minHeight: ScreenSize.height * 0.4, maxHeight: .infinity)
@@ -119,6 +119,7 @@ struct DoneOrderView: View {
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 20)
+        .background(Color.backgroundColor)
         .navigationBarBackButtonHidden()
         .contentShape(Rectangle())
         .gesture(
@@ -134,7 +135,7 @@ struct DoneOrderView: View {
 
 struct DoneOrderView_Previews: PreviewProvider {
     static var previews: some View {
-        DoneOrderView(order: OrderModel(orderId: "", procedureId: "", doctorId: "", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 1000), withPhoto: false, selectedTab: .constant(.plus))
+        DoneOrderView(order: OrderModel(orderId: "", procedureId: "", doctorId: "", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 1000), withPhoto: true, selectedTab: .constant(.plus))
             .environmentObject(ProfileViewModel())
     }
 }

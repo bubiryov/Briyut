@@ -199,6 +199,7 @@ extension ProfileViewModel {
         if let lastDocument {
             self.allLastDocument = lastDocument
         }
+        print("Downloaded orders")
     }
 
     func addNewOrder(order: OrderModel) async throws {

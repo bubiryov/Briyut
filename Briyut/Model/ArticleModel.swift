@@ -15,15 +15,15 @@ struct ArticleModel: Codable, Equatable {
     let body: String
     let dateCreated: Timestamp
     let pictureUrl: String?
-    let procedureId: String?
+//    let procedureId: String?
     
-    init(id: String, title: String, body: String, dateCreated: Timestamp, pictureUrl: String?, procedureId: String?) {
+    init(id: String, title: String, body: String, dateCreated: Timestamp, pictureUrl: String?) {
         self.id = id
         self.title = title
         self.body = body
         self.dateCreated = dateCreated
         self.pictureUrl = pictureUrl
-        self.procedureId = procedureId
+//        self.procedureId = procedureId
     }
     
     enum CodingKeys: String, CodingKey {
@@ -32,7 +32,7 @@ struct ArticleModel: Codable, Equatable {
         case body = "body"
         case dateCreated = "date_created"
         case pictureUrl = "picture_url"
-        case procedureId = "procedure_id"
+//        case procedureId = "procedure_id"
     }
     
     func encode(to encoder: Encoder) throws {
@@ -42,7 +42,7 @@ struct ArticleModel: Codable, Equatable {
         try container.encode(self.body, forKey: .body)
         try container.encode(self.dateCreated, forKey: .dateCreated)
         try container.encodeIfPresent(self.pictureUrl, forKey: .pictureUrl)
-        try container.encodeIfPresent(self.procedureId, forKey: .procedureId)
+//        try container.encodeIfPresent(self.procedureId, forKey: .procedureId)
     }
     
     init(from decoder: Decoder) throws {
@@ -52,6 +52,6 @@ struct ArticleModel: Codable, Equatable {
         self.body = try container.decode(String.self, forKey: .body)
         self.dateCreated = try container.decode(Timestamp.self, forKey: .dateCreated)
         self.pictureUrl = try container.decodeIfPresent(String.self, forKey: .pictureUrl)
-        self.procedureId = try container.decodeIfPresent(String.self, forKey: .procedureId)
+//        self.procedureId = try container.decodeIfPresent(String.self, forKey: .procedureId)
     }
 }
