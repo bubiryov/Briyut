@@ -31,126 +31,130 @@ struct DateTimeSelectionView: View {
                                             
     var body: some View {
 
-        VStack {
+        ZStack {
             
-            BarTitle<BackButton?, Text>(
-                text: selectedDate.barTitleDate(),
-                leftButton: procedure != nil ? BackButton() : nil,
-                action: { selectedDate = Date() }
-            )
+            Color.backgroundColor.edgesIgnoringSafeArea(.all)
             
-            CustomDatePicker(
-                selectedDate: $selectedDate,
-                mode: .days,
-                pastTime: false
-            )
-            .onChange(of: selectedDate) { _ in
-                selectedTime = ""
-            }
-                                    
-            Spacer()
-            
-            LazyVGrid(columns: Array(repeating: GridItem(), count: 4), spacing: 20) {
-                ForEach(timeSlots, id: \.self) { timeSlot in
-                    Button(action: {
-                        withAnimation(nil) {
-                            selectedTime = timeSlot
-                        }
-                    }) {
-                        Text(timeSlot)
-                            .foregroundColor(selectedTime == timeSlot ? .white : .primary)
-                            .font(Mariupol.medium, 17)
-                            .frame(width: ScreenSize.width * 0.2, height: ScreenSize.height * 0.05)
-                            .background(
-                                RoundedRectangle(cornerRadius: ScreenSize.width / 30)
-                                    .strokeBorder(Color.mainColor, lineWidth: 2)
-                                    .background(
-                                        selectedTime == timeSlot ? Color.mainColor : Color.clear
-                                    )
-                            )
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(disabledAllButtons ? true : checkIfDisabled(time: timeSlot))
-                    .opacity(disabledAllButtons ? 0.5 : checkIfDisabled(time: timeSlot) ? 0.5 : 1)
-                    .cornerRadius(ScreenSize.width / 30)
-                }
-            }
-            .padding(.horizontal)
-            .alert("Sorry, this time has just been taken", isPresented: $showAlert) {
-                Button("Got it", role: .cancel) { }
-            }
-            .contentShape(Rectangle())
-            .gesture(
-                DragGesture()
-                    .onEnded { gesture in
-                        if gesture.translation.width > 100 && procedure != nil {
-                            presentationMode.wrappedValue.dismiss()
-                        }
-                    }
-            )
-            
-            Spacer()
-            
-            Button {
-                if let procedure {
-                    Task {
-                        do {
-                            loading = true
-                            try await addNewOrderAction(procedure: procedure)
-                            loading = false
-                        } catch {
-                            print("Can't add an order")
-                            loading = false
-                        }
-                    }
-                } else if let order {
-                    Task {
-                        do {
-                            loading = true
-                            try await editOrderAction(order: order)
-                            loading = false
-                        } catch {
-                            print("Can't edit the order")
-                            loading = false
-                        }
-                    }
-                }
-            } label: {
-                AccentButton(
-                    text: mainButtonTitle,
-                    isButtonActive: selectedTime != "" ? true : false,
-                    animation: loading
+            VStack {
+                
+                BarTitle<BackButton?, Text>(
+                    text: selectedDate.barTitleDate(),
+                    leftButton: procedure != nil ? BackButton() : nil,
+                    action: { selectedDate = Date() }
                 )
+                
+                CustomDatePicker(
+                    selectedDate: $selectedDate,
+                    mode: .days,
+                    pastTime: false
+                )
+                .onChange(of: selectedDate) { _ in
+                    selectedTime = ""
+                }
+                                        
+                Spacer()
+                
+                LazyVGrid(columns: Array(repeating: GridItem(), count: 4), spacing: 20) {
+                    ForEach(timeSlots, id: \.self) { timeSlot in
+                        Button(action: {
+                            withAnimation(nil) {
+                                selectedTime = timeSlot
+                            }
+                        }) {
+                            Text(timeSlot)
+                                .foregroundColor(selectedTime == timeSlot ? .white : .primary)
+                                .font(Mariupol.medium, 17)
+                                .frame(width: ScreenSize.width * 0.2, height: ScreenSize.height * 0.05)
+                                .background(
+                                    RoundedRectangle(cornerRadius: ScreenSize.width / 30)
+                                        .strokeBorder(Color.mainColor, lineWidth: 2)
+                                        .background(
+                                            selectedTime == timeSlot ? Color.mainColor : Color.clear
+                                        )
+                                )
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(disabledAllButtons ? true : checkIfDisabled(time: timeSlot))
+                        .opacity(disabledAllButtons ? 0.5 : checkIfDisabled(time: timeSlot) ? 0.5 : 1)
+                        .cornerRadius(ScreenSize.width / 30)
+                    }
+                }
+                .padding(.horizontal)
+                .alert("Sorry, this time has just been taken", isPresented: $showAlert) {
+                    Button("Got it", role: .cancel) { }
+                }
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture()
+                        .onEnded { gesture in
+                            if gesture.translation.width > 100 && procedure != nil {
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        }
+                )
+                
+                Spacer()
+                
+                Button {
+                    Haptics.shared.play(.light)
+                    if let procedure {
+                        Task {
+                            do {
+                                loading = true
+                                try await addNewOrderAction(procedure: procedure)
+                                loading = false
+                            } catch {
+                                print("Can't add an order")
+                                loading = false
+                            }
+                        }
+                    } else if let order {
+                        Task {
+                            do {
+                                loading = true
+                                try await editOrderAction(order: order)
+                                loading = false
+                            } catch {
+                                print("Can't edit the order")
+                                loading = false
+                            }
+                        }
+                    }
+                } label: {
+                    AccentButton(
+                        text: mainButtonTitle,
+                        isButtonActive: selectedTime != "" ? true : false,
+                        animation: loading
+                    )
+                }
+                .disabled((selectedTime != "" ? false : true) || loading)
             }
-            .disabled((selectedTime != "" ? false : true) || loading)
-            
-        }
-        .padding(.bottom, 20)
-        .background(Color.backgroundColor)
-        .navigationBarBackButtonHidden(true)
-        .onChange(of: selectedDate) { newDate in
-            Task {
-                disabledAllButtons = true
-                personalOrdersTime = try await vm.getDayOrderTimes(date: newDate, selectionMode: .day, doctorId: doctor?.userId)
-                allOrders = try await vm.getDayMonthOrders(date: newDate, selectionMode: .day, doctorId: nil)
-                generateTimeSlots()
-                disabledAllButtons = false
+            .padding(.bottom, 20)
+            .navigationBarBackButtonHidden(true)
+            .onChange(of: selectedDate) { newDate in
+                Task {
+                    disabledAllButtons = true
+                    personalOrdersTime = try await vm.getDayOrderTimes(date: newDate, selectionMode: .day, doctorId: doctor?.userId)
+                    allOrders = try await vm.getDayMonthOrders(date: newDate, selectionMode: .day, doctorId: nil)
+                    generateTimeSlots()
+                    disabledAllButtons = false
+                }
             }
-        }
-        .onAppear {
-            Task {
-                disabledAllButtons = true
-                personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: doctor?.userId)
-                allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil)
-                generateTimeSlots()
-                disabledAllButtons = false
+            .onAppear {
+                Task {
+                    disabledAllButtons = true
+                    personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: doctor?.userId)
+                    allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil)
+                    generateTimeSlots()
+                    disabledAllButtons = false
+                }
             }
-        }
-        .fullScreenCover(isPresented: $fullCover, content: {
-            if let order {
-                DoneOrderView(order: order, withPhoto: false, selectedTab: $selectedTab)
-            }
+            .fullScreenCover(isPresented: $fullCover, content: {
+                if let order {
+                    DoneOrderView(order: order, withPhoto: false, selectedTab: $selectedTab)
+                }
         })
+        }
     }
     
     func addNewOrderAction(procedure: ProcedureModel) async throws {
@@ -165,6 +169,8 @@ struct DateTimeSelectionView: View {
             try await vm.addNewOrder(order: order)
             self.order = order
             fullCover = true
+            try await Task.sleep(nanoseconds: 1_600_000_000)
+            Haptics.shared.notify(.success)
         } else {
             showAlert = true
             selectedTime = ""
@@ -344,7 +350,7 @@ struct DateTimeSelectionView_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
-        .background(Color.backgroundColor)
+//        .background(Color.backgroundColor)
     }
 }
 
@@ -427,6 +433,9 @@ struct CustomDatePicker: View {
                     }
                 }
         )
+        .onChange(of: selectedDate) { _ in
+            Haptics.shared.play(.light)
+        }
         
     }
     

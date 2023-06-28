@@ -14,7 +14,7 @@ struct ClientOrders: View {
     @State private var selectedIndex = 0
     
     var body: some View {
-        NavigationView {
+//        NavigationView {
             VStack {
                 BarTitle<Text, Text>(text: "Appointments")
                 
@@ -38,7 +38,7 @@ struct ClientOrders: View {
                 }
             }
             .background(Color.backgroundColor)
-        }
+//        }
     }
 }
 
@@ -49,7 +49,7 @@ struct ClientOrders_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
-        .background(Color.backgroundColor)
+//        .background(Color.backgroundColor)
     }
 }
 
@@ -97,37 +97,35 @@ struct OrderList: View {
     var orderArray: [OrderModel]
     
     var body: some View {
-        List {
-            ForEach(orderArray, id: \.orderId) { order in
-                
-                OrderRow(
-                    vm: vm,
-                    order: order,
-                    withButtons: order.isDone ? false : true,
-                    color: nil,
-                    fontColor: nil,
-                    bigDate: false,
-                    userInformation: .doctor,
-                    photoBackgroundColor: Color.secondary.opacity(0.1)
-                )
-                    .listRowInsets(EdgeInsets())
-                    .padding(.bottom, 7)
-                
-                if order == orderArray.last {
-                    HStack {
-                        
-                    }
-                    .frame(height: 1)
-                    .onAppear {
-                        Task {
-                            try await vm.getRequiredOrders(dataFetchMode: .user, isDone: selectedIndex == 0 ? false : true, countLimit: 6)
+        ScrollView {
+            LazyVStack {
+                ForEach(orderArray, id: \.orderId) { order in
+                    
+                    OrderRow(
+                        vm: vm,
+                        order: order,
+                        withButtons: order.isDone ? false : true,
+                        color: nil,
+                        fontColor: nil,
+                        bigDate: false,
+                        userInformation: .doctor,
+                        photoBackgroundColor: Color.secondary.opacity(0.1)
+                    )
+                    
+                    if order == orderArray.last {
+                        HStack {
+                            
+                        }
+                        .frame(height: 1)
+                        .onAppear {
+                            Task {
+                                try await vm.getRequiredOrders(dataFetchMode: .user, isDone: selectedIndex == 0 ? false : true, countLimit: 6)
+                            }
                         }
                     }
                 }
             }
-            .listRowSeparator(.hidden)
         }
-        .listStyle(.inset)
         .scrollIndicators(.hidden)
         .onAppear {
             Task {

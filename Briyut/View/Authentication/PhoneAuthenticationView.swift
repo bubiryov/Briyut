@@ -37,7 +37,7 @@ struct PhoneAuthenticationView: View {
                 OtpView_SwiftUI(
                     otpCode: $code,
                     otpCodeLength: 6,
-                    textColor: .black,
+                    textColor: .primary,
                     textSize: CGFloat(25)
                 )
                 .keyboardType(.numberPad)
@@ -92,15 +92,6 @@ struct PhoneAuthenticationView: View {
                 }
                 .disabled(loading)
                 
-//                HStack {
-//                    if let error = vm.errorText {
-//                        Text(error)
-//                            .font(.subheadline)
-//                            .foregroundColor(.red)
-//                    }
-//                }
-//                .frame(maxWidth: .infinity)
-//                .frame(height: ScreenSize.height * 0.02)
             }
         }
         .padding(.top, topPadding())

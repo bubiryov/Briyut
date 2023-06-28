@@ -60,6 +60,7 @@ struct LocationView: View {
             
             Button {
                 Task {
+                    Haptics.shared.play(.light)
                     if location == nil {
                         do {
                             loading = true

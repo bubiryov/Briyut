@@ -40,10 +40,12 @@ struct ChooseClientView: View {
                 
                 if showSearch {
                     AccentInputField(promptText: "User's name", title: nil, input: $searchText)
+                        .disableAutocorrection(true)
                         .overlay(content: {
                             HStack {
                                 Spacer()
                                 Button {
+                                    Haptics.shared.play(.light)
                                     withAnimation(.easeInOut(duration: 0.15)) {
                                         searchText = ""
                                         showSearch = false

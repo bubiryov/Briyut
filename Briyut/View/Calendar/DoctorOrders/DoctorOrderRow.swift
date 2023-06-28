@@ -59,6 +59,7 @@ struct DoctorOrderRow: View {
                 if isEditing && order.1 && order.0.end.dateValue() > Date() {
                     HStack {
                         Button {
+                            Haptics.shared.notify(.warning)
                             Task {
                                 showAlert = true
                             }

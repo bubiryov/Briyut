@@ -160,6 +160,7 @@ struct UserRow: View {
                     if vm.user?.isDoctor ?? false {
                         Button {
                             Task {
+                                Haptics.shared.notify(.warning)
                                 deleteAlert = true
                             }
                         } label: {

@@ -88,6 +88,7 @@ struct ProcedureView: View {
             }
             
             Button {
+                Haptics.shared.play(.light)
                 Task {
                     if procedure == nil {
                         try await addProcedure()

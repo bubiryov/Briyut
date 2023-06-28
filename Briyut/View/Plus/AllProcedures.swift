@@ -218,6 +218,7 @@ struct EditButton: View {
     
     var body: some View {
         Button {
+            Haptics.shared.play(.light)
             withAnimation(.easeInOut(duration: 0.15)) {
                 isEditing.toggle()
             }
@@ -234,6 +235,7 @@ struct SearchButton: View {
     
     var body: some View {
         Button {
+            Haptics.shared.play(.light)
             withAnimation(.easeInOut(duration: 0.15)) {
                 if showSearch {
                     withAnimation(.easeInOut(duration: 0.15)) {

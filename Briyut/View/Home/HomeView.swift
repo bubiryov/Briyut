@@ -26,13 +26,17 @@ struct HomeView: View {
         NavigationView {
             VStack(alignment: .leading, spacing: 25) {
                             
-                BarTitle<MapButton, ProfileButton>(text: "", leftButton: MapButton(image: "pin", showMap: $showMap), rightButton: ProfileButton(selectedTab: $selectedTab, photo: vm.user?.photoUrl ?? ""))
+                BarTitle<MapButton, ProfileButton>(
+                    text: "",
+                    leftButton: MapButton(image: "pin", showMap: $showMap),
+                    rightButton: ProfileButton(selectedTab: $selectedTab, photo: vm.user?.photoUrl ?? ""))
                 
                 Text("Find your procedure")
                     .font(Mariupol.bold, 30)
                     .lineLimit(1)
                             
                 Button {
+                    Haptics.shared.play(.light)
                     withAnimation(.easeInOut(duration: 0.15)) {
                         selectedTab = .plus
                         showSearch = true
@@ -115,7 +119,7 @@ struct HomeView: View {
                 VStack(alignment: .leading) {
                     
                     HStack(alignment: .center) {
-                        Text("Interesting")
+                        Text("Articles")
                             .font(Mariupol.medium, 22)
                         
                         Spacer()
@@ -237,5 +241,3 @@ struct MapButton: View {
         .buttonStyle(.plain)
     }
 }
-
-//    .background(Color(#colorLiteral(red: 0.1098039216, green: 0.1098039216, blue: 0.1098039216, alpha: 1)))

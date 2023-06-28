@@ -58,6 +58,7 @@ struct AllDoctorsView: View {
                     Spacer()
                     
                     Button {
+                        Haptics.shared.play(.light)
                         Task {
                             do {
                                 loading = true

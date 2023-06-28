@@ -22,11 +22,17 @@ final class ArticlesViewModel: ObservableObject {
     
     func createNewArticle(article: ArticleModel) async throws {
         try await ArticleManager.shared.createNewArticle(article: article)
+        articles = []
+        lastArticle = nil
+        try await getRequiredArticles(countLimit: 6)
     }
     
     func removeArticle(article_id: String) async throws {
         try await deleteStorageFolderContents(documentId: article_id, childStorage: "articles")
         try await ArticleManager.shared.removeArticle(article_id: article_id)
+        articles = []
+        lastArticle = nil
+        try await getRequiredArticles(countLimit: 6)
     }
     
     func deleteStorageFolderContents(documentId: String, childStorage: String) async throws {

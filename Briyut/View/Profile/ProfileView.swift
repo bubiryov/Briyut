@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CachedAsyncImage
+import AlertToast
 
 struct ProfileView: View {
     
@@ -62,6 +63,7 @@ struct ProfileView: View {
                     
                     Button {
                         UIPasteboard.general.string = vm.user?.userId
+                        Haptics.shared.notify(.success)
                         copyIdAlert = true
                     } label: {
                         SettingsButtonView(imageName: "copy", title: "Copy ID")
@@ -88,13 +90,9 @@ struct ProfileView: View {
                 )
             }
         }
-        .alert(isPresented: $copyIdAlert) {
-            Alert(
-                title: Text("UserID has been copied"),
-                dismissButton: .default(Text("Got it!"))
-            )
+        .toast(isPresenting: $copyIdAlert, duration: 1) {
+            AlertToast(displayMode: .hud, type: .regular, title: "UserID has been copied")
         }
-
     }
 }
 

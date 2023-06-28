@@ -93,8 +93,9 @@ struct EditProfileView: View {
                                 }
                             }
                         }
-                                                                            
+                        
                         Button {
+                            Haptics.shared.play(.light)
                             Task {
                                 loading = true
                                 do {
@@ -104,22 +105,6 @@ struct EditProfileView: View {
                                     print("Can't save changes")
                                     loading = false
                                 }
-    //                        guard let user = vm.user else { return }
-    //                        Task {
-    //                            var url: String = user.photoUrl ?? ""
-    //                            if let selectedPhoto {
-    //                                try await vm.deleteStorageFolderContents(userId: user.userId)
-    //                                let path = try await vm.saveProfilePhoto(item: selectedPhoto)
-    //                                url = try await vm.getUrlForImage(path: path)
-    //                            }
-    //                            try await vm.editProfile(
-    //                                userID: user.userId,
-    //                                name: name != "" ? name : nil,
-    //                                lastName: lastName != "" ? lastName : nil,
-    //                                phoneNumber: phoneNumber.count > 5 ? phoneNumber : nil,
-    //                                photoURL: url)
-    //                            try await vm.loadCurrentUser()
-    //                            presentationMode.wrappedValue.dismiss()
                             }
                         } label: {
                             AccentButton(text: "Save", isButtonActive: true, animation: loading)
@@ -238,6 +223,7 @@ struct DeleteButton: View {
     var body: some View {
         Button {
             showAlert = true
+            Haptics.shared.notify(.warning)
         } label: {
             BarButtonView(image: "trash", textColor: .white, backgroundColor: Color.destructiveColor)
         }

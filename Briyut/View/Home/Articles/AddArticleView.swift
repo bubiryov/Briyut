@@ -141,12 +141,8 @@ struct AddArticleView: View {
             body: textBody,
             dateCreated: Timestamp(date: Date()),
             pictureUrl: url
-//            procedureId: clippedProcedure?.procedureId
         )
         try await articleVM.createNewArticle(article: article)
-        articleVM.articles = []
-        articleVM.lastArticle = nil
-        try await articleVM.getRequiredArticles(countLimit: 6)
     }
 
     private func validateFields() -> Bool {

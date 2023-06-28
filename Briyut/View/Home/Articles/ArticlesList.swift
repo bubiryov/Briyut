@@ -155,6 +155,7 @@ struct ArticleRow: View {
         .background(Color.secondaryColor)
         .cornerRadius(ScreenSize.width / 20)
         .onTapGesture {
+            Haptics.shared.play(.light)
             showFullArticle = true
         }
         .fullScreenCover(isPresented: $showFullArticle) {

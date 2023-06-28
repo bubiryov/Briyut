@@ -98,6 +98,8 @@
 		89D37B792A0A87D100A7C933 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B782A0A87D100A7C933 /* EditProfileView.swift */; };
 		89D6C8192A2B529500A38CEB /* ChooseClientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D6C8182A2B529500A38CEB /* ChooseClientView.swift */; };
 		89E8AB342A14DD52000661E6 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AB332A14DD51000661E6 /* SplashView.swift */; };
+		89E96D2B2A4C468800BB4FE6 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 89E96D2A2A4C468800BB4FE6 /* AlertToast */; };
+		89E96D2D2A4C4DF800BB4FE6 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E96D2C2A4C4DF800BB4FE6 /* Haptics.swift */; };
 		89E9B5982A45B25400B5D733 /* ArticlesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E9B5972A45B25400B5D733 /* ArticlesList.swift */; };
 		89E9B59A2A45CADF00B5D733 /* ArticleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E9B5992A45CADE00B5D733 /* ArticleManager.swift */; };
 		89E9B59C2A45CB1D00B5D733 /* ArticleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E9B59B2A45CB1D00B5D733 /* ArticleModel.swift */; };
@@ -221,6 +223,7 @@
 		89D37B782A0A87D100A7C933 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		89D6C8182A2B529500A38CEB /* ChooseClientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseClientView.swift; sourceTree = "<group>"; };
 		89E8AB332A14DD51000661E6 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		89E96D2C2A4C4DF800BB4FE6 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		89E9B5972A45B25400B5D733 /* ArticlesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesList.swift; sourceTree = "<group>"; };
 		89E9B5992A45CADE00B5D733 /* ArticleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleManager.swift; sourceTree = "<group>"; };
 		89E9B59B2A45CB1D00B5D733 /* ArticleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleModel.swift; sourceTree = "<group>"; };
@@ -239,6 +242,7 @@
 				89CA5AB52A02F40E00695069 /* GoogleSignInSwift in Frameworks */,
 				8987712B2A3F91CB00F40467 /* OtpView-SwiftUI in Frameworks */,
 				89C9E2F02A0BC8F600B16CBF /* CachedAsyncImage in Frameworks */,
+				89E96D2B2A4C468800BB4FE6 /* AlertToast in Frameworks */,
 				89988BEA2A1A3D35004DB4C6 /* Lottie in Frameworks */,
 				89BFAA3B2A1F5A3400DF2D0B /* FirebaseStorage in Frameworks */,
 				899EC5A22A000E1300C90D49 /* FirebaseAnalyticsSwift in Frameworks */,
@@ -428,6 +432,7 @@
 				899EC5A52A000E6500C90D49 /* AppDelegate.swift */,
 				89CA5AAF2A02D9E000695069 /* Extensions.swift */,
 				89CA5ABA2A02FD3200695069 /* Utilities.swift */,
+				89E96D2C2A4C4DF800BB4FE6 /* Haptics.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -610,6 +615,7 @@
 				89BFAA3A2A1F5A3400DF2D0B /* FirebaseStorage */,
 				895E8EAB2A377D140076E58D /* SwiftUICharts */,
 				8987712A2A3F91CB00F40467 /* OtpView-SwiftUI */,
+				89E96D2A2A4C468800BB4FE6 /* AlertToast */,
 			);
 			productName = Briyut;
 			productReference = 899EC56D2A000A1C00C90D49 /* Briyut.app */;
@@ -690,6 +696,7 @@
 				89988BE82A1A3D35004DB4C6 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				895E8EAA2A377D130076E58D /* XCRemoteSwiftPackageReference "ChartView" */,
 				898771292A3F91CB00F40467 /* XCRemoteSwiftPackageReference "OtpView-SwiftUI" */,
+				89E96D292A4C468800BB4FE6 /* XCRemoteSwiftPackageReference "AlertToast" */,
 			);
 			productRefGroup = 899EC56E2A000A1C00C90D49 /* Products */;
 			projectDirPath = "";
@@ -763,6 +770,7 @@
 				89E8AB342A14DD52000661E6 /* SplashView.swift in Sources */,
 				899EC5B82A001D5C00C90D49 /* LoginView.swift in Sources */,
 				89C5905E2A059DD800975E50 /* UserManager.swift in Sources */,
+				89E96D2D2A4C4DF800BB4FE6 /* Haptics.swift in Sources */,
 				89D37B792A0A87D100A7C933 /* EditProfileView.swift in Sources */,
 				899EC5C12A003DBF00C90D49 /* HomeView.swift in Sources */,
 				89CA5AAC2A027A1E00695069 /* ResetPasswordView.swift in Sources */,
@@ -1226,6 +1234,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		89E96D292A4C468800BB4FE6 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elai950/AlertToast.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1288,6 +1304,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 89CA5AB12A02F40E00695069 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		89E96D2A2A4C468800BB4FE6 /* AlertToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89E96D292A4C468800BB4FE6 /* XCRemoteSwiftPackageReference "AlertToast" */;
+			productName = AlertToast;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

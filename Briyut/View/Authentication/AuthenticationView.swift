@@ -62,6 +62,15 @@ struct AuthenticationView: View {
                         }
                     }
                 }
+                .gesture(
+                    DragGesture()
+                        .onEnded { gesture in
+                            if gesture.translation.height > 100 {
+                                hideKeyboard()
+                            }
+                        }
+                )
+                
             }
             .sheet(isPresented: $showResetPasswordView) {
                 ResetPasswordView(showResetPasswordView: $showResetPasswordView)

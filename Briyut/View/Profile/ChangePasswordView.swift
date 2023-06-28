@@ -54,6 +54,7 @@ struct ChangePasswordView: View {
                     
                     Button {
                         Task {
+                            Haptics.shared.play(.light)
                             do {
                                 loading = true
                                 try await vm.changePassword(

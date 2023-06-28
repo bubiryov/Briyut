@@ -64,7 +64,6 @@ struct SplashView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.backgroundColor)
-//        .background(colorScheme == .dark ? .black : .white)
         .onAppear {
             Task {
                 try await Task.sleep(nanoseconds: 300_000_000)

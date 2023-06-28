@@ -77,6 +77,7 @@ struct OrderRow: View {
             if withButtons {
                 HStack {
                     Button {
+                        Haptics.shared.notify(.warning)
                         Task {
                             showAlert = true
                         }
@@ -130,11 +131,16 @@ struct OrderRow: View {
         .sheet(isPresented: $rescheduleFullCover) {
             let doctor = vm.doctors.first(where: { $0.userId == order.doctorId })
             DateTimeSelectionView(doctor: doctor, order: order, mainButtonTitle: "Edit an appoinment", selectedTab: .constant(.calendar))
-                .padding()
-                .padding(.bottom)
+                .padding(.top, topPadding())
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
+                .background(Color.backgroundColor)
         }
         .onTapGesture {
-            showFullOrder = true
+            Haptics.shared.play(.light)
+            withAnimation {
+                showFullOrder = true
+            }
         }
         .fullScreenCover(isPresented: $showFullOrder) {
             DoneOrderView(order: order, withPhoto: true, selectedTab: .constant(.calendar))
