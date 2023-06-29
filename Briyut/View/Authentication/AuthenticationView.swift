@@ -75,7 +75,7 @@ struct AuthenticationView: View {
             .sheet(isPresented: $showResetPasswordView) {
                 ResetPasswordView(showResetPasswordView: $showResetPasswordView)
                     .presentationDetents([.medium, .large])
-                    .presentationCornerRadius(20)
+//                    .presentationCornerRadius(20)
             }
         }.ignoresSafeArea(.keyboard)
     }

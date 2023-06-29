@@ -165,7 +165,6 @@ struct HomeView: View {
                 
             }
             .onAppear {
-                let startTime = DispatchTime.now()
                 Task {
                     try await vm.loadCurrentUser()
                     try await vm.getAllDoctors()
@@ -176,9 +175,6 @@ struct HomeView: View {
                     if justOpened {
                         try await vm.updateOrdersStatus(isDone: false, isDoctor: vm.user?.isDoctor ?? false)
                         try await articlesVM.getRequiredArticles(countLimit: 6)
-                        let endTime = DispatchTime.now()
-                        try await Task.sleep(nanoseconds: 3_000_000_000 - (endTime.uptimeNanoseconds - startTime.uptimeNanoseconds))
-                        splashView = false
                         justOpened = false
                     }
                 }
@@ -241,3 +237,21 @@ struct MapButton: View {
         .buttonStyle(.plain)
     }
 }
+
+//try await vm.loadCurrentUser()
+//try await vm.getAllDoctors()
+//try await vm.getAllProcedures()
+//if vm.user?.isDoctor ?? false {
+//    try await vm.getAllUsers()
+//}
+//if justOpened {
+//    try await vm.updateOrdersStatus(isDone: false, isDoctor: vm.user?.isDoctor ?? false)
+//    try await articlesVM.getRequiredArticles(countLimit: 6)
+//    let endTime = DispatchTime.now()
+//    let difference = endTime.uptimeNanoseconds - startTime.uptimeNanoseconds
+//    try await Task.sleep(nanoseconds: difference > 6_000_000_000 ? 6_000_000_000 : 3_000_000_000 - difference)
+//    splashView = false
+//    justOpened = false
+//    print("Content end")
+//
+//}

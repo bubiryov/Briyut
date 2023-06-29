@@ -17,6 +17,9 @@ struct StatsView: View {
     @State private var monthOrders: [OrderModel] = []
     @State private var sorted: [Double] = []
     @State private var lineChartData: ([Double], Date, Date)  = ([], Date(), Date())
+    @State private var customPeriod: Bool = false
+    @State private var startDate: Date = Date()
+    @State private var endDate: Date = Date()
     
     var body: some View {
         
@@ -35,11 +38,13 @@ struct StatsView: View {
                 action: { selectedDate = Date() }
             )
             ScrollView {
-                CustomDatePicker(
-                    selectedDate: $selectedDate,
-                    mode: .months,
-                    pastTime: true
-                )
+                if !customPeriod {
+                    CustomDatePicker(
+                        selectedDate: $selectedDate,
+                        mode: .months,
+                        pastTime: true
+                    )
+                }
                 
                 PieChartCard(
                     total: monthOrders.reduce(0.0) { $0 + Double($1.price) },
@@ -62,7 +67,38 @@ struct StatsView: View {
                 )
                                 
                 LineChartCard(lineChartData: lineChartData)
+                    .overlay {
+                        if monthOrders.isEmpty {
+                            Text("No data yet")
+                                .font(Mariupol.medium, 17)
+                                .foregroundColor(.secondary)
+                        }
+                    }
                 
+                VStack(spacing: 20) {
+                    Toggle(isOn: $customPeriod.animation()) {
+                        Text("Custom period")
+                            .font(Mariupol.medium, 17)
+                    }
+                    .tint(.mainColor)
+                    .padding(.trailing, 5)
+                    
+                    if customPeriod {
+                        DatePicker("Start", selection: $startDate, displayedComponents: [.date])
+                            .datePickerStyle(CompactDatePickerStyle())
+                            .tint(.mainColor)
+                            .onAppear {
+                                startDate = lineChartData.1
+                                endDate = lineChartData.2
+                            }
+                        
+                        DatePicker("End", selection: $endDate, displayedComponents: [.date])
+                            .datePickerStyle(CompactDatePickerStyle())
+                            .tint(.mainColor)
+                    }
+                }
+                .padding(.top)
+
                 HStack { }
                 .frame(height: 10)
             }
