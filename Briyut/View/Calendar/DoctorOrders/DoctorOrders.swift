@@ -29,7 +29,7 @@ struct DoctorOrders: View {
                 action: { selectedDate = Date() }
             )
                         
-            CustomDatePicker(
+            BarDatePicker(
                 selectedDate: $selectedDate,
                 mode: .days,
                 pastTime: true
@@ -63,7 +63,7 @@ struct DoctorOrders: View {
         }
         .onChange(of: selectedDate) { _ in
             Task {
-                let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId)
+                let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
                 dayOrders = orders.map {($0, false)}
                 isEditing = false
                 if orders.isEmpty {
@@ -75,7 +75,7 @@ struct DoctorOrders: View {
         }
         .onChange(of: selectedDoctor) { _ in
             Task {
-                let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId)
+                let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
                 dayOrders = orders.map {($0, false)}
                 isEditing = false
                 if orders.isEmpty {

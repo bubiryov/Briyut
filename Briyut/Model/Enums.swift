@@ -49,6 +49,7 @@ enum DoctorOption: Hashable {
 enum DateSelectionMode {
     case day
     case month
+    case custom
 }
 
 enum DataFetchMode {

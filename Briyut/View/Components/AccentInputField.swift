@@ -11,6 +11,7 @@ struct AccentInputField: View {
     
     var promptText: String
     var title: String?
+    var spaceAllow: Bool? = nil
     @Binding var input: String
     
     var body: some View {
@@ -27,6 +28,12 @@ struct AccentInputField: View {
                 .frame(height: ScreenSize.height * 0.06)
                 .background(Color.secondary.opacity(0.1))
                 .cornerRadius(ScreenSize.width / 30)
+                .onReceive(NotificationCenter.default.publisher(for: UITextField.textDidChangeNotification)) { _ in
+                    if spaceAllow == false && input.last == " " {
+                        input = String(input.dropLast())
+                    }
+                }
+
         }
     }
 }

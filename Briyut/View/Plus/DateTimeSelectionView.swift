@@ -43,7 +43,7 @@ struct DateTimeSelectionView: View {
                     action: { selectedDate = Date() }
                 )
                 
-                CustomDatePicker(
+                BarDatePicker(
                     selectedDate: $selectedDate,
                     mode: .days,
                     pastTime: false
@@ -135,7 +135,7 @@ struct DateTimeSelectionView: View {
                 Task {
                     disabledAllButtons = true
                     personalOrdersTime = try await vm.getDayOrderTimes(date: newDate, selectionMode: .day, doctorId: doctor?.userId)
-                    allOrders = try await vm.getDayMonthOrders(date: newDate, selectionMode: .day, doctorId: nil)
+                    allOrders = try await vm.getDayMonthOrders(date: newDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
                     generateTimeSlots()
                     disabledAllButtons = false
                 }
@@ -144,7 +144,7 @@ struct DateTimeSelectionView: View {
                 Task {
                     disabledAllButtons = true
                     personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: doctor?.userId)
-                    allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil)
+                    allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
                     generateTimeSlots()
                     disabledAllButtons = false
                 }
@@ -162,7 +162,7 @@ struct DateTimeSelectionView: View {
         
         let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure.procedureId, doctorId: doctor?.userId ?? "", clientId: client.userId, date: createTimestamp(from: selectedDate, time: selectedTime, procedure: nil)!, end: createTimestamp(from: selectedDate, time: selectedTime, procedure: procedure)!, isDone: false, price: procedure.cost)
         
-        allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil)
+        allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
         personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: doctor?.userId)
         
         if !checkIfDisabled(time: selectedTime) {
@@ -186,7 +186,7 @@ struct DateTimeSelectionView: View {
             throw URLError(.badServerResponse)
         }
                 
-        allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil)
+        allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
         personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: order.doctorId)
 
         if !checkIfDisabled(time: selectedTime) {
@@ -220,8 +220,9 @@ struct DateTimeSelectionView: View {
         let endTime = calendar.date(bySettingHour: 21, minute: 0, second: 0, of: selectedDate)!
         
         let interval = 30 * 60
-                
-        for _ in 0..<28 {
+
+//  Тут было 0..<28
+        for _ in 0..<27 {
             let nextTime = calendar.date(byAdding: .second, value: interval, to: currentTime)!
                         
             if personalOrdersTime.isEmpty {
@@ -350,11 +351,11 @@ struct DateTimeSelectionView_Previews: PreviewProvider {
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)
-//        .background(Color.backgroundColor)
+        .background(Color.backgroundColor)
     }
 }
 
-struct CustomDatePicker: View {
+struct BarDatePicker: View {
     @Binding var selectedDate: Date
     let mode: DatePickerMode
     let pastTime: Bool

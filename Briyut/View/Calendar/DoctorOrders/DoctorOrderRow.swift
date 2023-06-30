@@ -113,7 +113,7 @@ struct DoctorOrderRow: View {
                 primaryButton: .destructive(Text("Remove"), action: {
                     Task {
                         try await vm.removeOrder(orderId: order.0.orderId)
-                        let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId)
+                        let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
                         withAnimation(.easeInOut(duration: 0.15)) {
                             dayOrders = orders.map {($0, false)}
                             isEditing = false
@@ -132,7 +132,7 @@ struct DoctorOrderRow: View {
         .onChange(of: fullCover) { newValue in
             if newValue == false {
                 Task {
-                    let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId)
+                    let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
                     withAnimation(.easeInOut(duration: 0.15)) {
                         dayOrders = orders.map {($0, false)}
                         isEditing = false

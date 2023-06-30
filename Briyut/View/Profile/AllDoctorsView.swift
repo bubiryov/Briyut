@@ -31,6 +31,7 @@ struct AllDoctorsView: View {
                     AccentInputField(
                         promptText: vm.user?.userId ?? "",
                         title: "UserID",
+                        spaceAllow: false,
                         input: $futureDoctorID
                     )
                 }
@@ -44,7 +45,7 @@ struct AllDoctorsView: View {
                             userStatus: .doctor
                         )
                         .onTapGesture {
-                            withAnimation(.easeInOut(duration: 0.2)) {
+                            withAnimation(.easeInOut(duration: 0.15)) {
                                 if let index = tupleDoctors.firstIndex(where: { $0.0.userId == doctor.0.userId }) {
                                     tupleDoctors[index].1.toggle()
                                 }

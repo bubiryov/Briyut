@@ -22,6 +22,9 @@ struct EditProfileView: View {
     @State private var data: Data? = nil
     @State private var showActionSheet: Bool = false
     @State private var showPhotosPicker: Bool = false
+    @State private var customSchedule: Bool = false
+    @State private var workStartTime: Date? = nil
+    @State private var workEndTime: Date? = nil
     @State private var loading: Bool = false
     
     var body: some View {
@@ -78,12 +81,14 @@ struct EditProfileView: View {
                                 AccentInputField(
                                     promptText: "Maria",
                                     title: "Name",
+                                    spaceAllow: false,
                                     input: $name
                                 )
                                 
                                 AccentInputField(
                                     promptText: "Shevchenko",
                                     title: "Last name",
+                                    spaceAllow: false,
                                     input: $lastName
                                 )
                                 
@@ -92,6 +97,15 @@ struct EditProfileView: View {
                                         .keyboardType(.phonePad)
                                 }
                             }
+                            
+                            Toggle(isOn: $customSchedule.animation()) {
+                                Text("Custom period")
+                                    .font(Mariupol.medium, 17)
+                            }
+                            .tint(.mainColor)
+                            .padding(.trailing, 5)
+                            .padding(.top)
+
                         }
                         
                         Button {

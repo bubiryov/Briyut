@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ProcedureModel: Codable, Equatable {
+struct ProcedureModel: Codable, Equatable, Hashable {
     let procedureId: String
     let name: String
     let duration: Int
@@ -22,6 +22,10 @@ struct ProcedureModel: Codable, Equatable {
         self.cost = cost
         self.parallelQuantity = parallelQuantity
         self.availableDoctors = availableDoctors
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(procedureId)
     }
     
     enum CodingKeys: String, CodingKey {

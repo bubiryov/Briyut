@@ -131,7 +131,7 @@ final class OrderManager {
         try await orderDocument(orderId: orderId).updateData(data)
     }
     
-    func getDayMounthOrders(for date: Date, selectionMode: DateSelectionMode, doctorId: String?) async throws -> [OrderModel] {
+    func getDayMounthOrders(for date: Date, selectionMode: DateSelectionMode, doctorId: String?, firstDate: Date?, secondDate: Date?) async throws -> [OrderModel] {
         let calendar = Calendar.current
         
         var startDate: Date
@@ -145,6 +145,9 @@ final class OrderManager {
             let components = calendar.dateComponents([.year, .month], from: date)
             startDate = calendar.date(from: components)!
             endDate = calendar.date(byAdding: .month, value: 1, to: startDate)!
+        case .custom:
+            startDate = calendar.startOfDay(for: firstDate!)
+            endDate = calendar.date(byAdding: .day, value: 1, to: secondDate!)!
         }
         
         let query = orderCollection

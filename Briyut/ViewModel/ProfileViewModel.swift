@@ -218,9 +218,9 @@ extension ProfileViewModel {
     
     func removeOrder(orderId: String) async throws {
         try await OrderManager.shared.removeOrder(orderId: orderId)
-        activeLastDocument = nil
-        activeOrders = []
-        try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
+//        activeLastDocument = nil
+//        activeOrders = []
+//        try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
     }
         
     func updateOrdersStatus(isDone: Bool, isDoctor: Bool) async throws {
@@ -238,8 +238,8 @@ extension ProfileViewModel {
         try await getRequiredOrders(dataFetchMode: .user, isDone: true, countLimit: 6)
     }
     
-    func getDayMonthOrders(date: Date, selectionMode: DateSelectionMode, doctorId: String?) async throws -> [OrderModel] {
-        return try await OrderManager.shared.getDayMounthOrders(for: date, selectionMode: selectionMode, doctorId: doctorId)
+    func getDayMonthOrders(date: Date, selectionMode: DateSelectionMode, doctorId: String?, firstDate: Date?, secondDate: Date?) async throws -> [OrderModel] {
+        return try await OrderManager.shared.getDayMounthOrders(for: date, selectionMode: selectionMode, doctorId: doctorId, firstDate: firstDate, secondDate: secondDate)
     }
     
     func deleteUnfinishedOrders(idType: IDType, id: String) async throws {
@@ -258,7 +258,7 @@ extension ProfileViewModel {
 //    }
     
     func getDayOrderTimes(date: Date, selectionMode: DateSelectionMode, doctorId: String?) async throws -> [(Date, Date)] {
-        let orders = try await getDayMonthOrders(date: date, selectionMode: selectionMode, doctorId: doctorId)
+        let orders = try await getDayMonthOrders(date: date, selectionMode: selectionMode, doctorId: doctorId, firstDate: nil, secondDate: nil)
         var occupied = [(Date, Date)]()
         for order in orders {
             let start = order.date.dateValue()

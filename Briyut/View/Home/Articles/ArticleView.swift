@@ -84,9 +84,6 @@ struct ArticleView: View {
                     Task {
                         do {
                             try await articleVM.removeArticle(article_id: article.id)
-//                            articleVM.articles = []
-//                            articleVM.lastArticle = nil
-//                            try await articleVM.getRequiredArticles(countLimit: 6)
                             presentationMode.wrappedValue.dismiss()
                         } catch {
                             print("Something went wrong")

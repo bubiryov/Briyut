@@ -34,6 +34,7 @@ struct LocationView: View {
                     AccentInputField(
                         promptText: "Харків",
                         title: "City",
+                        spaceAllow: false,
                         input: $city
                     )
                     

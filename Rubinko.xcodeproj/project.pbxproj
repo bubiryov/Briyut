@@ -20,6 +20,7 @@
 		896D3D082A3DC7270053E873 /* ClinicMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896D3D072A3DC7270053E873 /* ClinicMapView.swift */; };
 		896D3D0A2A3DDBF10053E873 /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896D3D092A3DDBF10053E873 /* LocationModel.swift */; };
 		896D3D0C2A3E28170053E873 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896D3D0B2A3E28170053E873 /* LocationManager.swift */; };
+		897CF14E2A4DE548006A05AA /* AddPastOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897CF14D2A4DE548006A05AA /* AddPastOrderView.swift */; };
 		897ED61C2A41B2C700668890 /* Mariupol-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 897ED6192A41B2C700668890 /* Mariupol-Regular.ttf */; };
 		897ED61D2A41B2C700668890 /* Mariupol-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 897ED61A2A41B2C700668890 /* Mariupol-Bold.ttf */; };
 		897ED61E2A41B2C700668890 /* Mariupol-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 897ED61B2A41B2C700668890 /* Mariupol-Medium.ttf */; };
@@ -153,6 +154,7 @@
 		896D3D072A3DC7270053E873 /* ClinicMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinicMapView.swift; sourceTree = "<group>"; };
 		896D3D092A3DDBF10053E873 /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
 		896D3D0B2A3E28170053E873 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		897CF14D2A4DE548006A05AA /* AddPastOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPastOrderView.swift; sourceTree = "<group>"; };
 		897ED6192A41B2C700668890 /* Mariupol-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Mariupol-Regular.ttf"; sourceTree = "<group>"; };
 		897ED61A2A41B2C700668890 /* Mariupol-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Mariupol-Bold.ttf"; sourceTree = "<group>"; };
 		897ED61B2A41B2C700668890 /* Mariupol-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Mariupol-Medium.ttf"; sourceTree = "<group>"; };
@@ -550,6 +552,7 @@
 				89D37B782A0A87D100A7C933 /* EditProfileView.swift */,
 				89804BD92A2E1C66002E2282 /* AllUsersView.swift */,
 				89C9C16B2A3215CD0078A042 /* HistoryView.swift */,
+				897CF14D2A4DE548006A05AA /* AddPastOrderView.swift */,
 				89BDBA6B2A35D428008449BE /* StatsView.swift */,
 				89C6096A2A3C770200D5BF00 /* ChangePasswordView.swift */,
 			);
@@ -784,6 +787,7 @@
 				89CFDD682A122E7200159C4B /* OrderManager.swift in Sources */,
 				899EC5CB2A00574700C90D49 /* AuthenticationViewModel.swift in Sources */,
 				89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */,
+				897CF14E2A4DE548006A05AA /* AddPastOrderView.swift in Sources */,
 				89BDBA6C2A35D428008449BE /* StatsView.swift in Sources */,
 				89F71FF92A2F416E006DE84D /* DoneOrderView.swift in Sources */,
 				898FD9BC2A0910F100725697 /* AllDoctorsView.swift in Sources */,

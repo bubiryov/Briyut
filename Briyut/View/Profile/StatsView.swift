@@ -39,7 +39,7 @@ struct StatsView: View {
             )
             ScrollView {
                 if !customPeriod {
-                    CustomDatePicker(
+                    BarDatePicker(
                         selectedDate: $selectedDate,
                         mode: .months,
                         pastTime: true
@@ -68,7 +68,7 @@ struct StatsView: View {
                                 
                 LineChartCard(lineChartData: lineChartData)
                     .overlay {
-                        if monthOrders.isEmpty {
+                        if lineChartData.0.count < 2 || lineChartData.0.allSatisfy({ $0 == 0 }){
                             Text("No data yet")
                                 .font(Mariupol.medium, 17)
                                 .foregroundColor(.secondary)
@@ -87,10 +87,6 @@ struct StatsView: View {
                         DatePicker("Start", selection: $startDate, displayedComponents: [.date])
                             .datePickerStyle(CompactDatePickerStyle())
                             .tint(.mainColor)
-                            .onAppear {
-                                startDate = lineChartData.1
-                                endDate = lineChartData.2
-                            }
                         
                         DatePicker("End", selection: $endDate, displayedComponents: [.date])
                             .datePickerStyle(CompactDatePickerStyle())
@@ -108,21 +104,47 @@ struct StatsView: View {
         .navigationBarBackButtonHidden()
         .onAppear {
             Task {
-                monthOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .month, doctorId: selectedDoctor?.userId)
-                lineChartData = calculateModifiedCounts()
-                print(lineChartData)
+                monthOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .month, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
+                lineChartData = calculateModifiedCounts(selectionMode: .month)
             }
         }
         .onChange(of: selectedDate) { newDate in
             Task {
-                monthOrders = try await vm.getDayMonthOrders(date: newDate, selectionMode: .month, doctorId: selectedDoctor?.userId)
-                lineChartData = calculateModifiedCounts()
+                monthOrders = try await vm.getDayMonthOrders(date: newDate, selectionMode: .month, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
+                lineChartData = calculateModifiedCounts(selectionMode: .month)
             }
         }
         .onChange(of: selectedDoctor) { newDoctor in
             Task {
-                monthOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .month, doctorId: newDoctor?.userId)
-                lineChartData = calculateModifiedCounts()
+                monthOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: customPeriod ? .custom : .month, doctorId: newDoctor?.userId, firstDate: startDate, secondDate: endDate)
+                lineChartData = calculateModifiedCounts(selectionMode: customPeriod ? .custom : .month)
+            }
+        }
+        .onChange(of: startDate) { newStartDate in
+            if customPeriod {
+                Task {
+                    monthOrders = try await vm.getDayMonthOrders(date: Date(), selectionMode: .custom, doctorId: selectedDoctor?.userId, firstDate: newStartDate, secondDate: endDate)
+                    lineChartData = calculateModifiedCounts(selectionMode: .custom)
+                }
+            }
+        }
+        .onChange(of: endDate) { newSecondDate in
+            if customPeriod {
+                Task {
+                    monthOrders = try await vm.getDayMonthOrders(date: Date(), selectionMode: .custom, doctorId: selectedDoctor?.userId, firstDate: startDate, secondDate: newSecondDate)
+                    lineChartData = calculateModifiedCounts(selectionMode: .custom)
+                }
+            }
+        }
+        .onChange(of: customPeriod) { newValue in
+            if newValue {
+                startDate = lineChartData.1
+                endDate = lineChartData.2
+            } else {
+                Task {
+                    monthOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .month, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
+                    lineChartData = calculateModifiedCounts(selectionMode: .month)
+                }
             }
         }
         .contentShape(Rectangle())
@@ -136,7 +158,7 @@ struct StatsView: View {
         )
     }
     
-    func calculateModifiedCounts() -> ([Double], Date, Date) {
+    func calculateModifiedCounts(selectionMode: DateSelectionMode) -> ([Double], Date, Date) {
         let dailyCounts = monthOrders.reduce(into: [Date: Int]()) { counts, order in
             let calendar = Calendar.current
             let components = calendar.dateComponents([.year, .month, .day], from: order.date.dateValue())
@@ -145,8 +167,22 @@ struct StatsView: View {
         }
         
         let sortedDailyCounts = dailyCounts.sorted { $0.key < $1.key }
-        let minDate = sortedDailyCounts.first?.key
-        let maxDate = sortedDailyCounts.last?.key
+        let minDate: Date? = {
+            if selectionMode == .month {
+                return sortedDailyCounts.first?.key
+            } else {
+                return startDate
+            }
+        }()
+        
+        
+        let maxDate: Date? = {
+            if selectionMode == .month {
+                return sortedDailyCounts.last?.key
+            } else {
+                return endDate
+            }
+        }()
         
         var modifiedCounts: [Double] = []
         

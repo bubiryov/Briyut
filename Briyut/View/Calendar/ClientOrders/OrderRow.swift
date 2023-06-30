@@ -121,6 +121,9 @@ struct OrderRow: View {
                 primaryButton: .destructive(Text("Remove"), action: {
                     Task {
                         try await vm.removeOrder(orderId: order.orderId)
+                        vm.activeLastDocument = nil
+                        vm.activeOrders = []
+                        try await vm.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
                     }
                 }),
                 secondaryButton: .default(Text("Cancel"), action: {
@@ -158,7 +161,7 @@ struct OrderRow: View {
 struct OrderRow_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: false, color: .mainColor, fontColor: .white, bigDate: true, userInformation: .doctor, photoBackgroundColor: .white.opacity(0.2))
+            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: false, color: nil, fontColor: .white, bigDate: false, userInformation: .doctor, photoBackgroundColor: .white.opacity(0.2))
         }
         .padding(.horizontal, 20)
     }

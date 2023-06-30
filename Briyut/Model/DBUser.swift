@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DBUser: Codable, Equatable {
+struct DBUser: Codable, Equatable, Comparable {
     let userId: String
     let name: String?
     let lastName: String?
@@ -17,6 +17,13 @@ struct DBUser: Codable, Equatable {
     let isDoctor: Bool
     let phoneNumber: String?
     let isBlocked: Bool?
+    
+    static func < (lhs: DBUser, rhs: DBUser) -> Bool {
+        if let lhsName = lhs.name, let rhsName = rhs.name {
+            return lhsName < rhsName
+        }
+        return lhs.name != nil
+    }
     
     init(auth: AuthDataResultModel, name: String?, lastName: String?, dateCreated: Date?, isDoctor: Bool, phoneNumber: String?, isBlocked: Bool?) {
         self.userId = auth.uid
