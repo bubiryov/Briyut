@@ -25,7 +25,7 @@ struct ChangePasswordView: View {
                 VStack(spacing: 20) {
                     
                     BarTitle<BackButton, Text>(
-                        text: "Change password",
+                        text: "change-password-string",
                         leftButton: BackButton()
                     )
                     
@@ -33,21 +33,21 @@ struct ChangePasswordView: View {
                         field: $currentPassword,
                         isSecureField: true,
                         title: "currentpassword123",
-                        header: "Current password"
+                        header: "current-password-string"
                     )
                     
                     AuthInputField(
                         field: $newPassword,
                         isSecureField: true,
                         title: "newpassword123",
-                        header: "New password"
+                        header: "new-password-string"
                     )
                     
                     AuthInputField(
                         field: $repeatPassword,
                         isSecureField: true,
                         title: "newpassword123",
-                        header: "Repeat password"
+                        header: "repeat-password-string"
                     )
                     
                     Spacer()
@@ -73,7 +73,7 @@ struct ChangePasswordView: View {
                         }
                     } label: {
                         AccentButton(
-                            text: "Change password",
+                            text: "change-password-string",
                             isButtonActive: vm.validatePassword(newPassword, repeatPassword: repeatPassword),
                             animation: loading
                         )

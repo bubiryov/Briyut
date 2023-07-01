@@ -37,12 +37,12 @@ struct AllProcedures: View {
                 VStack {
                     if vm.user?.isDoctor == true {
                         BarTitle<EditButton, AddProcedureButton>(
-                            text: "Procedures",
+                            text: "procedures-string",
                             leftButton: EditButton(isEditing: $isEditing),
                             rightButton: AddProcedureButton(isEditing: $isEditing))
                     } else {
                         BarTitle<Text, SearchButton>(
-                            text: "Procedures",
+                            text: "procedures-string",
                             rightButton: SearchButton(showSearch: $showSearch))
                     }
                                     
@@ -52,7 +52,7 @@ struct AllProcedures: View {
                         } label: {
                             HStack {
                                 HStack {
-                                    Text("To create an appointment, you should provide a name and phone number")
+                                    Text("all-procedures-message-string")
                                         .foregroundColor(.white)
                                         .font(.subheadline)
                                         .bold()
@@ -70,7 +70,7 @@ struct AllProcedures: View {
                     
                     if showSearch {
                         AccentInputField(
-                            promptText: "Massage",
+                            promptText: "massage-string",
                             title: nil,
                             input: $searchText
                         )
@@ -158,7 +158,7 @@ struct AddProcedureButton: View {
     @Binding var isEditing : Bool
     var body: some View {
         NavigationLink {
-            ProcedureView(title: "New procedure", buttonText: "Add", isEditing: $isEditing)
+            ProcedureView(title: "new-procedure-string".localized, buttonText: "add-string".localized, isEditing: $isEditing)
         } label: {
             BarButtonView(image: "plus", scale: 0.35)
         }
@@ -178,12 +178,23 @@ struct ProcedureRow: View {
         
         NavigationLink {
             if isEditing {
-                ProcedureView(title: "Editing procedure", buttonText: "Save changes", procedure: procedure, isEditing: $isEditing)
+                ProcedureView(
+                    title: "editing-procedure-string",
+                    buttonText: "save-changes-string",
+                    procedure: procedure,
+                    isEditing: $isEditing
+                )
             } else {
                 if vm.user?.isDoctor == true {
-                    ChooseClientView(procedure: procedure, selectedTab: $selectedTab)
+                    ChooseClientView(
+                        procedure: procedure,
+                        selectedTab: $selectedTab
+                    )
                 } else {
-                    ChooseDoctorView(procedure: procedure, selectedTab: $selectedTab)
+                    ChooseDoctorView(
+                        procedure: procedure,
+                        selectedTab: $selectedTab
+                    )
                 }
             }
         } label: {
@@ -191,7 +202,7 @@ struct ProcedureRow: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(procedure.name)
                         .font(Mariupol.medium, 20)
-                    Text("\(procedure.duration) min")
+                    Text("\(procedure.duration) \("min-string".localized)")
                         .font(Mariupol.regular, 14)
                 }
                 .padding(.vertical, 7)

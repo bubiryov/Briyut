@@ -20,7 +20,7 @@ struct RegistrationView: View {
             VStack(spacing: 20) {
                 
                 BarTitle<BackButton, Text>(
-                    text: "New account",
+                    text: "new-account-string",
                     leftButton: BackButton(presentationMode: _presentationMode)
                 )
                 
@@ -28,21 +28,21 @@ struct RegistrationView: View {
                     field: $vm.email,
                     isSecureField: false,
                     title: "rubinko@gmail.com",
-                    header: "Your email address"
+                    header: "your-email-string"
                 )
                 
                 AuthInputField(
                     field: $vm.password,
                     isSecureField: true,
-                    title: "min. 6 characters",
-                    header: "Choose your password"
+                    title: "min-6-characters-string",
+                    header: "your-password-string"
                 )
                 
                 AuthInputField(
                     field: $repeatPassword,
                     isSecureField: true,
-                    title: "min. 6 characters",
-                    header: "Repeat password"
+                    title: "min-6-characters-string",
+                    header: "repeat-password-string"
                 )
                 
                 Spacer()
@@ -62,7 +62,7 @@ struct RegistrationView: View {
                     }
                 } label: {
                     AccentButton(
-                        text: "Create an account",
+                        text: "create-account-string",
                         isButtonActive: vm.validate(email: vm.email, password: vm.password, repeatPassword: repeatPassword),
                         animation: loading
                     )

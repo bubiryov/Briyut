@@ -21,7 +21,7 @@ struct ChooseClientView: View {
         return vm.users
             .filter {!($0.isBlocked ?? false)}
             .filter { user in
-                searchText.isEmpty ? true : (user.name ?? "").localizedCaseInsensitiveContains(searchText) || (user.lastName ?? "").localizedCaseInsensitiveContains(searchText)
+                searchText.isEmpty ? true : ((user.name ?? "") + " " + (user.lastName ?? "")).localizedCaseInsensitiveContains(searchText)
             }
     }
     
@@ -33,13 +33,13 @@ struct ChooseClientView: View {
 
             VStack {
                 BarTitle<BackButton, SearchButton>(
-                    text: "Choose a client",
+                    text: "choose-client-string",
                     leftButton: BackButton(),
                     rightButton: SearchButton(showSearch: $showSearch)
                 )
                 
                 if showSearch {
-                    AccentInputField(promptText: "User's name", title: nil, input: $searchText)
+                    AccentInputField(promptText: "user-name-string", title: nil, input: $searchText)
                         .disableAutocorrection(true)
                         .overlay(content: {
                             HStack {
@@ -85,7 +85,7 @@ struct ChooseClientView: View {
                             DateTimeSelectionView(
                                 doctor: vm.user,
                                 procedure: procedure,
-                                mainButtonTitle: "Add appoinment",
+                                mainButtonTitle: "add-appointment-string",
                                 client: user,
                                 selectedTab: $selectedTab
                             )
@@ -124,7 +124,7 @@ struct ChooseClientView: View {
     }
 }
 
-struct ChooseClienView_Previews: PreviewProvider {
+struct ChooseClientView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             ChooseClientView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, parallelQuantity: 1, availableDoctors: []), selectedTab: .constant(.home))

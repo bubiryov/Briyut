@@ -69,7 +69,7 @@ struct StatsView: View {
                 LineChartCard(lineChartData: lineChartData)
                     .overlay {
                         if lineChartData.0.count < 2 || lineChartData.0.allSatisfy({ $0 == 0 }){
-                            Text("No data yet")
+                            Text("no-data-yet-string")
                                 .font(Mariupol.medium, 17)
                                 .foregroundColor(.secondary)
                         }
@@ -77,18 +77,18 @@ struct StatsView: View {
                 
                 VStack(spacing: 20) {
                     Toggle(isOn: $customPeriod.animation()) {
-                        Text("Custom period")
+                        Text("custom-period-string")
                             .font(Mariupol.medium, 17)
                     }
                     .tint(.mainColor)
                     .padding(.trailing, 5)
                     
                     if customPeriod {
-                        DatePicker("Start", selection: $startDate, displayedComponents: [.date])
+                        DatePicker("start-string", selection: $startDate, displayedComponents: [.date])
                             .datePickerStyle(CompactDatePickerStyle())
                             .tint(.mainColor)
                         
-                        DatePicker("End", selection: $endDate, displayedComponents: [.date])
+                        DatePicker("end-string", selection: $endDate, displayedComponents: [.date])
                             .datePickerStyle(CompactDatePickerStyle())
                             .tint(.mainColor)
                     }
@@ -227,9 +227,9 @@ struct PieChartCard: View {
         VStack(spacing: 5) {
             HStack {
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(purpose.rawValue)
+                    Text(purpose.rawValue.localized)
                         .font(Mariupol.bold, 22)
-                    Text(selectedMonth == currentMonth ? "This month" : DateFormatter.customFormatter(format: "MMMM").getMonthNameInNominativeCase(from: selectedDate))
+                    Text(selectedMonth == currentMonth ? "this-month-string".localized : DateFormatter.customFormatter(format: "MMMM").getMonthNameInNominativeCase(from: selectedDate))
                         .font(Mariupol.bold, 20)
                         .foregroundColor(.secondary)
                 }
@@ -275,7 +275,7 @@ struct PieChartCard: View {
                             .foregroundColor(.staticMainColor)
                         
                         VStack(alignment: .leading) {
-                            Text("Done")
+                            Text("done-orders-string")
                                 .font(Mariupol.bold, 17)
                                 .foregroundColor(.secondary)
                             
@@ -295,7 +295,7 @@ struct PieChartCard: View {
                             .foregroundColor(.secondary)
                         
                         VStack(alignment: .leading) {
-                            Text("Future")
+                            Text("future-orders-string")
                                 .font(Mariupol.bold, 17)
                                 .foregroundColor(.secondary)
                             
@@ -304,8 +304,6 @@ struct PieChartCard: View {
                                 .font(.title3.bold())
                         }
                         .padding(.leading, 10)
-//                        .padding(.trailing, 5)
-                        
                     }
                 }
                 .padding(.vertical)

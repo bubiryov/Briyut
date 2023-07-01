@@ -80,8 +80,8 @@ struct DateTimeSelectionView: View {
                     }
                 }
                 .padding(.horizontal)
-                .alert("Sorry, this time has just been taken", isPresented: $showAlert) {
-                    Button("Got it", role: .cancel) { }
+                .alert("booked-time-alert-string", isPresented: $showAlert) {
+                    Button("got-it-string", role: .cancel) { }
                 }
                 .contentShape(Rectangle())
                 .gesture(
@@ -339,9 +339,74 @@ struct DateTimeSelectionView: View {
                 return true
             }
         }
+        
+        if !(vm.user?.isDoctor ?? false) {
+            guard checkCustomSchedule(orderDate: orderDate, endOfFutureOrder: endOfFutureOrder) == false else { return true }
+            guard checkVacation() == false else { return true }
+        }
 
         return false
     }
+    
+    func checkCustomSchedule(orderDate: Date, endOfFutureOrder: Date) -> Bool {
+        guard
+            let doctor = self.doctor,
+            doctor.customSchedule != nil,
+            let scheduleTimes = doctor.scheduleTimes,
+            let startOfDay = scheduleTimes.keys.first,
+            let endOfDay = scheduleTimes.values.first else {
+            return false
+        }
+
+        let fullStartDate = createFullDate(from: selectedDate, time: startOfDay) ?? Date()
+        let fullEndDate = createFullDate(from: selectedDate, time: endOfDay) ?? Date()
+
+        return !(orderDate >= fullStartDate && endOfFutureOrder <= fullEndDate)
+    }
+    
+    func checkVacation() -> Bool {
+        let calendar = Calendar.current
+
+        guard
+            let doctor = self.doctor,
+            doctor.vacation != nil,
+            let vacationDates = doctor.vacationDates,
+            let vacationEndDate = calendar.date(byAdding: .day, value: 1, to: vacationDates[1].dateValue()),
+            vacationDates.count == 2 else {
+            return false
+        }
+        
+        let vacationStartDate = vacationDates[0].dateValue()
+
+        return selectedDate >= vacationStartDate && selectedDate < vacationEndDate
+    }
+
+    
+//    func checkVacation() -> Bool {
+//
+//        guard
+//            let doctor = self.doctor,
+//            doctor.vacation != nil,
+//            let vacationDates = doctor.vacationDates else {
+//            return false
+//        }
+//
+//        guard selectedDate < vacationDates[0].dateValue() && selectedDate > vacationDates[1].dateValue() else { return true }
+//
+//        return false
+//    }
+    
+//    func checkCustomSchedule(orderDate: Date, endOfFutureOrder: Date) -> Bool {
+//        guard let doctor = self.doctor else { return false }
+//        guard doctor.customSchedule != nil else { return false }
+//        guard let scheduleTimes = doctor.scheduleTimes else { return false }
+//        guard let startOfDay = scheduleTimes.keys.first else { return false }
+//        guard let endOfDay = scheduleTimes.values.first else { return false }
+//
+//        guard orderDate >= createFullDate(from: selectedDate, time: startOfDay) ?? Date() && endOfFutureOrder <= createFullDate(from: selectedDate, time: endOfDay) ?? Date() else { return true }
+//
+//        return false
+//    }
 }
 
 struct DateTimeSelectionView_Previews: PreviewProvider {

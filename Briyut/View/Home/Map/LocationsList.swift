@@ -16,7 +16,7 @@ struct LocationsList: View {
         
         VStack {
             BarTitle<BackButton, AddLocationButton>(
-                text: "Addresses",
+                text: "addresses-string",
                 leftButton: BackButton(),
                 rightButton: AddLocationButton(vm: vm)
             )

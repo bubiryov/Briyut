@@ -49,13 +49,12 @@ struct DoneOrderView: View {
                     DoneAnimation()
                         .frame(width: 250, height: 200)
                     
-                    Text("Done")
+                    Text("done-string")
                         .font(Mariupol.bold, 30)
                         .foregroundColor(.staticMainColor)
                 }
             }
             .frame(minHeight: ScreenSize.height * 0.4, maxHeight: .infinity)
-//            ScreenSize.height * 0.6 --- maxHeight
             .frame(maxWidth: .infinity)
             .background(Color.secondaryColor)
             .cornerRadius(ScreenSize.width / 20)
@@ -63,40 +62,28 @@ struct DoneOrderView: View {
             VStack(spacing: ScreenSize.height * 0.02) {
                 let specialist = vm.doctors.first(where: { $0.userId == order.doctorId })
                 let client = vm.users.first(where: { $0.userId == order.clientId })
-                
-//                Spacer()
-                
+                                
                 DoneOrderViewRow(
-                    leftText: "Date",
+                    leftText: "date-string",
                     rightText: DateFormatter.customFormatter(format: "dd MMM yyyy").string(from: order.date.dateValue()))
-                
-//                Spacer()
-                
+                                
                 DoneOrderViewRow(
-                    leftText: "Time",
+                    leftText: "time-string",
                     rightText: DateFormatter.customFormatter(format: "HH:mm").string(from: order.date.dateValue()))
-                
-//                Spacer()
-                
+                                
                 DoneOrderViewRow(
-                    leftText: "Specialist",
-                    rightText: "\(specialist?.name ?? "Deleted specialist") \((specialist?.name != nil) ? specialist?.lastName ?? "" : "")")
-                
-//                Spacer()
+                    leftText: "specialist-string",
+                    rightText: "\(specialist?.name ?? "deleted-specialist-string".localized) \((specialist?.name != nil) ? specialist?.lastName ?? "" : "")")
                 
                 if vm.user?.isDoctor ?? false {
                     DoneOrderViewRow(
-                        leftText: "Client",
-                        rightText: "\(client?.name ?? "\(client?.userId ?? "Deleted client")") \((client?.name != nil) ? client?.lastName ?? "" : "")")
-                    
-//                    Spacer()
+                        leftText: "client-string",
+                        rightText: "\(client?.name ?? "\(client?.userId ?? "deleted-user-string".localized)") \((client?.name != nil) ? client?.lastName ?? "" : "")")
                 }
                 
                 DoneOrderViewRow(
-                    leftText: "Total",
+                    leftText: "total-string",
                     rightText: "₴ \(order.price)")
-                
-//                Spacer()
                 
             }
             .padding(20)
@@ -113,7 +100,7 @@ struct DoneOrderView: View {
                     }
                 }
             } label: {
-                AccentButton(text: withPhoto ? "Back" : "Back Home", isButtonActive: true)
+                AccentButton(text: withPhoto ? "back-string" : "back-home-string", isButtonActive: true)
             }
 //            .padding(.top, 10)
         }
@@ -147,7 +134,7 @@ fileprivate struct DoneOrderViewRow: View {
     
     var body: some View {
         HStack {
-            Text(leftText)
+            Text(leftText.localized)
                 .foregroundColor(.secondary)
                 .font(Mariupol.regular, 17)
             

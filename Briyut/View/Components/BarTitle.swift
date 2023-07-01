@@ -30,7 +30,7 @@ struct BarTitle<V1: View, V2: View>: View {
             }
             
             HStack {
-                Text(text)
+                Text(text.localized)
                     .font(Mariupol.bold, 22)
                     .onTapGesture {
                         if let action {

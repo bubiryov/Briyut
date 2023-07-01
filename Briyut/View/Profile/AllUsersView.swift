@@ -22,7 +22,11 @@ struct AllUsersView: View {
             Color.backgroundColor.edgesIgnoringSafeArea(.all)
             
             VStack {
-                BarTitle<BackButton, SearchButton>(text: "Users", leftButton: BackButton(), rightButton: SearchButton(showSearch: $showSearch))
+                BarTitle<BackButton, SearchButton>(
+                    text: "users-string",
+                    leftButton: BackButton(),
+                    rightButton: SearchButton(showSearch: $showSearch)
+                )
                 
                 if showSearch {
                     AccentInputField(promptText: "Arkadiy Rubin", title: nil, input: $searchable)
@@ -120,17 +124,17 @@ struct UserRow: View {
     
     var alertTitle: String {
         userStatus == .doctor ?
-        "Are you sure you want to delete the specialist?" :
-        (user.isBlocked ?? false ? "Are you sure you want to unblock the user?" : "Are you sure you want to block the user?")
+        "delete-specialist-alert-title-string".localized :
+        (user.isBlocked ?? false ? "unblock-user-alert-title-string".localized : "block-user-alert-title-string".localized)
     }
     
     var alertMessage: String {
         userStatus == .doctor ?
-        "This action will not be undone. All apppointments will be cancelled." :
-        (user.isBlocked ?? false ? "The user will again be able to create new appointments" : "The user will be blocked and his apppointments will be cancelled.")
+        "delete-specialist-alert-message-string".localized :
+        (user.isBlocked ?? false ? "unblock-user-alert-message-string".localized : "block-user-alert-message-string".localized)
     }
     var deleteButtonTitle: String {
-        userStatus == .doctor ? "Delete" : (user.isBlocked ?? false ? "Unblock" : "Block")
+        userStatus == .doctor ? "delete-string".localized : (user.isBlocked ?? false ? "unblock-string".localized : "block-string".localized)
     }
     
     var body: some View {
@@ -184,7 +188,7 @@ struct UserRow: View {
                         UIApplication.shared.open(url)
                         
                     } label: {
-                        Text("Call")
+                        Text("call-string")
                             .foregroundColor(.white)
                             .font(Mariupol.medium, 17)
                             .frame(height: ScreenSize.height * 0.05)
@@ -195,9 +199,7 @@ struct UserRow: View {
                     .buttonStyle(.plain)
                     .disabled(user.phoneNumber == nil && user.phoneNumber?.count ?? 0 < 8 ? true : false)
                 }
-//                .padding(.bottom)
                 .offset(y: -10)
-//                .padding(.top, 10)
                 .alert(isPresented: $deleteAlert) {
                     Alert(
                         title: Text(alertTitle),
@@ -211,7 +213,7 @@ struct UserRow: View {
                                 }
                             }
                         }),
-                        secondaryButton: .default(Text("Cancel"), action: { })
+                        secondaryButton: .default(Text("cancel-string"), action: { })
                     )
                 }
             }

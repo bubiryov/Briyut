@@ -32,7 +32,7 @@ struct AddArticleView: View {
             VStack {
                 
                 BarTitle<BackButton, ClipButton>(
-                    text: "New article",
+                    text: "new-article-string",
                     leftButton: BackButton(),
                     rightButton: ClipButton(
                         showActionSheet: $showActionSheet,
@@ -41,10 +41,10 @@ struct AddArticleView: View {
                     )
                 )
                 
-                ArticleInputField(promptText: "Title", type: .tittle, input: $tittle)
+                ArticleInputField(promptText: "title-string", type: .tittle, input: $tittle)
                     .lineLimit(2)
                 
-                ArticleInputField(promptText: "Write your text", type: .body, input: $textBody)
+                ArticleInputField(promptText: "write-your-text-string", type: .body, input: $textBody)
                 
                 Spacer()
                 
@@ -63,7 +63,7 @@ struct AddArticleView: View {
                         }
                     } label: {
                         AccentButton(
-                            text: "Publish",
+                            text: "publish-string",
                             isButtonActive: validateFields(),
                             animation: loading
                         )
@@ -74,7 +74,7 @@ struct AddArticleView: View {
             .padding(.bottom, 10)
             .confirmationDialog("Choose an action", isPresented: $showActionSheet) {
                 
-                Button("Choose new photo") {
+                Button("choose-new-photo-string") {
                     showPhotosPicker = true
                 }
                 
@@ -82,7 +82,7 @@ struct AddArticleView: View {
                     Button(role: .destructive) {
                         selectedPhoto = nil
                     } label: {
-                        Text("Delete current photo")
+                        Text("delete-current-photo-string")
                     }
 
                 }
@@ -177,7 +177,7 @@ fileprivate struct ArticleInputField: View {
                     .font(Mariupol.medium, 17)
             }
             
-            TextField("", text: $input, prompt: Text(promptText), axis: .vertical)
+            TextField("", text: $input, prompt: Text(promptText.localized), axis: .vertical)
                 .font(type == .tittle ? Font.custom(Mariupol.bold.rawValue, size: 22) : Font.custom(Mariupol.medium.rawValue, size: 17) )
                 .padding()
                 .frame(maxWidth: .infinity)

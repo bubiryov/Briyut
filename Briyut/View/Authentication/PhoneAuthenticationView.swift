@@ -27,7 +27,7 @@ struct PhoneAuthenticationView: View {
     var body: some View {
         VStack {
             
-            BarTitle<BackButton, Text>(text: "Phone Sign In", leftButton: BackButton(presentationMode: _presentationMode))
+            BarTitle<BackButton, Text>(text: "phone-sign-in-string", leftButton: BackButton(presentationMode: _presentationMode))
             
             if sentSms {
                 Spacer()
@@ -61,13 +61,13 @@ struct PhoneAuthenticationView: View {
                         }
                     }
                 } label: {
-                    AccentButton(text: "Done", isButtonActive: code.count != 6 ? false : true)
+                    AccentButton(text: "done-string", isButtonActive: code.count != 6 ? false : true)
                 }
                 .disabled(loading)
                 
             } else {
                 
-                AuthInputField(field: $phoneNumber, isSecureField: false, title: "+380", header: "Your phone number")
+                AuthInputField(field: $phoneNumber, isSecureField: false, title: "+380", header: "your-phone-number-string")
                     .keyboardType(.numberPad)
                     .padding(.top)
                 
@@ -88,7 +88,7 @@ struct PhoneAuthenticationView: View {
                         }
                     }
                 } label: {
-                    AccentButton(text: "Send SMS", isButtonActive: activeButton, animation: loading)
+                    AccentButton(text: "send-sms-string", isButtonActive: activeButton, animation: loading)
                 }
                 .disabled(loading)
                 

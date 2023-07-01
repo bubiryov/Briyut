@@ -17,7 +17,10 @@ struct ChooseDoctorView: View {
     
     var body: some View {
         VStack {
-            BarTitle<BackButton, Text>(text: "Choose a doctor", leftButton: BackButton())
+            BarTitle<BackButton, Text>(
+                text: "choose-doctor-string",
+                leftButton: BackButton()
+            )
             
             ScrollView {
                                 
@@ -26,7 +29,13 @@ struct ChooseDoctorView: View {
                     if let doctor = vm.doctors.first(where: { $0.userId == doctorId }) {
                         
                         NavigationLink {
-                            DateTimeSelectionView(doctor: doctor, procedure: procedure, mainButtonTitle: "Add appoinment", client: vm.user, selectedTab: $selectedTab)
+                            DateTimeSelectionView(
+                                doctor: doctor,
+                                procedure: procedure,
+                                mainButtonTitle: "add-appointment-string",
+                                client: vm.user,
+                                selectedTab: $selectedTab
+                            )
                         } label: {
                             UserRow(
                                 vm: vm,
@@ -35,30 +44,6 @@ struct ChooseDoctorView: View {
                                 userStatus: .doctor
                             )
                         }
-
-                        
-//                        NavigationLink {
-//
-//                            DateTimeSelectionView(doctor: doctor, procedure: procedure, mainButtonTitle: "Add appoinment", client: vm.user, selectedTab: $selectedTab)
-//
-//                        } label: {
-//
-//                            HStack {
-//                                ProfileImage(photoURL: doctor.photoUrl, frame: ScreenSize.height * 0.06, color: .lightBlueColor)
-//                                    .cornerRadius(cornerRadius)
-//
-//                                Text("\(doctor.name ?? doctor.userId) \(doctor.lastName ?? "")")
-//                                    .foregroundColor(.primary)
-//                                    .bold()
-//                                    .padding(.leading, 8)
-//                                    .lineLimit(1)
-//                            }
-//                            .padding(.horizontal)
-//                            .frame(maxWidth: .infinity, alignment: .leading)
-//                            .frame(height: ScreenSize.height * 0.1)
-//                            .background(Color.secondaryColor)
-//                            .cornerRadius(cornerRadius)
-//                        }
                     }
                 }
             }

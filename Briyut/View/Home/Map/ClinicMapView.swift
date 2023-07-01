@@ -36,7 +36,7 @@ struct ClinicMapView: View {
                         }
                     } label: {
                         AccentButton(
-                            text: vm.mapLocation == nil ? "Navigate" : vm.mapLocation?.address ?? "Navigate",
+                            text: vm.mapLocation == nil ? "navigate-string" : vm.mapLocation?.address ?? "navigate-string",
                             isButtonActive: vm.mapLocation == nil ? false : true
                         )
                         .shadow(radius: 10, y: 5)

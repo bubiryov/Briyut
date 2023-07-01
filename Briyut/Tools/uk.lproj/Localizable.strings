@@ -1,0 +1,154 @@
+"your-email-string" = "Your email address";
+"your-password-string" = "Your password";
+"min-6-characters-string" = "min. 6 characters";
+"login-to-Rubinko-string" = "Login to Rubinko";
+"or-string" = "or";
+"google-sign-in-string" = "Sign in with Google";
+"sign-in-with-number-string" = "Sign in with number";
+"create-account-string" = "Create an account";
+"phone-sign-in-string" = "Phone Sign In";
+"reset-password-string" = "Reset password";
+"new-account-string" = "New account";
+"repeat-password-string" = "Repeat password";
+"your-phone-number-string" = "Your phone number";
+"send-sms-string" = "Send SMS";
+"done-string" = "Done";
+
+"find-your-procedure-string" = "Find your procedure";
+"search-string" = "Search";
+"appointments-string" = "Appointments";
+"no-any-appointments-string" = "You don't have any appointments yet";
+"see-all-string" = "See all";
+"articles-string" = "Articles";
+"no-articles-string" = "No current articles";
+
+"new-article-string" = "New article";
+"title-string" = "Title";
+"write-your-text-string" = "Write your text";
+"publish-string" = "Publish";
+"choose-new-photo-string" = "Choose new photo";
+"delete-current-photo-string" = "Delete current photo";
+"delete-article-alert-title-string" = "Are you sure you want to delete the article?";
+
+"addresses-string" = "Addresses";
+"new-address-string" = "New address";
+"city-string" = "City";
+"street-string" = "Street";
+"building-string" = "Building";
+"coordinates-string" = "Coordinates";
+"add-string" = "Add";
+"edit-address-string" = "Edit address";
+"navigate-string" = "Navigate";
+"delete-address-alert-title-string" = "Are you sure you want to delete this address?";
+
+"procedures-string" = "Procedures";
+"editing-procedure-string" = "Procedure editing";
+"new-procedure-string" = "New procedure";
+"procedure-name-string" = "Procedure name";
+"massage-string" = "Massage";
+"duration-string" = "Duration (minutes)";
+"count-of-parallel-string" = "Count of parallel procedures";
+"price-string" = "Price";
+"choose-available-specialists-string" = "Choose available specialists";
+"specialists-string" = "Specialists";
+"save-changes-string" = "Save changes";
+"min-string" = "min";
+"choose-client-string" = "Choose a client";
+"choose-doctor-string" = "Choose a specialist";
+"user-name-string" = "User's name";
+"yesterday-string" = "Yesterday";
+"today-string" = "Today";
+"tommorow-string" = "Tomorrow";
+"add-appointment-string" = "Add appointment";
+"all-procedures-message-string" = "To create an appointment, you should provide a name and phone number";
+"edit-procedure-string" = "Edit procedure";
+"delete-procedure-alert-title-string" = "Are you sure you want to delete the procedure?";
+"delete-procedure-alert-message-string" = "This action will not be undone and all scheduled sessions will be canceled";
+"booked-time-alert-string" = "Sorry, this time has just been taken";
+"got-it-string" = "Got it";
+
+"done-string" = "Done";
+"date-string" = "Date";
+"time-string" = "Time";
+"specialist-string" = "Specialist";
+"client-string" = "Client";
+"total-string" = "Total";
+"back-home-string" = "Back home";
+
+"upcoming-string" = "Upcoming";
+"past-string" = "Past";
+
+"no-appointments-on-this-day-string" = "No appointments on this day";
+"cancel-string" = "Cancel";
+"reschedule-string" = "Reschedule";
+"edit-appointment-string" = "Edit an appointment";
+"cancel-appointment-alert-string" = "Are you sure you want to remove this appointment?";
+"remove-string" = "Remove";
+
+"user-managment-string" = "User managment";
+"stats-string" = "Stats";
+"history-string" = "History";
+"change-password-string" = "Change password";
+"copy-id-string" = "Copy ID";
+"id-is-copied-string" = "UserID has been copied";
+"log-out-alert-string" = "Are you sure you want to log out?";
+"log-out-string" = "Log out";
+
+"edit-string" = "Edit";
+"profile-editing-string" = "Profile editing";
+"name-string" = "Name";
+"last-name-string" = "Last name";
+"phone-number-string" = "Phone number";
+"custom-schedule-string" = "Custom schedule";
+"vacation-string" = "Vacation";
+"start-string" = "Start";
+"end-string" = "End";
+"save-string" = "Save";
+
+"delete-account-alert-title-string" = "Are you sure you want to delete your account?";
+"delete-account-alert-message-string" = "All your data will be permanently deleted";
+"yes-i'm-sure-string" = "Yes, i am sure";
+"user-id-string" = "UserID";
+"delete-string" = "Delete";
+"call-string" = "Call";
+"delete-specialist-alert-title-string" = "Are you sure you want to delete the specialist?";
+"delete-specialist-alert-message-string" = "This action will not be undone. All appointments will be canceled.";
+"add-specialist-string" = "Add a specialist";
+
+"users-string" = "Users";
+"block-string" = "Block";
+"unblock-string" = "Unblock";
+"block-user-alert-title-string" = "Are you sure you want to block the user?";
+"block-user-alert-message-string" = "The user will be blocked and his appointments will be canceled.";
+"unblock-user-alert-title-string" = "Are you sure you want to unblock the user?";
+"unblock-user-alert-message-string" = "The user will again be able to create new appointments";
+
+"all-specialists-string" = "All specialists";
+"this-month-string" = "This month";
+"done-orders-string" = "Done";
+"future-orders-string" = "Future";
+"earnings-string" = "Earnings";
+"no-data-yet-string" = "No data yet";
+"custom-period-string" = "Custom period";
+
+"add-past-appointment-string" = "Add past appointment";
+"user-string" = "User";
+"procedure-string" = "Procedure";
+"back-string" = "Back";
+
+"current-password-string" = "Current password";
+"new-password-string" = "New password";
+
+"deleted-procedure-string" = "Deleted procedure";
+"blocked-user-string" = "Blocked user";
+"deleted-user-string" = "Deleted user";
+"deleted-specialist-string" = "Deleted specialist";
+"anonymous-string" = "Anonymous user";
+
+"remove-appointment-alert-title-string" = "Are you sure you want to remove this appointment?";
+
+
+
+
+
+

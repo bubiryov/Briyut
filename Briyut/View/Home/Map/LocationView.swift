@@ -22,7 +22,7 @@ struct LocationView: View {
     var body: some View {
         VStack {
             BarTitle<BackButton, DeleteButton>(
-                text: location != nil ? "Edit address" : "New address",
+                text: location != nil ? "edit-address-string" : "new-address-string",
                 leftButton: BackButton(),
                 rightButton: location != nil ? DeleteButton(showAlert: $showAlert) : nil
             )
@@ -33,26 +33,26 @@ struct LocationView: View {
                     
                     AccentInputField(
                         promptText: "Харків",
-                        title: "City",
+                        title: "city-string",
                         spaceAllow: false,
                         input: $city
                     )
                     
                     AccentInputField(
                         promptText: "Сумська",
-                        title: "Street",
+                        title: "street-string",
                         input: $street
                     )
                     
                     AccentInputField(
                         promptText: "17-А",
-                        title: "Building",
+                        title: "building-string",
                         input: $buildingNumber
                     )
                     
                     AccentInputField(
                         promptText: "49.991236239813, 36.225463473776614",
-                        title: "Coordinates",
+                        title: "coordinates-string",
                         input: $coordinates
                     )
                 }
@@ -85,7 +85,7 @@ struct LocationView: View {
                 }
             } label: {
                 AccentButton(
-                    text: location != nil ? "Edit" : "Add",
+                    text: location != nil ? "edit-string" : "add-string",
                     isButtonActive: validateFields(),
                     animation: loading
                 )
@@ -122,14 +122,14 @@ struct LocationView: View {
         .ignoresSafeArea(.keyboard)
         .alert(isPresented: $showAlert) {
             Alert(
-                title: Text("Are you sure you want to delete this address?"),
-                primaryButton: .destructive(Text("Delete"), action: {
+                title: Text("delete-address-alert-title-string"),
+                primaryButton: .destructive(Text("delete-string"), action: {
                     Task {
                         try await vm.removeLocation(locationId: location!.id)
                         presentationMode.wrappedValue.dismiss()
                     }
                 }),
-                secondaryButton: .default(Text("Cancel"), action: { })
+                secondaryButton: .default(Text("cancel-string"), action: { })
             )
         }
     }

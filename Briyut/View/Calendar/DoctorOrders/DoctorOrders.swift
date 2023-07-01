@@ -52,7 +52,7 @@ struct DoctorOrders: View {
                 .scrollIndicators(.hidden)
             } else {
                 Spacer()
-                Text(selectedDate < Date() ? "There were no appointments on this day" : "You don't have any appointments yet")
+                Text(selectedDate < Date() ? "no-appointments-on-this-day-string" : "no-any-appointments-string")
                     .foregroundColor(.secondary)
                 Spacer()
             }
@@ -121,7 +121,7 @@ struct DoctorMenuPicker: View {
             ForEach(doctors, id: \.self) { doctorOption in
                 switch doctorOption {
                 case .allDoctors:
-                    Button("Все специалисты") {
+                    Button("all-specialists-string") {
                         selectedDoctor = nil
                     }
                 case .user(let doctor):

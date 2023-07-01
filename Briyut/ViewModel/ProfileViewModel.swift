@@ -107,8 +107,8 @@ final class ProfileViewModel: ObservableObject {
         self.doctors = try await UserManager.shared.getAllDoctors()
     }
     
-    func editProfile(userID: String, name: String?, lastName: String?, phoneNumber: String?, photoURL: String?) async throws {
-        return try await UserManager.shared.editProfile(userID: userID, name: name, lastName: lastName, phoneNumber: phoneNumber, photoURL: photoURL)
+    func editProfile(userID: String, name: String?, lastName: String?, phoneNumber: String?, photoURL: String?, customSchedule: Bool?, scheduleTimes: [String: String]?, vacation: Bool?, vacationDates: [Timestamp]?) async throws {
+        return try await UserManager.shared.editProfile(userID: userID, name: name, lastName: lastName, phoneNumber: phoneNumber, photoURL: photoURL, customSchedule: customSchedule, scheduleTimes: scheduleTimes, vacation: vacation, vacationDates: vacationDates)
     }
     
     func savePhoto(item: PhotosPickerItem, childStorage: String) async throws -> String {

@@ -20,15 +20,13 @@ struct AuthInputField: View {
     var body: some View {
         VStack(alignment: .leading) {
             if let header {
-                Text(header)
+                Text(header.localized)
                     .font(Mariupol.medium, 17)
-//                    .font(.subheadline.bold())
             }
             if isSecureField {
                 if showEye {
-                    TextField(title, text: $field)
+                    TextField(title.localized, text: $field)
                         .font(Mariupol.medium, 17)
-//                        .bold()
                         .padding()
                         .frame(height: heightFrame)
                         .textInputAutocapitalization(.never)
@@ -48,9 +46,8 @@ struct AuthInputField: View {
                                 .strokeBorder(Color.secondary, lineWidth: 1)
                         )
                 } else {
-                    SecureField(title, text: $field)
+                    SecureField(title.localized, text: $field)
                         .font(Mariupol.medium, 17)
-//                        .bold()
                         .padding()
                         .frame(height: heightFrame)
                         .textInputAutocapitalization(.never)
@@ -71,7 +68,7 @@ struct AuthInputField: View {
                         )
                 }
             } else {
-                TextField(title, text: $field)
+                TextField(title.localized, text: $field)
                     .bold()
                     .padding()
                     .frame(height: heightFrame)

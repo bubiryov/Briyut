@@ -61,7 +61,6 @@ extension AuthenticationViewModel {
         return true
     }
 
-    
 //    func validate(email: String, password: String?, repeatPassword: String?) -> Bool {
 //
 //        let emailRegex = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$"
@@ -109,7 +108,7 @@ extension AuthenticationViewModel {
     func createUserWithEmail() async throws {
         do {
             let authDataResult = try await AuthenticationManager.shared.createUser(email: email, password: password)
-            let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil, isBlocked: false)
+            let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil, isBlocked: false, customSchedule: nil, scheduleTimes: nil, vacation: nil, vacationDates: nil)
             try await UserManager.shared.createNewUser(user: user)
             email = ""
             password = ""
@@ -180,7 +179,7 @@ extension AuthenticationViewModel {
                 do {
                     try await UserManager.shared.getUser(userId: authDataResult.uid)
                 } catch {
-                    let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: phoneNumber, isBlocked: false)
+                    let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: phoneNumber, isBlocked: false, customSchedule: nil, scheduleTimes: nil, vacation: nil, vacationDates: nil)
                     try await UserManager.shared.createNewUser(user: user)
                     errorText = nil
                 }
@@ -210,7 +209,7 @@ extension AuthenticationViewModel {
         do {
             try await UserManager.shared.getUser(userId: authDataResult.uid)
         } catch {
-            let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil, isBlocked: false)
+            let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil, isBlocked: false, customSchedule: nil, scheduleTimes: nil, vacation: nil, vacationDates: nil)
             try await UserManager.shared.createNewUser(user: user)
         }
     }
@@ -224,7 +223,7 @@ extension AuthenticationViewModel {
         let appleManager = AppleAuthenticationManager()
         let tokens = try await appleManager.startSignInWithAppleFlow()
         let authDataResult = try await AuthenticationManager.shared.signInWithApple(tokens: tokens)
-        let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil, isBlocked: false)
+        let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil, isBlocked: false, customSchedule: nil, scheduleTimes: nil, vacation: nil, vacationDates: nil)
         try await UserManager.shared.createNewUser(user: user)
     }
 }

@@ -8,6 +8,8 @@
 import SwiftUI
 import PhotosUI
 import UIKit
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 struct EditProfileView: View {
     
@@ -23,8 +25,11 @@ struct EditProfileView: View {
     @State private var showActionSheet: Bool = false
     @State private var showPhotosPicker: Bool = false
     @State private var customSchedule: Bool = false
-    @State private var workStartTime: Date? = nil
-    @State private var workEndTime: Date? = nil
+    @State private var workStartTime: Date = Date()
+    @State private var workEndTime: Date = Date()
+    @State private var vacation: Bool = false
+    @State private var startVacation: Date = Date()
+    @State private var endVacation: Date = Date()
     @State private var loading: Bool = false
     
     var body: some View {
@@ -36,77 +41,143 @@ struct EditProfileView: View {
                 
                 VStack {
                     BarTitle<BackButton, DeleteButton>(
-                        text: "Edit",
+                        text: "profile-editing-string",
                         leftButton: BackButton(),
                         rightButton: DeleteButton(showAlert: $showAlert)
                     )
                     .padding(.bottom)
                     
                     VStack {
-                        
-                        Button {
-                            showActionSheet = true
-                        } label: {
-                            VStack {
-                                if selectedPhoto == nil {
-                                    ProfileImage(
-                                        photoURL: vm.user?.photoUrl,
-                                        frame: ScreenSize.height * 0.12,
-                                        color: Color.secondary.opacity(0.1),
-                                        padding: 16
-                                    )
-                                } else {
-                                    if let data = data, let image = UIImage(data: data) {
-                                        Image(uiImage: image)
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: ScreenSize.height * 0.12, height: ScreenSize.height * 0.12, alignment: .center)
-                                            .clipped()
+                        ScrollView {
+                            
+                            Button {
+                                showActionSheet = true
+                            } label: {
+                                VStack {
+                                    if selectedPhoto == nil {
+                                        ProfileImage(
+                                            photoURL: vm.user?.photoUrl,
+                                            frame: ScreenSize.height * 0.12,
+                                            color: Color.secondary.opacity(0.1),
+                                            padding: 16
+                                        )
+                                    } else {
+                                        if let data = data, let image = UIImage(data: data) {
+                                            Image(uiImage: image)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(width: ScreenSize.height * 0.12, height: ScreenSize.height * 0.12, alignment: .center)
+                                                .clipped()
+                                        }
                                     }
                                 }
                             }
-                        }
-                        .frame(height: ScreenSize.height * 0.12)
-                        .cornerRadius(ScreenSize.width / 20)
-                        .onChange(of: selectedPhoto) { _ in
-                            guard let item = selectedPhoto else { return }
-                            Task {
-                                guard let data = try await item.loadTransferable(type: Data.self) else { return }
-                                self.data = data
+                            .frame(height: ScreenSize.height * 0.12)
+                            .cornerRadius(ScreenSize.width / 20)
+                            .onChange(of: selectedPhoto) { _ in
+                                guard let item = selectedPhoto else { return }
+                                Task {
+                                    guard let data = try await item.loadTransferable(type: Data.self) else { return }
+                                    self.data = data
+                                }
                             }
-                        }
-
-                        ScrollView {
+                            
                             VStack(spacing: ScreenSize.height * 0.02) {
                                 AccentInputField(
                                     promptText: "Maria",
-                                    title: "Name",
+                                    title: "name-string",
                                     spaceAllow: false,
                                     input: $name
                                 )
                                 
                                 AccentInputField(
                                     promptText: "Shevchenko",
-                                    title: "Last name",
+                                    title: "last-name-string",
                                     spaceAllow: false,
                                     input: $lastName
                                 )
                                 
                                 if !vm.authProviders.contains(.phone) {
-                                    AccentInputField(promptText: "+38 (099)-999-99-99", title: "Phone number", input: $phoneNumber)
+                                    AccentInputField(promptText: "+38 (099)-999-99-99", title: "phone-number-string", input: $phoneNumber)
                                         .keyboardType(.phonePad)
                                 }
                             }
-                            
-                            Toggle(isOn: $customSchedule.animation()) {
-                                Text("Custom period")
-                                    .font(Mariupol.medium, 17)
+                            if vm.user?.isDoctor ?? false {
+                                VStack(spacing: 20) {
+                                    
+                                    Toggle(isOn: $customSchedule.animation()) {
+                                        Text("custom-schedule-string")
+                                            .font(Mariupol.medium, 17)
+                                    }
+                                    .tint(.mainColor)
+                                    .padding(.trailing, 5)
+                                    
+                                    if customSchedule {
+                                        DatePicker(selection: $workStartTime, displayedComponents: [.hourAndMinute]) {
+                                            Text("start-string")
+                                                .font(Mariupol.regular, 17)
+                                        }
+                                        .datePickerStyle(CompactDatePickerStyle())
+                                        .environment(\.locale, Locale(identifier: "en_GB"))
+                                        .tint(.mainColor)
+                                        .onChange(of: workStartTime) { newTime in
+                                            workStartTime = roundDateToNearestInterval(date: newTime)
+                                        }
+                                        
+                                        DatePicker(selection: $workEndTime, displayedComponents: [.hourAndMinute]) {
+                                            Text("end-string")
+                                                .font(Mariupol.regular, 17)
+                                        }
+                                        .datePickerStyle(CompactDatePickerStyle())
+                                        .environment(\.locale, Locale(identifier: "en_GB"))
+                                        .tint(.mainColor)
+                                        .onChange(of: workEndTime) { newTime in
+                                            workEndTime = roundDateToNearestInterval(date: newTime)
+                                        }
+                                        
+                                    }
+                                }
+                                .padding(.top)
+                                
+                                VStack(spacing: 20) {
+                                    
+                                    Toggle(isOn: $vacation.animation()) {
+                                        Text("vacation-string")
+                                            .font(Mariupol.medium, 17)
+                                    }
+                                    .tint(.mainColor)
+                                    .padding(.trailing, 5)
+                                    
+                                    if vacation {
+                                        DatePicker(
+                                            selection: $startVacation,
+                                            in: Date()...,
+                                            displayedComponents: [.date]
+                                        ) {
+                                            Text("start-string")
+                                                .font(Mariupol.regular, 17)
+                                        }
+                                        .datePickerStyle(CompactDatePickerStyle())
+                                        .environment(\.locale, Locale(identifier: "en_GB"))
+                                        .tint(.mainColor)
+                                        
+                                        DatePicker(
+                                            selection: $endVacation,
+                                            in: startVacation == Date() ? Date()... : startVacation...,
+                                            displayedComponents: [.date]
+                                        ) {
+                                            Text("end-string")
+                                                .font(Mariupol.regular, 17)
+                                        }
+                                        .datePickerStyle(CompactDatePickerStyle())
+                                        .environment(\.locale, Locale(identifier: "en_GB"))
+                                        .tint(.mainColor)
+                                    }
+                                }
+                                .padding(.vertical)
                             }
-                            .tint(.mainColor)
-                            .padding(.trailing, 5)
-                            .padding(.top)
-
                         }
+                        .scrollIndicators(.hidden)
                         
                         Button {
                             Haptics.shared.play(.light)
@@ -121,18 +192,22 @@ struct EditProfileView: View {
                                 }
                             }
                         } label: {
-                            AccentButton(text: "Save", isButtonActive: true, animation: loading)
+                            AccentButton(
+                                text: "save-string",
+                                isButtonActive: true,
+                                animation: loading
+                            )
                         }
                         .disabled(loading)
                     }
                     .ignoresSafeArea(.keyboard)
                     .confirmationDialog("Choose action", isPresented: $showActionSheet) {
-                        Button("Choose new photo") {
+                        Button("choose-new-photo-string") {
                             showPhotosPicker = true
                         }
                         
-                        if let url = vm.user?.photoUrl {
-                            Button("Delete current photo", role: .destructive) {
+                        if let url = vm.user?.photoUrl, url != "" {
+                            Button("delete-current-photo-string", role: .destructive) {
                                 guard let user = vm.user else { return }
                                 Task {
                                     try await vm.deletePreviousPhoto(url: url)
@@ -141,7 +216,18 @@ struct EditProfileView: View {
                                         name: name != "" ? name : nil,
                                         lastName: lastName != "" ? lastName : nil,
                                         phoneNumber: phoneNumber.count > 5 ? phoneNumber : nil,
-                                        photoURL: nil)
+                                        photoURL: nil,
+                                        customSchedule: customSchedule,
+                                        scheduleTimes: customSchedule ? [
+                                            DateFormatter.customFormatter(format: "HH:mm").string(from: workStartTime) :
+                                                DateFormatter.customFormatter(format: "HH:mm").string(from: workEndTime)
+                                        ] : nil,
+                                        vacation: vacation,
+                                        vacationDates: vacation ? [
+                                            Timestamp(date: startVacation),
+                                                Timestamp(date: endVacation)
+                                        ] : nil
+                                    )
                                     try await vm.loadCurrentUser()
                                     presentationMode.wrappedValue.dismiss()
                                 }
@@ -157,17 +243,26 @@ struct EditProfileView: View {
                 .padding(.bottom, 20)
                 .navigationBarBackButtonHidden(true)
                 .onAppear {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "HH:mm"
+                    
                     if let user = vm.user {
                         name = user.name ?? ""
                         lastName = user.lastName ?? ""
                         phoneNumber = user.phoneNumber ?? ""
+                        customSchedule = user.customSchedule ?? false
+                        workStartTime = dateFormatter.date(from: user.scheduleTimes?.keys.first ?? "08:00") ?? Date()
+                        workEndTime = dateFormatter.date(from: user.scheduleTimes?.values.first ?? "21:00") ?? Date()
+                        vacation = user.vacation ?? false
+                        startVacation = user.vacationDates?[0].dateValue() ?? Date()
+                        endVacation = user.vacationDates?[1].dateValue() ?? Date()
                     }
                 }
                 .alert(isPresented: $showAlert) {
                     Alert(
-                        title: Text("Are you sure you want to delete your account?"),
-                        message: Text("All your data will be permanently deleted"),
-                        primaryButton: .destructive(Text("Yes, I am sure"), action: {
+                        title: Text("delete-account-alert-title-string"),
+                        message: Text("delete-account-alert-message-string"),
+                        primaryButton: .destructive(Text("yes-i'm-sure-string"), action: {
                             Task {
                                 do {
                                     try await vm.deleteAccount()
@@ -177,7 +272,7 @@ struct EditProfileView: View {
                                 }
                             }
                         }),
-                        secondaryButton: .default(Text("Cancel"), action: { })
+                        secondaryButton: .default(Text("cancel-string"), action: { })
                     )
                 }
                 .contentShape(Rectangle())
@@ -207,16 +302,54 @@ struct EditProfileView: View {
             let path = try await vm.savePhoto(item: selectedPhoto, childStorage: "users")
             url = try await vm.getUrlForImage(path: path)
         }
+        let scheduleTimes: [String : String]? = {
+            if customSchedule {
+                return [
+                    DateFormatter.customFormatter(format: "HH:mm").string(from: workStartTime) :
+                        DateFormatter.customFormatter(format: "HH:mm").string(from: workEndTime)
+                ]
+            } else {
+                return nil
+            }
+        }()
+        
+        let vacationDates: [Timestamp]? = {
+            if vacation {
+                return [Timestamp(date: startVacation), Timestamp(date: endVacation)]
+            } else {
+                return nil
+            }
+        }()
+        
         try await vm.editProfile(
             userID: user.userId,
             name: name != "" ? name : nil,
             lastName: lastName != "" ? lastName : nil,
             phoneNumber: phoneNumber.count > 5 ? phoneNumber : nil,
-            photoURL: url
+            photoURL: url,
+            customSchedule: customSchedule,
+            scheduleTimes: scheduleTimes,
+            vacation: vacation,
+            vacationDates: vacationDates
         )
         try await vm.loadCurrentUser()
         presentationMode.wrappedValue.dismiss()
     }
+    
+    private func roundDateToNearestInterval(date: Date) -> Date {
+        let interval: TimeInterval = 15 * 60
+        let timeInterval = date.timeIntervalSinceReferenceDate
+        let roundedInterval = (timeInterval / interval).rounded() * interval
+
+        let roundedDate = Date(timeIntervalSinceReferenceDate: roundedInterval)
+
+        if roundedDate > Date() {
+            return roundedDate.addingTimeInterval(-interval)
+        }
+
+        return roundedDate
+    }
+
 }
 
 struct EditProfileView_Previews: PreviewProvider {

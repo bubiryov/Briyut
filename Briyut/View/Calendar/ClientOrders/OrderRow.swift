@@ -41,7 +41,7 @@ struct OrderRow: View {
                 
                 VStack(alignment: .leading) {
                     
-                    Text(procedure?.name ?? "Deleted procedure")
+                    Text(procedure?.name ?? "deleted-procedure-string".localized)
                         .font(Mariupol.medium, 20)
                         .lineLimit(1)
                         .foregroundColor(fontColor != nil ? fontColor : .primary)
@@ -49,11 +49,11 @@ struct OrderRow: View {
                     Spacer()
                                         
                     if userInformation == .client {
-                        Text("\(user?.name ?? "\(user?.userId ?? "Deleted user")") \(((user?.name) != nil) ? user?.lastName ?? "" : "")")
+                        Text("\(user?.name ?? "\(user?.userId ?? "deleted-user-string".localized)") \(((user?.name) != nil) ? user?.lastName ?? "" : "")")
                             .font(Mariupol.regular, 14)
                             .foregroundColor(fontColor != nil ? fontColor : .secondary)
                     } else {
-                        Text("\(doc?.name ?? "\(doc?.userId ?? "Deleted specialist")") \(doc?.lastName ?? "")")
+                        Text("\(doc?.name ?? "\(doc?.userId ?? "deleted-specialist-string".localized)") \(doc?.lastName ?? "")")
                             .font(Mariupol.regular, 14)
                             .foregroundColor(fontColor != nil ? fontColor : .secondary)
                     }
@@ -82,7 +82,7 @@ struct OrderRow: View {
                             showAlert = true
                         }
                     } label: {
-                        Text("Cancel")
+                        Text("cancel-string")
                             .foregroundColor(.black)
                             .font(Mariupol.medium, 17)
                             .frame(height: ScreenSize.height * 0.05)
@@ -97,7 +97,7 @@ struct OrderRow: View {
                     Button {
                         rescheduleFullCover.toggle()
                     } label: {
-                        Text("Reschedule")
+                        Text("reschedule-string")
                             .foregroundColor(.white)
                             .font(Mariupol.medium, 17)
                             .frame(height: ScreenSize.height * 0.05)
@@ -117,8 +117,8 @@ struct OrderRow: View {
         .cornerRadius(ScreenSize.width / 20)
         .alert(isPresented: $showAlert) {
             Alert(
-                title: Text("Are you sure you want to remove the appointment?"),
-                primaryButton: .destructive(Text("Remove"), action: {
+                title: Text("remove-appointment-alert-title-string"),
+                primaryButton: .destructive(Text("remove-string"), action: {
                     Task {
                         try await vm.removeOrder(orderId: order.orderId)
                         vm.activeLastDocument = nil
@@ -133,7 +133,7 @@ struct OrderRow: View {
         }
         .sheet(isPresented: $rescheduleFullCover) {
             let doctor = vm.doctors.first(where: { $0.userId == order.doctorId })
-            DateTimeSelectionView(doctor: doctor, order: order, mainButtonTitle: "Edit an appoinment", selectedTab: .constant(.calendar))
+            DateTimeSelectionView(doctor: doctor, order: order, mainButtonTitle: "edit-appointment-string", selectedTab: .constant(.calendar))
                 .padding(.top, topPadding())
                 .padding(.horizontal, 20)
                 .padding(.bottom, 20)
@@ -148,14 +148,7 @@ struct OrderRow: View {
         .fullScreenCover(isPresented: $showFullOrder) {
             DoneOrderView(order: order, withPhoto: true, selectedTab: .constant(.calendar))
         }
-    }
-    
-//    func orderDate() -> String {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "dd MMM yyyy, HH:mm"
-//        return dateFormatter.string(from: order.date.dateValue())
-//    }
-    
+    }    
 }
 
 struct OrderRow_Previews: PreviewProvider {

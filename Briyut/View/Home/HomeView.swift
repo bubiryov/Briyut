@@ -31,7 +31,7 @@ struct HomeView: View {
                     leftButton: MapButton(image: "pin", showMap: $showMap),
                     rightButton: ProfileButton(selectedTab: $selectedTab, photo: vm.user?.photoUrl ?? ""))
                 
-                Text("Find your procedure")
+                Text("find-your-procedure-string")
                     .font(Mariupol.bold, 30)
                     .lineLimit(1)
                             
@@ -45,7 +45,7 @@ struct HomeView: View {
                     HStack {
                         BarButtonView(image: "search", scale: 0.4, textColor: .primary, backgroundColor: .clear)
                         
-                        Text("Search")
+                        Text("search-string")
                             .foregroundColor(.secondary)
                             .font(Mariupol.medium, 17)
                         
@@ -60,7 +60,7 @@ struct HomeView: View {
                 VStack(alignment: .leading) {
                     
                     HStack(alignment: .center) {
-                        Text("Appointments")
+                        Text("appointments-string")
                             .font(Mariupol.medium, 22)
                         
                         Spacer()
@@ -70,7 +70,7 @@ struct HomeView: View {
                                 selectedTab = .calendar
                             }
                         } label: {
-                            Text("See all")
+                            Text("see-all-string")
                                 .font(Mariupol.medium, 17)
                                 .foregroundColor(.secondary.opacity(0.6))
                         }
@@ -105,7 +105,7 @@ struct HomeView: View {
                                 selectedTab = .plus
                             }
                         } label: {
-                            Text("You don't have any appointments yet")
+                            Text("no-any-appointments-string")
                                 .font(Mariupol.medium, 17)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .frame(height: ScreenSize.height * 0.14)
@@ -119,7 +119,7 @@ struct HomeView: View {
                 VStack(alignment: .leading) {
                     
                     HStack(alignment: .center) {
-                        Text("Articles")
+                        Text("articles-string")
                             .font(Mariupol.medium, 22)
                         
                         Spacer()
@@ -127,7 +127,7 @@ struct HomeView: View {
                         NavigationLink {
                             ArticlesList()
                         } label: {
-                            Text("See all")
+                            Text("see-all-string")
                                 .font(Mariupol.medium, 17)
                                 .foregroundColor(.secondary.opacity(0.6))
                         }
@@ -151,7 +151,7 @@ struct HomeView: View {
                         .padding(.bottom, articlesVM.articles.count > 1 ? 5 : 0)
                         
                     } else {
-                        Text("No current news")
+                        Text("no-articles-string")
                             .font(Mariupol.medium, 17)
                             .frame(maxWidth: .infinity, alignment: .center)
                             .frame(height: ScreenSize.height * 0.14)

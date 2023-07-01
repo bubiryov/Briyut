@@ -49,19 +49,27 @@ final class UserManager {
         try await userDocument(userId: userId).getDocument(as: DBUser.self)
     }
     
-    func editProfile(userID: String, name: String?, lastName: String?, phoneNumber: String?, photoURL: String?) async throws {
+    func editProfile(userID: String, name: String?, lastName: String?, phoneNumber: String?, photoURL: String?, customSchedule: Bool?, scheduleTimes: [String: String]?, vacation: Bool?, vacationDates: [Timestamp]?) async throws {
         let data: [String : Any] = [
             DBUser.CodingKeys.name.rawValue : name as Any,
             DBUser.CodingKeys.lastName.rawValue : lastName as Any,
             DBUser.CodingKeys.phoneNumber.rawValue : phoneNumber as Any,
-            DBUser.CodingKeys.photoUrl.rawValue : photoURL as Any
+            DBUser.CodingKeys.photoUrl.rawValue : photoURL as Any,
+            DBUser.CodingKeys.customSchedule.rawValue : customSchedule as Any,
+            DBUser.CodingKeys.scheduleTimes.rawValue : scheduleTimes as Any,
+            DBUser.CodingKeys.vacation.rawValue : vacation as Any,
+            DBUser.CodingKeys.vacationDates.rawValue : vacationDates as Any
         ]
         try await userDocument(userId: userID).updateData(data)
     }
     
     func updateDoctorStatus(userID: String, isDoctor: Bool) async throws {
         let data: [String : Any] = [
-            DBUser.CodingKeys.isDoctor.rawValue : isDoctor
+            DBUser.CodingKeys.isDoctor.rawValue : isDoctor,
+            DBUser.CodingKeys.customSchedule.rawValue : Optional<Any>.none!,
+            DBUser.CodingKeys.scheduleTimes.rawValue : Optional<Any>.none!,
+            DBUser.CodingKeys.vacation.rawValue : Optional<Any>.none!,
+            DBUser.CodingKeys.vacationDates.rawValue : Optional<Any>.none!,
         ]
         try await userDocument(userId: userID).updateData(data)
     }

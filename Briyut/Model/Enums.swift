@@ -58,8 +58,8 @@ enum DataFetchMode {
 }
 
 enum ChartCardPurpose: String {
-    case earnings = "Earnings"
-    case appointments = "Appointments"
+    case earnings = "earnings-string"
+    case appointments = "appointments-string"
 }
 
 enum IDType {

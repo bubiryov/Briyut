@@ -19,7 +19,7 @@ struct ArticlesList: View {
 
         VStack {
             BarTitle<BackButton, AddArticleButton>(
-                text: "Interesting",
+                text: "articles-string",
                 leftButton: BackButton(),
                 rightButton: vm.user?.isDoctor ?? false ? AddArticleButton() : nil
             )

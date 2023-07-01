@@ -35,7 +35,7 @@ struct ProfileView: View {
                 .cornerRadius(ScreenSize.width / 20)
                 
                 HStack {
-                    Text(vm.user?.name ?? (vm.user?.userId ?? "Blocked user"))
+                    Text(vm.user?.name ?? (vm.user?.userId ?? "blocked-user-string".localized))
                         .font(Mariupol.bold, 22)
                         .lineLimit(1)
                     
@@ -45,20 +45,20 @@ struct ProfileView: View {
                 }
                                                 
                 VStack {
-                    NavigationRow(destination: AllDoctorsView(), imageName: "stethoscope", title: "Specialists")
+                    NavigationRow(destination: AllDoctorsView(), imageName: "stethoscope", title: "specialists-string")
 
                     if vm.user?.isDoctor ?? false {
                         
-                        NavigationRow(destination: AllUsersView(), imageName: "users", title: "User managment")
+                        NavigationRow(destination: AllUsersView(), imageName: "users", title: "user-managment-string")
                                                 
-                        NavigationRow(destination: StatsView(), imageName: "stats", title: "Stats")
+                        NavigationRow(destination: StatsView(), imageName: "stats", title: "stats-string")
                                                 
-                        NavigationRow(destination: HistoryView(), imageName: "history", title: "History")
+                        NavigationRow(destination: HistoryView(), imageName: "history", title: "history-string")
                         
                     }
                     
-                    if !vm.authProviders.contains(.phone) {
-                        NavigationRow(destination: ChangePasswordView(), imageName: "lock", title: "Change password")
+                    if !vm.authProviders.contains(.phone) && !vm.authProviders.contains(.google) {
+                        NavigationRow(destination: ChangePasswordView(), imageName: "lock", title: "change-password-string")
                     }
                     
                     Button {
@@ -66,7 +66,7 @@ struct ProfileView: View {
                         Haptics.shared.notify(.success)
                         copyIdAlert = true
                     } label: {
-                        SettingsButtonView(imageName: "copy", title: "Copy ID")
+                        SettingsButtonView(imageName: "copy", title: "copy-id-string".localized)
                     }
 
                 }
@@ -77,21 +77,21 @@ struct ProfileView: View {
             .background(Color.backgroundColor)
             .alert(isPresented: $logOutAlert) {
                 Alert(
-                    title: Text("Are you sure you want to log out?"),
-                    primaryButton: .destructive(Text("Log out"), action: {
+                    title: Text("log-out-alert-string"),
+                    primaryButton: .destructive(Text("log-out-string"), action: {
                         Task {
                             try vm.signOut()
                             notEntered = true
                         }
                     }),
-                    secondaryButton: .default(Text("Cancel"), action: {
+                    secondaryButton: .default(Text("cancel-string"), action: {
                         
                     })
                 )
             }
         }
         .toast(isPresenting: $copyIdAlert, duration: 1) {
-            AlertToast(displayMode: .hud, type: .regular, title: "UserID has been copied")
+            AlertToast(displayMode: .hud, type: .regular, title: "id-is-copied-string")
         }
     }
 }
@@ -158,7 +158,10 @@ struct NavigationRow<Destination: View>: View {
     
     var body: some View {
         NavigationLink(destination: destination) {
-            SettingsButtonView(imageName: imageName, title: title)
+            SettingsButtonView(
+                imageName: imageName,
+                title: title.localized
+            )
         }
     }
 }

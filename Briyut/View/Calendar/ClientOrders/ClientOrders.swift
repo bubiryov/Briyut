@@ -16,10 +16,10 @@ struct ClientOrders: View {
     var body: some View {
 //        NavigationView {
             VStack {
-                BarTitle<Text, Text>(text: "Appointments")
+                BarTitle<Text, Text>(text: "appointments-string")
                 
                 CustomSegmentedPicker(
-                    options: ["Upcoming", "Past"],
+                    options: ["upcoming-string", "past-string"],
                     selectedIndex: $selectedIndex
                 )
                                 
@@ -76,7 +76,7 @@ struct CustomSegmentedPicker: View {
                             selectedIndex = index
                         }
                     } label: {
-                        Text(options[index])
+                        Text(options[index].localized)
                             .font(Mariupol.medium, 17)
                             .foregroundColor(selectedIndex == index ? .white : .primary)
                             .frame(maxWidth: .infinity)

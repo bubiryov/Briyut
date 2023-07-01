@@ -42,7 +42,7 @@ struct AccentButton: View {
                     .background(buttonColor)
                     .cornerRadius(cornerRadius)
             } else {
-                Text(text)
+                Text(text.localized)
                     .font(Mariupol.medium, 17)
                     .foregroundColor(textColor)
                     .frame(height: height)
@@ -61,7 +61,7 @@ struct AccentButton: View {
                         .frame(width: 17)
                         .foregroundColor(.primary)
                 }
-                Text(text)
+                Text(text.localized)
                     .foregroundColor(textColor)
                     .font(Mariupol.medium, 17)
             }

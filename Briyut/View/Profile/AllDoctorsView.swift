@@ -23,14 +23,14 @@ struct AllDoctorsView: View {
             VStack(spacing: ScreenSize.height * 0.02) {
                 
                 BarTitle<BackButton, Text>(
-                    text: "Specialists",
+                    text: "specialists-string",
                     leftButton: BackButton()
                 )
                 
                 if vm.user?.isDoctor ?? false {
                     AccentInputField(
                         promptText: vm.user?.userId ?? "",
-                        title: "UserID",
+                        title: "user-id-string",
                         spaceAllow: false,
                         input: $futureDoctorID
                     )
@@ -75,7 +75,7 @@ struct AllDoctorsView: View {
                         }
                     } label: {
                         AccentButton(
-                            text: "Add a doctor",
+                            text: "add-specialist-string",
                             isButtonActive: validateDoctor(),
                             animation: loading
                         )

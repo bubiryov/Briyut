@@ -66,6 +66,7 @@
 		89A17E562A03B36100C92A58 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E552A03B36100C92A58 /* SignInWithAppleButton.swift */; };
 		89A17E582A03C8BD00C92A58 /* AppleAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E572A03C8BD00C92A58 /* AppleAuthenticationManager.swift */; };
 		89A17E5A2A03C8E300C92A58 /* AppleSignInResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A17E592A03C8E300C92A58 /* AppleSignInResultModel.swift */; };
+		89A949D02A501F52007C79F2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 89A949D22A501F52007C79F2 /* Localizable.strings */; };
 		89BDBA6C2A35D428008449BE /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BDBA6B2A35D428008449BE /* StatsView.swift */; };
 		89BFAA3B2A1F5A3400DF2D0B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 89BFAA3A2A1F5A3400DF2D0B /* FirebaseStorage */; };
 		89BFAA3D2A1F5B1900DF2D0B /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BFAA3C2A1F5B1900DF2D0B /* StorageManager.swift */; };
@@ -198,6 +199,8 @@
 		89A17E552A03B36100C92A58 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
 		89A17E572A03C8BD00C92A58 /* AppleAuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthenticationManager.swift; sourceTree = "<group>"; };
 		89A17E592A03C8E300C92A58 /* AppleSignInResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInResultModel.swift; sourceTree = "<group>"; };
+		89A949D12A501F52007C79F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		89A949D32A506C8C007C79F2 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		89BDBA6B2A35D428008449BE /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		89BFAA3C2A1F5B1900DF2D0B /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		89C5904D2A051AFB00975E50 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
@@ -435,6 +438,7 @@
 				89CA5AAF2A02D9E000695069 /* Extensions.swift */,
 				89CA5ABA2A02FD3200695069 /* Utilities.swift */,
 				89E96D2C2A4C4DF800BB4FE6 /* Haptics.swift */,
+				89A949D22A501F52007C79F2 /* Localizable.strings */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -685,11 +689,12 @@
 			};
 			buildConfigurationList = 899EC5682A000A1C00C90D49 /* Build configuration list for PBXProject "Rubinko" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = uk;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				uk,
 			);
 			mainGroup = 899EC5642A000A1C00C90D49;
 			packageReferences = (
@@ -722,6 +727,7 @@
 				89988BF32A1A3EF9004DB4C6 /* Done.json in Resources */,
 				899EC5752A000A1E00C90D49 /* Assets.xcassets in Resources */,
 				897ED61D2A41B2C700668890 /* Mariupol-Bold.ttf in Resources */,
+				89A949D02A501F52007C79F2 /* Localizable.strings in Resources */,
 				899EC5AA2A0016A700C90D49 /* Alokary.ttf in Resources */,
 				897ED61E2A41B2C700668890 /* Mariupol-Medium.ttf in Resources */,
 				894068892A4393B000DC16F4 /* loading.json in Resources */,
@@ -862,11 +868,24 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		89A949D22A501F52007C79F2 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				89A949D12A501F52007C79F2 /* en */,
+				89A949D32A506C8C007C79F2 /* uk */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		899EC5902A000A1E00C90D49 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -926,6 +945,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

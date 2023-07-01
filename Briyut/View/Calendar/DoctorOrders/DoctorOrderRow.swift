@@ -30,7 +30,7 @@ struct DoctorOrderRow: View {
             
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
-                    Text(procedure?.name ?? "Massage")
+                    Text(procedure?.name ?? "deleted-procedure-string".localized)
                         .font(Mariupol.medium, 20)
                         .foregroundColor(order.1 ? .white : .primary)
                         .lineLimit(1)
@@ -45,7 +45,7 @@ struct DoctorOrderRow: View {
                 Spacer()
                 
                 if order.1 {
-                    Text("\(client?.name ?? client?.userId ?? "") \(client?.name != nil ? client?.lastName ?? "" : "")")
+                    Text("\(client?.name ?? client?.userId ?? "Deleted user") \(client?.name != nil ? client?.lastName ?? "" : "")")
                         .font(Mariupol.regular, 14)
                         .foregroundColor(.white)
                     
@@ -64,7 +64,7 @@ struct DoctorOrderRow: View {
                                 showAlert = true
                             }
                         } label: {
-                            Text("Cancel")
+                            Text("cancel-string")
                                 .foregroundColor(.black)
                                 .font(Mariupol.medium, 17)
                                 .frame(maxWidth: .infinity)
@@ -79,7 +79,7 @@ struct DoctorOrderRow: View {
                         Button {
                             fullCover.toggle()
                         } label: {
-                            Text("Reschedule")
+                            Text("reschedule-string")
                                 .foregroundColor(.black)
                                 .font(Mariupol.medium, 17)
                                 .frame(maxWidth: .infinity)
@@ -109,8 +109,8 @@ struct DoctorOrderRow: View {
         }
         .alert(isPresented: $showAlert) {
             Alert(
-                title: Text("Are you sure you want to remove the appointment?"),
-                primaryButton: .destructive(Text("Remove"), action: {
+                title: Text("cancel-appointment-alert-string"),
+                primaryButton: .destructive(Text("remove-string"), action: {
                     Task {
                         try await vm.removeOrder(orderId: order.0.orderId)
                         let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
@@ -120,14 +120,20 @@ struct DoctorOrderRow: View {
                         }
                     }
                 }),
-                secondaryButton: .default(Text("Cancel"), action: {
+                secondaryButton: .default(Text("cancel-string"), action: {
                 })
             )
         }
         .sheet(isPresented: $fullCover) {
-            DateTimeSelectionView(doctor: vm.user, order: order.0, mainButtonTitle: "Edit an appointment", selectedTab: .constant(.home))
-                .padding()
-                .padding(.bottom)
+            DateTimeSelectionView(
+                doctor: vm.user,
+                order: order.0,
+                mainButtonTitle: "edit-appointment-string".localized,
+                selectedTab: .constant(.home)
+            )
+            .padding()
+            .padding(.bottom)
+            .background(Color.backgroundColor)
         }
         .onChange(of: fullCover) { newValue in
             if newValue == false {

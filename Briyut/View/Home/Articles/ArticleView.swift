@@ -79,8 +79,8 @@ struct ArticleView: View {
         .navigationBarBackButtonHidden()
         .alert(isPresented: $showAlert) {
             Alert(
-                title: Text("Are you sure you want to delete the article?"),
-                primaryButton: .destructive(Text("Delete"), action: {
+                title: Text("delete-article-alert-title-string"),
+                primaryButton: .destructive(Text("delete-string"), action: {
                     Task {
                         do {
                             try await articleVM.removeArticle(article_id: article.id)
@@ -90,7 +90,7 @@ struct ArticleView: View {
                         }
                     }
                 }),
-                secondaryButton: .default(Text("Cancel"), action: { })
+                secondaryButton: .default(Text("cancel-string"), action: { })
             )
         }
 

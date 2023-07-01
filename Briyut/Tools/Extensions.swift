@@ -127,11 +127,11 @@ extension Date {
         let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
         
         if calendar.isDate(self, inSameDayAs: today) {
-            return "Today"
+            return "today-string"
         } else if calendar.isDate(self, inSameDayAs: tomorrow) {
-            return "Tomorrow"
+            return "tommorow-string"
         } else if calendar.isDate(self, inSameDayAs: yesterday) {
-            return "Yesterday"
+            return "yesterday-string"
         } else {
             let formatter = DateFormatter.customFormatter(format: "d MMMM yyyy")
             return formatter.string(from: self)
@@ -139,4 +139,9 @@ extension Date {
     }
 }
 
+extension String {
+    var localized: String {
+        return NSLocalizedString(self, comment: "")
+    }
+}
 

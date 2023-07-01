@@ -17,11 +17,11 @@ struct AccentInputField: View {
     var body: some View {
         VStack(alignment: .leading) {
             if let title {
-                Text(title)
+                Text(title.localized)
                     .font(Mariupol.medium, 17)
             }
             
-            TextField("", text: $input, prompt: Text(promptText))
+            TextField("", text: $input, prompt: Text(promptText.localized))
                 .font(Mariupol.medium, 17)
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity)

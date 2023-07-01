@@ -18,14 +18,14 @@ struct ResetPasswordView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: ScreenSize.height * 0.02) {
-                BarTitle<Text, Text>(text: "Reset password")
+                BarTitle<Text, Text>(text: "reset-password-string")
                     .padding(.top)
                 
                 AuthInputField(
                     field: $vm.email,
                     isSecureField: false,
                     title: "rubinko@gmail.com",
-                    header: "Your email address"
+                    header: "your-email-string"
                 )
                 
                 Button {
@@ -42,7 +42,7 @@ struct ResetPasswordView: View {
                     }
                 } label: {
                     AccentButton(
-                        text: "Reset password",
+                        text: "reset-password-string",
                         isButtonActive: vm.validate(email: vm.email, password: nil, repeatPassword: nil),
                         animation: loading
                     )

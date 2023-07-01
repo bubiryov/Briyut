@@ -16,7 +16,10 @@ struct AvailableDoctorsView: View {
     
     var body: some View {
         VStack {
-            BarTitle<BackButton, Text>(text: "Doctors", leftButton: BackButton())
+            BarTitle<BackButton, Text>(
+                text: "specialists-string",
+                leftButton: BackButton()
+            )
             
             ScrollView {
                 ForEach(vm.doctors, id: \.userId) { doctor in

@@ -19,7 +19,7 @@ struct HistoryView: View {
     var body: some View {
         VStack {
             BarTitle<BackButton, AddButton>(
-                text: "History",
+                text: "history-string",
                 leftButton: BackButton(),
                 rightButton: AddButton(showSheet: $showSheet)
             )
@@ -44,7 +44,7 @@ struct HistoryView: View {
                                     choosenOrder = order
                                     showAlert = true
                                 } label: {
-                                    Text("Remove")
+                                    Text("remove-string")
                                 }
                             }
                         }
@@ -99,8 +99,8 @@ struct HistoryView: View {
         )
         .alert(isPresented: $showAlert) {
             Alert(
-                title: Text("Are you sure you want to delete this appointment?"),
-                primaryButton: .destructive(Text("Delete"), action: {
+                title: Text("remove-appointment-alert-title-string"),
+                primaryButton: .destructive(Text("remove-string"), action: {
                     Task {
                         do {
                             guard let choosenOrder else {
@@ -115,7 +115,7 @@ struct HistoryView: View {
                         }
                     }
                 }),
-                secondaryButton: .default(Text("Cancel"), action: { })
+                secondaryButton: .default(Text("cancel-string"), action: { })
             )
         }
         .sheet(isPresented: $showSheet) {

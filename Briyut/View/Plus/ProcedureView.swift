@@ -27,35 +27,39 @@ struct ProcedureView: View {
     var body: some View {
         
         VStack {
-            BarTitle<BackButton, DeleteProcedureButton?>(text: title, leftButton: BackButton(), rightButton: procedure != nil ? DeleteProcedureButton(showAlert: $showAlert) : nil)
-                .padding(.bottom)
+            BarTitle<BackButton, DeleteProcedureButton?>(
+                text: title,
+                leftButton: BackButton(),
+                rightButton: procedure != nil ? DeleteProcedureButton(showAlert: $showAlert) : nil
+            )
+            .padding(.bottom)
             
             ScrollView {
                 VStack(spacing: ScreenSize.height * 0.02) {
                     
                     AccentInputField(
-                        promptText: "Massage",
-                        title: "Procedure name",
+                        promptText: "massage-string",
+                        title: "procedure-name-string",
                         input: $name
                     )
                     
                     AccentInputField(
                         promptText: "30",
-                        title: "Duration (minutes)",
+                        title: "duration-string",
                         input: $duration
                     )
                     .keyboardType(.numberPad)
                     
                     AccentInputField(
                         promptText: "2",
-                        title: "Count of parallel procedures",
+                        title: "count-of-parallel-string",
                         input: $parallelQuantity
                     )
                     .keyboardType(.numberPad)
                     
                     AccentInputField(
                         promptText: "1000",
-                        title: "Price",
+                        title: "price-string",
                         input: $cost
                     )
                     .keyboardType(.numberPad)
@@ -63,16 +67,16 @@ struct ProcedureView: View {
             }
             .alert(isPresented: $showAlert) {
                 Alert(
-                    title: Text("Are you sure you want to delete the procedure?"),
-                    message: Text("This action will not be undone and all scheduled sessions will be canceled"),
-                    primaryButton: .destructive(Text("Delete"), action: {
+                    title: Text("delete-procedure-alert-title-string"),
+                    message: Text("delete-procedure-alert-message-string"),
+                    primaryButton: .destructive(Text("delete-string"), action: {
                         Task {
                             try await vm.removeProcedure(procedureId: procedure!.procedureId)
                             isEditing = false
                             presentationMode.wrappedValue.dismiss()
                         }
                     }),
-                    secondaryButton: .default(Text("Cancel"), action: { })
+                    secondaryButton: .default(Text("cancel-string"), action: { })
                 )
             }
             
@@ -82,7 +86,7 @@ struct ProcedureView: View {
                 AvailableDoctorsView(choosenDoctors: $availableDoctors)
             } label: {
                 AccentButton(
-                    text: "Choose available doctors",
+                    text: "choose-available-specialists-string",
                     isButtonActive: true
                 )
             }
@@ -176,7 +180,7 @@ struct ProcedureView: View {
 struct AddProcedure_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            ProcedureView(title: "Edit procedure", buttonText: "Save changes", isEditing: .constant(false))
+            ProcedureView(title: "edit-procedure-string", buttonText: "save-changes-string", isEditing: .constant(false))
                 .environmentObject(ProfileViewModel())
         }
         .padding(.horizontal, 20)

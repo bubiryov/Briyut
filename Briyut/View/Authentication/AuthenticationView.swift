@@ -53,7 +53,7 @@ struct AuthenticationView: View {
                             Button {
                                 showResetPasswordView = true
                             } label: {
-                                Text("Reset password")
+                                Text("reset-password-string")
                             }
                         } label: {
                             Image(systemName: "questionmark.circle")

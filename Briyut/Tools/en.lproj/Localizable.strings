@@ -1,0 +1,149 @@
+"your-email-string" = "Ваша електронна адреса";
+"your-password-string" = "Ваш пароль";
+"min-6-characters-string" = "мінімум 6 символів";
+"login-to-Rubinko-string" = "Увійти до Rubinko";
+"or-string" = "або";
+"google-sign-in-string" = "Увійти за допомогою Google";
+"sign-in-with-number-string" = "Увійти за допомогою номера";
+"create-account-string" = "Створити обліковий запис";
+"phone-sign-in-string" = "Увійти за допомогою телефону";
+"reset-password-string" = "Скинути пароль";
+"new-account-string" = "Новий обліковий запис";
+"repeat-password-string" = "Повторити пароль";
+"your-phone-number-string" = "Ваш номер телефону";
+"send-sms-string" = "Надіслати SMS";
+"done-string" = "Готово";
+
+"find-your-procedure-string" = "Знайди свою процедуру";
+"search-string" = "Пошук";
+"appointments-string" = "Записи";
+"no-any-appointments-string" = "У вас ще немає жодних записів";
+"see-all-string" = "Переглянути всi";
+"articles-string" = "Статті";
+"no-articles-string" = "Немає актуальних статей";
+
+"new-article-string" = "Нова стаття";
+"title-string" = "Заголовок";
+"write-your-text-string" = "Напишіть текст";
+"publish-string" = "Опублікувати";
+"choose-new-photo-string" = "Обрати нове фото";
+"delete-current-photo-string" = "Видалити поточне фото";
+"delete-article-alert-title-string" = "Ви впевнені, що хочете видалити статтю?";
+
+"addresses-string" = "Адреси";
+"new-address-string" = "Нова адреса";
+"city-string" = "Місто";
+"street-string" = "Вулиця";
+"building-string" = "Будинок";
+"coordinates-string" = "Координати";
+"add-string" = "Додати";
+"edit-address-string" = "Редагувати адресу";
+"navigate-string" = "Навігувати";
+"delete-address-alert-title-string" = "Ви впевнені, що хочете видалити цю адресу?";
+
+"procedures-string" = "Процедури";
+"editing-procedure-string" = "Редагування процедури";
+"new-procedure-string" = "Нова процедура";
+"procedure-name-string" = "Назва процедури";
+"massage-string" = "Масаж";
+"duration-string" = "Тривалість (хвилини)";
+"count-of-parallel-string" = "Кількість паралельних процедур";
+"price-string" = "Ціна";
+"choose-available-specialists-string" = "Виберіть доступних спеціалістів";
+"specialists-string" = "Спеціалісти";
+"save-changes-string" = "Зберегти зміни";
+"min-string" = "хв";
+"choose-client-string" = "Оберіть клієнта";
+
+"choose-doctor-string" = "Виберіть лікаря";
+"user-name-string" = "Ім'я користувача";
+"yesterday-string" = "Вчора";
+"today-string" = "Сьогодні";
+"tommorow-string" = "Завтра";
+"add-appointment-string" = "Додати запис";
+"all-procedures-message-string" = "Для створення запису необхідно вказати ім'я та номер телефону";
+"edit-procedure-string" = "Редагувати процедуру";
+"delete-procedure-alert-title-string" = "Ви впевнені, що хочете видалити процедуру?";
+"delete-procedure-alert-message-string" = "Ця дія буде незворотньою, і всі заплановані сеанси будуть скасовані";
+"booked-time-alert-string" = "Вибачте, цей час вже зайнятий";
+"got-it-string" = "Зрозуміло";
+
+"done-string" = "Готово";
+"date-string" = "Дата";
+"time-string" = "Час";
+"specialist-string" = "Спеціаліст";
+"client-string" = "Клієнт";
+"total-string" = "Сума";
+"back-home-string" = "На головну";
+
+"upcoming-string" = "Майбутні";
+"past-string" = "Минулі";
+
+"no-appointments-on-this-day-string" = "Немає записів на цей день";
+"cancel-string" = "Скасувати";
+"reschedule-string" = "Перенести";
+"edit-appointment-string" = "Редагувати запис";
+"cancel-appointment-alert-string" = "Ви впевнені, що хочете видалити цей запис?";
+"remove-string" = "Видалити";
+
+"user-managment-string" = "Управління користувачами";
+"stats-string" = "Статистика";
+"history-string" = "Історія";
+"change-password-string" = "Змінити пароль";
+"copy-id-string" = "Скопіювати ID";
+"id-is-copied-string" = "ID користувача скопійовано";
+"log-out-alert-string" = "Ви впевнені, що хочете вийти?";
+"log-out-string" = "Вийти";
+
+"edit-string" = "Редагувати";
+"profile-editing-string" = "Редагування профілю";
+"name-string" = "Ім'я";
+"last-name-string" = "Прізвище";
+"phone-number-string" = "Номер телефону";
+"custom-schedule-string" = "Власний графік";
+"vacation-string" = "Відпустка";
+"start-string" = "Початок";
+"end-string" = "Кінець";
+"save-string" = "Зберегти";
+
+"delete-account-alert-title-string" = "Ви впевнені, що хочете видалити свій обліковий запис?";
+"delete-account-alert-message-string" = "Всі ваші дані будуть назавжди видалені";
+"yes-i'm-sure-string" = "Так, я впевнений";
+"user-id-string" = "ID користувача";
+"delete-string" = "Видалити";
+"call-string" = "Зателефонувати";
+"delete-specialist-alert-title-string" = "Ви впевнені, що хочете видалити спеціаліста?";
+"delete-specialist-alert-message-string" = "Цю дію неможливо скасувати. Всі записи будуть скасовані.";
+"add-specialist-string" = "Додати спеціаліста";
+
+"users-string" = "Користувачі";
+"block-string" = "Заблокувати";
+"unblock-string" = "Розблокувати";
+"block-user-alert-title-string" = "Ви впевнені, що хочете заблокувати користувача?";
+"block-user-alert-message-string" = "Користувач буде заблокований, і його записи будуть скасовані.";
+"unblock-user-alert-title-string" = "Ви впевнені, що хочете розблокувати користувача?";
+"unblock-user-alert-message-string" = "Користувач знову зможе створювати нові записи.";
+
+"all-specialists-string" = "Всі спеціалісти";
+"this-month-string" = "Цей місяць";
+"done-orders-string" = "Виконані";
+"future-orders-string" = "Майбутні";
+"earnings-string" = "Заробіток";
+"no-data-yet-string" = "Ще немає даних";
+"custom-period-string" = "Власний період";
+
+"add-past-appointment-string" = "Додати минулий запис";
+"user-string" = "Користувач";
+"procedure-string" = "Процедура";
+"back-string" = "Назад";
+
+"current-password-string" = "Поточний пароль";
+"new-password-string" = "Новий пароль";
+
+"deleted-procedure-string" = "Видалена процедура";
+"blocked-user-string" = "Заблокований користувач";
+"deleted-user-string" = "Видалений користувач";
+"deleted-specialist-string" = "Видалений спеціаліст";
+"anonymous-string" = "Анонімний користувач";
+
+"remove-appointment-alert-title-string" = "Ви впевнені, що хочете видалити цей запис?";
