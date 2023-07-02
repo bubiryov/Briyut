@@ -18,9 +18,7 @@ struct HomeView: View {
     @Binding var splashView: Bool
     @State private var showFullOrder: Bool = false
     @State private var showMap: Bool = false
-    
-//    additional color (secondary)
-    
+        
     var body: some View {
         
         NavigationView {
@@ -34,6 +32,7 @@ struct HomeView: View {
                 Text("find-your-procedure-string")
                     .font(Mariupol.bold, 30)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                             
                 Button {
                     Haptics.shared.play(.light)

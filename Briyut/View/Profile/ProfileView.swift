@@ -57,7 +57,7 @@ struct ProfileView: View {
                         
                     }
                     
-                    if !vm.authProviders.contains(.phone) && !vm.authProviders.contains(.google) {
+                    if vm.authProviders.contains(.email) {
                         NavigationRow(destination: ChangePasswordView(), imageName: "lock", title: "change-password-string")
                     }
                     

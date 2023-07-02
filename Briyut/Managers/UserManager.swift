@@ -64,15 +64,31 @@ final class UserManager {
     }
     
     func updateDoctorStatus(userID: String, isDoctor: Bool) async throws {
-        let data: [String : Any] = [
-            DBUser.CodingKeys.isDoctor.rawValue : isDoctor,
-            DBUser.CodingKeys.customSchedule.rawValue : Optional<Any>.none!,
-            DBUser.CodingKeys.scheduleTimes.rawValue : Optional<Any>.none!,
-            DBUser.CodingKeys.vacation.rawValue : Optional<Any>.none!,
-            DBUser.CodingKeys.vacationDates.rawValue : Optional<Any>.none!,
+        var data: [String: Any] = [
+            DBUser.CodingKeys.isDoctor.rawValue: isDoctor
         ]
+        
+        if !isDoctor {
+            data[DBUser.CodingKeys.customSchedule.rawValue] = nil
+            data[DBUser.CodingKeys.scheduleTimes.rawValue] = nil
+            data[DBUser.CodingKeys.vacation.rawValue] = nil
+            data[DBUser.CodingKeys.vacationDates.rawValue] = nil
+        }
+        
         try await userDocument(userId: userID).updateData(data)
     }
+
+    
+//    func updateDoctorStatus(userID: String, isDoctor: Bool) async throws {
+//        let data: [String : Any] = [
+//            DBUser.CodingKeys.isDoctor.rawValue : isDoctor,
+//            DBUser.CodingKeys.customSchedule.rawValue : Optional<Any>.none!,
+//            DBUser.CodingKeys.scheduleTimes.rawValue : Optional<Any>.none!,
+//            DBUser.CodingKeys.vacation.rawValue : Optional<Any>.none!,
+//            DBUser.CodingKeys.vacationDates.rawValue : Optional<Any>.none!,
+//        ]
+//        try await userDocument(userId: userID).updateData(data)
+//    }
     
     func updateBlockStatus(userID: String, isBlocked: Bool) async throws {
         let data: [String : Any] = [

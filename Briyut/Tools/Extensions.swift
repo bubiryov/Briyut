@@ -94,6 +94,14 @@ extension DateFormatter {
     static func customFormatter(format: String) -> DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = format
+        
+        let language = Locale.preferredLanguages.first ?? "uk"
+        if !language.hasPrefix("en") {
+            formatter.locale = Locale(identifier: "uk_UA")
+        } else {
+            formatter.locale = Locale(identifier: "en_US")
+        }
+        
         return formatter
     }
     

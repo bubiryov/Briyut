@@ -17,16 +17,20 @@ struct AllProcedures: View {
     @Binding var selectedTab: Tab
     @FocusState var focus: Bool
     private var procedures: [ProcedureModel] {
-        var procedures: [ProcedureModel] = []
+        var filteredProcedures: [ProcedureModel] = []
         if let user = vm.user, user.isDoctor {
-            procedures = vm.procedures.filter({ $0.availableDoctors.contains(user.userId) })
+            filteredProcedures = vm.procedures.filter({ $0.availableDoctors.contains(user.userId) })
         } else {
-            procedures = vm.procedures
+            filteredProcedures = vm.procedures
         }
-        return procedures.filter { procedure in
-            searchText.isEmpty ? true : procedure.name.localizedCaseInsensitiveContains(searchText) == true
+        
+        let sortedProcedures = filteredProcedures.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        
+        return sortedProcedures.filter { procedure in
+            searchText.isEmpty ? true : procedure.name.localizedCaseInsensitiveContains(searchText)
         }
     }
+    
     
     var body: some View {
         NavigationView {
@@ -95,7 +99,6 @@ struct AllProcedures: View {
                                     }
                                 }
                         )
-                        
                     }
                     
                     ScrollView {

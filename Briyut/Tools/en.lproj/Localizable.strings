@@ -147,3 +147,7 @@
 "anonymous-string" = "Анонімний користувач";
 
 "remove-appointment-alert-title-string" = "Ви впевнені, що хочете видалити цей запис?";
+
+"en" = "en_US";
+"uk" = "uk_UA";
+
