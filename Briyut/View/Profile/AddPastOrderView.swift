@@ -27,7 +27,7 @@ struct AddPastOrderView: View {
             
             VStack(spacing: 40) {
                 
-                BarTitle<Text, Text>(text: "add-past-appointment-string")
+                TopBar<Text, Text>(text: "add-past-appointment-string")
                                 
                 HStack {
                     Text("user-string")
@@ -35,13 +35,7 @@ struct AddPastOrderView: View {
                     
                     Spacer()
                     
-                    Picker("", selection: $selectedUser) {
-                        ForEach(vm.users.sorted(), id: \.userId) { user in
-                            Text("\(user.name ?? "anonymous-string") \(user.name != nil ? user.lastName ?? "" : "")")
-                                .tag(user as DBUser?)
-                        }
-                    }
-                    .tint(.staticMainColor)
+                    userPicker
                 }
                 
                 HStack {
@@ -50,13 +44,7 @@ struct AddPastOrderView: View {
                     
                     Spacer()
                     
-                    Picker("", selection: $selectedProcedure) {
-                        ForEach(vm.procedures, id: \.procedureId) { procedure in
-                            Text(procedure.name)
-                                .tag(procedure as ProcedureModel?)
-                        }
-                    }
-                    .tint(.staticMainColor)
+                    procedurePicker
                 }
                 
                 CustomDatePicker(
@@ -64,40 +52,7 @@ struct AddPastOrderView: View {
                     selectedTime: $selectedTime
                 )
                                 
-                Button {
-                    Haptics.shared.play(.light)
-                    if let selectedUser, let selectedProcedure, let user = vm.user {
-                        let newOrder = OrderModel(
-                            orderId: UUID().uuidString,
-                            procedureId: selectedProcedure.procedureId,
-                            doctorId: user.userId,
-                            clientId: selectedUser.userId,
-                            date: Timestamp(date: getCombinedDate()),
-                            end: Timestamp(date: getCombinedDate().addingTimeInterval(TimeInterval(selectedProcedure.duration * 60))),
-                            isDone: true,
-                            price: selectedProcedure.cost
-                        )
-                        Task {
-                            do {
-                                loading = true
-                                try await vm.addNewOrder(order: newOrder)
-                                vm.allLastDocument = nil
-                                vm.allOrders = []
-                                try await vm.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
-                                loading = false
-                                presentationMode.wrappedValue.dismiss()
-                            } catch {
-                                print("Can't add past orders")
-                            }
-                        }
-                    }
-                } label: {
-                    AccentButton(
-                        text: "add-string",
-                        isButtonActive: selectedUser != nil && selectedProcedure != nil && getCombinedDate() < Date(),
-                        animation: loading)
-                }
-                .disabled(selectedUser == nil || selectedProcedure == nil || getCombinedDate() >= Date())
+                addPastOrderButton
                 
                 Spacer()
             }
@@ -105,18 +60,6 @@ struct AddPastOrderView: View {
             .padding(.horizontal, 20)
         }
     }
-    
-    private func getCombinedDate() -> Date {
-        let calendar = Calendar.current
-        let dateComponents = calendar.dateComponents([.day, .month, .year], from: selectedDate)
-        let timeComponents = calendar.dateComponents([.hour, .minute], from: selectedTime)
-        let combinedDateTime = calendar.date(bySettingHour: timeComponents.hour ?? 0,
-                                             minute: timeComponents.minute ?? 0,
-                                             second: 0,
-                                             of: calendar.date(from: dateComponents) ?? Date()) ?? Date()
-        return combinedDateTime
-    }
-
 }
 
 struct AddPastOrderView_Previews: PreviewProvider {
@@ -127,7 +70,7 @@ struct AddPastOrderView_Previews: PreviewProvider {
 }
 
 
-struct CustomDatePicker: View {
+fileprivate struct CustomDatePicker: View {
     
     @Binding var selectedDate: Date
     @Binding var selectedTime: Date
@@ -176,5 +119,85 @@ struct CustomDatePicker: View {
         let timeInterval = date.timeIntervalSinceReferenceDate
         let roundedInterval = (timeInterval / interval).rounded() * interval
         return Date(timeIntervalSinceReferenceDate: roundedInterval)
+    }
+}
+
+// MARK: Components
+
+extension AddPastOrderView {
+    var userPicker: some View {
+        Picker("", selection: $selectedUser) {
+            ForEach(vm.users.sorted(), id: \.userId) { user in
+                Text("\(user.name ?? "anonymous-string") \(user.name != nil ? user.lastName ?? "" : "")")
+                    .tag(user as DBUser?)
+            }
+        }
+        .tint(.staticMainColor)
+    }
+    
+    var procedurePicker: some View {
+        Picker("", selection: $selectedProcedure) {
+            ForEach(vm.procedures, id: \.procedureId) { procedure in
+                Text(procedure.name)
+                    .tag(procedure as ProcedureModel?)
+            }
+        }
+        .tint(.staticMainColor)
+    }
+    
+    var addPastOrderButton: some View {
+        Button {
+            addOrderAction()
+        } label: {
+            AccentButton(
+                text: "add-string",
+                isButtonActive: selectedUser != nil && selectedProcedure != nil && getCombinedDate() < Date(),
+                animation: loading)
+        }
+        .disabled(selectedUser == nil || selectedProcedure == nil || getCombinedDate() >= Date())
+    }
+}
+
+// MARK: Functions
+
+extension AddPastOrderView {
+    private func addOrderAction() {
+        Haptics.shared.play(.light)
+        if let selectedUser, let selectedProcedure, let user = vm.user {
+            let newOrder = OrderModel(
+                orderId: UUID().uuidString,
+                procedureId: selectedProcedure.procedureId,
+                doctorId: user.userId,
+                clientId: selectedUser.userId,
+                date: Timestamp(date: getCombinedDate()),
+                end: Timestamp(date: getCombinedDate().addingTimeInterval(TimeInterval(selectedProcedure.duration * 60))),
+                isDone: true,
+                price: selectedProcedure.cost
+            )
+            Task {
+                do {
+                    loading = true
+                    try await vm.addNewOrder(order: newOrder)
+                    vm.allLastDocument = nil
+                    vm.allOrders = []
+                    try await vm.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
+                    loading = false
+                    presentationMode.wrappedValue.dismiss()
+                } catch {
+                    print("Can't add past orders")
+                }
+            }
+        }
+    }
+    
+    private func getCombinedDate() -> Date {
+        let calendar = Calendar.current
+        let dateComponents = calendar.dateComponents([.day, .month, .year], from: selectedDate)
+        let timeComponents = calendar.dateComponents([.hour, .minute], from: selectedTime)
+        let combinedDateTime = calendar.date(bySettingHour: timeComponents.hour ?? 0,
+                                             minute: timeComponents.minute ?? 0,
+                                             second: 0,
+                                             of: calendar.date(from: dateComponents) ?? Date()) ?? Date()
+        return combinedDateTime
     }
 }

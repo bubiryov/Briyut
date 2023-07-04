@@ -19,7 +19,7 @@ struct RegistrationView: View {
         GeometryReader { _ in
             VStack(spacing: 20) {
                 
-                BarTitle<BackButton, Text>(
+                TopBar<BackButton, Text>(
                     text: "new-account-string",
                     leftButton: BackButton(presentationMode: _presentationMode)
                 )
@@ -48,18 +48,7 @@ struct RegistrationView: View {
                 Spacer()
                 
                 Button {
-                    Task {
-                        do {
-                            loading = true
-                            try await vm.createUserWithEmail()
-                            notEntered = false
-                            loading = false
-                            presentationMode.wrappedValue.dismiss()
-                        } catch {
-                            print("Can't create an account")
-                            loading = false
-                        }
-                    }
+                    createAccount()
                 } label: {
                     AccentButton(
                         text: "create-account-string",
@@ -99,6 +88,24 @@ struct RegistrationView_Previews: PreviewProvider {
             RegistrationView(notEntered: .constant(false))
                 .environmentObject(AuthenticationViewModel())
         }
+    }
+}
+
+extension RegistrationView {
+    func createAccount() {
+        Task {
+            do {
+                loading = true
+                try await vm.createUserWithEmail()
+                notEntered = false
+                loading = false
+                presentationMode.wrappedValue.dismiss()
+            } catch {
+                print("Can't create an account")
+                loading = false
+            }
+        }
+
     }
 }
 

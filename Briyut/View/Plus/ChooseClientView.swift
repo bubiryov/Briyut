@@ -32,51 +32,14 @@ struct ChooseClientView: View {
             Color.backgroundColor.edgesIgnoringSafeArea(.all)
 
             VStack {
-                BarTitle<BackButton, SearchButton>(
+                TopBar<BackButton, SearchButton>(
                     text: "choose-client-string",
                     leftButton: BackButton(),
                     rightButton: SearchButton(showSearch: $showSearch)
                 )
                 
                 if showSearch {
-                    AccentInputField(promptText: "user-name-string", title: nil, input: $searchText)
-                        .disableAutocorrection(true)
-                        .overlay(content: {
-                            HStack {
-                                Spacer()
-                                Button {
-                                    Haptics.shared.play(.light)
-                                    withAnimation(.easeInOut(duration: 0.15)) {
-                                        searchText = ""
-                                        showSearch = false
-                                        hideKeyboard()
-                                    }
-                                } label: {
-                                    Image(systemName: "xmark.circle")
-                                }
-                            }
-                            .padding(.horizontal)
-                            .foregroundColor(.secondary)
-                            .buttonStyle(.plain)
-                        })
-                        .focused($focus)
-                        .onAppear {
-                            focus = true
-                        }
-                        .onDisappear {
-                            focus = false
-                        }
-                        .gesture(
-                            DragGesture()
-                                .onEnded { gesture in
-                                    if gesture.translation.height < 30 {
-                                        withAnimation(.easeInOut(duration: 0.15)) {
-                                            showSearch = false
-                                            hideKeyboard()
-                                        }
-                                    }
-                                }
-                        )
+                    searchField
                 }
                 
                 ScrollView {
@@ -132,5 +95,50 @@ struct ChooseClientView_Previews: PreviewProvider {
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)
+    }
+}
+
+extension ChooseClientView {
+    var searchField: some View {
+        
+        AccentInputField(promptText: "user-name-string", title: nil, input: $searchText)
+            .disableAutocorrection(true)
+            .overlay(content: {
+                HStack {
+                    Spacer()
+                    Button {
+                        Haptics.shared.play(.light)
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            searchText = ""
+                            showSearch = false
+                            hideKeyboard()
+                        }
+                    } label: {
+                        Image(systemName: "xmark.circle")
+                    }
+                }
+                .padding(.horizontal)
+                .foregroundColor(.secondary)
+                .buttonStyle(.plain)
+            })
+            .focused($focus)
+            .onAppear {
+                focus = true
+            }
+            .onDisappear {
+                focus = false
+            }
+            .gesture(
+                DragGesture()
+                    .onEnded { gesture in
+                        if gesture.translation.height < 30 {
+                            withAnimation(.easeInOut(duration: 0.15)) {
+                                showSearch = false
+                                hideKeyboard()
+                            }
+                        }
+                    }
+            )
+
     }
 }

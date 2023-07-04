@@ -17,7 +17,7 @@ struct ChooseDoctorView: View {
     
     var body: some View {
         VStack {
-            BarTitle<BackButton, Text>(
+            TopBar<BackButton, Text>(
                 text: "choose-doctor-string",
                 leftButton: BackButton()
             )

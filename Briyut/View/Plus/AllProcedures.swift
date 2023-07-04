@@ -40,65 +40,22 @@ struct AllProcedures: View {
                 
                 VStack {
                     if vm.user?.isDoctor == true {
-                        BarTitle<EditButton, AddProcedureButton>(
+                        TopBar<EditButton, AddProcedureButton>(
                             text: "procedures-string",
                             leftButton: EditButton(isEditing: $isEditing),
                             rightButton: AddProcedureButton(isEditing: $isEditing))
                     } else {
-                        BarTitle<Text, SearchButton>(
+                        TopBar<Text, SearchButton>(
                             text: "procedures-string",
                             rightButton: SearchButton(showSearch: $showSearch))
                     }
                                     
                     if alertContition() {
-                        NavigationLink {
-                            EditProfileView(notEntered: $notEntered)
-                        } label: {
-                            HStack {
-                                HStack {
-                                    Text("all-procedures-message-string")
-                                        .foregroundColor(.white)
-                                        .font(.subheadline)
-                                        .bold()
-                                        .multilineTextAlignment(.center)
-                                }
-                                .padding(5)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .frame(minHeight: ScreenSize.height * 0.06)
-                            .background(Color.mainColor)
-                            .cornerRadius(ScreenSize.width / 30)
-                        }
-                        .buttonStyle(.plain)
+                        personalInformationAlert
                     }
                     
                     if showSearch {
-                        AccentInputField(
-                            promptText: "massage-string",
-                            title: nil,
-                            input: $searchText
-                        )
-                        .focused($focus)
-                        .onAppear {
-                            focus = true
-                        }
-                        .onDisappear {
-                            focus = false
-                            showSearch = false
-                            searchText = ""
-                        }
-                        .gesture(
-                            DragGesture()
-                                .onEnded { gesture in
-                                    if gesture.translation.height < 30 {
-                                        withAnimation(.easeInOut(duration: 0.15)) {
-                                            showSearch = false
-                                            searchText = ""
-                                            hideKeyboard()
-                                        }
-                                    }
-                                }
-                        )
+                        searchField
                     }
                     
                     ScrollView {
@@ -131,19 +88,6 @@ struct AllProcedures: View {
             }
         }
     }
-    
-    private func alertContition() -> Bool {
-        guard vm.user?.name == nil || vm.user?.phoneNumber == nil, vm.user?.isDoctor == false else {
-            return false
-        }
-        return true
-    }
-    
-    private func randomize(interval: TimeInterval, withVariance variance: Double) -> TimeInterval {
-        let random = (Double(arc4random_uniform(1000)) - 500.0) / 500.0
-        return interval + variance * random
-    }
-    
 }
 
 struct AddProcedureView_Previews: PreviewProvider {
@@ -157,8 +101,10 @@ struct AddProcedureView_Previews: PreviewProvider {
     }
 }
 
-struct AddProcedureButton: View {
+fileprivate struct AddProcedureButton: View {
+    
     @Binding var isEditing : Bool
+    
     var body: some View {
         NavigationLink {
             ProcedureView(title: "new-procedure-string".localized, buttonText: "add-string".localized, isEditing: $isEditing)
@@ -169,98 +115,78 @@ struct AddProcedureButton: View {
     }
 }
 
-struct ProcedureRow: View {
+// MARK: Components
+
+extension AllProcedures {
     
-    var vm: ProfileViewModel
-    var procedure: ProcedureModel
-    var cornerRadius = ScreenSize.width / 30
-    @Binding var isEditing: Bool
-    @Binding var selectedTab: Tab
-    
-    var body: some View {
-        
+    var personalInformationAlert: some View {
+
         NavigationLink {
-            if isEditing {
-                ProcedureView(
-                    title: "editing-procedure-string",
-                    buttonText: "save-changes-string",
-                    procedure: procedure,
-                    isEditing: $isEditing
-                )
-            } else {
-                if vm.user?.isDoctor == true {
-                    ChooseClientView(
-                        procedure: procedure,
-                        selectedTab: $selectedTab
-                    )
-                } else {
-                    ChooseDoctorView(
-                        procedure: procedure,
-                        selectedTab: $selectedTab
-                    )
-                }
-            }
+            EditProfileView(notEntered: $notEntered)
         } label: {
             HStack {
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(procedure.name)
-                        .font(Mariupol.medium, 20)
-                    Text("\(procedure.duration) \("min-string".localized)")
-                        .font(Mariupol.regular, 14)
+                HStack {
+                    Text("all-procedures-message-string")
+                        .foregroundColor(.white)
+                        .font(.subheadline)
+                        .bold()
+                        .multilineTextAlignment(.center)
                 }
-                .padding(.vertical, 7)
-                
-                Spacer()
-                
-                VStack {
-                    Text("₴ \(procedure.cost)")
-                        .font(Mariupol.regular, 22)
-                }
+                .padding(5)
             }
-            .padding(.horizontal, 20)
-            .frame(minHeight: ScreenSize.height * 0.09)
-            .background(Color.secondaryColor)
-            .cornerRadius(cornerRadius)
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: ScreenSize.height * 0.06)
+            .background(Color.mainColor)
+            .cornerRadius(ScreenSize.width / 30)
         }
         .buttonStyle(.plain)
-    }
-}
 
-struct EditButton: View {
+    }
     
-    @Binding var isEditing: Bool
-    
-    var body: some View {
-        Button {
-            Haptics.shared.play(.light)
-            withAnimation(.easeInOut(duration: 0.15)) {
-                isEditing.toggle()
-            }
-        } label: {
-            BarButtonView(image: "pencil", textColor: isEditing ? .white : nil, backgroundColor: isEditing ? .mainColor : nil)
+    var searchField: some View {
+        AccentInputField(
+            promptText: "massage-string",
+            title: nil,
+            input: $searchText
+        )
+        .focused($focus)
+        .onAppear {
+            focus = true
         }
-        .buttonStyle(.plain)
-    }
-}
-
-struct SearchButton: View {
-    
-    @Binding var showSearch: Bool
-    
-    var body: some View {
-        Button {
-            Haptics.shared.play(.light)
-            withAnimation(.easeInOut(duration: 0.15)) {
-                if showSearch {
-                    withAnimation(.easeInOut(duration: 0.15)) {
-                        hideKeyboard()
+        .onDisappear {
+            focus = false
+            showSearch = false
+            searchText = ""
+        }
+        .gesture(
+            DragGesture()
+                .onEnded { gesture in
+                    if gesture.translation.height < 30 {
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            showSearch = false
+                            searchText = ""
+                            hideKeyboard()
+                        }
                     }
                 }
-                showSearch.toggle()
-            }
-        } label: {
-            BarButtonView(image: "search")
-        }
-        .buttonStyle(.plain)
+        )
+
     }
+}
+
+// MARK: Functions
+
+extension AllProcedures {
+    private func alertContition() -> Bool {
+        guard vm.user?.name == nil || vm.user?.phoneNumber == nil, vm.user?.isDoctor == false else {
+            return false
+        }
+        return true
+    }
+    
+    private func randomize(interval: TimeInterval, withVariance variance: Double) -> TimeInterval {
+        let random = (Double(arc4random_uniform(1000)) - 500.0) / 500.0
+        return interval + variance * random
+    }
+
 }

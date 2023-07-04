@@ -40,7 +40,6 @@ struct AuthenticationView: View {
                     .padding(.horizontal, 20)
                     .padding(.top, ScreenSize.height * 0.05)
                     .background(Color.backgroundColor)
-//                    .background(colorScheme == .dark ? .black : .white)
                     .cornerRadius(ScreenSize.width / 20)
                     .shadow(radius: 10, y: -10)
                     .offset(y: ScreenSize.height / 3.5)
@@ -75,7 +74,6 @@ struct AuthenticationView: View {
             .sheet(isPresented: $showResetPasswordView) {
                 ResetPasswordView(showResetPasswordView: $showResetPasswordView)
                     .presentationDetents([.medium, .large])
-//                    .presentationCornerRadius(20)
             }
         }.ignoresSafeArea(.keyboard)
     }

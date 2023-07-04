@@ -31,7 +31,7 @@ struct AddArticleView: View {
             
             VStack {
                 
-                BarTitle<BackButton, ClipButton>(
+                TopBar<BackButton, ClipButton>(
                     text: "new-article-string",
                     leftButton: BackButton(),
                     rightButton: ClipButton(
@@ -41,26 +41,24 @@ struct AddArticleView: View {
                     )
                 )
                 
-                ArticleInputField(promptText: "title-string", type: .tittle, input: $tittle)
-                    .lineLimit(2)
+                ArticleInputField(
+                    promptText: "title-string",
+                    type: .tittle,
+                    input: $tittle
+                )
+                .lineLimit(2)
                 
-                ArticleInputField(promptText: "write-your-text-string", type: .body, input: $textBody)
+                ArticleInputField(
+                    promptText: "write-your-text-string",
+                    type: .body,
+                    input: $textBody
+                )
                 
                 Spacer()
                 
                 if !isKeyboardVisible {
                     Button {
-                        Task {
-                            do {
-                                loading = true
-                                try await addNewArticle()
-                                presentationMode.wrappedValue.dismiss()
-                                loading = false
-                            } catch {
-                                print("Can't add new article")
-                                loading = false
-                            }
-                        }
+                        publishArticle()
                     } label: {
                         AccentButton(
                             text: "publish-string",
@@ -84,7 +82,6 @@ struct AddArticleView: View {
                     } label: {
                         Text("delete-current-photo-string")
                     }
-
                 }
             }
             .photosPicker(
@@ -124,32 +121,6 @@ struct AddArticleView: View {
             }
         .navigationBarBackButtonHidden()
         }
-    }
-    
-    private func addNewArticle() async throws {
-        let articleId = UUID().uuidString
-        var url: String? = nil
-        
-        if let selectedPhoto {
-            let path = try await articleVM.savePhoto(item: selectedPhoto, articleId: articleId, childStorage: "articles")
-            url = try await articleVM.getUrlForImage(path: path)
-        }
-        
-        let article = ArticleModel(
-            id: UUID().uuidString,
-            title: tittle,
-            body: textBody,
-            dateCreated: Timestamp(date: Date()),
-            pictureUrl: url
-        )
-        try await articleVM.createNewArticle(article: article)
-    }
-
-    private func validateFields() -> Bool {
-        let isTitleEmpty = tittle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        let isTextBodyEmpty = textBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        
-        return !isTitleEmpty && !isTextBodyEmpty
     }
 }
 
@@ -194,7 +165,7 @@ fileprivate struct ArticleInputField: View {
     }
 }
 
-struct ClipButton: View {
+fileprivate struct ClipButton: View {
     
     @Binding var showActionSheet : Bool
     var selectedPhoto: PhotosPickerItem?
@@ -219,4 +190,48 @@ struct ClipButton: View {
         }
         .buttonStyle(.plain)
     }
+}
+
+extension AddArticleView {
+    
+    private func publishArticle() {
+        Task {
+            do {
+                loading = true
+                try await addNewArticle()
+                presentationMode.wrappedValue.dismiss()
+                loading = false
+            } catch {
+                print("Can't add new article")
+                loading = false
+            }
+        }
+    }
+    
+    private func addNewArticle() async throws {
+        let articleId = UUID().uuidString
+        var url: String? = nil
+        
+        if let selectedPhoto {
+            let path = try await articleVM.savePhoto(item: selectedPhoto, articleId: articleId, childStorage: "articles")
+            url = try await articleVM.getUrlForImage(path: path)
+        }
+        
+        let article = ArticleModel(
+            id: UUID().uuidString,
+            title: tittle,
+            body: textBody,
+            dateCreated: Timestamp(date: Date()),
+            pictureUrl: url
+        )
+        try await articleVM.createNewArticle(article: article)
+    }
+
+    private func validateFields() -> Bool {
+        let isTitleEmpty = tittle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let isTextBodyEmpty = textBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        
+        return !isTitleEmpty && !isTextBodyEmpty
+    }
+
 }

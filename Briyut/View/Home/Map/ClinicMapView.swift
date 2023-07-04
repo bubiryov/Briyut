@@ -22,7 +22,7 @@ struct ClinicMapView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    BarTitle<BackButton, EditLocationsButton>(
+                    TopBar<BackButton, EditLocationsButton>(
                         text: "",
                         leftButton: BackButton(backgorundColor: colorScheme == .dark ? Color.secondary.opacity(0.3) : nil),
                         rightButton: profileVM.user?.isDoctor ?? false ? EditLocationsButton(vm: vm) : nil

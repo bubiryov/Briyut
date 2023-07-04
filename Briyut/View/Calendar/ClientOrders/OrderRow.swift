@@ -37,7 +37,7 @@ struct OrderRow: View {
                     color: photoBackgroundColor,
                     padding: 16
                 )
-                    .cornerRadius(ScreenSize.width / 20)
+                .cornerRadius(ScreenSize.width / 20)
                 
                 VStack(alignment: .leading) {
                     
@@ -49,13 +49,9 @@ struct OrderRow: View {
                     Spacer()
                                         
                     if userInformation == .client {
-                        Text("\(user?.name ?? "\(user?.userId ?? "deleted-user-string".localized)") \(((user?.name) != nil) ? user?.lastName ?? "" : "")")
-                            .font(Mariupol.regular, 14)
-                            .foregroundColor(fontColor != nil ? fontColor : .secondary)
+                        userInfo(user: user)
                     } else {
-                        Text("\(doc?.name ?? "\(doc?.userId ?? "deleted-specialist-string".localized)") \(doc?.lastName ?? "")")
-                            .font(Mariupol.regular, 14)
-                            .foregroundColor(fontColor != nil ? fontColor : .secondary)
+                        userInfo(user: doc)
                     }
 
                     
@@ -63,7 +59,7 @@ struct OrderRow: View {
                     
                     Text(DateFormatter.customFormatter(format: "dd MMM yyyy, HH:mm").string(from: order.date.dateValue()))
                         .font(bigDate ? Font.custom(Mariupol.medium.rawValue, size: 22) : Font.custom(Mariupol.medium.rawValue, size: 17))
-
+                    
                         .foregroundColor(fontColor != nil ? fontColor : .primary)
                     
                 }
@@ -75,38 +71,7 @@ struct OrderRow: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             
             if withButtons {
-                HStack {
-                    Button {
-                        Haptics.shared.notify(.warning)
-                        Task {
-                            showAlert = true
-                        }
-                    } label: {
-                        Text("cancel-string")
-                            .foregroundColor(.black)
-                            .font(Mariupol.medium, 17)
-                            .frame(height: ScreenSize.height * 0.05)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.white)
-                            .cornerRadius(ScreenSize.width / 30)
-                    }
-                    .buttonStyle(.plain)
-                    
-                    Spacer()
-                    
-                    Button {
-                        rescheduleFullCover.toggle()
-                    } label: {
-                        Text("reschedule-string")
-                            .foregroundColor(.white)
-                            .font(Mariupol.medium, 17)
-                            .frame(height: ScreenSize.height * 0.05)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.mainColor)
-                            .cornerRadius(ScreenSize.width / 30)
-                    }
-                    .buttonStyle(.plain)
-                }
+                orderEditingButtons
             }
         }
         .frame(maxWidth: .infinity)
@@ -126,9 +91,7 @@ struct OrderRow: View {
                         try await vm.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
                     }
                 }),
-                secondaryButton: .default(Text("Cancel"), action: {
-                    
-                })
+                secondaryButton: .default(Text("Cancel"), action: { })
             )
         }
         .sheet(isPresented: $rescheduleFullCover) {
@@ -154,8 +117,52 @@ struct OrderRow: View {
 struct OrderRow_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: false, color: nil, fontColor: .white, bigDate: false, userInformation: .doctor, photoBackgroundColor: .white.opacity(0.2))
+            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: true, color: nil, fontColor: .white, bigDate: false, userInformation: .doctor, photoBackgroundColor: .white.opacity(0.2))
         }
         .padding(.horizontal, 20)
+    }
+}
+
+extension OrderRow {
+    func userInfo(user: DBUser?) -> some View {
+        Text("\(user?.name ?? "\(user?.userId ?? "deleted-user-string".localized)") \(((user?.name) != nil) ? user?.lastName ?? "" : "")")
+            .font(Mariupol.regular, 14)
+            .foregroundColor(fontColor != nil ? fontColor : .secondary)
+    }
+    
+    var orderEditingButtons: some View {
+        HStack {
+            Button {
+                Haptics.shared.notify(.warning)
+                Task {
+                    showAlert = true
+                }
+            } label: {
+                Text("cancel-string")
+                    .foregroundColor(.black)
+                    .font(Mariupol.medium, 17)
+                    .frame(height: ScreenSize.height * 0.05)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.white)
+                    .cornerRadius(ScreenSize.width / 30)
+            }
+            .buttonStyle(.plain)
+            
+            Spacer()
+            
+            Button {
+                Haptics.shared.notify(.warning)
+                rescheduleFullCover.toggle()
+            } label: {
+                Text("reschedule-string")
+                    .foregroundColor(.white)
+                    .font(Mariupol.medium, 17)
+                    .frame(height: ScreenSize.height * 0.05)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.mainColor)
+                    .cornerRadius(ScreenSize.width / 30)
+            }
+            .buttonStyle(.plain)
+        }
     }
 }

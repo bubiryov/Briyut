@@ -22,7 +22,7 @@ struct AllDoctorsView: View {
             
             VStack(spacing: ScreenSize.height * 0.02) {
                 
-                BarTitle<BackButton, Text>(
+                TopBar<BackButton, Text>(
                     text: "specialists-string",
                     leftButton: BackButton()
                 )
@@ -59,20 +59,7 @@ struct AllDoctorsView: View {
                     Spacer()
                     
                     Button {
-                        Haptics.shared.play(.light)
-                        Task {
-                            do {
-                                loading = true
-                                try await vm.addDoctor(userID: futureDoctorID)
-                                withAnimation {
-                                    futureDoctorID = ""
-                                }
-                                loading = false
-                            } catch {
-                                loading = false
-                                print("Can't add a doctor")
-                            }
-                        }
+                        addDoctorAction()
                     } label: {
                         AccentButton(
                             text: "add-specialist-string",
@@ -129,4 +116,22 @@ extension AllDoctorsView {
         guard !futureDoctorID.isEmpty else { return false }
         return true
     }
+    
+    private func addDoctorAction() {
+        Haptics.shared.play(.light)
+        Task {
+            do {
+                loading = true
+                try await vm.addDoctor(userID: futureDoctorID)
+                withAnimation {
+                    futureDoctorID = ""
+                }
+                loading = false
+            } catch {
+                loading = false
+                print("Can't add a doctor")
+            }
+        }
+    }
+
 }

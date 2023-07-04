@@ -16,7 +16,7 @@ struct AvailableDoctorsView: View {
     
     var body: some View {
         VStack {
-            BarTitle<BackButton, Text>(
+            TopBar<BackButton, Text>(
                 text: "specialists-string",
                 leftButton: BackButton()
             )

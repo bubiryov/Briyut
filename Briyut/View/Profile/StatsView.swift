@@ -29,7 +29,7 @@ struct StatsView: View {
             let selectedMonth = calendar.component(.month, from: selectedDate)
             let currentMonth = calendar.component(.month, from: Date())
             
-            BarTitle<BackButton, DoctorMenuPicker>(
+            TopBar<BackButton, DoctorMenuPicker>(
                 text: DateFormatter.customFormatter(format: "MMMM").getMonthNameInNominativeCase(from: selectedDate),
                 leftButton: BackButton(), rightButton: DoctorMenuPicker(
                     vm: vm,
@@ -37,6 +37,7 @@ struct StatsView: View {
                     selectedDoctor: $selectedDoctor),
                 action: { selectedDate = Date() }
             )
+            
             ScrollView {
                 if !customPeriod {
                     BarDatePicker(
@@ -75,25 +76,8 @@ struct StatsView: View {
                         }
                     }
                 
-                VStack(spacing: 20) {
-                    Toggle(isOn: $customPeriod.animation()) {
-                        Text("custom-period-string")
-                            .font(Mariupol.medium, 17)
-                    }
-                    .tint(.mainColor)
-                    .padding(.trailing, 5)
-                    
-                    if customPeriod {
-                        DatePicker("start-string", selection: $startDate, displayedComponents: [.date])
-                            .datePickerStyle(CompactDatePickerStyle())
-                            .tint(.mainColor)
-                        
-                        DatePicker("end-string", selection: $endDate, displayedComponents: [.date])
-                            .datePickerStyle(CompactDatePickerStyle())
-                            .tint(.mainColor)
-                    }
-                }
-                .padding(.top)
+                customPeriodSettings
+                
 
                 HStack { }
                 .frame(height: 10)
@@ -103,37 +87,22 @@ struct StatsView: View {
         .background(Color.backgroundColor)
         .navigationBarBackButtonHidden()
         .onAppear {
-            Task {
-                monthOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .month, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
-                lineChartData = calculateModifiedCounts(selectionMode: .month)
-            }
+            fetchDataAndUpdate(date: selectedDate, doctor: selectedDoctor, startDate: nil, endDate: nil, selectionMode: .month)
         }
         .onChange(of: selectedDate) { newDate in
-            Task {
-                monthOrders = try await vm.getDayMonthOrders(date: newDate, selectionMode: .month, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
-                lineChartData = calculateModifiedCounts(selectionMode: .month)
-            }
+            fetchDataAndUpdate(date: newDate, doctor: selectedDoctor, startDate: startDate, endDate: endDate, selectionMode: .month)
         }
         .onChange(of: selectedDoctor) { newDoctor in
-            Task {
-                monthOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: customPeriod ? .custom : .month, doctorId: newDoctor?.userId, firstDate: startDate, secondDate: endDate)
-                lineChartData = calculateModifiedCounts(selectionMode: customPeriod ? .custom : .month)
-            }
+            fetchDataAndUpdate(date: selectedDate, doctor: newDoctor, startDate: startDate, endDate: endDate, selectionMode: customPeriod ? .custom : .month)
         }
         .onChange(of: startDate) { newStartDate in
             if customPeriod {
-                Task {
-                    monthOrders = try await vm.getDayMonthOrders(date: Date(), selectionMode: .custom, doctorId: selectedDoctor?.userId, firstDate: newStartDate, secondDate: endDate)
-                    lineChartData = calculateModifiedCounts(selectionMode: .custom)
-                }
+                fetchDataAndUpdate(date: Date(), doctor: selectedDoctor, startDate: newStartDate, endDate: endDate, selectionMode: .custom)
             }
         }
         .onChange(of: endDate) { newSecondDate in
             if customPeriod {
-                Task {
-                    monthOrders = try await vm.getDayMonthOrders(date: Date(), selectionMode: .custom, doctorId: selectedDoctor?.userId, firstDate: startDate, secondDate: newSecondDate)
-                    lineChartData = calculateModifiedCounts(selectionMode: .custom)
-                }
+                fetchDataAndUpdate(date: Date(), doctor: selectedDoctor, startDate: startDate, endDate: newSecondDate, selectionMode: .custom)
             }
         }
         .onChange(of: customPeriod) { newValue in
@@ -141,10 +110,7 @@ struct StatsView: View {
                 startDate = lineChartData.1
                 endDate = lineChartData.2
             } else {
-                Task {
-                    monthOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .month, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
-                    lineChartData = calculateModifiedCounts(selectionMode: .month)
-                }
+                fetchDataAndUpdate(date: selectedDate, doctor: selectedDoctor, startDate: nil, endDate: nil, selectionMode: .month)
             }
         }
         .contentShape(Rectangle())
@@ -157,6 +123,49 @@ struct StatsView: View {
                 }
         )
     }
+}
+
+struct StatsView_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack {
+            StatsView()
+                .environmentObject(ProfileViewModel())
+        }
+        .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
+    }
+}
+
+// MARK: Components
+
+extension StatsView {
+    var customPeriodSettings: some View {
+        VStack(spacing: 20) {
+            Toggle(isOn: $customPeriod.animation()) {
+                Text("custom-period-string")
+                    .font(Mariupol.medium, 17)
+            }
+            .tint(.mainColor)
+            .padding(.trailing, 5)
+            
+            if customPeriod {
+                DatePicker("start-string", selection: $startDate, displayedComponents: [.date])
+                    .datePickerStyle(CompactDatePickerStyle())
+                    .tint(.mainColor)
+                
+                DatePicker("end-string", selection: $endDate, displayedComponents: [.date])
+                    .datePickerStyle(CompactDatePickerStyle())
+                    .tint(.mainColor)
+            }
+        }
+        .padding(.top)
+
+    }
+}
+
+// MARK: Functions
+
+extension StatsView {
     
     func calculateModifiedCounts(selectionMode: DateSelectionMode) -> ([Double], Date, Date) {
         let dailyCounts = monthOrders.reduce(into: [Date: Int]()) { counts, order in
@@ -199,173 +208,21 @@ struct StatsView: View {
         
         return (modifiedCounts, minDate ?? Date(), maxDate ?? Date())
     }
-
-}
-
-struct StatsView_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack {
-            StatsView()
-                .environmentObject(ProfileViewModel())
-        }
-        .padding(.horizontal, 20)
-        .background(Color.backgroundColor)
-    }
-}
-
-struct PieChartCard: View {
     
-    let total: Double?
-    let firstValue: Double
-    let secondValue: Double
-    let selectedDate: Date
-    let selectedMonth: Int
-    let currentMonth: Int
-    let purpose: ChartCardPurpose
-    
-    var body: some View {
-        VStack(spacing: 5) {
-            HStack {
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(purpose.rawValue.localized)
-                        .font(Mariupol.bold, 22)
-                    Text(selectedMonth == currentMonth ? "this-month-string".localized : DateFormatter.customFormatter(format: "MMMM").getMonthNameInNominativeCase(from: selectedDate))
-                        .font(Mariupol.bold, 20)
-                        .foregroundColor(.secondary)
-                }
-                Spacer()
-                
-                if let total {
-                    Text("\(purpose == .earnings ? "₴" : "") \(String(format: "%.0f", total))")
-                        .lineLimit(1)
-                        .font(.largeTitle)
-                    
-                }
-            }
-            
-            HStack {
-                
-                if purpose == .appointments {
-                    PieChart()
-                        .data((firstValue == 0 && secondValue == 0) ? [1, 0] : [firstValue, secondValue])
-                        .chartStyle(ChartStyle(
-                            backgroundColor: .white,
-                            foregroundColor: [
-                                ColorGradient(.staticMainColor, .staticMainColor),
-                                ColorGradient(.secondary, .secondary)
-                            ]))
-                        .frame(width: ScreenSize.height * 0.135, height: ScreenSize.height * 0.135)
-                        .overlay {
-                            Circle()
-                                .frame(width: ScreenSize.height * 0.07)
-                                .foregroundColor(.secondaryColor)
-                                .overlay {
-                                    Circle()
-                                        .stroke(Color.white, lineWidth: 2)
-                                }
-                        }
-                    
-                    Spacer()
-                }
-                
-                VStack(alignment: .leading) {
-                    HStack(alignment: .top) {
-                        RoundedRectangle(cornerRadius: 4)
-                            .frame(width: ScreenSize.width / 25, height: ScreenSize.width / 25)
-                            .foregroundColor(.staticMainColor)
-                        
-                        VStack(alignment: .leading) {
-                            Text("done-orders-string")
-                                .font(Mariupol.bold, 17)
-                                .foregroundColor(.secondary)
-                            
-                            Text("\(purpose == .earnings ? "₴ " : "")\(String(format: "%.0f", firstValue))")
-                                .lineLimit(1)
-                                .font(.title3.bold())
-                        }
-                        .padding(.leading, 10)
-                    }
-                    
-                    Spacer()
-                    
-                    HStack(alignment: .top) {
-                        
-                        RoundedRectangle(cornerRadius: 4)
-                            .frame(width: ScreenSize.width / 25, height: ScreenSize.width / 25)
-                            .foregroundColor(.secondary)
-                        
-                        VStack(alignment: .leading) {
-                            Text("future-orders-string")
-                                .font(Mariupol.bold, 17)
-                                .foregroundColor(.secondary)
-                            
-                            Text("\(purpose == .earnings ? "₴ " : "")\(String(format: "%.0f", secondValue))")
-                                .lineLimit(1)
-                                .font(.title3.bold())
-                        }
-                        .padding(.leading, 10)
-                    }
-                }
-                .padding(.vertical)
-                
-                if purpose == .earnings {
-                    
-                    Spacer()
-                    
-                    PieChart()
-                        .data((firstValue == 0 && secondValue == 0) ? [1, 0] : [firstValue, secondValue])
-                        .chartStyle(ChartStyle(
-                            backgroundColor: .white,
-                            foregroundColor: [
-                                ColorGradient(.staticMainColor, .staticMainColor),
-                                ColorGradient(.secondary, .secondary)
-                            ]))
-                        .frame(width: ScreenSize.height * 0.135, height: ScreenSize.height * 0.135)
-                        .overlay {
-                            Circle()
-                                .frame(width: ScreenSize.height * 0.07)
-                                .foregroundColor(.secondaryColor)
-                                .overlay {
-                                    Circle()
-                                        .stroke(Color.white, lineWidth: 2)
-                                }
-                        }
-                }
+    func fetchDataAndUpdate(
+        date: Date,
+        doctor: DBUser?,
+        startDate: Date?,
+        endDate: Date?,
+        selectionMode: DateSelectionMode) {
+        Task {
+            do {
+                monthOrders = try await vm.getDayMonthOrders(date: date, selectionMode: selectionMode, doctorId: doctor?.userId, firstDate: startDate, secondDate: endDate)
+                lineChartData = calculateModifiedCounts(selectionMode: selectionMode)
+            } catch {
+                print("Can't get or update data")
             }
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 15)
-        .frame(minHeight: ScreenSize.height * 0.2)
-        .background(Color.secondaryColor)
-        .cornerRadius(ScreenSize.width / 20)
     }
-}
 
-struct LineChartCard: View {
-    
-    var lineChartData: ([Double], Date, Date)  = ([], Date(), Date())
-    
-    var body: some View {
-        VStack {
-            
-            LineChart()
-                .data(lineChartData.0)
-                .chartStyle(ChartStyle(backgroundColor: .secondaryColor, foregroundColor: [ColorGradient(.staticMainColor, .staticMainColor)]))
-            
-            HStack {
-                Text(DateFormatter.customFormatter(format: "dd.MM").string(from: lineChartData.1))
-                    .font(.caption.bold())
-                    .foregroundColor(.secondary)
-                Spacer()
-                Text(DateFormatter.customFormatter(format: "dd.MM").string(from: lineChartData.2))
-                    .font(.caption.bold())
-                    .foregroundColor(.secondary)
-            }
-            .padding(.horizontal)
-        }
-        .padding(.vertical, 20)
-        .frame(height: ScreenSize.height * 0.23)
-        .background(Color.secondaryColor)
-        .cornerRadius(ScreenSize.width / 20)
-    }
 }

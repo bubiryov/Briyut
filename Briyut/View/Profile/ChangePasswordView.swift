@@ -24,7 +24,7 @@ struct ChangePasswordView: View {
                 
                 VStack(spacing: 20) {
                     
-                    BarTitle<BackButton, Text>(
+                    TopBar<BackButton, Text>(
                         text: "change-password-string",
                         leftButton: BackButton()
                     )

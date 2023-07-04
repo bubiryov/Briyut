@@ -37,7 +37,7 @@ struct DateTimeSelectionView: View {
             
             VStack {
                 
-                BarTitle<BackButton?, Text>(
+                TopBar<BackButton?, Text>(
                     text: selectedDate.barTitleDate(),
                     leftButton: procedure != nil ? BackButton() : nil,
                     action: { selectedDate = Date() }
@@ -56,27 +56,7 @@ struct DateTimeSelectionView: View {
                 
                 LazyVGrid(columns: Array(repeating: GridItem(), count: 4), spacing: 20) {
                     ForEach(timeSlots, id: \.self) { timeSlot in
-                        Button(action: {
-                            withAnimation(nil) {
-                                selectedTime = timeSlot
-                            }
-                        }) {
-                            Text(timeSlot)
-                                .foregroundColor(selectedTime == timeSlot ? .white : .primary)
-                                .font(Mariupol.medium, 17)
-                                .frame(width: ScreenSize.width * 0.2, height: ScreenSize.height * 0.05)
-                                .background(
-                                    RoundedRectangle(cornerRadius: ScreenSize.width / 30)
-                                        .strokeBorder(Color.mainColor, lineWidth: 2)
-                                        .background(
-                                            selectedTime == timeSlot ? Color.mainColor : Color.clear
-                                        )
-                                )
-                        }
-                        .buttonStyle(.plain)
-                        .disabled(disabledAllButtons ? true : checkIfDisabled(time: timeSlot))
-                        .opacity(disabledAllButtons ? 0.5 : checkIfDisabled(time: timeSlot) ? 0.5 : 1)
-                        .cornerRadius(ScreenSize.width / 30)
+                        timeSlotButton(timeSlot: timeSlot)
                     }
                 }
                 .padding(.horizontal)
@@ -95,67 +75,106 @@ struct DateTimeSelectionView: View {
                 
                 Spacer()
                 
-                Button {
-                    Haptics.shared.play(.light)
-                    if let procedure {
-                        Task {
-                            do {
-                                loading = true
-                                try await addNewOrderAction(procedure: procedure)
-                                loading = false
-                            } catch {
-                                print("Can't add an order")
-                                loading = false
-                            }
-                        }
-                    } else if let order {
-                        Task {
-                            do {
-                                loading = true
-                                try await editOrderAction(order: order)
-                                loading = false
-                            } catch {
-                                print("Can't edit the order")
-                                loading = false
-                            }
-                        }
-                    }
-                } label: {
-                    AccentButton(
-                        text: mainButtonTitle,
-                        isButtonActive: selectedTime != "" ? true : false,
-                        animation: loading
-                    )
-                }
-                .disabled((selectedTime != "" ? false : true) || loading)
+                mainButton
+                
             }
             .padding(.bottom, 20)
             .navigationBarBackButtonHidden(true)
             .onChange(of: selectedDate) { newDate in
-                Task {
-                    disabledAllButtons = true
-                    personalOrdersTime = try await vm.getDayOrderTimes(date: newDate, selectionMode: .day, doctorId: doctor?.userId)
-                    allOrders = try await vm.getDayMonthOrders(date: newDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
-                    generateTimeSlots()
-                    disabledAllButtons = false
-                }
+                handleSelectedDateChange(newDate: newDate)
             }
             .onAppear {
-                Task {
-                    disabledAllButtons = true
-                    personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: doctor?.userId)
-                    allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
-                    generateTimeSlots()
-                    disabledAllButtons = false
-                }
+                loadData()
             }
             .fullScreenCover(isPresented: $fullCover, content: {
                 if let order {
                     DoneOrderView(order: order, withPhoto: false, selectedTab: $selectedTab)
                 }
-        })
+            })
         }
     }
+}
+
+struct DateTimeSelectionView_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack {
+            DateTimeSelectionView(mainButtonTitle: "Add appoinment", selectedTab: .constant(.plus))
+                .environmentObject(ProfileViewModel())
+        }
+        .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
+    }
+}
+
+// MARK: Components
+
+extension DateTimeSelectionView {
+    func timeSlotButton(timeSlot: String) -> some View {
+        Button(action: {
+            withAnimation(nil) {
+                selectedTime = timeSlot
+            }
+        }) {
+            Text(timeSlot)
+                .foregroundColor(selectedTime == timeSlot ? .white : .primary)
+                .font(Mariupol.medium, 17)
+                .frame(width: ScreenSize.width * 0.2, height: ScreenSize.height * 0.05)
+                .background(
+                    RoundedRectangle(cornerRadius: ScreenSize.width / 30)
+                        .strokeBorder(Color.mainColor, lineWidth: 2)
+                        .background(
+                            selectedTime == timeSlot ? Color.mainColor : Color.clear
+                        )
+                )
+        }
+        .buttonStyle(.plain)
+        .disabled(disabledAllButtons ? true : checkIfDisabled(time: timeSlot))
+        .opacity(disabledAllButtons ? 0.5 : checkIfDisabled(time: timeSlot) ? 0.5 : 1)
+        .cornerRadius(ScreenSize.width / 30)
+    }
+    
+    var mainButton: some View {
+        Button {
+            Haptics.shared.play(.light)
+            if let procedure {
+                Task {
+                    do {
+                        loading = true
+                        try await addNewOrderAction(procedure: procedure)
+                        loading = false
+                    } catch {
+                        print("Can't add an order")
+                        loading = false
+                    }
+                }
+            } else if let order {
+                Task {
+                    do {
+                        loading = true
+                        try await editOrderAction(order: order)
+                        loading = false
+                    } catch {
+                        print("Can't edit the order")
+                        loading = false
+                    }
+                }
+            }
+        } label: {
+            AccentButton(
+                text: mainButtonTitle,
+                isButtonActive: selectedTime != "" ? true : false,
+                animation: loading
+            )
+        }
+        .disabled((selectedTime != "" ? false : true) || loading)
+
+    }
+
+}
+
+// MARK: Functions
+
+extension DateTimeSelectionView {
     
     func addNewOrderAction(procedure: ProcedureModel) async throws {
         guard let client else { return }
@@ -192,14 +211,12 @@ struct DateTimeSelectionView: View {
         if !checkIfDisabled(time: selectedTime) {
             try await vm.editOrderTime(orderId: order.orderId, date: date, end: end)
             
-//            if vm.user?.isDoctor ?? false {
-                vm.activeLastDocument = nil
-                vm.activeOrders = []
+            vm.activeLastDocument = nil
+            vm.activeOrders = []
             try await vm.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
-//            }
-
+            
             presentationMode.wrappedValue.dismiss()
-
+            
         } else {
             showAlert = true
             selectedTime = ""
@@ -380,162 +397,25 @@ struct DateTimeSelectionView: View {
 
         return selectedDate >= vacationStartDate && selectedDate < vacationEndDate
     }
+    
+    func handleSelectedDateChange(newDate: Date) {
+        Task {
+            disabledAllButtons = true
+            personalOrdersTime = try await vm.getDayOrderTimes(date: newDate, selectionMode: .day, doctorId: doctor?.userId)
+            allOrders = try await vm.getDayMonthOrders(date: newDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
+            generateTimeSlots()
+            disabledAllButtons = false
+        }
+    }
+    
+    func loadData() {
+        Task {
+            disabledAllButtons = true
+            personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: doctor?.userId)
+            allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
+            generateTimeSlots()
+            disabledAllButtons = false
+        }
+    }
 
-    
-//    func checkVacation() -> Bool {
-//
-//        guard
-//            let doctor = self.doctor,
-//            doctor.vacation != nil,
-//            let vacationDates = doctor.vacationDates else {
-//            return false
-//        }
-//
-//        guard selectedDate < vacationDates[0].dateValue() && selectedDate > vacationDates[1].dateValue() else { return true }
-//
-//        return false
-//    }
-    
-//    func checkCustomSchedule(orderDate: Date, endOfFutureOrder: Date) -> Bool {
-//        guard let doctor = self.doctor else { return false }
-//        guard doctor.customSchedule != nil else { return false }
-//        guard let scheduleTimes = doctor.scheduleTimes else { return false }
-//        guard let startOfDay = scheduleTimes.keys.first else { return false }
-//        guard let endOfDay = scheduleTimes.values.first else { return false }
-//
-//        guard orderDate >= createFullDate(from: selectedDate, time: startOfDay) ?? Date() && endOfFutureOrder <= createFullDate(from: selectedDate, time: endOfDay) ?? Date() else { return true }
-//
-//        return false
-//    }
-}
-
-struct DateTimeSelectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack {
-            DateTimeSelectionView(mainButtonTitle: "Add appoinment", selectedTab: .constant(.plus))
-                .environmentObject(ProfileViewModel())
-        }
-        .padding(.horizontal, 20)
-        .background(Color.backgroundColor)
-    }
-}
-
-struct BarDatePicker: View {
-    @Binding var selectedDate: Date
-    let mode: DatePickerMode
-    let pastTime: Bool
-    
-    var body: some View {
-        VStack {
-            HStack {
-                if mode == .days {
-                    Button(action: {
-                        let value = leftButtonStep(pastTime: pastTime)
-                        selectedDate = Calendar.current.date(byAdding: .day, value: -value, to: selectedDate) ?? selectedDate
-                    }) {
-                        Circle()
-                            .frame(width: 40, height: 40)
-                            .foregroundColor(Color.mainColor)
-                            .overlay(
-                                Image("back")
-                                    .resizable()
-                                    .frame(width: 15, height: 15)
-                                    .foregroundColor(.white)
-                            )
-                    }
-                    .disabled(pastTime ? false : shouldEnableLeftButton(selectedDate: selectedDate))
-                    .opacity(pastTime ? 1 : shouldEnableLeftButton(selectedDate: selectedDate) ? 0.5 : 1)
-                }
-                
-                ForEach(-2...2, id: \.self) { day in
-                    let date = Calendar.current.date(byAdding: mode == .days ? .day : .month, value: day, to: selectedDate) ?? selectedDate
-                    let isSelected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
-                    
-                    Button(action: {
-                        selectedDate = date
-                    }) {
-                        VStack(spacing: 2) {
-                            if mode == .days {
-                                Text(DateFormatter.customFormatter(format: "d").string(from: date))
-                                    .font(Mariupol.medium, 17)
-                                    .foregroundColor(isSelected ? .white : .primary)
-                            }
-                            Text(DateFormatter.customFormatter(format: mode == .days ? "E" : "MMM").string(from: date))
-                                .foregroundColor(isSelected ? .white : .primary)
-                                .font(Mariupol.regular, 11)
-                        }
-                        .frame(width: ScreenSize.height * 0.05, height: ScreenSize.width * 0.15)
-                        .background(isSelected ? Color.mainColor : Color.clear)
-                        .cornerRadius(ScreenSize.width / 30)
-                    }
-                    .disabled(pastTime ? false : checkIfDisabled(date: date))
-                    .opacity(pastTime ? 1 : checkIfDisabled(date: date) ? 0.3 : 1)
-//                    .scaleEffect(day == -2 || day == 2 ? 0.7 : (day == -1 || day == 1 ? 0.8 : 1))
-                }
-                if mode == .days {
-                    Button(action: {
-                        selectedDate = Calendar.current.date(byAdding: .day, value: 5, to: selectedDate) ?? selectedDate
-                    }) {
-                        Circle()
-                            .frame(width: 40, height: 40)
-                            .foregroundColor(Color.mainColor)
-                            .overlay(
-                                Image("next")
-                                    .resizable()
-                                    .frame(width: 15, height: 15)
-                                    .foregroundColor(.white)
-                            )
-                    }
-                }
-            }
-        }
-        .gesture(
-            DragGesture()
-                .onEnded { gesture in
-                    if gesture.translation.width > 100 && (selectedDate >= Date() || pastTime) {
-                        selectedDate = Calendar.current.date(byAdding: .day, value: -1, to: selectedDate) ?? selectedDate
-                    } else if gesture.translation.width < 100 {
-                        selectedDate = Calendar.current.date(byAdding: .day, value: 1, to: selectedDate) ?? selectedDate
-                    }
-                }
-        )
-        .onChange(of: selectedDate) { _ in
-            Haptics.shared.play(.light)
-        }
-        
-    }
-    
-    func checkIfDisabled(date: Date) -> Bool {
-        let currentDate = Calendar.current.startOfDay(for: Date())
-        let selectedDate = Calendar.current.startOfDay(for: date)
-        return selectedDate < currentDate
-    }
-    
-    func shouldEnableLeftButton(selectedDate: Date) -> Bool {
-        let currentDate = Calendar.current.startOfDay(for: Date())
-        
-        let startDate = Calendar.current.date(byAdding: .day, value: -2, to: currentDate) ?? currentDate
-        
-        let endDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate) ?? currentDate
-        
-        return selectedDate >= startDate && selectedDate <= endDate
-    }
-    
-    func leftButtonStep(pastTime: Bool) -> Int {
-        let currentDate = Calendar.current.startOfDay(for: Date())
-        let difference = Calendar.current.dateComponents([.day], from: currentDate, to: selectedDate).day ?? 0
-        
-        var value: Int {
-            if pastTime {
-                return 5
-            } else {
-                if difference >= 5 {
-                    return 5
-                } else {
-                    return difference
-                }
-            }
-        }
-        return value
-    }
 }

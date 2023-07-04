@@ -31,14 +31,7 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            print("Content start")
-            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-            notEntered = authUser == nil
-            localNotEntered = authUser == nil
-            Task {
-                try await Task.sleep(nanoseconds: 3_000_000_000)
-                splashView = false
-            }
+            checkAuthentication()
         }
         .onChange(of: notEntered) { newValue in
             localNotEntered = newValue
@@ -50,5 +43,17 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .environmentObject(AuthenticationViewModel())
+    }
+}
+
+extension ContentView {
+    func checkAuthentication() {
+        Task {
+            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+            notEntered = authUser == nil
+            localNotEntered = authUser == nil
+            try await Task.sleep(nanoseconds: 3_000_000_000)
+            splashView = false
+        }
     }
 }

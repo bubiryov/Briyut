@@ -18,7 +18,7 @@ struct HistoryView: View {
     
     var body: some View {
         VStack {
-            BarTitle<BackButton, AddButton>(
+            TopBar<BackButton, AddButton>(
                 text: "history-string",
                 leftButton: BackButton(),
                 rightButton: AddButton(showSheet: $showSheet)
@@ -101,19 +101,7 @@ struct HistoryView: View {
             Alert(
                 title: Text("remove-appointment-alert-title-string"),
                 primaryButton: .destructive(Text("remove-string"), action: {
-                    Task {
-                        do {
-                            guard let choosenOrder else {
-                                throw URLError(.badServerResponse)
-                            }
-                            try await vm.removeOrder(orderId: choosenOrder.orderId)
-                            vm.allLastDocument = nil
-                            vm.allOrders = []
-                            try await vm.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
-                        } catch {
-                            print("Something went wrong")
-                        }
-                    }
+                    removeAppointment()
                 }),
                 secondaryButton: .default(Text("cancel-string"), action: { })
             )
@@ -135,16 +123,20 @@ struct HistoryView_Previews: PreviewProvider {
     }
 }
 
-struct AddButton: View {
-    
-    @Binding var showSheet: Bool
-    
-    var body: some View {
-        Button {
-            showSheet = true
-        } label: {
-            BarButtonView(image: "plus", scale: 0.35)
+extension HistoryView {
+    func removeAppointment() {
+        Task {
+            do {
+                guard let choosenOrder else {
+                    throw URLError(.badServerResponse)
+                }
+                try await vm.removeOrder(orderId: choosenOrder.orderId)
+                vm.allLastDocument = nil
+                vm.allOrders = []
+                try await vm.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
+            } catch {
+                print("Something went wrong")
+            }
         }
-        .buttonStyle(.plain)
     }
 }

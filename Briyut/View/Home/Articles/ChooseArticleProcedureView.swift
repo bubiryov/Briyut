@@ -15,7 +15,7 @@ struct ChooseArticleProcedureView: View {
     
     var body: some View {
         VStack {
-            BarTitle<BackButton, Text>(
+            TopBar<BackButton, Text>(
                 text: "Choose procedure",
                 leftButton: BackButton()
             )
@@ -65,12 +65,6 @@ struct ChooseArticleProcedureView: View {
                     }
                 }
         )
-
-//        .onAppear {
-//            Task {
-//                try await vm.getAllProcedures()
-//            }
-//        }
     }
 }
 

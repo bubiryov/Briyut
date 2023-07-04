@@ -20,44 +20,21 @@ struct ArticleView: View {
     var body: some View {
         
         VStack {
-            BarTitle<BackButton, DeleteButton>(
+            TopBar<BackButton, DeleteButton>(
                 text: "",
                 leftButton: BackButton(),
                 rightButton: vm.user?.isDoctor ?? false ? DeleteButton(showAlert: $showAlert) : nil
             )
-            
-            ScrollView {
-                VStack(alignment: .leading, spacing: 25) {
-                    
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text(article.title)
-                            .font(Mariupol.bold, 30)
                         
-                        Text(DateFormatter.customFormatter(format: "dd MMM yyyy, HH:mm").string(from: article.dateCreated.dateValue()))
-                            .font(Mariupol.medium, 14)
-                            .foregroundColor(.secondary)
-                    }
-                    
+            ScrollView {
+                
+                articleTitle
+
+                VStack(alignment: .leading, spacing: 25) {
+                                        
                     if let pictureUrl = article.pictureUrl, pictureUrl != "" {
-                        CachedAsyncImage(url: URL(string: pictureUrl), urlCache: .imageCache) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(height: ScreenSize.height * 0.18)
-                                .cornerRadius(ScreenSize.height / 50)
-                                .clipped()
-                            
-                        } placeholder: {
-                            HStack {
-                                ProgressView()
-                            }
-                            .frame(height: ScreenSize.height * 0.18)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.secondaryColor)
-                            .cornerRadius(ScreenSize.height / 50)
-                        }
+                        articlePicture(url: pictureUrl)
                     }
-                    
                     
                     Text(article.body)
                         .font(Mariupol.regular, 17)
@@ -78,20 +55,7 @@ struct ArticleView: View {
         .background(Color.backgroundColor)
         .navigationBarBackButtonHidden()
         .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text("delete-article-alert-title-string"),
-                primaryButton: .destructive(Text("delete-string"), action: {
-                    Task {
-                        do {
-                            try await articleVM.removeArticle(article_id: article.id)
-                            presentationMode.wrappedValue.dismiss()
-                        } catch {
-                            print("Something went wrong")
-                        }
-                    }
-                }),
-                secondaryButton: .default(Text("cancel-string"), action: { })
-            )
+            deleteArticleAlert
         }
 
     }
@@ -108,4 +72,58 @@ struct ArticleView_Previews: PreviewProvider {
         .environmentObject(ProfileViewModel())
         .environmentObject(ArticlesViewModel())
     }
+}
+
+extension ArticleView {
+    
+    var articleTitle: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(article.title)
+                .font(Mariupol.bold, 30)
+            
+            Text(DateFormatter.customFormatter(format: "dd MMM yyyy, HH:mm").string(from: article.dateCreated.dateValue()))
+                .font(Mariupol.medium, 14)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    func articlePicture(url: String) -> some View {
+        return CachedAsyncImage(url: URL(string: url), urlCache: .imageCache) { image in
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(height: ScreenSize.height * 0.18)
+                .cornerRadius(ScreenSize.height / 50)
+                .clipped()
+            
+        } placeholder: {
+            HStack {
+                ProgressView()
+            }
+            .frame(height: ScreenSize.height * 0.18)
+            .frame(maxWidth: .infinity)
+            .background(Color.secondaryColor)
+            .cornerRadius(ScreenSize.height / 50)
+        }
+    }
+    
+    private var deleteArticleAlert: Alert {
+        Alert(
+            title: Text("delete-article-alert-title-string"),
+            primaryButton: .destructive(Text("delete-string"), action: {
+                Task {
+                    do {
+                        try await articleVM.removeArticle(article_id: article.id)
+                        presentationMode.wrappedValue.dismiss()
+                    } catch {
+                        print("Something went wrong")
+                    }
+                }
+            }),
+            secondaryButton: .default(Text("cancel-string"), action: { })
+        )
+    }
+
+
 }

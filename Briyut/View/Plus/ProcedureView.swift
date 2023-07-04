@@ -27,10 +27,10 @@ struct ProcedureView: View {
     var body: some View {
         
         VStack {
-            BarTitle<BackButton, DeleteProcedureButton?>(
+            TopBar<BackButton, DeleteButton?>(
                 text: title,
                 leftButton: BackButton(),
-                rightButton: procedure != nil ? DeleteProcedureButton(showAlert: $showAlert) : nil
+                rightButton: procedure != nil ? DeleteButton(showAlert: $showAlert) : nil
             )
             .padding(.bottom)
             
@@ -66,18 +66,7 @@ struct ProcedureView: View {
                 }
             }
             .alert(isPresented: $showAlert) {
-                Alert(
-                    title: Text("delete-procedure-alert-title-string"),
-                    message: Text("delete-procedure-alert-message-string"),
-                    primaryButton: .destructive(Text("delete-string"), action: {
-                        Task {
-                            try await vm.removeProcedure(procedureId: procedure!.procedureId)
-                            isEditing = false
-                            presentationMode.wrappedValue.dismiss()
-                        }
-                    }),
-                    secondaryButton: .default(Text("cancel-string"), action: { })
-                )
+                deleteProcedureAlert
             }
             
             Spacer()
@@ -113,15 +102,7 @@ struct ProcedureView: View {
         .background(Color.backgroundColor)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            if let procedure {
-                if name == "" {
-                    name = procedure.name
-                    duration = String(procedure.duration)
-                    cost = String(procedure.cost)
-                    availableDoctors = procedure.availableDoctors
-                    parallelQuantity = String(procedure.parallelQuantity)
-                }
-            }
+            loadDataFromProcedure()
         }
         .contentShape(Rectangle())
         .gesture(
@@ -139,6 +120,96 @@ struct ProcedureView: View {
         )
         .ignoresSafeArea(.keyboard)
     }
+    
+//    func validateFields() -> Bool {
+//        if name.isEmpty || duration.isEmpty || cost.isEmpty || Int(cost) == nil || availableDoctors.isEmpty || parallelQuantity.isEmpty || Int(parallelQuantity) == nil {
+//            return false
+//        }
+//        if !duration.allSatisfy({ $0.isNumber }) || !cost.allSatisfy({ $0.isNumber }) {
+//            return false
+//        }
+//
+//        return true
+//    }
+//
+//    func addProcedure() async throws {
+//        let newProcedure = ProcedureModel(procedureId: UUID().uuidString, name: name, duration: Int(duration)!, cost: Int(cost)!, parallelQuantity: Int(parallelQuantity)!, availableDoctors: availableDoctors)
+//        do {
+//            loading = true
+//            try await vm.addNewProcedure(procedure: newProcedure)
+//            loading = false
+//            presentationMode.wrappedValue.dismiss()
+//        } catch {
+//            loading = false
+//            print("Can't add the procedure")
+//        }
+//    }
+//
+//    func editProcedure() async throws {
+//        do {
+//            loading = true
+//            try await vm.editProcedure(procedureId: procedure?.procedureId ?? "", name: name, duration: Int(duration)!, cost: Int(cost)!, parallelQuantity: Int(parallelQuantity)!, availableDoctors: availableDoctors)
+//            loading = false
+//            presentationMode.wrappedValue.dismiss()
+//        } catch {
+//            loading = false
+//            print("Can't edit the procedure")
+//        }
+//    }
+//
+//    func loadDataFromProcedure() {
+//        if let procedure = procedure {
+//            if name == "" {
+//                name = procedure.name
+//                duration = String(procedure.duration)
+//                cost = String(procedure.cost)
+//                availableDoctors = procedure.availableDoctors
+//                parallelQuantity = String(procedure.parallelQuantity)
+//            }
+//        }
+//    }
+
+}
+
+struct AddProcedure_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack {
+            ProcedureView(title: "edit-procedure-string", buttonText: "save-changes-string", isEditing: .constant(false))
+                .environmentObject(ProfileViewModel())
+        }
+        .padding(.horizontal, 20)
+        .background(Color.backgroundColor)
+    }
+}
+
+// MARK: Components
+
+extension ProcedureView {
+    
+    private var deleteProcedureAlert: Alert {
+        Alert(
+            title: Text("delete-procedure-alert-title-string"),
+            message: Text("delete-procedure-alert-message-string"),
+            primaryButton: .destructive(Text("delete-string"), action: {
+                Task {
+                    do {
+                        try await vm.removeProcedure(procedureId: procedure!.procedureId)
+                        isEditing = false
+                        presentationMode.wrappedValue.dismiss()
+                    } catch {
+                        print("Something went wrong")
+                    }
+                }
+            }),
+            secondaryButton: .default(Text("cancel-string"), action: { })
+        )
+    }
+
+}
+
+// MARK: Functions
+
+extension ProcedureView {
     
     func validateFields() -> Bool {
         if name.isEmpty || duration.isEmpty || cost.isEmpty || Int(cost) == nil || availableDoctors.isEmpty || parallelQuantity.isEmpty || Int(parallelQuantity) == nil {
@@ -175,29 +246,17 @@ struct ProcedureView: View {
             print("Can't edit the procedure")
         }
     }
-}
-
-struct AddProcedure_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack {
-            ProcedureView(title: "edit-procedure-string", buttonText: "save-changes-string", isEditing: .constant(false))
-                .environmentObject(ProfileViewModel())
-        }
-        .padding(.horizontal, 20)
-        .background(Color.backgroundColor)
-    }
-}
-
-fileprivate struct DeleteProcedureButton: View {
     
-    @Binding var showAlert: Bool
-    
-    var body: some View {
-        Button {
-            showAlert = true
-        } label: {
-            BarButtonView(image: "trash", textColor: .white, backgroundColor: Color.destructiveColor)
+    func loadDataFromProcedure() {
+        if let procedure = procedure {
+            if name == "" {
+                name = procedure.name
+                duration = String(procedure.duration)
+                cost = String(procedure.cost)
+                availableDoctors = procedure.availableDoctors
+                parallelQuantity = String(procedure.parallelQuantity)
+            }
         }
-        .buttonStyle(.plain)
     }
+
 }

@@ -21,7 +21,7 @@ struct LocationView: View {
     
     var body: some View {
         VStack {
-            BarTitle<BackButton, DeleteButton>(
+            TopBar<BackButton, DeleteButton>(
                 text: location != nil ? "edit-address-string" : "new-address-string",
                 leftButton: BackButton(),
                 rightButton: location != nil ? DeleteButton(showAlert: $showAlert) : nil

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import CachedAsyncImage
 
 struct ArticlesList: View {
     
@@ -18,11 +17,12 @@ struct ArticlesList: View {
     var body: some View {
 
         VStack {
-            BarTitle<BackButton, AddArticleButton>(
+            TopBar<BackButton, AddArticleButton>(
                 text: "articles-string",
                 leftButton: BackButton(),
                 rightButton: vm.user?.isDoctor ?? false ? AddArticleButton() : nil
             )
+            
             ScrollView {
                 LazyVStack {
                     ForEach(articleVM.articles, id: \.id) { article in
@@ -35,15 +35,7 @@ struct ArticlesList: View {
                             }
                             .frame(height: 1)
                             .onAppear {
-                                Task {
-                                    do {
-                                        loading = true
-                                        try await articleVM.getRequiredArticles(countLimit: 6)
-                                        loading = false
-                                    } catch {
-                                        loading = false
-                                    }
-                                }
+                                getMoreArticles()
                             }
                             
                             if loading {
@@ -58,17 +50,6 @@ struct ArticlesList: View {
             .scrollIndicators(.hidden)
         }
         .background(Color.backgroundColor)
-//        .onAppear {
-//            Task {
-//                do {
-//                    loading = true
-//                    try await articleVM.getRequiredArticles(countLimit: 6)
-//                    loading = false
-//                } catch {
-//                    loading = false
-//                }
-//            }
-//        }
         .gesture(
             DragGesture()
                 .onEnded { gesture in
@@ -92,89 +73,16 @@ struct ArticlesList_Previews: PreviewProvider {
     }
 }
 
-struct ArticleRow: View {
-    
-    let article: ArticleModel
-    @EnvironmentObject var articleVM: ArticlesViewModel
-    @State private var showFullArticle: Bool = false
-    
-    var body: some View {
-        HStack {
-            if let url = article.pictureUrl {
-                VStack {
-                    CachedAsyncImage(url: URL(string: url), urlCache: .imageCache) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: ScreenSize.height * 0.1, height: ScreenSize.height * 0.1, alignment: .center)
-                            .clipped()
-                        
-                    } placeholder: {
-                        Text("Rubinko")
-                            .lineLimit(1)
-                            .padding(5)
-                            .font(.custom("Alokary", size: 11))
-                            .foregroundColor(.mainColor)
-                            .tracking(1)
-                            .frame(width: ScreenSize.height * 0.1, height: ScreenSize.height * 0.1)
-                            .background(Color.white)
-                            .cornerRadius(ScreenSize.width / 20)
-                    }
-                }
-                .cornerRadius(ScreenSize.width / 20)
-            } else {
-                Text("Rubinko")
-                    .lineLimit(1)
-                    .padding(5)
-                    .font(.custom("Alokary", size: 11))
-                    .foregroundColor(.mainColor)
-                    .tracking(1)
-                    .frame(width: ScreenSize.height * 0.1, height: ScreenSize.height * 0.1)
-                    .background(Color.white)
-                    .cornerRadius(ScreenSize.width / 20)
+extension ArticlesList {
+    func getMoreArticles() {
+        Task {
+            do {
+                loading = true
+                try await articleVM.getRequiredArticles(countLimit: 6)
+                loading = false
+            } catch {
+                loading = false
             }
-            
-            VStack(alignment: .leading, spacing: 10) {
-                Text(article.title)
-                    .font(Mariupol.medium, 20)
-                    .lineLimit(1)
-                
-                Text(article.body)
-                    .font(Mariupol.regular, 14)
-                    .lineLimit(4)
-                    .foregroundColor(.secondary)
-            }
-            .padding(.leading, 10)
-            .frame(height: ScreenSize.height * 0.1, alignment: .top)
-
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 20)
-        .padding(.vertical, 7)
-        .frame(height: ScreenSize.height * 0.135)
-        .background(Color.secondaryColor)
-        .cornerRadius(ScreenSize.width / 20)
-        .onTapGesture {
-            Haptics.shared.play(.light)
-            showFullArticle = true
-        }
-        .fullScreenCover(isPresented: $showFullArticle) {
-            ArticleView(article: article)
         }
     }
 }
-
-struct AddArticleButton: View {
-    
-    @EnvironmentObject var articleVM: ArticlesViewModel
-
-    var body: some View {
-        NavigationLink {
-            AddArticleView().environmentObject(articleVM)
-        } label: {
-            BarButtonView(image: "plus", scale: 0.35)
-        }
-        .buttonStyle(.plain)
-    }
-}
-

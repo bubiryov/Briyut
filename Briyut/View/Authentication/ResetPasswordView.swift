@@ -18,7 +18,7 @@ struct ResetPasswordView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: ScreenSize.height * 0.02) {
-                BarTitle<Text, Text>(text: "reset-password-string")
+                TopBar<Text, Text>(text: "reset-password-string")
                     .padding(.top)
                 
                 AuthInputField(
@@ -29,17 +29,7 @@ struct ResetPasswordView: View {
                 )
                 
                 Button {
-                    Task {
-                        do {
-                            loading = true
-                            try await vm.resetPassword()
-                            loading = false
-                            showInfoAlert = true
-                        } catch {
-                            loading = false
-                            print("Reset password error")
-                        }
-                    }
+                    resetPassword()
                 } label: {
                     AccentButton(
                         text: "reset-password-string",
@@ -71,9 +61,24 @@ struct ResetPasswordView: View {
 
 struct ResetPasswordView_Previews: PreviewProvider {
     static var previews: some View {
-//        NavigationView {
         ResetPasswordView(showResetPasswordView: .constant(true))
-                .environmentObject(AuthenticationViewModel())
-//        }
+            .environmentObject(AuthenticationViewModel())
+    }
+}
+
+extension ResetPasswordView {
+    func resetPassword() {
+        Task {
+            do {
+                loading = true
+                try await vm.resetPassword()
+                loading = false
+                showInfoAlert = true
+            } catch {
+                loading = false
+                print("Reset password error")
+            }
+        }
+
     }
 }

@@ -22,33 +22,10 @@ struct DoneOrderView: View {
         VStack {
             VStack {
                 if withPhoto {
-                    let userPhotoUrl: String = {
-                        if vm.user?.isDoctor ?? false {
-                            return vm.users.first(where: { $0.userId == order.clientId })?.photoUrl ?? ""
-                        } else {
-                            return vm.doctors.first(where: { $0.userId == order.doctorId })?.photoUrl ?? ""
-                        }
-                    }()
-                    GeometryReader { geometry in
-                        CachedAsyncImage(url: URL(string: userPhotoUrl)) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: geometry.size.width, height: geometry.size.height)
-                                .clipped()
-                        } placeholder: {
-                            Image(systemName: "person.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 100)
-                                .foregroundColor(.staticMainColor)
-                        }
-                        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
-                    }
+                    userPhoto
                 } else {
                     DoneAnimation()
                         .frame(width: 250, height: 200)
-                    
                     Text("done-string")
                         .font(Mariupol.bold, 30)
                         .foregroundColor(.staticMainColor)
@@ -102,7 +79,6 @@ struct DoneOrderView: View {
             } label: {
                 AccentButton(text: withPhoto ? "back-string" : "back-home-string", isButtonActive: true)
             }
-//            .padding(.top, 10)
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 20)
@@ -145,5 +121,35 @@ fileprivate struct DoneOrderViewRow: View {
                 .lineLimit(1)
                 .padding(.leading, 50)
         }
+    }
+}
+
+extension DoneOrderView {
+    var userPhoto: some View {
+        let userPhotoUrl: String = {
+            if vm.user?.isDoctor ?? false {
+                return vm.users.first(where: { $0.userId == order.clientId })?.photoUrl ?? ""
+            } else {
+                return vm.doctors.first(where: { $0.userId == order.doctorId })?.photoUrl ?? ""
+            }
+        }()
+        
+        return GeometryReader { geometry in
+            CachedAsyncImage(url: URL(string: userPhotoUrl)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .clipped()
+            } placeholder: {
+                Image(systemName: "person.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100)
+                    .foregroundColor(.staticMainColor)
+            }
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+        }
+
     }
 }

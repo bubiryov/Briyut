@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BarTitle<V1: View, V2: View>: View {
+struct TopBar<V1: View, V2: View>: View {
     
     var text: String
     var leftButton: V1? = nil
@@ -48,6 +48,6 @@ struct BarTitle<V1: View, V2: View>: View {
 
 struct BarTittle_Previews: PreviewProvider {
     static var previews: some View {
-        BarTitle<Text, Text>(text: "Title", action: {})
+        TopBar<Text, Text>(text: "Title", action: {})
     }
 }

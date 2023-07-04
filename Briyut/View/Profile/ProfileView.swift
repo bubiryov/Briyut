@@ -20,7 +20,7 @@ struct ProfileView: View {
         
         NavigationView {
             VStack(spacing: 25) {
-                BarTitle<EditProfileButton, LogOutButton>(
+                TopBar<EditProfileButton, LogOutButton>(
                     text: "",
                     leftButton: EditProfileButton(notEntered: $notEntered),
                     rightButton: LogOutButton(logOutAlert: $logOutAlert)
@@ -107,37 +107,7 @@ struct ProfileView_Previews: PreviewProvider {
     }
 }
 
-struct ProfileImage: View {
-    
-    var photoURL: String?
-    var frame: CGFloat
-    var color: Color
-    var padding: CGFloat
-    
-    var body: some View {
-        VStack {
-            CachedAsyncImage(url: URL(string: photoURL ?? ""), urlCache: .imageCache) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: frame, height: frame, alignment: .center)
-                    .clipped()
-                
-            } placeholder: {
-                Image(systemName: "person.fill")
-                    .resizable()
-                    .padding(padding)
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: frame, height: frame, alignment: .center)
-                    .clipped()
-                    .foregroundColor(.secondary)
-                    .background(color)
-            }
-        }
-    }
-}
-
-struct EditProfileButton: View {
+fileprivate struct EditProfileButton: View {
     
     @Binding var notEntered: Bool
         
@@ -151,7 +121,7 @@ struct EditProfileButton: View {
     }
 }
 
-struct NavigationRow<Destination: View>: View {
+fileprivate struct NavigationRow<Destination: View>: View {
     var destination: Destination
     var imageName: String
     var title: String
@@ -166,7 +136,7 @@ struct NavigationRow<Destination: View>: View {
     }
 }
 
-struct LogOutButton: View {
+fileprivate struct LogOutButton: View {
     
     @Binding var logOutAlert: Bool
     
@@ -180,7 +150,7 @@ struct LogOutButton: View {
     }
 }
 
-struct SettingsButtonView: View {
+fileprivate struct SettingsButtonView: View {
     
     var imageName: String
     var title: String

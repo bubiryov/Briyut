@@ -19,7 +19,7 @@ struct DoctorOrders: View {
         
     var body: some View {
         VStack {
-            BarTitle<EditButton, DoctorMenuPicker>(
+            TopBar<EditButton, DoctorMenuPicker>(
                 text: selectedDate.barTitleDate(),
                 leftButton: selectedDoctor == vm.user ? EditButton(isEditing: $isEditing) : nil,
                 rightButton: DoctorMenuPicker(
@@ -62,39 +62,13 @@ struct DoctorOrders: View {
             selectedDoctor = vm.user
         }
         .onChange(of: selectedDate) { _ in
-            Task {
-                let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
-                dayOrders = orders.map {($0, false)}
-                isEditing = false
-                if orders.isEmpty {
-                    noOrders = true
-                } else {
-                    noOrders = false
-                }
-            }
+            onChangeUpdate()
         }
         .onChange(of: selectedDoctor) { _ in
-            Task {
-                let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
-                dayOrders = orders.map {($0, false)}
-                isEditing = false
-                if orders.isEmpty {
-                    noOrders = true
-                } else {
-                    noOrders = false
-                }
-            }
+            onChangeUpdate()
         }
         .onChange(of: isEditing) { newValue in
-            withAnimation(.easeInOut(duration: 0.15)) {
-                dayOrders = dayOrders.map {
-                    if $0.0.date.dateValue() < Date() && $0.0.end.dateValue() > Date() {
-                        return ($0.0, true)
-                    } else {
-                        return ($0.0, newValue)
-                    }
-                }
-            }
+            updateIsEditing(newValue)
         }
     }
 }
@@ -110,36 +84,34 @@ struct DoctorOrders_Previews: PreviewProvider {
     }
 }
 
-struct DoctorMenuPicker: View {
+extension DoctorOrders {
     
-    let vm: ProfileViewModel
-    let doctors: [DoctorOption]
-    @Binding var selectedDoctor: DBUser?
+    private func onChangeUpdate() {
+        Task {
+            do {
+                let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
+                dayOrders = orders.map {($0, false)}
+                isEditing = false
+                if orders.isEmpty {
+                    noOrders = true
+                } else {
+                    noOrders = false
+                }
+            } catch {
+                print("Ошибка при обновлении выбранной даты: \(error)")
+            }
+        }
+    }
     
-    var body: some View {
-        Menu {
-            ForEach(doctors, id: \.self) { doctorOption in
-                switch doctorOption {
-                case .allDoctors:
-                    Button("all-specialists-string") {
-                        selectedDoctor = nil
-                    }
-                case .user(let doctor):
-                    Button("\(doctor.name ?? "") \(doctor.lastName ?? "")") {
-                        selectedDoctor = doctor
-                    }
+    private func updateIsEditing(_ newValue: Bool) {
+        withAnimation(.easeInOut(duration: 0.15)) {
+            dayOrders = dayOrders.map {
+                if $0.0.date.dateValue() < Date() && $0.0.end.dateValue() > Date() {
+                    return ($0.0, true)
+                } else {
+                    return ($0.0, newValue)
                 }
             }
-        } label: {
-            let doctor = selectedDoctor ?? vm.user
-            ProfileImage(
-                photoURL: doctor == selectedDoctor ? doctor?.photoUrl ?? "" : "",
-                frame: ScreenSize.height * 0.06,
-                color: Color.secondary.opacity(0.1),
-                padding: 16
-            )
-            .buttonStyle(.plain)
-            .cornerRadius(ScreenSize.width / 30)
         }
     }
 }

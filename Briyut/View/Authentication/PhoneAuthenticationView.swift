@@ -27,7 +27,7 @@ struct PhoneAuthenticationView: View {
     var body: some View {
         VStack {
             
-            BarTitle<BackButton, Text>(text: "phone-sign-in-string", leftButton: BackButton(presentationMode: _presentationMode))
+            TopBar<BackButton, Text>(text: "phone-sign-in-string", leftButton: BackButton(presentationMode: _presentationMode))
             
             if sentSms {
                 Spacer()
@@ -47,21 +47,12 @@ struct PhoneAuthenticationView: View {
                 Spacer()
                 
                 Button {
-                    Task {
-                        do {
-                            loading = true
-                            try await vm.verifyCode(code: code)
-                            hideKeyboard()
-                            notEntered = false
-                            sentSms = false
-                            loading = false
-                        } catch {
-                            loading = false
-                            print("Verifying code error")
-                        }
-                    }
+                    verifyCodeAndHandleActions()
                 } label: {
-                    AccentButton(text: "done-string", isButtonActive: code.count != 6 ? false : true)
+                    AccentButton(
+                        text: "done-string",
+                        isButtonActive: code.count != 6 ? false : true
+                    )
                 }
                 .disabled(loading)
                 
@@ -74,21 +65,12 @@ struct PhoneAuthenticationView: View {
                 Spacer()
                 
                 Button {
-                    Task {
-                        do {
-                            loading = true
-                            try await vm.sendCode(phoneNumber)
-                            withAnimation(.easeInOut(duration: 0.1)) {
-                                sentSms = true
-                            }
-                            loading = false
-                        } catch {
-                            loading = false
-                            print("Code was not sent")
-                        }
-                    }
+                    sendCodeAndHandleActions()
                 } label: {
-                    AccentButton(text: "send-sms-string", isButtonActive: activeButton, animation: loading)
+                    AccentButton(
+                        text: "send-sms-string",
+                        isButtonActive: activeButton, animation: loading
+                    )
                 }
                 .disabled(loading)
                 
@@ -121,6 +103,40 @@ struct PhoneAuthenticationView_Previews: PreviewProvider {
         NavigationView {
             PhoneAuthenticationView(notEntered: .constant(true))
                 .environmentObject(AuthenticationViewModel())
+        }
+    }
+}
+
+extension PhoneAuthenticationView {
+    func verifyCodeAndHandleActions() {
+        Task {
+            do {
+                loading = true
+                try await vm.verifyCode(code: code)
+                hideKeyboard()
+                notEntered = false
+                sentSms = false
+                loading = false
+            } catch {
+                loading = false
+                print("Verifying code error")
+            }
+        }
+    }
+    
+    func sendCodeAndHandleActions() {
+        Task {
+            do {
+                loading = true
+                try await vm.sendCode(phoneNumber)
+                withAnimation(.easeInOut(duration: 0.1)) {
+                    sentSms = true
+                }
+                loading = false
+            } catch {
+                loading = false
+                print("Code was not sent")
+            }
         }
     }
 }

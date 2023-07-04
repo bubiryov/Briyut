@@ -29,19 +29,9 @@ struct DoctorOrderRow: View {
             LeftLineCircleImage(order: order)
             
             VStack(alignment: .leading) {
-                HStack(alignment: .top) {
-                    Text(procedure?.name ?? "deleted-procedure-string".localized)
-                        .font(Mariupol.medium, 20)
-                        .foregroundColor(order.1 ? .white : .primary)
-                        .lineLimit(1)
-                    
-                    Spacer()
-                    
-                    Text(DateFormatter.customFormatter(format: "HH:mm").string(from: order.0.date.dateValue()))
-                        .foregroundColor(order.1 ? .white : .primary)
-                        .font(order.1 ? Font.custom(Mariupol.bold.rawValue, size: 22) : Font.custom(Mariupol.regular.rawValue, size: 17))
-                }
                 
+                doctorOrderRowHeader(for: procedure)
+
                 Spacer()
                 
                 if order.1 {
@@ -57,38 +47,7 @@ struct DoctorOrderRow: View {
                 }
                 
                 if isEditing && order.1 && order.0.end.dateValue() > Date() {
-                    HStack {
-                        Button {
-                            Haptics.shared.notify(.warning)
-                            Task {
-                                showAlert = true
-                            }
-                        } label: {
-                            Text("cancel-string")
-                                .foregroundColor(.black)
-                                .font(Mariupol.medium, 17)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: ScreenSize.height * 0.05)
-                                .background(Color.white)
-                                .cornerRadius(ScreenSize.width / 30)
-                        }
-                        .buttonStyle(.plain)
-                        
-                        Spacer()
-                        
-                        Button {
-                            fullCover.toggle()
-                        } label: {
-                            Text("reschedule-string")
-                                .foregroundColor(.black)
-                                .font(Mariupol.medium, 17)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: ScreenSize.height * 0.05)
-                                .background(Color.white)
-                                .cornerRadius(ScreenSize.width / 30)
-                        }
-                        .buttonStyle(.plain)
-                    }
+                    doctorOrderRowEditingButtons
                 }
             }
             .padding(.horizontal)
@@ -120,8 +79,7 @@ struct DoctorOrderRow: View {
                         }
                     }
                 }),
-                secondaryButton: .default(Text("cancel-string"), action: {
-                })
+                secondaryButton: .default(Text("cancel-string"), action: {})
             )
         }
         .sheet(isPresented: $fullCover) {
@@ -136,15 +94,7 @@ struct DoctorOrderRow: View {
             .background(Color.backgroundColor)
         }
         .onChange(of: fullCover) { newValue in
-            if newValue == false {
-                Task {
-                    let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
-                    withAnimation(.easeInOut(duration: 0.15)) {
-                        dayOrders = orders.map {($0, false)}
-                        isEditing = false
-                    }
-                }
-            }
+            fullCoverUpdatingOrders(newValue)
         }
     }
 }
@@ -160,25 +110,78 @@ struct DoctorOrderRow_Previews: PreviewProvider {
     }
 }
 
-struct LeftLineCircleImage: View {
+// MARK: Components
+
+extension DoctorOrderRow {
     
-    var order: (OrderModel, Bool)
-    
-    var body: some View {
-        VStack {
-            Circle()
-                .stroke(Color.mainColor, lineWidth: 1)
-                .background(
-                    order.1 ?
-                    Circle()
-                        .fill(Color.mainColor)
-                        .padding(3) : nil
-                )
-                .frame(width: 20, height: 20)
+    private func doctorOrderRowHeader(for procedure: ProcedureModel?) -> some View {
+        HStack(alignment: .top) {
+            Text(procedure?.name ?? "deleted-procedure-string".localized)
+                .font(Mariupol.medium, 20)
+                .foregroundColor(order.1 ? .white : .primary)
+                .lineLimit(1)
             
-            Rectangle()
-                .fill(Color.mainColor)
-                .frame(width: 3)
+            Spacer()
+            
+            Text(DateFormatter.customFormatter(format: "HH:mm").string(from: order.0.date.dateValue()))
+                .foregroundColor(order.1 ? .white : .primary)
+                .font(order.1 ? Font.custom(Mariupol.bold.rawValue, size: 22) : Font.custom(Mariupol.regular.rawValue, size: 17))
+        }
+    }
+    
+    var doctorOrderRowEditingButtons: some View {
+        HStack {
+            Button {
+                Haptics.shared.notify(.warning)
+                Task {
+                    showAlert = true
+                }
+            } label: {
+                Text("cancel-string")
+                    .foregroundColor(.black)
+                    .font(Mariupol.medium, 17)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: ScreenSize.height * 0.05)
+                    .background(Color.white)
+                    .cornerRadius(ScreenSize.width / 30)
+            }
+            .buttonStyle(.plain)
+            
+            Spacer()
+            
+            Button {
+                fullCover.toggle()
+            } label: {
+                Text("reschedule-string")
+                    .foregroundColor(.black)
+                    .font(Mariupol.medium, 17)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: ScreenSize.height * 0.05)
+                    .background(Color.white)
+                    .cornerRadius(ScreenSize.width / 30)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+}
+
+// MARK: Functions
+
+extension DoctorOrderRow {
+    
+    private func fullCoverUpdatingOrders(_ newValue: Bool) {
+        if newValue == false {
+            Task {
+                do {
+                    let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        dayOrders = orders.map {($0, false)}
+                        isEditing = false
+                    }
+                } catch {
+                    print("Full cover updating orders error \(error)")
+                }
+            }
         }
     }
 }
