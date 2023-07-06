@@ -9,8 +9,23 @@ import SwiftUI
 
 struct RootView: View {
     
-    @StateObject var vm = ProfileViewModel()
+//    @StateObject var vm = ProfileViewModel()
+    
+    @StateObject var propertyViewModel: PropertyViewModel = PropertyViewModel()
     @StateObject var articlesVM: ArticlesViewModel = ArticlesViewModel()
+    var profileViewModel: ProfileViewModel
+    var procedureViewModel: ProcedureViewModel
+    var orderViewModel: OrderViewModel = OrderViewModel()
+    
+    init(notEntered: Binding<Bool>, splashView: Binding<Bool>) {
+        _notEntered = notEntered
+        _splashView = splashView
+        
+        self.procedureViewModel = ProcedureViewModel(orderViewModel: orderViewModel)
+        self.profileViewModel = ProfileViewModel(orderViewModel: orderViewModel, procedureViewModel: procedureViewModel)
+    }
+
+    
     @State private var selectedTab: Tab = .home
     @Binding var notEntered: Bool
     @Binding var splashView: Bool
@@ -27,17 +42,17 @@ struct RootView: View {
                     switch selectedTab {
                     case .home:
                         HomeView(selectedTab: $selectedTab, justOpened: $justOpened, showSearch: $showSearch, splashView: $splashView)
-                            .environmentObject(vm)
+                            .environmentObject(propertyViewModel)
                             .environmentObject(articlesVM)
                     case .plus:
                         AllProcedures(notEntered: $notEntered, showSearch: $showSearch, selectedTab: $selectedTab)
-                            .environmentObject(vm)
+                            .environmentObject(profileViewModel)
                     case .calendar:
                         CalendarView()
-                            .environmentObject(vm)
+                            .environmentObject(profileViewModel)
                     case .profile:
                         ProfileView(notEntered: $notEntered)
-                            .environmentObject(vm)
+                            .environmentObject(profileViewModel)
                     }
                 }
                 .padding(.top, topPadding())
@@ -51,11 +66,11 @@ struct RootView: View {
 
         }
         .background(Color.backgroundColor)
-        .onAppear {
-            Task {
-                vm.getProvider()
-            }
-        }
+//        .onAppear {
+//            Task {
+//                vm.getProvider()
+//            }
+//        }
     }    
 }
 

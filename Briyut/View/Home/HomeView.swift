@@ -9,7 +9,9 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var profileViewModel: ProfileViewModel
+    @EnvironmentObject var orderViewModel: OrderViewModel
+    @EnvironmentObject var procedureViewModel: ProcedureViewModel
     @EnvironmentObject var articlesVM: ArticlesViewModel
     @Environment(\.colorScheme) var colorScheme
     @Binding var selectedTab: Tab
@@ -27,7 +29,7 @@ struct HomeView: View {
                 TopBar<MapButton, ProfileButton>(
                     text: "",
                     leftButton: MapButton(image: "pin", showMap: $showMap),
-                    rightButton: ProfileButton(selectedTab: $selectedTab, photo: vm.user?.photoUrl ?? ""))
+                    rightButton: ProfileButton(selectedTab: $selectedTab, photo: profileViewModel.user?.photoUrl ?? ""))
                 
                 Text("find-your-procedure-string")
                     .font(Mariupol.bold, 30)
@@ -49,7 +51,7 @@ struct HomeView: View {
             .background(Color.backgroundColor)
         }
         .fullScreenCover(isPresented: $showMap) {
-            ClinicMapView(profileVM: vm)
+            ClinicMapView(profileVM: profileViewModel)
         }
     }
 }
@@ -63,7 +65,7 @@ struct HomeView_Previews: PreviewProvider {
                 showSearch: .constant(false),
                 splashView: .constant(false)
             )
-            .environmentObject(ProfileViewModel())
+            .environmentObject(PropertyViewModel())
             .environmentObject(ArticlesViewModel())
         }
         .padding(.horizontal)
@@ -121,9 +123,9 @@ extension HomeView {
                 .foregroundColor(.primary)
             }
             
-            if let nearestOrder = vm.activeOrders.first {
+            if let nearestOrder = profileViewModel.activeOrders.first {
                 ZStack {
-                    if vm.activeOrders.count > 1 {
+                    if orderViewModel.activeOrders.count > 1 {
                         RoundedRectangle(cornerRadius: ScreenSize.width / 15)
                             .frame(height: ScreenSize.height * 0.14)
                             .offset(y: ScreenSize.height / 35)
@@ -131,17 +133,17 @@ extension HomeView {
                             .foregroundColor(.mainColor.opacity(0.7))
                     }
                     OrderRow(
-                        vm: vm,
+                        vm: profileViewModel,
                         order: nearestOrder,
                         withButtons: false,
                         color: .mainColor,
                         fontColor: .white,
                         bigDate: true,
-                        userInformation: vm.user?.isDoctor ?? false ? .client : .doctor,
+                        userInformation: profileViewModel.user?.isDoctor ?? false ? .client : .doctor,
                         photoBackgroundColor: colorScheme == .dark ? .white.opacity(0.2) : .white
                     )
                 }
-                .padding(.bottom, vm.activeOrders.count > 1 ? 5 : 0)
+                .padding(.bottom, orderViewModel.activeOrders.count > 1 ? 5 : 0)
             } else {
                 Button {
                     withAnimation(.easeInOut(duration: 0.15)) {
@@ -215,16 +217,16 @@ extension HomeView {
     private func loadData() {
         Task {
             do {
-                try await vm.loadCurrentUser()
-                try await vm.getAllDoctors()
-                try await vm.getAllProcedures()
+                try await profileViewModel.loadCurrentUser()
+                try await profileViewModel.getAllDoctors()
+                try await procedureViewModel.getAllProcedures()
                 
-                if vm.user?.isDoctor ?? false {
-                    try await vm.getAllUsers()
+                if profileViewModel.user?.isDoctor ?? false {
+                    try await profileViewModel.getAllUsers()
                 }
                 
                 if justOpened {
-                    try await vm.updateOrdersStatus(isDone: false, isDoctor: vm.user?.isDoctor ?? false)
+                    try await orderViewModel.updateOrdersStatus(isDone: false, isDoctor: profileViewModel.user?.isDoctor ?? false)
                     try await articlesVM.getRequiredArticles(countLimit: 6)
                     justOpened = false
                 }

@@ -11,7 +11,7 @@ import SwiftUI
 import PhotosUI
 
 @MainActor
-final class ProfileViewModel: ObservableObject {
+class PropertyViewModel: ObservableObject {
     
     @Published var user: DBUser? = nil
     @Published var doctors: [DBUser] = []
@@ -21,20 +21,24 @@ final class ProfileViewModel: ObservableObject {
     @Published var activeOrders: [OrderModel] = []
     @Published var doneOrders: [OrderModel] = []
     @Published var allOrders: [OrderModel] = []
-
+    
     var activeLastDocument: DocumentSnapshot? = nil
     var doneLastDocument: DocumentSnapshot? = nil
     var allLastDocument: DocumentSnapshot? = nil
+
+}
+
+@MainActor
+class ProfileViewModel: PropertyViewModel {
     
-//    init() {
-//        for familyName in UIFont.familyNames {
-//            print(familyName)
-//            for fontName in UIFont.fontNames(forFamilyName: familyName) {
-//                print("--- \(fontName)")
-//            }
-//        }
-//    }
-        
+    let orderViewModel: OrderViewModel
+    let procedureViewModel: ProcedureViewModel
+    
+    init(orderViewModel: OrderViewModel, procedureViewModel: ProcedureViewModel) {
+        self.orderViewModel = orderViewModel
+        self.procedureViewModel = procedureViewModel
+    }
+                
     func loadCurrentUser() async throws {
         let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
         user = try await getUser(userId: authDataResult.uid)
@@ -68,7 +72,7 @@ final class ProfileViewModel: ObservableObject {
     
     func deleteAccount() async throws {
         guard let user = user else { throw URLError(.badServerResponse) }
-        try await deleteUnfinishedOrders(idType: .client, id: user.userId)
+        try await orderViewModel.deleteUnfinishedOrders(idType: .client, id: user.userId)
         try await UserManager.shared.deleteUser(userId: user.userId)
         try await deleteStorageFolderContents(documentId: user.userId, childStorage: "users")
         try await AuthenticationManager.shared.deleteAccount()
@@ -77,13 +81,12 @@ final class ProfileViewModel: ObservableObject {
     
     func updateBlockStatus(userID: String, isBlocked: Bool) async throws {
         try await UserManager.shared.updateBlockStatus(userID: userID, isBlocked: isBlocked)
-//        users = []
         if isBlocked {
-            try await deleteUnfinishedOrders(idType: .client, id: userID)
+            try await orderViewModel.deleteUnfinishedOrders(idType: .client, id: userID)
         }
         activeLastDocument = nil
         activeOrders = []
-        try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 2)
+        try await orderViewModel.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 2)
         try await getAllUsers()
     }
     
@@ -98,8 +101,8 @@ final class ProfileViewModel: ObservableObject {
     func removeDoctor(userID: String) async throws {
         guard userID != user?.userId else { return }
         try await UserManager.shared.removeDoctor(userID: userID)
-        try await deleteUnfinishedOrders(idType: .doctor, id: userID)
-        try await updateProceduresForDoctor(userID: userID)
+        try await orderViewModel.deleteUnfinishedOrders(idType: .doctor, id: userID)
+        try await procedureViewModel.updateProceduresForDoctor(userID: userID)
         try await getAllDoctors()
     }
     
@@ -131,51 +134,8 @@ final class ProfileViewModel: ObservableObject {
     }
 }
 
-// MARK: Procedures
-
-extension ProfileViewModel {
-    
-    func addNewProcedure(procedure: ProcedureModel) async throws {
-        try await ProcedureManager.shared.createNewProcedure(procedure: procedure)
-        try await getAllProcedures()
-    }
-        
-    func getProcedure(procedureId: String) async throws -> ProcedureModel {
-        try await ProcedureManager.shared.getProduct(procedureId: procedureId)
-    }
-    
-    func getAllProcedures() async throws {
-        procedures = try await ProcedureManager.shared.getAllProcedures()
-    }
-    
-//    func addListenerForProcuderes() {
-//        ProcedureManager.shared.addListenerForProcedures { [weak self] products in
-//            self?.procedures = products
-//        }
-//    }
-        
-    func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, parallelQuantity: Int, availableDoctors: [String]) async throws {
-        try await ProcedureManager.shared.editProcedure(procedureId: procedureId, name: name, duration: duration, cost: cost, parallelQuantity: parallelQuantity, availableDoctors: availableDoctors)
-        try await getAllProcedures()
-    }
-    
-    func removeProcedure(procedureId: String) async throws {
-        try await ProcedureManager.shared.removeProcedure(procedureId: procedureId)
-        try await deleteUnfinishedOrders(idType: .procedure, id: procedureId)
-        try await getAllProcedures()
-        activeLastDocument = nil
-        activeOrders = []
-        try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 2)
-    }
-    
-    func updateProceduresForDoctor(userID: String) async throws {
-        try await ProcedureManager.shared.updateProceduresForDoctor(userID: userID)
-    }
-}
-
-// MARK: Orders
-
-extension ProfileViewModel {
+@MainActor
+class OrderViewModel: PropertyViewModel {
         
     func getRequiredOrders(dataFetchMode: DataFetchMode, isDone: Bool, countLimit: Int) async throws {
         if !isDone {
@@ -270,17 +230,46 @@ extension ProfileViewModel {
         return occupied
     }
 
+}
+
+@MainActor
+class ProcedureViewModel: PropertyViewModel {
     
-//    func getDayOrderTimes(date: Date, doctorId: String?) async throws -> [(Date, Date)] {
-//        let orders = try await getDayOrders(date: date, doctorId: doctorId)
-//        var occupied = [(Date, Date)]()
-//        for order in orders {
-//            let start = order.date.dateValue()
-//            let end = order.end.dateValue()
-//
-//            let tuple = (start, end)
-//            occupied.append(tuple)
-//        }
-//        return occupied
-//    }
+    let orderViewModel: OrderViewModel
+    
+    init(orderViewModel: OrderViewModel) {
+        self.orderViewModel = orderViewModel
+    }
+    
+    func addNewProcedure(procedure: ProcedureModel) async throws {
+        try await ProcedureManager.shared.createNewProcedure(procedure: procedure)
+        try await getAllProcedures()
+    }
+        
+    func getProcedure(procedureId: String) async throws -> ProcedureModel {
+        try await ProcedureManager.shared.getProduct(procedureId: procedureId)
+    }
+    
+    func getAllProcedures() async throws {
+        procedures = try await ProcedureManager.shared.getAllProcedures()
+    }
+            
+    func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, parallelQuantity: Int, availableDoctors: [String]) async throws {
+        try await ProcedureManager.shared.editProcedure(procedureId: procedureId, name: name, duration: duration, cost: cost, parallelQuantity: parallelQuantity, availableDoctors: availableDoctors)
+        try await getAllProcedures()
+    }
+    
+    func removeProcedure(procedureId: String) async throws {
+        try await ProcedureManager.shared.removeProcedure(procedureId: procedureId)
+        try await orderViewModel.deleteUnfinishedOrders(idType: .procedure, id: procedureId)
+        try await getAllProcedures()
+        activeLastDocument = nil
+        activeOrders = []
+        try await orderViewModel.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 2)
+    }
+    
+    func updateProceduresForDoctor(userID: String) async throws {
+        try await ProcedureManager.shared.updateProceduresForDoctor(userID: userID)
+    }
+
 }
