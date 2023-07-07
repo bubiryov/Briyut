@@ -9,7 +9,8 @@ import SwiftUI
 
 struct DoctorOrders: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
     @State private var selectedDate: Date = Date()
     @State private var selectedDoctor: DBUser? = nil
     @State private var dayOrders: [(OrderModel, Bool)] = []
@@ -21,10 +22,10 @@ struct DoctorOrders: View {
         VStack {
             TopBar<EditButton, DoctorMenuPicker>(
                 text: selectedDate.barTitleDate(),
-                leftButton: selectedDoctor == vm.user ? EditButton(isEditing: $isEditing) : nil,
+                leftButton: selectedDoctor == interfaceData.user ? EditButton(isEditing: $isEditing) : nil,
                 rightButton: DoctorMenuPicker(
-                    vm: vm,
-                    doctors: vm.doctors.map(DoctorOption.user),
+                    interfaceData: interfaceData,
+                    doctors: interfaceData.doctors.map(DoctorOption.user),
                     selectedDoctor: $selectedDoctor),
                 action: { selectedDate = Date() }
             )
@@ -39,7 +40,7 @@ struct DoctorOrders: View {
                 ScrollView {
                     LazyVStack {
                         ForEach($dayOrders, id: \.0.orderId) { order in
-                            DoctorOrderRow(vm: vm, dayOrders: $dayOrders, order: order, isEditing: $isEditing, selectedDoctor: selectedDoctor, selectedDate: selectedDate)
+                            DoctorOrderRow(interfaceData: interfaceData, mainViewModel: mainViewModel, dayOrders: $dayOrders, order: order, isEditing: $isEditing, selectedDoctor: selectedDoctor, selectedDate: selectedDate)
                                 .onAppear {
                                     if let currentIndex = dayOrders.firstIndex(where: { $0.0.date.dateValue() <= Date() && $0.0.end.dateValue() > Date()}) {
                                         dayOrders[currentIndex] = (dayOrders[currentIndex].0, true)
@@ -59,7 +60,7 @@ struct DoctorOrders: View {
         }
         .background(Color.backgroundColor)
         .onAppear {
-            selectedDoctor = vm.user
+            selectedDoctor = interfaceData.user
         }
         .onChange(of: selectedDate) { _ in
             onChangeUpdate()
@@ -77,7 +78,7 @@ struct DoctorOrders_Previews: PreviewProvider {
     static var previews: some View {
         VStack{
             DoctorOrders()
-                .environmentObject(ProfileViewModel())
+                .environmentObject(InterfaceData())
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)
@@ -89,7 +90,7 @@ extension DoctorOrders {
     private func onChangeUpdate() {
         Task {
             do {
-                let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
+                let orders = try await mainViewModel.orderViewModel.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
                 dayOrders = orders.map {($0, false)}
                 isEditing = false
                 if orders.isEmpty {

@@ -10,7 +10,9 @@ import FirebaseFirestore
 
 struct ClientOrders: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
+    
     @State private var selectedIndex = 0
     
     var body: some View {
@@ -24,15 +26,17 @@ struct ClientOrders: View {
                                 
                 if selectedIndex == 0 {
                     OrderList(
-                        vm: vm,
+                        interfaceData: interfaceData,
+                        mainViewModel: mainViewModel,
                         selectedIndex: selectedIndex,
-                        orderArray: vm.activeOrders)
+                        orderArray: interfaceData.activeOrders)
                     
                 } else {
                     OrderList(
-                        vm: vm,
+                        interfaceData: interfaceData,
+                        mainViewModel: mainViewModel,
                         selectedIndex: selectedIndex,
-                        orderArray: vm.doneOrders
+                        orderArray: interfaceData.doneOrders
                     )
                 }
             }
@@ -44,7 +48,8 @@ struct ClientOrders_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             ClientOrders()
-                .environmentObject(ProfileViewModel())
+                .environmentObject(InterfaceData())
+                .environmentObject(MainViewModel(data: InterfaceData()))
         }
         .padding(.horizontal, 20)
     }

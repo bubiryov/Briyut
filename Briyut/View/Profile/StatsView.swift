@@ -10,7 +10,9 @@ import SwiftUICharts
 
 struct StatsView: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
+    
     @Environment(\.presentationMode) var presentationMode
     @State private var selectedDoctor: DBUser? = nil
     @State private var selectedDate: Date = Date()
@@ -32,8 +34,8 @@ struct StatsView: View {
             TopBar<BackButton, DoctorMenuPicker>(
                 text: DateFormatter.customFormatter(format: "MMMM").getMonthNameInNominativeCase(from: selectedDate),
                 leftButton: BackButton(), rightButton: DoctorMenuPicker(
-                    vm: vm,
-                    doctors: [.allDoctors] + vm.doctors.map(DoctorOption.user),
+                    interfaceData: interfaceData,
+                    doctors: [.allDoctors] + interfaceData.doctors.map(DoctorOption.user),
                     selectedDoctor: $selectedDoctor),
                 action: { selectedDate = Date() }
             )
@@ -129,7 +131,8 @@ struct StatsView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             StatsView()
-                .environmentObject(ProfileViewModel())
+                .environmentObject(InterfaceData())
+                .environmentObject(MainViewModel(data: InterfaceData()))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)
@@ -217,7 +220,7 @@ extension StatsView {
         selectionMode: DateSelectionMode) {
         Task {
             do {
-                monthOrders = try await vm.getDayMonthOrders(date: date, selectionMode: selectionMode, doctorId: doctor?.userId, firstDate: startDate, secondDate: endDate)
+                monthOrders = try await mainViewModel.orderViewModel.getDayMonthOrders(date: date, selectionMode: selectionMode, doctorId: doctor?.userId, firstDate: startDate, secondDate: endDate)
                 lineChartData = calculateModifiedCounts(selectionMode: selectionMode)
             } catch {
                 print("Can't get or update data")

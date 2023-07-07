@@ -9,10 +9,10 @@ import SwiftUI
 
 struct CalendarView: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
     
     var body: some View {
-        if vm.user?.isDoctor == true {
+        if interfaceData.user?.isDoctor == true {
             DoctorOrders()
         } else {
             ClientOrders()
@@ -23,7 +23,7 @@ struct CalendarView: View {
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView()
-            .environmentObject(ProfileViewModel())
+            .environmentObject(InterfaceData())
             .padding(.horizontal, 20)
             .background(Color.backgroundColor)
     }

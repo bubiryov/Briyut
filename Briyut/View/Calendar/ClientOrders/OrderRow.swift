@@ -11,7 +11,8 @@ import FirebaseFirestoreSwift
 
 struct OrderRow: View {
     
-    let vm: ProfileViewModel
+    let interfaceData: InterfaceData
+    let mainViewModel: MainViewModel
     let order: OrderModel
     let withButtons: Bool
     let color: Color?
@@ -27,9 +28,9 @@ struct OrderRow: View {
         
         VStack(spacing: 10) {
             HStack {
-                let doc = vm.doctors.first(where: { $0.userId == order.doctorId })
-                let procedure = vm.procedures.first(where: { $0.procedureId == order.procedureId })
-                let user = vm.users.first(where: { $0.userId == order.clientId })
+                let doc = interfaceData.doctors.first(where: { $0.userId == order.doctorId })
+                let procedure = interfaceData.procedures.first(where: { $0.procedureId == order.procedureId })
+                let user = interfaceData.users.first(where: { $0.userId == order.clientId })
                 
                 ProfileImage(
                     photoURL: userInformation == .client ? user?.photoUrl : doc?.photoUrl,
@@ -85,17 +86,17 @@ struct OrderRow: View {
                 title: Text("remove-appointment-alert-title-string"),
                 primaryButton: .destructive(Text("remove-string"), action: {
                     Task {
-                        try await vm.removeOrder(orderId: order.orderId)
-                        vm.activeLastDocument = nil
-                        vm.activeOrders = []
-                        try await vm.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
+                        try await mainViewModel.orderViewModel.removeOrder(orderId: order.orderId)
+                        interfaceData.activeLastDocument = nil
+                        interfaceData.activeOrders = []
+                        try await mainViewModel.orderViewModel.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
                     }
                 }),
                 secondaryButton: .default(Text("Cancel"), action: { })
             )
         }
         .sheet(isPresented: $rescheduleFullCover) {
-            let doctor = vm.doctors.first(where: { $0.userId == order.doctorId })
+            let doctor = interfaceData.doctors.first(where: { $0.userId == order.doctorId })
             DateTimeSelectionView(doctor: doctor, order: order, mainButtonTitle: "edit-appointment-string", selectedTab: .constant(.calendar))
                 .padding(.top, topPadding())
                 .padding(.horizontal, 20)
@@ -117,7 +118,7 @@ struct OrderRow: View {
 struct OrderRow_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            OrderRow(vm: ProfileViewModel(), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: true, color: nil, fontColor: .white, bigDate: false, userInformation: .doctor, photoBackgroundColor: .white.opacity(0.2))
+            OrderRow(interfaceData: InterfaceData(), mainViewModel: MainViewModel(data: InterfaceData()), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: true, color: nil, fontColor: .white, bigDate: false, userInformation: .doctor, photoBackgroundColor: .white.opacity(0.2))
         }
         .padding(.horizontal, 20)
     }

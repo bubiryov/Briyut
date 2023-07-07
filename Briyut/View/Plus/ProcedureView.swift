@@ -10,7 +10,8 @@ import SwiftUI
 struct ProcedureView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
     
     var title: String
     var buttonText: String
@@ -120,62 +121,14 @@ struct ProcedureView: View {
         )
         .ignoresSafeArea(.keyboard)
     }
-    
-//    func validateFields() -> Bool {
-//        if name.isEmpty || duration.isEmpty || cost.isEmpty || Int(cost) == nil || availableDoctors.isEmpty || parallelQuantity.isEmpty || Int(parallelQuantity) == nil {
-//            return false
-//        }
-//        if !duration.allSatisfy({ $0.isNumber }) || !cost.allSatisfy({ $0.isNumber }) {
-//            return false
-//        }
-//
-//        return true
-//    }
-//
-//    func addProcedure() async throws {
-//        let newProcedure = ProcedureModel(procedureId: UUID().uuidString, name: name, duration: Int(duration)!, cost: Int(cost)!, parallelQuantity: Int(parallelQuantity)!, availableDoctors: availableDoctors)
-//        do {
-//            loading = true
-//            try await vm.addNewProcedure(procedure: newProcedure)
-//            loading = false
-//            presentationMode.wrappedValue.dismiss()
-//        } catch {
-//            loading = false
-//            print("Can't add the procedure")
-//        }
-//    }
-//
-//    func editProcedure() async throws {
-//        do {
-//            loading = true
-//            try await vm.editProcedure(procedureId: procedure?.procedureId ?? "", name: name, duration: Int(duration)!, cost: Int(cost)!, parallelQuantity: Int(parallelQuantity)!, availableDoctors: availableDoctors)
-//            loading = false
-//            presentationMode.wrappedValue.dismiss()
-//        } catch {
-//            loading = false
-//            print("Can't edit the procedure")
-//        }
-//    }
-//
-//    func loadDataFromProcedure() {
-//        if let procedure = procedure {
-//            if name == "" {
-//                name = procedure.name
-//                duration = String(procedure.duration)
-//                cost = String(procedure.cost)
-//                availableDoctors = procedure.availableDoctors
-//                parallelQuantity = String(procedure.parallelQuantity)
-//            }
-//        }
-//    }
-
 }
 
 struct AddProcedure_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             ProcedureView(title: "edit-procedure-string", buttonText: "save-changes-string", isEditing: .constant(false))
-                .environmentObject(ProfileViewModel())
+                .environmentObject(InterfaceData())
+                .environmentObject(MainViewModel(data: InterfaceData()))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)
@@ -193,7 +146,7 @@ extension ProcedureView {
             primaryButton: .destructive(Text("delete-string"), action: {
                 Task {
                     do {
-                        try await vm.removeProcedure(procedureId: procedure!.procedureId)
+                        try await mainViewModel.procedureViewModel.removeProcedure(procedureId: procedure!.procedureId)
                         isEditing = false
                         presentationMode.wrappedValue.dismiss()
                     } catch {
@@ -226,7 +179,7 @@ extension ProcedureView {
         let newProcedure = ProcedureModel(procedureId: UUID().uuidString, name: name, duration: Int(duration)!, cost: Int(cost)!, parallelQuantity: Int(parallelQuantity)!, availableDoctors: availableDoctors)
         do {
             loading = true
-            try await vm.addNewProcedure(procedure: newProcedure)
+            try await mainViewModel.procedureViewModel.addNewProcedure(procedure: newProcedure)
             loading = false
             presentationMode.wrappedValue.dismiss()
         } catch {
@@ -238,7 +191,7 @@ extension ProcedureView {
     func editProcedure() async throws {
         do {
             loading = true
-            try await vm.editProcedure(procedureId: procedure?.procedureId ?? "", name: name, duration: Int(duration)!, cost: Int(cost)!, parallelQuantity: Int(parallelQuantity)!, availableDoctors: availableDoctors)
+            try await mainViewModel.procedureViewModel.editProcedure(procedureId: procedure?.procedureId ?? "", name: name, duration: Int(duration)!, cost: Int(cost)!, parallelQuantity: Int(parallelQuantity)!, availableDoctors: availableDoctors)
             loading = false
             presentationMode.wrappedValue.dismiss()
         } catch {

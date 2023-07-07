@@ -11,7 +11,9 @@ import FirebaseFirestoreSwift
 
 struct DateTimeSelectionView: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
+
     @Environment(\.presentationMode) var presentationMode
     var doctor: DBUser? = nil
     var procedure: ProcedureModel? = nil
@@ -99,7 +101,8 @@ struct DateTimeSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             DateTimeSelectionView(mainButtonTitle: "Add appoinment", selectedTab: .constant(.plus))
-                .environmentObject(ProfileViewModel())
+                .environmentObject(InterfaceData())
+                .environmentObject(MainViewModel(data: InterfaceData()))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)
@@ -181,11 +184,11 @@ extension DateTimeSelectionView {
         
         let order = OrderModel(orderId: UUID().uuidString, procedureId: procedure.procedureId, doctorId: doctor?.userId ?? "", clientId: client.userId, date: createTimestamp(from: selectedDate, time: selectedTime, procedure: nil)!, end: createTimestamp(from: selectedDate, time: selectedTime, procedure: procedure)!, isDone: false, price: procedure.cost)
         
-        allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
-        personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: doctor?.userId)
+        allOrders = try await mainViewModel.orderViewModel.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
+        personalOrdersTime = try await mainViewModel.orderViewModel.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: doctor?.userId)
         
         if !checkIfDisabled(time: selectedTime) {
-            try await vm.addNewOrder(order: order)
+            try await mainViewModel.orderViewModel.addNewOrder(order: order)
             self.order = order
             fullCover = true
             try await Task.sleep(nanoseconds: 1_600_000_000)
@@ -200,20 +203,20 @@ extension DateTimeSelectionView {
     func editOrderAction(order: OrderModel) async throws {
         guard
             let date = createTimestamp(from: selectedDate, time: selectedTime, procedure: nil),
-            let end = createTimestamp(from: selectedDate, time: selectedTime, procedure: vm.procedures.first(where: { $0.procedureId == order.procedureId })) else {
+            let end = createTimestamp(from: selectedDate, time: selectedTime, procedure: interfaceData.procedures.first(where: { $0.procedureId == order.procedureId })) else {
             print("Edit order action error")
             throw URLError(.badServerResponse)
         }
                 
-        allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
-        personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: order.doctorId)
+        allOrders = try await mainViewModel.orderViewModel.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
+        personalOrdersTime = try await mainViewModel.orderViewModel.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: order.doctorId)
 
         if !checkIfDisabled(time: selectedTime) {
-            try await vm.editOrderTime(orderId: order.orderId, date: date, end: end)
+            try await mainViewModel.orderViewModel.editOrderTime(orderId: order.orderId, date: date, end: end)
             
-            vm.activeLastDocument = nil
-            vm.activeOrders = []
-            try await vm.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
+            interfaceData.activeLastDocument = nil
+            interfaceData.activeOrders = []
+            try await mainViewModel.orderViewModel.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
             
             presentationMode.wrappedValue.dismiss()
             
@@ -328,7 +331,7 @@ extension DateTimeSelectionView {
         } else if let order {
             localAllOrders = allOrders.filter({ $0.date.dateValue() != order.date.dateValue() })
             localPersonalOrdersTime = personalOrdersTime.filter({ $0.0 != order.date.dateValue() })
-            localProcedure = vm.procedures.first(where: { $0.procedureId == order.procedureId })
+            localProcedure = interfaceData.procedures.first(where: { $0.procedureId == order.procedureId })
         }
 
         guard let localProcedure else { return true }
@@ -351,13 +354,13 @@ extension DateTimeSelectionView {
 
         if matches.count > 0 {
 
-            guard let matchedProcedure = vm.procedures.first(where: { $0.procedureId == localProcedure.procedureId }) else { return true }
+            guard let matchedProcedure = interfaceData.procedures.first(where: { $0.procedureId == localProcedure.procedureId }) else { return true }
             guard (matchedProcedure.parallelQuantity - matches.count) > 0 else {
                 return true
             }
         }
         
-        if !(vm.user?.isDoctor ?? false) {
+        if !(interfaceData.user?.isDoctor ?? false) {
             guard checkCustomSchedule(orderDate: orderDate, endOfFutureOrder: endOfFutureOrder) == false else { return true }
             guard checkVacation() == false else { return true }
         }
@@ -401,8 +404,8 @@ extension DateTimeSelectionView {
     func handleSelectedDateChange(newDate: Date) {
         Task {
             disabledAllButtons = true
-            personalOrdersTime = try await vm.getDayOrderTimes(date: newDate, selectionMode: .day, doctorId: doctor?.userId)
-            allOrders = try await vm.getDayMonthOrders(date: newDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
+            personalOrdersTime = try await mainViewModel.orderViewModel.getDayOrderTimes(date: newDate, selectionMode: .day, doctorId: doctor?.userId)
+            allOrders = try await mainViewModel.orderViewModel.getDayMonthOrders(date: newDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
             generateTimeSlots()
             disabledAllButtons = false
         }
@@ -411,8 +414,8 @@ extension DateTimeSelectionView {
     func loadData() {
         Task {
             disabledAllButtons = true
-            personalOrdersTime = try await vm.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: doctor?.userId)
-            allOrders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
+            personalOrdersTime = try await mainViewModel.orderViewModel.getDayOrderTimes(date: selectedDate, selectionMode: .day, doctorId: doctor?.userId)
+            allOrders = try await mainViewModel.orderViewModel.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: nil, firstDate: nil, secondDate: nil)
             generateTimeSlots()
             disabledAllButtons = false
         }

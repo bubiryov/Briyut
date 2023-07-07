@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LocationsList: View {
     
-    @ObservedObject var vm: LocationsViewModel
+    @ObservedObject var locationViewModel: LocationsViewModel
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -18,13 +18,13 @@ struct LocationsList: View {
             TopBar<BackButton, AddLocationButton>(
                 text: "addresses-string",
                 leftButton: BackButton(),
-                rightButton: AddLocationButton(vm: vm)
+                rightButton: AddLocationButton(locationViewModel: locationViewModel)
             )
             
             ScrollView {
-                ForEach(vm.locations, id: \.id) { location in
+                ForEach(locationViewModel.locations, id: \.id) { location in
                     NavigationLink {
-                        LocationView(vm: vm, location: location)
+                        LocationView(locationViewModel: locationViewModel, location: location)
 //                            .environmentObject(vm)
                     } label: {
                         HStack {
@@ -67,18 +67,18 @@ struct LocationsList: View {
 
 struct LocationsList_Previews: PreviewProvider {
     static var previews: some View {
-        LocationsList(vm: LocationsViewModel())
+        LocationsList(locationViewModel: LocationsViewModel())
 //            .environmentObject(LocationsViewModel())
     }
 }
 
 struct AddLocationButton: View {
     
-    @ObservedObject var vm: LocationsViewModel
+    @ObservedObject var locationViewModel: LocationsViewModel
         
     var body: some View {
         NavigationLink {
-            LocationView(vm: vm)
+            LocationView(locationViewModel: locationViewModel)
         } label: {
             BarButtonView(image: "plus", scale: 0.35)
         }

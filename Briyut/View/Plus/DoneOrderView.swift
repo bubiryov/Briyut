@@ -12,7 +12,7 @@ import CachedAsyncImage
 
 struct DoneOrderView: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
     @Environment(\.presentationMode) var presentationMode
     let order: OrderModel
     let withPhoto: Bool
@@ -37,8 +37,8 @@ struct DoneOrderView: View {
             .cornerRadius(ScreenSize.width / 20)
             
             VStack(spacing: ScreenSize.height * 0.02) {
-                let specialist = vm.doctors.first(where: { $0.userId == order.doctorId })
-                let client = vm.users.first(where: { $0.userId == order.clientId })
+                let specialist = interfaceData.doctors.first(where: { $0.userId == order.doctorId })
+                let client = interfaceData.users.first(where: { $0.userId == order.clientId })
                                 
                 DoneOrderViewRow(
                     leftText: "date-string",
@@ -52,7 +52,7 @@ struct DoneOrderView: View {
                     leftText: "specialist-string",
                     rightText: "\(specialist?.name ?? "deleted-specialist-string".localized) \((specialist?.name != nil) ? specialist?.lastName ?? "" : "")")
                 
-                if vm.user?.isDoctor ?? false {
+                if interfaceData.user?.isDoctor ?? false {
                     DoneOrderViewRow(
                         leftText: "client-string",
                         rightText: "\(client?.name ?? "\(client?.userId ?? "deleted-user-string".localized)") \((client?.name != nil) ? client?.lastName ?? "" : "")")
@@ -99,7 +99,7 @@ struct DoneOrderView: View {
 struct DoneOrderView_Previews: PreviewProvider {
     static var previews: some View {
         DoneOrderView(order: OrderModel(orderId: "", procedureId: "", doctorId: "", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 1000), withPhoto: true, selectedTab: .constant(.plus))
-            .environmentObject(ProfileViewModel())
+            .environmentObject(InterfaceData())
     }
 }
 
@@ -127,10 +127,10 @@ fileprivate struct DoneOrderViewRow: View {
 extension DoneOrderView {
     var userPhoto: some View {
         let userPhotoUrl: String = {
-            if vm.user?.isDoctor ?? false {
-                return vm.users.first(where: { $0.userId == order.clientId })?.photoUrl ?? ""
+            if interfaceData.user?.isDoctor ?? false {
+                return interfaceData.users.first(where: { $0.userId == order.clientId })?.photoUrl ?? ""
             } else {
-                return vm.doctors.first(where: { $0.userId == order.doctorId })?.photoUrl ?? ""
+                return interfaceData.doctors.first(where: { $0.userId == order.doctorId })?.photoUrl ?? ""
             }
         }()
         

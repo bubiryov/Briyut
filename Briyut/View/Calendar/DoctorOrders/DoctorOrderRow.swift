@@ -11,7 +11,8 @@ import FirebaseFirestoreSwift
 
 struct DoctorOrderRow: View {
     
-    let vm: ProfileViewModel
+    let interfaceData: InterfaceData
+    let mainViewModel: MainViewModel
     @Binding var dayOrders: [(OrderModel, Bool)]
     @Binding var order: (OrderModel, Bool)
     @Binding var isEditing: Bool
@@ -22,8 +23,8 @@ struct DoctorOrderRow: View {
             
     var body: some View {
         
-        let procedure = vm.procedures.first(where: { $0.procedureId == order.0.procedureId })
-        let client = vm.users.first(where: { $0.userId == order.0.clientId })
+        let procedure = interfaceData.procedures.first(where: { $0.procedureId == order.0.procedureId })
+        let client = interfaceData.users.first(where: { $0.userId == order.0.clientId })
         
         HStack(alignment: .top) {
             LeftLineCircleImage(order: order)
@@ -71,8 +72,8 @@ struct DoctorOrderRow: View {
                 title: Text("cancel-appointment-alert-string"),
                 primaryButton: .destructive(Text("remove-string"), action: {
                     Task {
-                        try await vm.removeOrder(orderId: order.0.orderId)
-                        let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
+                        try await mainViewModel.orderViewModel.removeOrder(orderId: order.0.orderId)
+                        let orders = try await mainViewModel.orderViewModel.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
                         withAnimation(.easeInOut(duration: 0.15)) {
                             dayOrders = orders.map {($0, false)}
                             isEditing = false
@@ -84,7 +85,7 @@ struct DoctorOrderRow: View {
         }
         .sheet(isPresented: $fullCover) {
             DateTimeSelectionView(
-                doctor: vm.user,
+                doctor: interfaceData.user,
                 order: order.0,
                 mainButtonTitle: "edit-appointment-string".localized,
                 selectedTab: .constant(.home)
@@ -102,9 +103,9 @@ struct DoctorOrderRow: View {
 
 struct DoctorOrderRow_Previews: PreviewProvider {
     static var previews: some View {
-        let vm = ProfileViewModel()
+//        let vm = ProfileViewModel()
         VStack {
-            DoctorOrderRow(vm: vm, dayOrders: .constant([]), order: .constant(( OrderModel(orderId: "", procedureId: "", doctorId: "", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 1000), false)), isEditing: .constant(true), selectedDoctor: nil, selectedDate: Date())
+            DoctorOrderRow(interfaceData: InterfaceData(), mainViewModel: MainViewModel(data: InterfaceData()), dayOrders: .constant([]), order: .constant(( OrderModel(orderId: "", procedureId: "", doctorId: "", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 1000), false)), isEditing: .constant(true), selectedDoctor: nil, selectedDate: Date())
         }
         .padding(.horizontal, 20)
     }
@@ -173,7 +174,7 @@ extension DoctorOrderRow {
         if newValue == false {
             Task {
                 do {
-                    let orders = try await vm.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
+                    let orders = try await mainViewModel.orderViewModel.getDayMonthOrders(date: selectedDate, selectionMode: .day, doctorId: selectedDoctor?.userId, firstDate: nil, secondDate: nil)
                     withAnimation(.easeInOut(duration: 0.15)) {
                         dayOrders = orders.map {($0, false)}
                         isEditing = false

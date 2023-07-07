@@ -9,7 +9,8 @@ import SwiftUI
 
 struct AllDoctorsView: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
     @Environment(\.presentationMode) var presentationMode
     @State private var futureDoctorID: String = ""
     @State private var loading = false
@@ -27,9 +28,9 @@ struct AllDoctorsView: View {
                     leftButton: BackButton()
                 )
                 
-                if vm.user?.isDoctor ?? false {
+                if interfaceData.user?.isDoctor ?? false {
                     AccentInputField(
-                        promptText: vm.user?.userId ?? "",
+                        promptText: interfaceData.user?.userId ?? "",
                         title: "user-id-string",
                         spaceAllow: false,
                         input: $futureDoctorID
@@ -39,9 +40,10 @@ struct AllDoctorsView: View {
                 ScrollView {
                     ForEach(tupleDoctors, id: \.0.userId) { doctor in
                         UserRow(
-                            vm: vm,
+                            interfaceData: interfaceData,
+                            mainViewModel: mainViewModel,
                             user: doctor.0,
-                            showButtons: doctor.1 && doctor.0.userId != vm.user?.userId,
+                            showButtons: doctor.1 && doctor.0.userId != interfaceData.user?.userId,
                             userStatus: .doctor
                         )
                         .onTapGesture {
@@ -55,7 +57,7 @@ struct AllDoctorsView: View {
                 }
                 .scrollIndicators(.hidden)
                 
-                if vm.user?.isDoctor ?? false {
+                if interfaceData.user?.isDoctor ?? false {
                     Spacer()
                     
                     Button {
@@ -72,14 +74,14 @@ struct AllDoctorsView: View {
             }
             .padding(.bottom, 20)
             .background(Color.backgroundColor)
-            .onChange(of: vm.doctors, perform: { _ in
+            .onChange(of: interfaceData.doctors, perform: { _ in
                 withAnimation {
-                    tupleDoctors = vm.doctors.map {($0, false)}
+                    tupleDoctors = interfaceData.doctors.map {($0, false)}
                 }
             })
             .navigationBarBackButtonHidden(true)
             .onAppear {
-                tupleDoctors = vm.doctors.map {($0, false)}
+                tupleDoctors = interfaceData.doctors.map {($0, false)}
             }
             .contentShape(Rectangle())
             .gesture(
@@ -104,7 +106,8 @@ struct AddDoctorView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             AllDoctorsView()
-                .environmentObject(ProfileViewModel())
+                .environmentObject(InterfaceData())
+                .environmentObject(MainViewModel(data: InterfaceData()))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)
@@ -122,7 +125,7 @@ extension AllDoctorsView {
         Task {
             do {
                 loading = true
-                try await vm.addDoctor(userID: futureDoctorID)
+                try await mainViewModel.profileViewModel.addDoctor(userID: futureDoctorID)
                 withAnimation {
                     futureDoctorID = ""
                 }

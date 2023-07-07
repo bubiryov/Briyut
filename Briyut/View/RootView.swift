@@ -8,9 +8,21 @@
 import SwiftUI
 
 struct RootView: View {
-    
-    @StateObject var vm = ProfileViewModel()
+        
+    @StateObject private var interfaceData: InterfaceData
     @StateObject var articlesVM: ArticlesViewModel = ArticlesViewModel()
+    @StateObject var mainViewModel: MainViewModel
+    
+    init(notEntered: Binding<Bool>, splashView: Binding<Bool>) {
+        let interfaceData = InterfaceData()
+        let mainViewModel = MainViewModel(data: interfaceData)
+        _interfaceData = StateObject(wrappedValue: interfaceData)
+        _mainViewModel = StateObject(wrappedValue: mainViewModel)
+        
+        _notEntered = notEntered
+        _splashView = splashView
+    }
+    
     @State private var selectedTab: Tab = .home
     @Binding var notEntered: Bool
     @Binding var splashView: Bool
@@ -27,17 +39,24 @@ struct RootView: View {
                     switch selectedTab {
                     case .home:
                         HomeView(selectedTab: $selectedTab, justOpened: $justOpened, showSearch: $showSearch, splashView: $splashView)
-                            .environmentObject(vm)
+                            .environmentObject(interfaceData)
+                            .environmentObject(mainViewModel)
                             .environmentObject(articlesVM)
                     case .plus:
                         AllProcedures(notEntered: $notEntered, showSearch: $showSearch, selectedTab: $selectedTab)
-                            .environmentObject(vm)
+                            .environmentObject(interfaceData)
+                            .environmentObject(mainViewModel)
+
                     case .calendar:
                         CalendarView()
-                            .environmentObject(vm)
+                            .environmentObject(interfaceData)
+                            .environmentObject(mainViewModel)
+
                     case .profile:
                         ProfileView(notEntered: $notEntered)
-                            .environmentObject(vm)
+                            .environmentObject(interfaceData)
+                            .environmentObject(mainViewModel)
+
                     }
                 }
                 .padding(.top, topPadding())
@@ -53,7 +72,7 @@ struct RootView: View {
         .background(Color.backgroundColor)
         .onAppear {
             Task {
-                vm.getProvider()
+                mainViewModel.profileViewModel.getProvider()
             }
         }
     }    
