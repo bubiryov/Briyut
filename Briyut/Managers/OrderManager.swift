@@ -23,7 +23,7 @@ protocol OrderManagerProtocol {
 final class OrderManager: OrderManagerProtocol {
     
     static let shared = OrderManager()
-    private init() { print("Init order manager") }
+    private init() { }
     
     private let orderCollection = Firestore.firestore().collection("orders")
     

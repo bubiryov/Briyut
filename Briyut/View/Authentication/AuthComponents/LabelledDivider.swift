@@ -29,16 +29,18 @@ struct LabelledDivider: View {
             line
         }
     }
-    
-    var line: some View {
-        VStack {
-            Divider().background(color)
-        }
-    }
 }
 
 struct LabelledDivider_Previews: PreviewProvider {
     static var previews: some View {
         LabelledDivider(label: "or")
+    }
+}
+
+extension LabelledDivider {
+    var line: some View {
+        VStack {
+            Divider().background(color)
+        }
     }
 }

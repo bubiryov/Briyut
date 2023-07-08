@@ -43,7 +43,6 @@ class OrderViewModel {
         if let lastDocument {
             data.allLastDocument = lastDocument
         }
-        print("Downloaded orders")
     }
 
     func addNewOrder(order: OrderModel) async throws {

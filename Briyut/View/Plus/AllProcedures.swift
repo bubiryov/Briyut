@@ -93,10 +93,11 @@ struct AllProcedures: View {
 
 struct AddProcedureView_Previews: PreviewProvider {
     static var previews: some View {
+        let interfaceData = InterfaceData()
         VStack {
             AllProcedures(notEntered: .constant(false), showSearch: .constant(false), selectedTab: .constant(.plus))
-                .environmentObject(InterfaceData())
-                .environmentObject(MainViewModel(data: InterfaceData()))
+                .environmentObject(interfaceData)
+                .environmentObject(MainViewModel(data: interfaceData))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)

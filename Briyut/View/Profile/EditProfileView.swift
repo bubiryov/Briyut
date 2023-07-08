@@ -121,10 +121,13 @@ struct EditProfileView: View {
 
 struct EditProfileView_Previews: PreviewProvider {
     static var previews: some View {
+        
+        let interfaceData = InterfaceData()
+
         VStack {
             EditProfileView(notEntered: .constant(false))
-                .environmentObject(InterfaceData())
-                .environmentObject(MainViewModel(data: InterfaceData()))
+                .environmentObject(interfaceData)
+                .environmentObject(MainViewModel(data: interfaceData))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)
@@ -301,7 +304,7 @@ extension EditProfileView {
         var url: String = user.photoUrl ?? ""
         
         if let selectedPhoto {
-            try await mainViewModel.profileViewModel.deleteStorageFolderContents(documentId: user.userId, childStorage: "users")
+            try await mainViewModel.profileViewModel.storageViewModel.deleteStorageFolderContents(documentId: user.userId, childStorage: "users")
             let path = try await mainViewModel.profileViewModel.savePhoto(item: selectedPhoto, childStorage: "users")
             url = try await mainViewModel.profileViewModel.getUrlForImage(path: path)
         }

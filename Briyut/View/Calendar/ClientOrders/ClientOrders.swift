@@ -46,10 +46,13 @@ struct ClientOrders: View {
 
 struct ClientOrders_Previews: PreviewProvider {
     static var previews: some View {
+        
+        let interfaceData = InterfaceData()
+
         VStack {
             ClientOrders()
-                .environmentObject(InterfaceData())
-                .environmentObject(MainViewModel(data: InterfaceData()))
+                .environmentObject(interfaceData)
+                .environmentObject(MainViewModel(data: interfaceData))
         }
         .padding(.horizontal, 20)
     }

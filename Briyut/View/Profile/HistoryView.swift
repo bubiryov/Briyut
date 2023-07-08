@@ -117,10 +117,13 @@ struct HistoryView: View {
 
 struct HistoryView_Previews: PreviewProvider {
     static var previews: some View {
+        
+        let interfaceData = InterfaceData()
+
         VStack {
             HistoryView()
-                .environmentObject(InterfaceData())
-                .environmentObject(MainViewModel(data: InterfaceData()))
+                .environmentObject(interfaceData)
+                .environmentObject(MainViewModel(data: interfaceData))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)

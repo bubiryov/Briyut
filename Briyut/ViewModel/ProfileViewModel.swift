@@ -11,23 +11,15 @@ import SwiftUI
 import PhotosUI
 
 @MainActor
-class StorageViewModel {
-    func deleteStorageFolderContents(documentId: String, childStorage: String) async throws {
-        try await StorageManager.shared.deleteFolderContents(documentId: documentId, childStorage: childStorage)
-    }
-}
-
-@MainActor
 class ProfileViewModel {
     
     let data: InterfaceData
     let procedureViewModel: ProcedureViewModel
     let orderViewModel: OrderViewModel
+    let storageViewModel: StorageViewModel
+
     let userManager: UserManagerProtocol
     let authenticationManager: AuthenticationManagerProtocol
-    let storageManager: StorageManagerProtocol
-    
-    let storageViewModel = StorageViewModel()
     
     init(data: InterfaceData, procedureViewModel: ProcedureViewModel, orderViewModel: OrderViewModel, userManager: UserManagerProtocol, authenticationManager: AuthenticationManagerProtocol, storageManager: StorageManagerProtocol) {
         self.data = data
@@ -35,7 +27,7 @@ class ProfileViewModel {
         self.orderViewModel = orderViewModel
         self.userManager = userManager
         self.authenticationManager = authenticationManager
-        self.storageManager = storageManager
+        self.storageViewModel = StorageViewModel(storageManager: storageManager)
     }
     
     func loadCurrentUser() async throws {
@@ -64,16 +56,12 @@ class ProfileViewModel {
             print("Log out error: \(error)")
         }
     }
-    
-    func deleteStorageFolderContents(documentId: String, childStorage: String) async throws {
-        try await storageManager.deleteFolderContents(documentId: documentId, childStorage: childStorage)
-    }
-    
+        
     func deleteAccount() async throws {
         guard let user = data.user else { throw URLError(.badServerResponse) }
         try await orderViewModel.deleteUnfinishedOrders(idType: .client, id: user.userId)
         try await userManager.deleteUser(userId: user.userId)
-        try await deleteStorageFolderContents(documentId: user.userId, childStorage: "users")
+        try await storageViewModel.deleteStorageFolderContents(documentId: user.userId, childStorage: "users")
         try await authenticationManager.deleteAccount()
         data.user = nil
     }
@@ -121,15 +109,15 @@ class ProfileViewModel {
         guard let user = self.data.user else {
             throw URLError(.badServerResponse)
         }
-        return try await storageManager.saveImage(data: data, childStorage: childStorage, documentId: user.userId, contentTypes: contentTypes)
+        return try await storageViewModel.saveImage(data: data, childStorage: childStorage, documentId: user.userId, contentTypes: contentTypes)
     }
     
     func deletePreviousPhoto(url: String) async throws {
-        try await storageManager.deletePreviousPhoto(url: url)
+        try await storageViewModel.deletePreviousPhoto(url: url)
     }
     
     func getUrlForImage(path: String) async throws -> String {
-        return try await storageManager.getUrlForImage(path: path)
+        return try await storageViewModel.getUrlForImage(path: path)
     }
 }
 

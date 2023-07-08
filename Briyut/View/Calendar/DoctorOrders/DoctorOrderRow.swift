@@ -103,9 +103,11 @@ struct DoctorOrderRow: View {
 
 struct DoctorOrderRow_Previews: PreviewProvider {
     static var previews: some View {
-//        let vm = ProfileViewModel()
+        
+        let interfaceData = InterfaceData()
+
         VStack {
-            DoctorOrderRow(interfaceData: InterfaceData(), mainViewModel: MainViewModel(data: InterfaceData()), dayOrders: .constant([]), order: .constant(( OrderModel(orderId: "", procedureId: "", doctorId: "", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 1000), false)), isEditing: .constant(true), selectedDoctor: nil, selectedDate: Date())
+            DoctorOrderRow(interfaceData: interfaceData, mainViewModel: MainViewModel(data: interfaceData), dayOrders: .constant([]), order: .constant(( OrderModel(orderId: "", procedureId: "", doctorId: "", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 1000), false)), isEditing: .constant(true), selectedDoctor: nil, selectedDate: Date())
         }
         .padding(.horizontal, 20)
     }

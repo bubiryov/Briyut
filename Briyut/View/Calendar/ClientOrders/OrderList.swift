@@ -56,9 +56,12 @@ struct OrderList: View {
 
 struct OrderList_Previews: PreviewProvider {
     static var previews: some View {
+        
+        let interfaceData = InterfaceData()
+
         OrderList(
-            interfaceData: InterfaceData(),
-            mainViewModel: MainViewModel(data: InterfaceData()),
+            interfaceData: interfaceData,
+            mainViewModel: MainViewModel(data: interfaceData),
             selectedIndex: 0, orderArray: []
         )
     }

@@ -66,6 +66,7 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
+        let interfaceData = InterfaceData()
         VStack {
             HomeView(
                 selectedTab: .constant(.profile),
@@ -73,9 +74,9 @@ struct HomeView_Previews: PreviewProvider {
                 showSearch: .constant(false),
                 splashView: .constant(false)
             )
-            .environmentObject(InterfaceData())
+            .environmentObject(interfaceData)
             .environmentObject(ArticlesViewModel())
-            .environmentObject(MainViewModel(data: InterfaceData()))
+            .environmentObject(MainViewModel(data: interfaceData))
         }
         .padding(.horizontal)
         .padding(.bottom)

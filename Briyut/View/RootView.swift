@@ -10,8 +10,11 @@ import SwiftUI
 struct RootView: View {
         
     @StateObject private var interfaceData: InterfaceData
-    @StateObject var articlesVM: ArticlesViewModel = ArticlesViewModel()
     @StateObject var mainViewModel: MainViewModel
+    @StateObject var articlesVM: ArticlesViewModel = ArticlesViewModel()
+    
+    @Binding var notEntered: Bool
+    @Binding var splashView: Bool
     
     init(notEntered: Binding<Bool>, splashView: Binding<Bool>) {
         let interfaceData = InterfaceData()
@@ -24,8 +27,6 @@ struct RootView: View {
     }
     
     @State private var selectedTab: Tab = .home
-    @Binding var notEntered: Bool
-    @Binding var splashView: Bool
     @State var justOpened: Bool = true
     @State var showSearch: Bool = false
         

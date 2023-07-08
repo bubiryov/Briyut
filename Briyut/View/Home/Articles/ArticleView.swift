@@ -12,7 +12,7 @@ import CachedAsyncImage
 struct ArticleView: View {
     
     let article: ArticleModel
-    @EnvironmentObject var articleVM: ArticlesViewModel
+    @EnvironmentObject var articleViewModel: ArticlesViewModel
     @EnvironmentObject var interfaceData: InterfaceData
     @Environment(\.presentationMode) var presentationMode
     @State private var showAlert: Bool = false
@@ -114,7 +114,7 @@ extension ArticleView {
             primaryButton: .destructive(Text("delete-string"), action: {
                 Task {
                     do {
-                        try await articleVM.removeArticle(article_id: article.id)
+                        try await articleViewModel.removeArticle(article_id: article.id)
                         presentationMode.wrappedValue.dismiss()
                     } catch {
                         print("Something went wrong")

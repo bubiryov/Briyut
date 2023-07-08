@@ -66,9 +66,12 @@ struct AddPastOrderView: View {
 
 struct AddPastOrderView_Previews: PreviewProvider {
     static var previews: some View {
+        
+        let interfaceData = InterfaceData()
+
         AddPastOrderView()
-            .environmentObject(InterfaceData())
-            .environmentObject(MainViewModel(data: InterfaceData()))
+            .environmentObject(interfaceData)
+            .environmentObject(MainViewModel(data: interfaceData))
     }
 }
 

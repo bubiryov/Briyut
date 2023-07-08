@@ -117,8 +117,11 @@ struct OrderRow: View {
 
 struct OrderRow_Previews: PreviewProvider {
     static var previews: some View {
+        
+        let interfaceData = InterfaceData()
+
         VStack {
-            OrderRow(interfaceData: InterfaceData(), mainViewModel: MainViewModel(data: InterfaceData()), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: true, color: nil, fontColor: .white, bigDate: false, userInformation: .doctor, photoBackgroundColor: .white.opacity(0.2))
+            OrderRow(interfaceData: interfaceData, mainViewModel: MainViewModel(data: interfaceData), order: OrderModel(orderId: "", procedureId: "", doctorId: "hJlNBE2L1RWTDLNzvZNQIf4g6Ry1", clientId: "", date: Timestamp(date: Date()), end: Timestamp(date: Date()), isDone: false, price: 900), withButtons: true, color: nil, fontColor: .white, bigDate: false, userInformation: .doctor, photoBackgroundColor: .white.opacity(0.2))
         }
         .padding(.horizontal, 20)
     }

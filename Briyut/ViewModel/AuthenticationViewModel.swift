@@ -11,6 +11,12 @@ import SwiftUI
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
     
+    @Published var email: String = ""
+    @Published var password: String = ""
+    @Published var authUser: AuthDataResultModel? = nil
+    @Published var errorText: String? = nil
+    @Published var ID: String? = ""
+
     let userManager: UserManagerProtocol
     let authenticationManager: AuthenticationManagerProtocol
     
@@ -18,12 +24,6 @@ final class AuthenticationViewModel: ObservableObject {
         self.userManager = UserManager.shared
         self.authenticationManager = AuthenticationManager.shared
     }
-    
-    @Published var email: String = ""
-    @Published var password: String = ""
-    @Published var authUser: AuthDataResultModel? = nil
-    @Published var errorText: String? = nil
-    @Published var ID: String? = ""
         
     func getAuthUser() {
         self.authUser = try? authenticationManager.getAuthenticatedUser()
