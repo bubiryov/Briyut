@@ -10,6 +10,7 @@ import FirebaseFirestore
 
 @MainActor
 class InterfaceData: ObservableObject {
+    
     @Published var user: DBUser? = nil
     @Published var doctors: [DBUser] = []
     @Published var users: [DBUser] = []

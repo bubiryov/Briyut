@@ -9,9 +9,25 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-final class UserManager {
+protocol UserManagerProtocol {
+    func createNewUser(user: DBUser) async throws
+    func deleteUser(userId: String) async throws
+    func getAllUsers() async throws -> [DBUser]
+    @discardableResult
+    func getUser(userId: String) async throws -> DBUser
+    func editProfile(userID: String, name: String?, lastName: String?, phoneNumber: String?, photoURL: String?, customSchedule: Bool?, scheduleTimes: [String: String]?, vacation: Bool?, vacationDates: [Timestamp]?) async throws
+    func updateDoctorStatus(userID: String, isDoctor: Bool) async throws
+    func updateBlockStatus(userID: String, isBlocked: Bool) async throws
+    func makeDoctor(userID: String) async throws
+    func removeDoctor(userID: String) async throws
+    func checkIfUserExists(userId: String) async throws -> Bool
+    func getAllDoctors() async throws -> [DBUser]
+}
+
+final class UserManager: UserManagerProtocol {
     
-    static let shared = UserManager()
+    static var shared: UserManagerProtocol = UserManager()
+    
     private init() { }
     
     private let userCollection = Firestore.firestore().collection("users")
@@ -78,18 +94,6 @@ final class UserManager {
         try await userDocument(userId: userID).updateData(data)
     }
 
-    
-//    func updateDoctorStatus(userID: String, isDoctor: Bool) async throws {
-//        let data: [String : Any] = [
-//            DBUser.CodingKeys.isDoctor.rawValue : isDoctor,
-//            DBUser.CodingKeys.customSchedule.rawValue : Optional<Any>.none!,
-//            DBUser.CodingKeys.scheduleTimes.rawValue : Optional<Any>.none!,
-//            DBUser.CodingKeys.vacation.rawValue : Optional<Any>.none!,
-//            DBUser.CodingKeys.vacationDates.rawValue : Optional<Any>.none!,
-//        ]
-//        try await userDocument(userId: userID).updateData(data)
-//    }
-    
     func updateBlockStatus(userID: String, isBlocked: Bool) async throws {
         let data: [String : Any] = [
             DBUser.CodingKeys.isBlocked.rawValue : isBlocked

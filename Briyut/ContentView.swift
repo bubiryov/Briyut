@@ -49,7 +49,7 @@ struct ContentView_Previews: PreviewProvider {
 extension ContentView {
     func checkAuthentication() {
         Task {
-            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+            let authUser = try? vm.authenticationManager.getAuthenticatedUser()
             notEntered = authUser == nil
             localNotEntered = authUser == nil
             try await Task.sleep(nanoseconds: 3_000_000_000)

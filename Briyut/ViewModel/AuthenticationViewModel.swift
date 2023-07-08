@@ -10,7 +10,15 @@ import SwiftUI
 
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
-        
+    
+    let userManager: UserManagerProtocol
+    let authenticationManager: AuthenticationManagerProtocol
+    
+    init() {
+        self.userManager = UserManager.shared
+        self.authenticationManager = AuthenticationManager.shared
+    }
+    
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var authUser: AuthDataResultModel? = nil
@@ -18,7 +26,7 @@ final class AuthenticationViewModel: ObservableObject {
     @Published var ID: String? = ""
         
     func getAuthUser() {
-        self.authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+        self.authUser = try? authenticationManager.getAuthenticatedUser()
     }
 }
 
@@ -61,35 +69,9 @@ extension AuthenticationViewModel {
         return true
     }
 
-//    func validate(email: String, password: String?, repeatPassword: String?) -> Bool {
-//
-//        let emailRegex = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$"
-//        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailRegex)
-//
-//        guard
-//            !email.isEmpty,
-//            email.lowercased() == email,
-//            emailPredicate.evaluate(with: email),
-//            email.filter({$0 == "."}).count == 1 else {
-//            return false
-//        }
-//
-//        if let password {
-//            guard password.count > 5, password.contains(where: { $0.isLetter }), password.contains(where: { $0.isNumber }) else {
-//                return false
-//            }
-//        }
-//        if let repeatPassword {
-//            guard repeatPassword == password else {
-//                return false
-//            }
-//        }
-//        return true
-//    }
-
     func logInWithEmail() async throws {
         do {
-            try await AuthenticationManager.shared.signIn(email: email, password: password)
+            try await authenticationManager.signIn(email: email, password: password)
             email = ""
             password = ""
             errorText = nil
@@ -107,9 +89,9 @@ extension AuthenticationViewModel {
     
     func createUserWithEmail() async throws {
         do {
-            let authDataResult = try await AuthenticationManager.shared.createUser(email: email, password: password)
+            let authDataResult = try await authenticationManager.createUser(email: email, password: password)
             let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil, isBlocked: false, customSchedule: nil, scheduleTimes: nil, vacation: nil, vacationDates: nil)
-            try await UserManager.shared.createNewUser(user: user)
+            try await userManager.createNewUser(user: user)
             email = ""
             password = ""
         } catch let error {
@@ -119,12 +101,12 @@ extension AuthenticationViewModel {
     }
     
     func resetPassword() async throws {
-        try await AuthenticationManager.shared.resetPassword(email: email)
+        try await authenticationManager.resetPassword(email: email)
     }
     
     func changePassword(currentPassword: String, newPassword: String) async throws {
         guard validatePassword(newPassword, repeatPassword: newPassword) else { throw URLError(.badServerResponse) }
-        try await AuthenticationManager.shared.changePassword(currentPassword: currentPassword, newPassword: newPassword)
+        try await authenticationManager.changePassword(currentPassword: currentPassword, newPassword: newPassword)
     }
 }
 
@@ -157,7 +139,7 @@ extension AuthenticationViewModel {
         
         if let validateNumber = validatePhoneNumber(phoneNumber) {
             do {
-                let id = try await AuthenticationManager.shared.sendCode(validateNumber)
+                let id = try await authenticationManager.sendCode(validateNumber)
                 self.ID = id
                 print("SMS sent")
             } catch let error {
@@ -175,12 +157,12 @@ extension AuthenticationViewModel {
     func verifyCode(code: String) async throws {
         if let ID {
             do {
-                let (authDataResult, phoneNumber) = try await AuthenticationManager.shared.verifyCode(ID: ID, code: code)
+                let (authDataResult, phoneNumber) = try await authenticationManager.verifyCode(ID: ID, code: code)
                 do {
-                    try await UserManager.shared.getUser(userId: authDataResult.uid)
+                    try await userManager.getUser(userId: authDataResult.uid)
                 } catch {
                     let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: phoneNumber, isBlocked: false, customSchedule: nil, scheduleTimes: nil, vacation: nil, vacationDates: nil)
-                    try await UserManager.shared.createNewUser(user: user)
+                    try await userManager.createNewUser(user: user)
                     errorText = nil
                 }
             } catch {
@@ -207,10 +189,10 @@ extension AuthenticationViewModel {
         let googleManager = GoogleAuthenticationManager()
         let authDataResult = try await googleManager.signInGoogle()
         do {
-            try await UserManager.shared.getUser(userId: authDataResult.uid)
+            try await userManager.getUser(userId: authDataResult.uid)
         } catch {
             let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil, isBlocked: false, customSchedule: nil, scheduleTimes: nil, vacation: nil, vacationDates: nil)
-            try await UserManager.shared.createNewUser(user: user)
+            try await userManager.createNewUser(user: user)
         }
     }
 }
@@ -222,9 +204,9 @@ extension AuthenticationViewModel {
     func singInWithApple() async throws {
         let appleManager = AppleAuthenticationManager()
         let tokens = try await appleManager.startSignInWithAppleFlow()
-        let authDataResult = try await AuthenticationManager.shared.signInWithApple(tokens: tokens)
+        let authDataResult = try await authenticationManager.signInWithApple(tokens: tokens)
         let user = DBUser(auth: authDataResult, name: nil, lastName: nil, dateCreated: Date(), isDoctor: false, phoneNumber: nil, isBlocked: false, customSchedule: nil, scheduleTimes: nil, vacation: nil, vacationDates: nil)
-        try await UserManager.shared.createNewUser(user: user)
+        try await userManager.createNewUser(user: user)
     }
 }
 

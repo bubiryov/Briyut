@@ -12,20 +12,24 @@ import FirebaseFirestore
 class OrderViewModel {
     
     let data: InterfaceData
+    let orderManager: OrderManagerProtocol
+    let procedureManager: ProcedureManagerProtocol
     
-    init(data: InterfaceData) {
+    init(data: InterfaceData, orderManager: OrderManagerProtocol, procedureManager: ProcedureManagerProtocol) {
         self.data = data
+        self.orderManager = orderManager
+        self.procedureManager = procedureManager
     }
     
     func getRequiredOrders(dataFetchMode: DataFetchMode, isDone: Bool, countLimit: Int) async throws {
         if !isDone {
-            let (activeOrders, activeLastDocument) = try await OrderManager.shared.getRequiredOrders(dataFetchMode: dataFetchMode, userId: data.user?.userId ?? "", isDoctor: data.user?.isDoctor ?? false, isDone: false, countLimit: countLimit, lastDocument: data.activeLastDocument)
+            let (activeOrders, activeLastDocument) = try await orderManager.getRequiredOrders(dataFetchMode: dataFetchMode, userId: data.user?.userId ?? "", isDoctor: data.user?.isDoctor ?? false, isDone: false, countLimit: countLimit, lastDocument: data.activeLastDocument)
             data.activeOrders.append(contentsOf: activeOrders)
             if let activeLastDocument {
                 data.activeLastDocument = activeLastDocument
             }
         } else {
-            let (doneOrders, doneLastDocument) = try await OrderManager.shared.getRequiredOrders(dataFetchMode: dataFetchMode, userId: data.user?.userId ?? "", isDoctor: data.user?.isDoctor ?? false, isDone: true, countLimit: countLimit, lastDocument: data.doneLastDocument)
+            let (doneOrders, doneLastDocument) = try await orderManager.getRequiredOrders(dataFetchMode: dataFetchMode, userId: data.user?.userId ?? "", isDoctor: data.user?.isDoctor ?? false, isDone: true, countLimit: countLimit, lastDocument: data.doneLastDocument)
             data.doneOrders.append(contentsOf: doneOrders)
             if let doneLastDocument {
                 data.doneLastDocument = doneLastDocument
@@ -34,7 +38,7 @@ class OrderViewModel {
     }
     
     func getAllOrders(dataFetchMode: DataFetchMode, count: Int?, isDone: Bool?) async throws {
-        let (orders, lastDocument) = try await OrderManager.shared.getRequiredOrders(dataFetchMode: dataFetchMode, userId: "", isDoctor: false, isDone: isDone, countLimit: count, lastDocument: data.allLastDocument)
+        let (orders, lastDocument) = try await orderManager.getRequiredOrders(dataFetchMode: dataFetchMode, userId: "", isDoctor: false, isDone: isDone, countLimit: count, lastDocument: data.allLastDocument)
         data.allOrders.append(contentsOf: orders)
         if let lastDocument {
             data.allLastDocument = lastDocument
@@ -43,27 +47,27 @@ class OrderViewModel {
     }
 
     func addNewOrder(order: OrderModel) async throws {
-        try await OrderManager.shared.createNewOrder(order: order)
+        try await orderManager.createNewOrder(order: order)
         data.activeLastDocument = nil
         data.activeOrders = []
         try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
     }
     
     func editOrderTime(orderId: String, date: Timestamp, end: Timestamp) async throws {
-        try await OrderManager.shared.editOrderTime(orderId: orderId, date: date, end: end)
+        try await orderManager.editOrderTime(orderId: orderId, date: date, end: end)
     }
     
     func removeOrder(orderId: String) async throws {
-        try await OrderManager.shared.removeOrder(orderId: orderId)
+        try await orderManager.removeOrder(orderId: orderId)
     }
         
     func updateOrdersStatus(isDone: Bool, isDoctor: Bool) async throws {
         try await getAllOrders(dataFetchMode: .all, count: nil, isDone: isDone)
         for order in data.allOrders {
             let calendar = Calendar.current
-            let procedureDuration = try await ProcedureManager.shared.getProduct(procedureId: order.procedureId).duration
+            let procedureDuration = try await procedureManager.getProduct(procedureId: order.procedureId).duration
             if calendar.date(byAdding: .minute, value: procedureDuration, to: order.date.dateValue())! <= Date() {
-                try await OrderManager.shared.updateOrderStatus(orderId: order.orderId)
+                try await orderManager.updateOrderStatus(orderId: order.orderId)
             }
         }
         data.allLastDocument = nil
@@ -73,24 +77,19 @@ class OrderViewModel {
     }
     
     func getDayMonthOrders(date: Date, selectionMode: DateSelectionMode, doctorId: String?, firstDate: Date?, secondDate: Date?) async throws -> [OrderModel] {
-        return try await OrderManager.shared.getDayMounthOrders(for: date, selectionMode: selectionMode, doctorId: doctorId, firstDate: firstDate, secondDate: secondDate)
+        return try await orderManager.getDayMounthOrders(for: date, selectionMode: selectionMode, doctorId: doctorId, firstDate: firstDate, secondDate: secondDate)
     }
     
     func deleteUnfinishedOrders(idType: IDType, id: String) async throws {
         do {
-            try await OrderManager.shared.deleteUnfinishedOrders(idType: idType, id: id)
+            try await orderManager.deleteUnfinishedOrders(idType: idType, id: id)
             print("Active orders deleted")
         } catch {
             print("Error with deleting active orders")
             throw URLError(.badURL)
         }
     }
-    
-//    func getDayOrders(date: Date, doctorId: String?) async throws -> [OrderModel] {
-//        let dayOrders = try await OrderManager.shared.getDayOrders(date: date, doctorId: doctorId)
-//        return dayOrders
-//    }
-    
+        
     func getDayOrderTimes(date: Date, selectionMode: DateSelectionMode, doctorId: String?) async throws -> [(Date, Date)] {
         let orders = try await getDayMonthOrders(date: date, selectionMode: selectionMode, doctorId: doctorId, firstDate: nil, secondDate: nil)
         var occupied = [(Date, Date)]()

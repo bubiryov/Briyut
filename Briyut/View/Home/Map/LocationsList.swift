@@ -68,7 +68,6 @@ struct LocationsList: View {
 struct LocationsList_Previews: PreviewProvider {
     static var previews: some View {
         LocationsList(locationViewModel: LocationsViewModel())
-//            .environmentObject(LocationsViewModel())
     }
 }
 

@@ -49,7 +49,7 @@ final class LocationsViewModel: ObservableObject {
                 
                 if !locations.isEmpty {
                     if locations.count > 1 {
-                        // Найти минимальную область, охватывающую все локации
+
                         var minLat = locations[0].latitude
                         var maxLat = locations[0].latitude
                         var minLng = locations[0].longitude
@@ -87,20 +87,14 @@ final class LocationsViewModel: ObservableObject {
                             latitude: locations.first!.latitude,
                             longitude: locations.first!.longitude)
                         
-//                        if mapLocation != nil {
-                            span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-//                        } else {
-//                            span = MKCoordinateSpan(
-//                                latitudeDelta: 0.055,
-//                                longitudeDelta: 0.02)
-//                        }
+                        span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
                         
                         coordinateRegion = MKCoordinateRegion(center: center, span: span)
                         
                     }
                 } else {
                     span = MKCoordinateSpan(latitudeDelta: 0.07, longitudeDelta: 0.02)
-                    // Если нет локаций, использовать значения по умолчанию
+
                     coordinateRegion = MKCoordinateRegion(
                         center: CLLocationCoordinate2D(
                             latitude: 50.005778910087265,

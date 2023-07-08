@@ -12,32 +12,34 @@ class ProcedureViewModel {
     
     let data: InterfaceData
     let orderViewModel: OrderViewModel
+    let procedureManager: ProcedureManagerProtocol
     
-    init(data: InterfaceData, orderViewModel: OrderViewModel) {
+    init(data: InterfaceData, orderViewModel: OrderViewModel, procedureManager: ProcedureManagerProtocol) {
         self.data = data
         self.orderViewModel = orderViewModel
+        self.procedureManager = procedureManager
     }
     
     func addNewProcedure(procedure: ProcedureModel) async throws {
-        try await ProcedureManager.shared.createNewProcedure(procedure: procedure)
+        try await procedureManager.createNewProcedure(procedure: procedure)
         try await getAllProcedures()
     }
         
     func getProcedure(procedureId: String) async throws -> ProcedureModel {
-        try await ProcedureManager.shared.getProduct(procedureId: procedureId)
+        try await procedureManager.getProduct(procedureId: procedureId)
     }
     
     func getAllProcedures() async throws {
-        data.procedures = try await ProcedureManager.shared.getAllProcedures()
+        data.procedures = try await procedureManager.getAllProcedures()
     }
             
     func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, parallelQuantity: Int, availableDoctors: [String]) async throws {
-        try await ProcedureManager.shared.editProcedure(procedureId: procedureId, name: name, duration: duration, cost: cost, parallelQuantity: parallelQuantity, availableDoctors: availableDoctors)
+        try await procedureManager.editProcedure(procedureId: procedureId, name: name, duration: duration, cost: cost, parallelQuantity: parallelQuantity, availableDoctors: availableDoctors)
         try await getAllProcedures()
     }
     
     func removeProcedure(procedureId: String) async throws {
-        try await ProcedureManager.shared.removeProcedure(procedureId: procedureId)
+        try await procedureManager.removeProcedure(procedureId: procedureId)
         try await orderViewModel.deleteUnfinishedOrders(idType: .procedure, id: procedureId)
         try await getAllProcedures()
         data.activeLastDocument = nil
@@ -46,7 +48,7 @@ class ProcedureViewModel {
     }
     
     func updateProceduresForDoctor(userID: String) async throws {
-        try await ProcedureManager.shared.updateProceduresForDoctor(userID: userID)
+        try await procedureManager.updateProceduresForDoctor(userID: userID)
     }
 
 }

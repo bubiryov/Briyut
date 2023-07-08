@@ -9,7 +9,13 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-final class ArticleManager {
+protocol ArticleManagerProtocol {
+    func createNewArticle(article: ArticleModel) async throws
+    func removeArticle(article_id: String) async throws
+    func getRequiredArticles(countLimit: Int?, lastDocument: DocumentSnapshot?) async throws -> (orders: [ArticleModel], lastDocument: DocumentSnapshot?)
+}
+
+final class ArticleManager: ArticleManagerProtocol {
     
     static let shared = ArticleManager()
     
@@ -20,14 +26,6 @@ final class ArticleManager {
     private func articleDocument(article_id: String) -> DocumentReference {
         articleCollection.document(article_id)
     }
-    
-//    func getProduct(article_id: String) async throws -> ArticleModel {
-//        try await articleDocument(article_id: article_id).getDocument(as: ArticleModel.self)
-//    }
-    
-//    func getAllArticles() async throws -> [ArticleModel] {
-//        try await articleCollection.getDocuments(as: ArticleModel.self)
-//    }
     
     func createNewArticle(article: ArticleModel) async throws {
         try articleDocument(article_id: article.id)

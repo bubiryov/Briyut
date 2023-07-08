@@ -11,61 +11,75 @@ import SwiftUI
 import PhotosUI
 
 @MainActor
+class StorageViewModel {
+    func deleteStorageFolderContents(documentId: String, childStorage: String) async throws {
+        try await StorageManager.shared.deleteFolderContents(documentId: documentId, childStorage: childStorage)
+    }
+}
+
+@MainActor
 class ProfileViewModel {
     
     let data: InterfaceData
     let procedureViewModel: ProcedureViewModel
     let orderViewModel: OrderViewModel
+    let userManager: UserManagerProtocol
+    let authenticationManager: AuthenticationManagerProtocol
+    let storageManager: StorageManagerProtocol
     
-    init(data: InterfaceData, procedureViewModel: ProcedureViewModel, orderViewModel: OrderViewModel) {
+    let storageViewModel = StorageViewModel()
+    
+    init(data: InterfaceData, procedureViewModel: ProcedureViewModel, orderViewModel: OrderViewModel, userManager: UserManagerProtocol, authenticationManager: AuthenticationManagerProtocol, storageManager: StorageManagerProtocol) {
         self.data = data
         self.procedureViewModel = procedureViewModel
         self.orderViewModel = orderViewModel
+        self.userManager = userManager
+        self.authenticationManager = authenticationManager
+        self.storageManager = storageManager
     }
     
-    
     func loadCurrentUser() async throws {
-        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+        let authDataResult = try authenticationManager.getAuthenticatedUser()
         data.user = try await getUser(userId: authDataResult.uid)
     }
     
     func getUser(userId: String) async throws -> DBUser {
-        try await UserManager.shared.getUser(userId: userId)
+        try await userManager.getUser(userId: userId)
     }
     
     func getAllUsers() async throws {
-        data.users = try await UserManager.shared.getAllUsers()
+        data.users = try await userManager.getAllUsers()
     }
     
     func getProvider() {
-        if let providers = try? AuthenticationManager.shared.getProvider() {
+        if let providers = try? authenticationManager.getProvider() {
             data.authProviders = providers
         }
     }
             
     func signOut() throws {
         do {
-            try AuthenticationManager.shared.signOut()
+            try authenticationManager.signOut()
         } catch  {
             print("Log out error: \(error)")
         }
     }
     
     func deleteStorageFolderContents(documentId: String, childStorage: String) async throws {
-        try await StorageManager.shared.deleteFolderContents(documentId: documentId, childStorage: childStorage)
+        try await storageManager.deleteFolderContents(documentId: documentId, childStorage: childStorage)
     }
     
     func deleteAccount() async throws {
         guard let user = data.user else { throw URLError(.badServerResponse) }
         try await orderViewModel.deleteUnfinishedOrders(idType: .client, id: user.userId)
-        try await UserManager.shared.deleteUser(userId: user.userId)
+        try await userManager.deleteUser(userId: user.userId)
         try await deleteStorageFolderContents(documentId: user.userId, childStorage: "users")
-        try await AuthenticationManager.shared.deleteAccount()
+        try await authenticationManager.deleteAccount()
         data.user = nil
     }
     
     func updateBlockStatus(userID: String, isBlocked: Bool) async throws {
-        try await UserManager.shared.updateBlockStatus(userID: userID, isBlocked: isBlocked)
+        try await userManager.updateBlockStatus(userID: userID, isBlocked: isBlocked)
         if isBlocked {
             try await orderViewModel.deleteUnfinishedOrders(idType: .client, id: userID)
         }
@@ -76,27 +90,27 @@ class ProfileViewModel {
     }
     
     func addDoctor(userID: String) async throws {
-        guard try await UserManager.shared.checkIfUserExists(userId: userID) else {
+        guard try await userManager.checkIfUserExists(userId: userID) else {
             return
         }
-        try await UserManager.shared.makeDoctor(userID: userID)
+        try await userManager.makeDoctor(userID: userID)
         try await getAllDoctors()
     }
     
     func removeDoctor(userID: String) async throws {
         guard userID != data.user?.userId else { return }
-        try await UserManager.shared.removeDoctor(userID: userID)
+        try await userManager.removeDoctor(userID: userID)
         try await orderViewModel.deleteUnfinishedOrders(idType: .doctor, id: userID)
         try await procedureViewModel.updateProceduresForDoctor(userID: userID)
         try await getAllDoctors()
     }
     
     func getAllDoctors() async throws {
-        data.doctors = try await UserManager.shared.getAllDoctors()
+        data.doctors = try await userManager.getAllDoctors()
     }
     
     func editProfile(userID: String, name: String?, lastName: String?, phoneNumber: String?, photoURL: String?, customSchedule: Bool?, scheduleTimes: [String: String]?, vacation: Bool?, vacationDates: [Timestamp]?) async throws {
-        return try await UserManager.shared.editProfile(userID: userID, name: name, lastName: lastName, phoneNumber: phoneNumber, photoURL: photoURL, customSchedule: customSchedule, scheduleTimes: scheduleTimes, vacation: vacation, vacationDates: vacationDates)
+        return try await userManager.editProfile(userID: userID, name: name, lastName: lastName, phoneNumber: phoneNumber, photoURL: photoURL, customSchedule: customSchedule, scheduleTimes: scheduleTimes, vacation: vacation, vacationDates: vacationDates)
     }
     
     func savePhoto(item: PhotosPickerItem, childStorage: String) async throws -> String {
@@ -107,16 +121,15 @@ class ProfileViewModel {
         guard let user = self.data.user else {
             throw URLError(.badServerResponse)
         }
-        return try await StorageManager.shared.saveImage(data: data, childStorage: childStorage, documentId: user.userId, contentTypes: contentTypes)
+        return try await storageManager.saveImage(data: data, childStorage: childStorage, documentId: user.userId, contentTypes: contentTypes)
     }
     
     func deletePreviousPhoto(url: String) async throws {
-        try await StorageManager.shared.deletePreviousPhoto(url: url)
+        try await storageManager.deletePreviousPhoto(url: url)
     }
     
     func getUrlForImage(path: String) async throws -> String {
-        return try await StorageManager.shared.getUrlForImage(path: path)
+        return try await storageManager.getUrlForImage(path: path)
     }
-
 }
 
