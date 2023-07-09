@@ -10,7 +10,16 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Combine
 
-final class ProcedureManager {
+protocol ProcedureManagerProtocol {
+    func getProduct(procedureId: String) async throws -> ProcedureModel
+    func createNewProcedure(procedure: ProcedureModel) async throws
+    func getAllProcedures() async throws -> [ProcedureModel]
+    func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, parallelQuantity: Int, availableDoctors: [String]) async throws
+    func removeProcedure(procedureId: String) async throws
+    func updateProceduresForDoctor(userID: String) async throws
+}
+
+final class ProcedureManager: ProcedureManagerProtocol {
     
     static let shared = ProcedureManager()
     private init() { }
@@ -35,18 +44,7 @@ final class ProcedureManager {
         return try await query
             .getDocuments(as: ProcedureModel.self)
     }
-        
-//    func addListenerForProcedures(completion: @escaping (_ products: [ProcedureModel]) -> Void) {
-//        proceduresCollection.addSnapshotListener { querySnapshot, error in
-//            guard let documents = querySnapshot?.documents else {
-//                return
-//            }
-//
-//            let procedures: [ProcedureModel] = documents.compactMap({ try? $0.data(as: ProcedureModel.self) })
-//            completion(procedures)
-//        }
-//    }
-        
+                
     func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, parallelQuantity: Int, availableDoctors: [String]) async throws {
         let data: [String : Any] = [
             ProcedureModel.CodingKeys.name.rawValue : name,
@@ -60,15 +58,6 @@ final class ProcedureManager {
     
     func removeProcedure(procedureId: String) async throws {
         try await procedureDocument(procedureId: procedureId).delete()
-//        let orderQuery = Firestore.firestore().collection("orders").whereField("procedure_id", isEqualTo: procedureId)
-//        let ordersSnapshot = try await orderQuery.getDocuments(as: OrderModel.self)
-//
-//        for order in ordersSnapshot {
-//            let orderDocument = Firestore.firestore().collection("orders").document(order.orderId)
-//            if !order.isDone {
-//                try await orderDocument.delete()
-//            }
-//        }
     }
     
     func updateProceduresForDoctor(userID: String) async throws {
@@ -100,18 +89,5 @@ extension Query {
         })
         return (products, snapshot.documents.last)
     }
-    
-//    func addSnapshotListener<T>(as type: T.Type) -> (AnyPublisher<[T], Error>) where T: Decodable {
-//        let publisher = PassthroughSubject<[T], Error> ()
-//        let listener = self.addSnapshotListener { querySnapshot, error in
-//            guard let documents = querySnapshot?.documents else {
-//                print("No documents")
-//                return
-//            }
-//            let products: [T] = documents.compactMap({ try? $0.data(as: T.self) })
-//            publisher.send(products)
-//        }
-//        return publisher.eraseToAnyPublisher()
-//    }
 }
 

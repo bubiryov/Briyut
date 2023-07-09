@@ -12,8 +12,8 @@ import CachedAsyncImage
 struct ArticleView: View {
     
     let article: ArticleModel
-    @EnvironmentObject var articleVM: ArticlesViewModel
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var articleViewModel: ArticlesViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
     @Environment(\.presentationMode) var presentationMode
     @State private var showAlert: Bool = false
     
@@ -23,7 +23,7 @@ struct ArticleView: View {
             TopBar<BackButton, DeleteButton>(
                 text: "",
                 leftButton: BackButton(),
-                rightButton: vm.user?.isDoctor ?? false ? DeleteButton(showAlert: $showAlert) : nil
+                rightButton: interfaceData.user?.isDoctor ?? false ? DeleteButton(showAlert: $showAlert) : nil
             )
                         
             ScrollView {
@@ -69,7 +69,7 @@ struct ArticleView_Previews: PreviewProvider {
             body: "Болі в шиї — частий стан, що зустрічається у 20% дорослого населення. За статистикою хворобливі прояви у шийному відділі частіше відчувають жінки. \n\nСимптоматика носить у пацієнтів різний характер — від ниючого, наростаючого поступово болю до гострого і навіть “стріляючого”. Багато пацієнтів, не усвідомлюючи серйозність проблеми, не поспішають по медичну допомогу. При тому біль не тільки суттєво знижує якість життя, а й може вказувати на серйозні патології, які можуть призвести до паралічу.\n Причини, через які з’являється біль у шиї, різноманітні та множинні. Серед частих — дегенеративні процеси, викликані артрозом чи спондилезом. Також стан може бути спричинений бактеріальним фактором, запаленнями, спазмом або травмою м’язів, защемленням нервового закінчення. Також при деяких захворюваннях іншого відділу хребта, бурситі, інших запаленнях у плечі в шию може віддавати біль, що спочатку виник в інших областях. Цей процес називається іррадіацією. Провокують біль у ділянці шиї різні травми, професійне заняття спортом, пов’язане з високими фізичними навантаженнями. Через велику кількість причин, які провокують болі шиї важливо провести точну диференційовану діагностику. Адже від того залежатимуть методи та тривалість лікування.",
             dateCreated: Timestamp(date: Date()),
             pictureUrl: "https://otdyhateli.cm/wp-content/uploads/2016/04/42.jpg"))
-        .environmentObject(ProfileViewModel())
+        .environmentObject(InterfaceData())
         .environmentObject(ArticlesViewModel())
     }
 }
@@ -114,7 +114,7 @@ extension ArticleView {
             primaryButton: .destructive(Text("delete-string"), action: {
                 Task {
                     do {
-                        try await articleVM.removeArticle(article_id: article.id)
+                        try await articleViewModel.removeArticle(article_id: article.id)
                         presentationMode.wrappedValue.dismiss()
                     } catch {
                         print("Something went wrong")

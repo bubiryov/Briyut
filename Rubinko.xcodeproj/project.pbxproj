@@ -11,6 +11,7 @@
 		890C28BC2A06D3F1000DB1A6 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */; };
 		890ECEDF2A162F0500BEE3CC /* DateTimeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890ECEDE2A162F0500BEE3CC /* DateTimeSelectionView.swift */; };
 		891198FC2A29155400D6756F /* DoctorOrderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891198FB2A29155400D6756F /* DoctorOrderRow.swift */; };
+		89403C782A5961EC00D0C80E /* StorageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89403C772A5961EC00D0C80E /* StorageViewModel.swift */; };
 		894068732A42F33800DC16F4 /* LocationsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894068722A42F33800DC16F4 /* LocationsList.swift */; };
 		894068762A42FA1800DC16F4 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894068752A42FA1800DC16F4 /* LocationView.swift */; };
 		894068782A432C8700DC16F4 /* LocationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894068772A432C8700DC16F4 /* LocationsViewModel.swift */; };
@@ -110,12 +111,15 @@
 		89CA5ABB2A02FD3200695069 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA5ABA2A02FD3200695069 /* Utilities.swift */; };
 		89CFDD682A122E7200159C4B /* OrderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD672A122E7200159C4B /* OrderManager.swift */; };
 		89CFDD6A2A122ED700159C4B /* OrderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD692A122ED700159C4B /* OrderModel.swift */; };
-		89CFDD6C2A126BCB00159C4B /* AddOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD6B2A126BCB00159C4B /* AddOrderView.swift */; };
 		89CFDD6E2A126F5600159C4B /* ChooseDoctorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD6D2A126F5600159C4B /* ChooseDoctorView.swift */; };
 		89CFDD702A12823700159C4B /* ClientOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD6F2A12823700159C4B /* ClientOrders.swift */; };
 		89CFDD722A12824200159C4B /* DoctorOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CFDD712A12824200159C4B /* DoctorOrders.swift */; };
 		89D37B762A0A49BB00A7C933 /* ProcedureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */; };
 		89D37B792A0A87D100A7C933 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D37B782A0A87D100A7C933 /* EditProfileView.swift */; };
+		89D3A9772A5855B300F0EFD0 /* InterfaceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D3A9762A5855B300F0EFD0 /* InterfaceData.swift */; };
+		89D3A9792A5855E200F0EFD0 /* ProcedureViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D3A9782A5855E200F0EFD0 /* ProcedureViewModel.swift */; };
+		89D3A97B2A5855FC00F0EFD0 /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D3A97A2A5855FC00F0EFD0 /* OrderViewModel.swift */; };
+		89D3A97D2A58561800F0EFD0 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D3A97C2A58561800F0EFD0 /* MainViewModel.swift */; };
 		89D6C8192A2B529500A38CEB /* ChooseClientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D6C8182A2B529500A38CEB /* ChooseClientView.swift */; };
 		89E8AB342A14DD52000661E6 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AB332A14DD51000661E6 /* SplashView.swift */; };
 		89E96D2B2A4C468800BB4FE6 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 89E96D2A2A4C468800BB4FE6 /* AlertToast */; };
@@ -165,6 +169,7 @@
 		890C28BB2A06D3F1000DB1A6 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		890ECEDE2A162F0500BEE3CC /* DateTimeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeSelectionView.swift; sourceTree = "<group>"; };
 		891198FB2A29155400D6756F /* DoctorOrderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorOrderRow.swift; sourceTree = "<group>"; };
+		89403C772A5961EC00D0C80E /* StorageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageViewModel.swift; sourceTree = "<group>"; };
 		894068722A42F33800DC16F4 /* LocationsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsList.swift; sourceTree = "<group>"; };
 		894068752A42FA1800DC16F4 /* LocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
 		894068772A432C8700DC16F4 /* LocationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsViewModel.swift; sourceTree = "<group>"; };
@@ -256,12 +261,15 @@
 		89CA5ABA2A02FD3200695069 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		89CFDD672A122E7200159C4B /* OrderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderManager.swift; sourceTree = "<group>"; };
 		89CFDD692A122ED700159C4B /* OrderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderModel.swift; sourceTree = "<group>"; };
-		89CFDD6B2A126BCB00159C4B /* AddOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddOrderView.swift; sourceTree = "<group>"; };
 		89CFDD6D2A126F5600159C4B /* ChooseDoctorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseDoctorView.swift; sourceTree = "<group>"; };
 		89CFDD6F2A12823700159C4B /* ClientOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientOrders.swift; sourceTree = "<group>"; };
 		89CFDD712A12824200159C4B /* DoctorOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorOrders.swift; sourceTree = "<group>"; };
 		89D37B752A0A49BB00A7C933 /* ProcedureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureManager.swift; sourceTree = "<group>"; };
 		89D37B782A0A87D100A7C933 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		89D3A9762A5855B300F0EFD0 /* InterfaceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceData.swift; sourceTree = "<group>"; };
+		89D3A9782A5855E200F0EFD0 /* ProcedureViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcedureViewModel.swift; sourceTree = "<group>"; };
+		89D3A97A2A5855FC00F0EFD0 /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
+		89D3A97C2A58561800F0EFD0 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		89D6C8182A2B529500A38CEB /* ChooseClientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseClientView.swift; sourceTree = "<group>"; };
 		89E8AB332A14DD51000661E6 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		89E96D2C2A4C4DF800BB4FE6 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
@@ -357,7 +365,6 @@
 				898FD9BF2A096D4B00725697 /* AvailableDoctorsView.swift */,
 				89CFDD6D2A126F5600159C4B /* ChooseDoctorView.swift */,
 				89D6C8182A2B529500A38CEB /* ChooseClientView.swift */,
-				89CFDD6B2A126BCB00159C4B /* AddOrderView.swift */,
 				890ECEDE2A162F0500BEE3CC /* DateTimeSelectionView.swift */,
 				89F71FF82A2F416E006DE84D /* DoneOrderView.swift */,
 			);
@@ -519,9 +526,14 @@
 			isa = PBXGroup;
 			children = (
 				899EC5CA2A00574700C90D49 /* AuthenticationViewModel.swift */,
+				89D3A9762A5855B300F0EFD0 /* InterfaceData.swift */,
+				89D3A97C2A58561800F0EFD0 /* MainViewModel.swift */,
 				898FD9BD2A0935E100725697 /* ProfileViewModel.swift */,
+				89D3A9782A5855E200F0EFD0 /* ProcedureViewModel.swift */,
+				89D3A97A2A5855FC00F0EFD0 /* OrderViewModel.swift */,
 				894068772A432C8700DC16F4 /* LocationsViewModel.swift */,
 				89E9B59D2A45F2E400B5D733 /* ArticlesViewModel.swift */,
+				89403C772A5961EC00D0C80E /* StorageViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -828,6 +840,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89BFAA3D2A1F5B1900DF2D0B /* StorageManager.swift in Sources */,
+				89D3A97D2A58561800F0EFD0 /* MainViewModel.swift in Sources */,
 				894068762A42FA1800DC16F4 /* LocationView.swift in Sources */,
 				89D6C8192A2B529500A38CEB /* ChooseClientView.swift in Sources */,
 				898834602A52C56000DB719C /* ProfileButton.swift in Sources */,
@@ -910,15 +923,18 @@
 				89C590522A052B4700975E50 /* TopBar.swift in Sources */,
 				899EC5712A000A1C00C90D49 /* BriyutApp.swift in Sources */,
 				899EC5BF2A002FF400C90D49 /* AccentButton.swift in Sources */,
+				89D3A9772A5855B300F0EFD0 /* InterfaceData.swift in Sources */,
 				894068782A432C8700DC16F4 /* LocationsViewModel.swift in Sources */,
 				89E9B59A2A45CADF00B5D733 /* ArticleManager.swift in Sources */,
 				899EC5B62A001A7600C90D49 /* AuthInputField.swift in Sources */,
+				89D3A97B2A5855FC00F0EFD0 /* OrderViewModel.swift in Sources */,
 				8988346C2A52DFA300DB719C /* ProcedureRow.swift in Sources */,
+				89403C782A5961EC00D0C80E /* StorageViewModel.swift in Sources */,
 				898834662A52D1AC00DB719C /* AddArticleButton.swift in Sources */,
-				89CFDD6C2A126BCB00159C4B /* AddOrderView.swift in Sources */,
 				896D3D0A2A3DDBF10053E873 /* LocationModel.swift in Sources */,
 				89804BDA2A2E1C66002E2282 /* AllUsersView.swift in Sources */,
 				89A17E582A03C8BD00C92A58 /* AppleAuthenticationManager.swift in Sources */,
+				89D3A9792A5855E200F0EFD0 /* ProcedureViewModel.swift in Sources */,
 				89FD353C2A48771400E72D0A /* ArticleView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

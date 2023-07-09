@@ -9,7 +9,18 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-final class OrderManager {
+protocol OrderManagerProtocol {
+    func getProduct(orderId: String) async throws -> OrderModel
+    func createNewOrder(order: OrderModel) async throws
+    func removeOrder(orderId: String) async throws
+    func getRequiredOrders(dataFetchMode: DataFetchMode, userId: String, isDoctor: Bool, isDone: Bool?, countLimit: Int?, lastDocument: DocumentSnapshot?) async throws -> (orders: [OrderModel], lastDocument: DocumentSnapshot?)
+    func updateOrderStatus(orderId: String) async throws
+    func getDayMounthOrders(for date: Date, selectionMode: DateSelectionMode, doctorId: String?, firstDate: Date?, secondDate: Date?) async throws -> [OrderModel]
+    func editOrderTime(orderId: String, date: Timestamp, end: Timestamp) async throws
+    func deleteUnfinishedOrders(idType: IDType, id: String) async throws
+}
+
+final class OrderManager: OrderManagerProtocol {
     
     static let shared = OrderManager()
     private init() { }
@@ -32,26 +43,7 @@ final class OrderManager {
     func removeOrder(orderId: String) async throws {
         try await orderDocument(orderId: orderId).delete()
     }
-    
-//    private func filter(dataFetchMode: DataFetchMode, userId: String, isDoctor: Bool, isDone: Bool) -> Query {
-//        if dataFetchMode == .all {
-//            return orderCollection
-//                .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
-//        } else {
-//            let query = orderCollection
-//                .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
-//            if isDoctor {
-//                return query
-//                    .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
-//                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
-//            } else {
-//                return query
-//                    .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
-//                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone)
-//            }
-//        }
-//    }
-    
+        
     private func filter(dataFetchMode: DataFetchMode, userId: String, isDoctor: Bool, isDone: Bool?) -> Query {
         if let isDone {
             let query = orderCollection
@@ -76,33 +68,7 @@ final class OrderManager {
                 .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
         }
     }
-    
-//    private func filter(userId: String, isDoctor: Bool, isDone: Bool?) -> Query {
-//        if let isDone {
-//            if isDoctor {
-//                if userId == "" {
-//                    return orderCollection
-////                        .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
-//                        .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
-//                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
-//                } else {
-//                    return orderCollection
-//                        .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: userId)
-//                        .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
-//                        .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
-//                }
-//            } else {
-//                return orderCollection
-//                    .whereField(OrderModel.CodingKeys.clientId.rawValue, isEqualTo: userId)
-//                    .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: isDone)
-//                    .order(by: OrderModel.CodingKeys.date.rawValue, descending: isDone ? true : false)
-//            }
-//        } else {
-//            return orderCollection
-//                .order(by: OrderModel.CodingKeys.date.rawValue, descending: true)
-//        }
-//    }
-        
+            
     func getRequiredOrders(dataFetchMode: DataFetchMode, userId: String, isDoctor: Bool, isDone: Bool?, countLimit: Int?, lastDocument: DocumentSnapshot?) async throws -> (orders: [OrderModel], lastDocument: DocumentSnapshot?) {
 
         let query = filter(dataFetchMode: dataFetchMode, userId: userId, isDoctor: isDoctor, isDone: isDone)
@@ -165,29 +131,6 @@ final class OrderManager {
         }
     }
 
-        
-//    func getDayOrders(date: Date, doctorId: String?) async throws -> [OrderModel] {
-//        let calendar = Calendar.current
-//
-//        let startDate = calendar.startOfDay(for: date)
-//        let endDate = calendar.date(byAdding: .day, value: 1, to: startDate)!
-//
-//        let query = orderCollection
-////            .whereField(OrderModel.CodingKeys.isDone.rawValue, isEqualTo: false)
-//            .whereField(OrderModel.CodingKeys.date.rawValue, isGreaterThanOrEqualTo: startDate)
-//            .whereField(OrderModel.CodingKeys.date.rawValue, isLessThan: endDate)
-//            .order(by: OrderModel.CodingKeys.date.rawValue, descending: false)
-//
-//        if let doctorId {
-//            return try await query
-//                .whereField(OrderModel.CodingKeys.doctorId.rawValue, isEqualTo: doctorId)
-//                .getDocuments(as: OrderModel.self)
-//        } else {
-//            return try await query
-//                .getDocuments(as: OrderModel.self)
-//        }
-//    }
-    
     func editOrderTime(orderId: String, date: Timestamp, end: Timestamp) async throws {
         let data: [String: Any] = [
             OrderModel.CodingKeys.date.rawValue: date,

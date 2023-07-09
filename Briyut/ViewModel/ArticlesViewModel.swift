@@ -15,13 +15,16 @@ final class ArticlesViewModel: ObservableObject {
     
     @Published var articles: [ArticleModel] = []
     @Published var lastArticle: DocumentSnapshot? = nil
+    let storageManager: StorageManagerProtocol
+    let articleManager: ArticleManagerProtocol
     
-    deinit {
-        print("Deinit")
+    init() {
+        self.storageManager = StorageManager.shared
+        self.articleManager = ArticleManager.shared
     }
-    
+        
     func createNewArticle(article: ArticleModel) async throws {
-        try await ArticleManager.shared.createNewArticle(article: article)
+        try await articleManager.createNewArticle(article: article)
         articles = []
         lastArticle = nil
         try await getRequiredArticles(countLimit: 6)
@@ -29,18 +32,18 @@ final class ArticlesViewModel: ObservableObject {
     
     func removeArticle(article_id: String) async throws {
         try await deleteStorageFolderContents(documentId: article_id, childStorage: "articles")
-        try await ArticleManager.shared.removeArticle(article_id: article_id)
+        try await articleManager.removeArticle(article_id: article_id)
         articles = []
         lastArticle = nil
         try await getRequiredArticles(countLimit: 6)
     }
     
     func deleteStorageFolderContents(documentId: String, childStorage: String) async throws {
-        try await StorageManager.shared.deleteFolderContents(documentId: documentId, childStorage: childStorage)
+        try await storageManager.deleteFolderContents(documentId: documentId, childStorage: childStorage)
     }
     
     func getUrlForImage(path: String) async throws -> String {
-        return try await StorageManager.shared.getUrlForImage(path: path)
+        return try await storageManager.getUrlForImage(path: path)
     }
     
     func savePhoto(item: PhotosPickerItem, articleId: String, childStorage: String) async throws -> String {
@@ -48,11 +51,11 @@ final class ArticlesViewModel: ObservableObject {
         guard let data = try await item.loadTransferable(type: Data.self) else {
             throw URLError(.badServerResponse)
         }
-        return try await StorageManager.shared.saveImage(data: data, childStorage: childStorage, documentId: articleId, contentTypes: contentTypes)
+        return try await storageManager.saveImage(data: data, childStorage: childStorage, documentId: articleId, contentTypes: contentTypes)
     }
     
     func getRequiredArticles(countLimit: Int?) async throws {
-        let (articles, lastArticle) = try await ArticleManager.shared.getRequiredArticles(countLimit: countLimit, lastDocument: lastArticle)
+        let (articles, lastArticle) = try await articleManager.getRequiredArticles(countLimit: countLimit, lastDocument: lastArticle)
         self.articles.append(contentsOf: articles)
         if let lastArticle {
             self.lastArticle = lastArticle

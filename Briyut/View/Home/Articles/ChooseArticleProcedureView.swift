@@ -10,7 +10,7 @@ import SwiftUI
 struct ChooseArticleProcedureView: View {
     
     @Binding var clippedProcedure: ProcedureModel?
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -21,7 +21,7 @@ struct ChooseArticleProcedureView: View {
             )
             
             ScrollView {
-                ForEach(vm.procedures, id: \.procedureId) { procedure in
+                ForEach(interfaceData.procedures, id: \.procedureId) { procedure in
                     HStack {
                         VStack(alignment: .leading, spacing: 5) {
                             Text(procedure.name)
@@ -72,7 +72,7 @@ struct ChooseArticleProcedureView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             ChooseArticleProcedureView(clippedProcedure: .constant(nil))
-                .environmentObject(ProfileViewModel())
+                .environmentObject(InterfaceData())
         }
         .padding(.horizontal)
     }

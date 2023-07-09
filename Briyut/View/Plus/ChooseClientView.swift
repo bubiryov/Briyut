@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ChooseClientView: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
     @Environment(\.presentationMode) var presentationMode
     var procedure: ProcedureModel
     @State private var showSearch: Bool = false
@@ -18,7 +19,7 @@ struct ChooseClientView: View {
     @FocusState var focus: Bool
         
     var filteredUsers: [DBUser] {
-        return vm.users
+        return interfaceData.users
             .filter {!($0.isBlocked ?? false)}
             .filter { user in
                 searchText.isEmpty ? true : ((user.name ?? "") + " " + (user.lastName ?? "")).localizedCaseInsensitiveContains(searchText)
@@ -46,7 +47,7 @@ struct ChooseClientView: View {
                     ForEach(filteredUsers, id: \.userId) { user in
                         NavigationLink {
                             DateTimeSelectionView(
-                                doctor: vm.user,
+                                doctor: interfaceData.user,
                                 procedure: procedure,
                                 mainButtonTitle: "add-appointment-string",
                                 client: user,
@@ -54,7 +55,8 @@ struct ChooseClientView: View {
                             )
                         } label: {
                             UserRow(
-                                vm: vm,
+                                interfaceData: interfaceData,
+                                mainViewModel: mainViewModel,
                                 user: user,
                                 showButtons: false,
                                 userStatus: .client
@@ -89,9 +91,13 @@ struct ChooseClientView: View {
 
 struct ChooseClientView_Previews: PreviewProvider {
     static var previews: some View {
+        
+        let interfaceData = InterfaceData()
+        
         VStack {
             ChooseClientView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, parallelQuantity: 1, availableDoctors: []), selectedTab: .constant(.home))
-                .environmentObject(ProfileViewModel())
+                .environmentObject(interfaceData)
+                .environmentObject(MainViewModel(data: interfaceData))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)

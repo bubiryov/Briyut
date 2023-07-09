@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @EnvironmentObject var vm: AuthenticationViewModel
+    @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
     @AppStorage("notEntered") var localNotEntered = true
     @State private var notEntered = true
     @State private var splashView: Bool = true
@@ -49,9 +49,9 @@ struct ContentView_Previews: PreviewProvider {
 extension ContentView {
     func checkAuthentication() {
         Task {
-            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-            notEntered = authUser == nil
-            localNotEntered = authUser == nil
+            authenticationViewModel.getAuthUser()
+            notEntered = authenticationViewModel.authUser == nil
+            localNotEntered = authenticationViewModel.authUser == nil
             try await Task.sleep(nanoseconds: 3_000_000_000)
             splashView = false
         }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProcedureRow: View {
     
-    var vm: ProfileViewModel
+    var interfaceData: InterfaceData
     var procedure: ProcedureModel
     var cornerRadius = ScreenSize.width / 30
     @Binding var isEditing: Bool
@@ -26,7 +26,7 @@ struct ProcedureRow: View {
                     isEditing: $isEditing
                 )
             } else {
-                if vm.user?.isDoctor == true {
+                if interfaceData.user?.isDoctor == true {
                     ChooseClientView(
                         procedure: procedure,
                         selectedTab: $selectedTab
@@ -67,7 +67,7 @@ struct ProcedureRow: View {
 struct ProcedureRow_Previews: PreviewProvider {
     static var previews: some View {
         ProcedureRow(
-            vm: ProfileViewModel(),
+            interfaceData: InterfaceData(),
             procedure: ProcedureModel(
                 procedureId: "",
                 name: "Massage",

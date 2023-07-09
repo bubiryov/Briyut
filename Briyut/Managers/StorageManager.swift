@@ -10,7 +10,17 @@ import FirebaseStorage
 import UIKit
 import UniformTypeIdentifiers
 
-final class StorageManager {
+protocol StorageManagerProtocol {
+    func saveImage(data: Data, childStorage: String, documentId: String, contentTypes: [String]) async throws -> String
+    func deleteFolderContents(documentId: String, childStorage: String) async throws
+    func deletePreviousPhoto(url: String) async throws
+    func getData(documentId: String, childStorage: String, path: String) async throws -> Data
+    func getUrlForImage(path: String) async throws -> String
+    func getPathForURL(url: String) -> String?
+}
+
+final class StorageManager: StorageManagerProtocol {
+    
     static let shared = StorageManager()
     
     private init() {}
@@ -48,7 +58,6 @@ final class StorageManager {
         
         do {
             try await deleteContentsOfReference(folderRef: folderRef)
-            print("Folder contents deleted successfully")
         } catch {
             print("Failed to delete folder contents: \(error.localizedDescription)")
             throw error

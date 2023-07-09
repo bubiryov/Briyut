@@ -10,7 +10,7 @@ import SwiftUI
 struct LocationView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var vm: LocationsViewModel
+    @ObservedObject var locationViewModel: LocationsViewModel
     var location: LocationModel? = nil
     @State private var city: String = ""
     @State private var street: String = ""
@@ -125,7 +125,7 @@ struct LocationView: View {
                 title: Text("delete-address-alert-title-string"),
                 primaryButton: .destructive(Text("delete-string"), action: {
                     Task {
-                        try await vm.removeLocation(locationId: location!.id)
+                        try await locationViewModel.removeLocation(locationId: location!.id)
                         presentationMode.wrappedValue.dismiss()
                     }
                 }),
@@ -133,7 +133,15 @@ struct LocationView: View {
             )
         }
     }
-    
+}
+
+struct LocationView_Previews: PreviewProvider {
+    static var previews: some View {
+        LocationView(locationViewModel: LocationsViewModel())
+    }
+}
+
+extension LocationView {
     func addNewAddress() async throws {
         guard let coordinates = splitCoordinates() else {
             return
@@ -147,7 +155,7 @@ struct LocationView: View {
             longitude: longitude,
             address: "\(street), \(buildingNumber), \(city)"
         )
-        try await vm.createNewLocation(location: location)
+        try await locationViewModel.createNewLocation(location: location)
     }
     
     func editAddress() async throws {
@@ -156,7 +164,7 @@ struct LocationView: View {
         }
         let (latitude, longitude) = coordinates
         
-        try await vm.editLocation(
+        try await locationViewModel.editLocation(
             locationId: location!.id,
             latitude: latitude,
             longitude: longitude,
@@ -238,10 +246,5 @@ struct LocationView: View {
         
         return (city, house, street)
     }
-}
 
-struct LocationView_Previews: PreviewProvider {
-    static var previews: some View {
-        LocationView(vm: LocationsViewModel())
-    }
 }

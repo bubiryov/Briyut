@@ -9,7 +9,8 @@ import SwiftUI
 
 struct UserRow: View {
     
-    let vm: ProfileViewModel
+    let interfaceData: InterfaceData
+    let mainViewModel: MainViewModel
     let user: DBUser
     let showButtons: Bool
     let userStatus: UserStatus
@@ -73,7 +74,7 @@ struct UserRow: View {
 extension UserRow {
     var userEditingButtons: some View {
         HStack {
-            if vm.user?.isDoctor ?? false {
+            if interfaceData.user?.isDoctor ?? false {
                 Button {
                     Task {
                         Haptics.shared.notify(.warning)
@@ -119,9 +120,9 @@ extension UserRow {
                 primaryButton: .destructive(Text(deleteButtonTitle), action: {
                     Task {
                         if userStatus == .doctor {
-                            try await vm.removeDoctor(userID: user.userId)
+                            try await mainViewModel.profileViewModel.removeDoctor(userID: user.userId)
                         } else {
-                            try await vm.updateBlockStatus(userID: user.userId, isBlocked: user.isBlocked != true ? true : false)
+                            try await mainViewModel.profileViewModel.updateBlockStatus(userID: user.userId, isBlocked: user.isBlocked != true ? true : false)
                         }
                     }
                 }),

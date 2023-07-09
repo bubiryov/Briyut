@@ -11,7 +11,9 @@ import AlertToast
 
 struct ProfileView: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
+    
     @Binding var notEntered: Bool
     @State private var logOutAlert: Bool = false
     @State private var copyIdAlert: Bool = false
@@ -27,7 +29,7 @@ struct ProfileView: View {
                 )
                 
                 ProfileImage(
-                    photoURL: vm.user?.photoUrl,
+                    photoURL: interfaceData.user?.photoUrl,
                     frame: ScreenSize.height * 0.12,
                     color: Color.secondary.opacity(0.1),
                     padding: 16
@@ -35,11 +37,11 @@ struct ProfileView: View {
                 .cornerRadius(ScreenSize.width / 20)
                 
                 HStack {
-                    Text(vm.user?.name ?? (vm.user?.userId ?? "blocked-user-string".localized))
+                    Text(interfaceData.user?.name ?? (interfaceData.user?.userId ?? "blocked-user-string".localized))
                         .font(Mariupol.bold, 22)
                         .lineLimit(1)
                     
-                    Text(vm.user?.lastName ?? "")
+                    Text(interfaceData.user?.lastName ?? "")
                         .font(Mariupol.bold, 22)
                         .lineLimit(1)
                 }
@@ -47,7 +49,7 @@ struct ProfileView: View {
                 VStack {
                     NavigationRow(destination: AllDoctorsView(), imageName: "stethoscope", title: "specialists-string")
 
-                    if vm.user?.isDoctor ?? false {
+                    if interfaceData.user?.isDoctor ?? false {
                         
                         NavigationRow(destination: AllUsersView(), imageName: "users", title: "user-managment-string")
                                                 
@@ -57,12 +59,12 @@ struct ProfileView: View {
                         
                     }
                     
-                    if vm.authProviders.contains(.email) {
+                    if interfaceData.authProviders.contains(.email) {
                         NavigationRow(destination: ChangePasswordView(), imageName: "lock", title: "change-password-string")
                     }
                     
                     Button {
-                        UIPasteboard.general.string = vm.user?.userId
+                        UIPasteboard.general.string = interfaceData.user?.userId
                         Haptics.shared.notify(.success)
                         copyIdAlert = true
                     } label: {
@@ -80,7 +82,7 @@ struct ProfileView: View {
                     title: Text("log-out-alert-string"),
                     primaryButton: .destructive(Text("log-out-string"), action: {
                         Task {
-                            try vm.signOut()
+                            try mainViewModel.profileViewModel.signOut()
                             notEntered = true
                         }
                     }),
@@ -98,9 +100,13 @@ struct ProfileView: View {
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
+        
+        let interfaceData = InterfaceData()
+
         VStack {
             ProfileView(notEntered: .constant(false))
-                .environmentObject(ProfileViewModel())
+                .environmentObject(interfaceData)
+                .environmentObject(MainViewModel(data: interfaceData))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)

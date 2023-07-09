@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DoctorMenuPicker: View {
     
-    let vm: ProfileViewModel
+    let interfaceData: InterfaceData
     let doctors: [DoctorOption]
     @Binding var selectedDoctor: DBUser?
     
@@ -28,7 +28,7 @@ struct DoctorMenuPicker: View {
                 }
             }
         } label: {
-            let doctor = selectedDoctor ?? vm.user
+            let doctor = selectedDoctor ?? interfaceData.user
             ProfileImage(
                 photoURL: doctor == selectedDoctor ? doctor?.photoUrl ?? "" : "",
                 frame: ScreenSize.height * 0.06,
@@ -43,6 +43,6 @@ struct DoctorMenuPicker: View {
 
 struct DoctorMenuPicker_Previews: PreviewProvider {
     static var previews: some View {
-        DoctorMenuPicker(vm: ProfileViewModel(), doctors: [], selectedDoctor: .constant(nil))
+        DoctorMenuPicker(interfaceData: InterfaceData(), doctors: [], selectedDoctor: .constant(nil))
     }
 }

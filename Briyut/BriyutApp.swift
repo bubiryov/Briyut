@@ -11,13 +11,13 @@ import Firebase
 @main
 struct BriyutApp: App {
 
-    @StateObject var vm = AuthenticationViewModel()
+    @StateObject var authenticationViewModel = AuthenticationViewModel()
     @UIApplicationDelegateAdaptor (AppDelegate.self) var delegate
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(vm)
+                .environmentObject(authenticationViewModel)
         }
     }
 }

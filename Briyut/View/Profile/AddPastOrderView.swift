@@ -11,7 +11,9 @@ import FirebaseFirestoreSwift
 
 struct AddPastOrderView: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
+    
     @Environment(\.presentationMode) var presentationMode
     @State private var selectedUser: DBUser? = nil
     @State private var selectedProcedure: ProcedureModel? = nil
@@ -64,8 +66,12 @@ struct AddPastOrderView: View {
 
 struct AddPastOrderView_Previews: PreviewProvider {
     static var previews: some View {
+        
+        let interfaceData = InterfaceData()
+
         AddPastOrderView()
-            .environmentObject(ProfileViewModel())
+            .environmentObject(interfaceData)
+            .environmentObject(MainViewModel(data: interfaceData))
     }
 }
 
@@ -101,20 +107,6 @@ fileprivate struct CustomDatePicker: View {
         }
     }
     
-//    private func roundDateToNearestInterval(date: Date, interval: TimeInterval) -> Date {
-//        let timeInterval = date.timeIntervalSinceReferenceDate
-//        let roundedInterval = (timeInterval / interval).rounded() * interval
-//
-//        let roundedDate = Date(timeIntervalSinceReferenceDate: roundedInterval)
-//
-//        if roundedDate > Date() {
-//            return roundedDate.addingTimeInterval(-interval)
-//        }
-//
-//        return roundedDate
-//    }
-
-
     private func roundDateToNearestInterval(date: Date, interval: TimeInterval) -> Date {
         let timeInterval = date.timeIntervalSinceReferenceDate
         let roundedInterval = (timeInterval / interval).rounded() * interval
@@ -127,7 +119,7 @@ fileprivate struct CustomDatePicker: View {
 extension AddPastOrderView {
     var userPicker: some View {
         Picker("", selection: $selectedUser) {
-            ForEach(vm.users.sorted(), id: \.userId) { user in
+            ForEach(interfaceData.users.sorted(), id: \.userId) { user in
                 Text("\(user.name ?? "anonymous-string") \(user.name != nil ? user.lastName ?? "" : "")")
                     .tag(user as DBUser?)
             }
@@ -137,7 +129,7 @@ extension AddPastOrderView {
     
     var procedurePicker: some View {
         Picker("", selection: $selectedProcedure) {
-            ForEach(vm.procedures, id: \.procedureId) { procedure in
+            ForEach(interfaceData.procedures, id: \.procedureId) { procedure in
                 Text(procedure.name)
                     .tag(procedure as ProcedureModel?)
             }
@@ -163,7 +155,7 @@ extension AddPastOrderView {
 extension AddPastOrderView {
     private func addOrderAction() {
         Haptics.shared.play(.light)
-        if let selectedUser, let selectedProcedure, let user = vm.user {
+        if let selectedUser, let selectedProcedure, let user = interfaceData.user {
             let newOrder = OrderModel(
                 orderId: UUID().uuidString,
                 procedureId: selectedProcedure.procedureId,
@@ -177,10 +169,10 @@ extension AddPastOrderView {
             Task {
                 do {
                     loading = true
-                    try await vm.addNewOrder(order: newOrder)
-                    vm.allLastDocument = nil
-                    vm.allOrders = []
-                    try await vm.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
+                    try await mainViewModel.orderViewModel.addNewOrder(order: newOrder)
+                    interfaceData.allLastDocument = nil
+                    interfaceData.allOrders = []
+                    try await mainViewModel.orderViewModel.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
                     loading = false
                     presentationMode.wrappedValue.dismiss()
                 } catch {

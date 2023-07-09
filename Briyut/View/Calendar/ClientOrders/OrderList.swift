@@ -9,7 +9,8 @@ import SwiftUI
 
 struct OrderList: View {
     
-    let vm: ProfileViewModel
+    let interfaceData: InterfaceData
+    let mainViewModel: MainViewModel
     var selectedIndex: Int
     var orderArray: [OrderModel]
     
@@ -19,7 +20,8 @@ struct OrderList: View {
                 ForEach(orderArray, id: \.orderId) { order in
                     
                     OrderRow(
-                        vm: vm,
+                        interfaceData: interfaceData,
+                        mainViewModel: mainViewModel,
                         order: order,
                         withButtons: order.isDone ? false : true,
                         color: nil,
@@ -36,7 +38,7 @@ struct OrderList: View {
                         .frame(height: 1)
                         .onAppear {
                             Task {
-                                try await vm.getRequiredOrders(dataFetchMode: .user, isDone: selectedIndex == 0 ? false : true, countLimit: 6)
+                                try await mainViewModel.orderViewModel.getRequiredOrders(dataFetchMode: .user, isDone: selectedIndex == 0 ? false : true, countLimit: 6)
                             }
                         }
                     }
@@ -46,7 +48,7 @@ struct OrderList: View {
         .scrollIndicators(.hidden)
         .onAppear {
             Task {
-                try await vm.getRequiredOrders(dataFetchMode: .user, isDone: selectedIndex == 0 ? false : true, countLimit: 6)
+                try await mainViewModel.orderViewModel.getRequiredOrders(dataFetchMode: .user, isDone: selectedIndex == 0 ? false : true, countLimit: 6)
             }
         }
     }
@@ -54,6 +56,13 @@ struct OrderList: View {
 
 struct OrderList_Previews: PreviewProvider {
     static var previews: some View {
-        OrderList(vm: ProfileViewModel(), selectedIndex: 0, orderArray: [])
+        
+        let interfaceData = InterfaceData()
+
+        OrderList(
+            interfaceData: interfaceData,
+            mainViewModel: MainViewModel(data: interfaceData),
+            selectedIndex: 0, orderArray: []
+        )
     }
 }

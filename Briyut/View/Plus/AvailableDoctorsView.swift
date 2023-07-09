@@ -10,7 +10,7 @@ import SwiftUI
 struct AvailableDoctorsView: View {
     
     @Binding var choosenDoctors: [String]
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
     @Environment(\.presentationMode) var presentationMode
     var cornerRadius = ScreenSize.width / 30
     
@@ -22,7 +22,7 @@ struct AvailableDoctorsView: View {
             )
             
             ScrollView {
-                ForEach(vm.doctors, id: \.userId) { doctor in
+                ForEach(interfaceData.doctors, id: \.userId) { doctor in
                     HStack {
                         
                         ProfileImage(
@@ -72,7 +72,7 @@ struct AvailableDoctorsView: View {
 struct DoctorsList_Previews: PreviewProvider {
     static var previews: some View {
         AvailableDoctorsView(choosenDoctors: .constant([]))
-            .environmentObject(ProfileViewModel())
+            .environmentObject(InterfaceData())
             .padding(.horizontal, 20)
             .background(Color.backgroundColor)
     }

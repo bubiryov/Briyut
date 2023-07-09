@@ -9,7 +9,9 @@ import SwiftUI
 
 struct HistoryView: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
+    
     @Environment(\.presentationMode) var presentationMode
     @State private var loading: Bool = false
     @State private var showAlert: Bool = false
@@ -26,10 +28,11 @@ struct HistoryView: View {
                         
             ScrollView {
                 LazyVStack {
-                    ForEach(vm.allOrders, id: \.orderId) { order in
+                    ForEach(interfaceData.allOrders, id: \.orderId) { order in
                         
                         OrderRow(
-                            vm: vm,
+                            interfaceData: interfaceData,
+                            mainViewModel: mainViewModel,
                             order: order,
                             withButtons: false,
                             color: nil,
@@ -49,7 +52,7 @@ struct HistoryView: View {
                             }
                         }
                         
-                        if order == vm.allOrders.last {
+                        if order == interfaceData.allOrders.last {
                             HStack {
                                 
                             }
@@ -58,7 +61,7 @@ struct HistoryView: View {
                                 Task {
                                     do {
                                         loading = true
-                                        try await vm.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
+                                        try await mainViewModel.orderViewModel.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
                                         loading = false
                                     } catch {
                                         loading = true
@@ -77,15 +80,15 @@ struct HistoryView: View {
             .scrollIndicators(.hidden)
             .onAppear {
                 Task {
-                    try await vm.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
+                    try await mainViewModel.orderViewModel.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
                 }
             }
             Spacer()
         }
         .background(Color.backgroundColor)
         .onDisappear {
-            vm.allOrders = []
-            vm.allLastDocument = nil
+            interfaceData.allOrders = []
+            interfaceData.allLastDocument = nil
         }
         .navigationBarBackButtonHidden()
         .contentShape(Rectangle())
@@ -114,9 +117,13 @@ struct HistoryView: View {
 
 struct HistoryView_Previews: PreviewProvider {
     static var previews: some View {
+        
+        let interfaceData = InterfaceData()
+
         VStack {
             HistoryView()
-                .environmentObject(ProfileViewModel())
+                .environmentObject(interfaceData)
+                .environmentObject(MainViewModel(data: interfaceData))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)
@@ -130,10 +137,10 @@ extension HistoryView {
                 guard let choosenOrder else {
                     throw URLError(.badServerResponse)
                 }
-                try await vm.removeOrder(orderId: choosenOrder.orderId)
-                vm.allLastDocument = nil
-                vm.allOrders = []
-                try await vm.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
+                try await mainViewModel.orderViewModel.removeOrder(orderId: choosenOrder.orderId)
+                interfaceData.allLastDocument = nil
+                interfaceData.allOrders = []
+                try await mainViewModel.orderViewModel.getAllOrders(dataFetchMode: .all, count: 10, isDone: nil)
             } catch {
                 print("Something went wrong")
             }

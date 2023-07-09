@@ -10,7 +10,7 @@ import SwiftUI
 struct ArticlesList: View {
     
     @EnvironmentObject var articleVM: ArticlesViewModel
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
     @Environment(\.presentationMode) var presentationMode
     @State private var loading: Bool = false
     
@@ -20,7 +20,7 @@ struct ArticlesList: View {
             TopBar<BackButton, AddArticleButton>(
                 text: "articles-string",
                 leftButton: BackButton(),
-                rightButton: vm.user?.isDoctor ?? false ? AddArticleButton() : nil
+                rightButton: interfaceData.user?.isDoctor ?? false ? AddArticleButton() : nil
             )
             
             ScrollView {
@@ -66,7 +66,7 @@ struct ArticlesList_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             ArticlesList()
-                .environmentObject(ProfileViewModel())
+                .environmentObject(InterfaceData())
                 .environmentObject(ArticlesViewModel())
         }
         .padding(.horizontal)

@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ChooseDoctorView: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
     @Environment(\.presentationMode) var presentationMode
     var procedure: ProcedureModel
     var cornerRadius = ScreenSize.width / 30
@@ -26,19 +27,20 @@ struct ChooseDoctorView: View {
                                 
                 ForEach(procedure.availableDoctors, id: \.self) { doctorId in
                     
-                    if let doctor = vm.doctors.first(where: { $0.userId == doctorId }) {
+                    if let doctor = interfaceData.doctors.first(where: { $0.userId == doctorId }) {
                         
                         NavigationLink {
                             DateTimeSelectionView(
                                 doctor: doctor,
                                 procedure: procedure,
                                 mainButtonTitle: "add-appointment-string",
-                                client: vm.user,
+                                client: interfaceData.user,
                                 selectedTab: $selectedTab
                             )
                         } label: {
                             UserRow(
-                                vm: vm,
+                                interfaceData: interfaceData,
+                                mainViewModel: mainViewModel,
                                 user: doctor,
                                 showButtons: false,
                                 userStatus: .doctor
@@ -66,9 +68,11 @@ struct ChooseDoctorView: View {
 
 struct ChooseDoctorView_Previews: PreviewProvider {
     static var previews: some View {
+        let interfaceData = InterfaceData()
         VStack {
             ChooseDoctorView(procedure: ProcedureModel(procedureId: "", name: "", duration: 0, cost: 0, parallelQuantity: 1, availableDoctors: []), selectedTab: .constant(.plus))
-                .environmentObject(ProfileViewModel())
+                .environmentObject(interfaceData)
+                .environmentObject(MainViewModel(data: interfaceData))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)

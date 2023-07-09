@@ -9,7 +9,9 @@ import SwiftUI
 
 struct AllUsersView: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
+    
     @Environment(\.presentationMode) var presentationMode
     @State private var showSearch: Bool = false
     @State private var searchable: String = ""
@@ -60,7 +62,8 @@ struct AllUsersView: View {
                         
                         ForEach(filteredUsers, id: \.0.userId) { user in
                             UserRow(
-                                vm: vm,
+                                interfaceData: interfaceData,
+                                mainViewModel: mainViewModel,
                                 user: user.0,
                                 showButtons: user.1,
                                 userStatus: .client
@@ -78,15 +81,15 @@ struct AllUsersView: View {
 
                 Spacer()
             }
-            .onChange(of: vm.users, perform: { _ in
+            .onChange(of: interfaceData.users, perform: { _ in
                 withAnimation(.easeInOut(duration: 0.15)) {
-                    tupleUsers = vm.users.map {($0, false)}
+                    tupleUsers = interfaceData.users.map {($0, false)}
                 }
             })
             .onAppear {
                 Task {
-                    try await vm.getAllUsers()
-                    tupleUsers = vm.users.map {($0, false)}
+                    try await mainViewModel.profileViewModel.getAllUsers()
+                    tupleUsers = interfaceData.users.map {($0, false)}
                 }
             }
             .navigationBarBackButtonHidden(true)
@@ -105,9 +108,13 @@ struct AllUsersView: View {
 
 struct AllUsersView_Previews: PreviewProvider {
     static var previews: some View {
+        
+        let interfaceData = InterfaceData()
+
         VStack {
             AllUsersView()
-                .environmentObject(ProfileViewModel())
+                .environmentObject(interfaceData)
+                .environmentObject(MainViewModel(data: interfaceData))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)

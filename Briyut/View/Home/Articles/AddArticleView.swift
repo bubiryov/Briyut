@@ -11,7 +11,7 @@ import PhotosUI
 
 struct AddArticleView: View {
     
-    @EnvironmentObject var articleVM: ArticlesViewModel
+    @EnvironmentObject var articleViewModel: ArticlesViewModel
     @State private var tittle: String = ""
     @State private var textBody: String = ""
     @Environment(\.presentationMode) var presentationMode
@@ -213,8 +213,8 @@ extension AddArticleView {
         var url: String? = nil
         
         if let selectedPhoto {
-            let path = try await articleVM.savePhoto(item: selectedPhoto, articleId: articleId, childStorage: "articles")
-            url = try await articleVM.getUrlForImage(path: path)
+            let path = try await articleViewModel.savePhoto(item: selectedPhoto, articleId: articleId, childStorage: "articles")
+            url = try await articleViewModel.getUrlForImage(path: path)
         }
         
         let article = ArticleModel(
@@ -224,7 +224,7 @@ extension AddArticleView {
             dateCreated: Timestamp(date: Date()),
             pictureUrl: url
         )
-        try await articleVM.createNewArticle(article: article)
+        try await articleViewModel.createNewArticle(article: article)
     }
 
     private func validateFields() -> Bool {

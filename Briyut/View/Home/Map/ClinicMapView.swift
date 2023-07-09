@@ -10,9 +10,9 @@ import MapKit
 
 struct ClinicMapView: View {
     
-    @StateObject var vm: LocationsViewModel = LocationsViewModel()
+    @StateObject var locationViewModel: LocationsViewModel = LocationsViewModel()
     @Environment(\.colorScheme) var colorScheme
-    var profileVM: ProfileViewModel
+    var interfaceData: InterfaceData
         
     var body: some View {
         
@@ -25,23 +25,23 @@ struct ClinicMapView: View {
                     TopBar<BackButton, EditLocationsButton>(
                         text: "",
                         leftButton: BackButton(backgorundColor: colorScheme == .dark ? Color.secondary.opacity(0.3) : nil),
-                        rightButton: profileVM.user?.isDoctor ?? false ? EditLocationsButton(vm: vm) : nil
+                        rightButton: interfaceData.user?.isDoctor ?? false ? EditLocationsButton(locationViewModel: locationViewModel) : nil
                     )
                     
                     Spacer()
                     
                     Button {
-                        if let location = vm.mapLocation {
-                            vm.openMapsAppWithDirections(location: location)
+                        if let location = locationViewModel.mapLocation {
+                            locationViewModel.openMapsAppWithDirections(location: location)
                         }
                     } label: {
                         AccentButton(
-                            text: vm.mapLocation == nil ? "navigate-string" : vm.mapLocation?.address ?? "navigate-string",
-                            isButtonActive: vm.mapLocation == nil ? false : true
+                            text: locationViewModel.mapLocation == nil ? "navigate-string" : locationViewModel.mapLocation?.address ?? "navigate-string",
+                            isButtonActive: locationViewModel.mapLocation == nil ? false : true
                         )
                         .shadow(radius: 10, y: 5)
                     }
-                    .disabled(vm.mapLocation == nil ? true : false)
+                    .disabled(locationViewModel.mapLocation == nil ? true : false)
 
                 }
                 .padding(.horizontal, 20)
@@ -52,17 +52,17 @@ struct ClinicMapView: View {
     }
     
     private var mapLayer: some View {
-        Map(coordinateRegion: $vm.mapRegion,
-            annotationItems: vm.locations,
+        Map(coordinateRegion: $locationViewModel.mapRegion,
+            annotationItems: locationViewModel.locations,
             annotationContent: { location in
             MapAnnotation(coordinate: CLLocationCoordinate2D(
                 latitude: location.latitude,
                 longitude: location.longitude)) {
                     LocationMapAnnotationView()
                         .shadow(color: .black.opacity(0.3), radius: 2, y: 7)
-                        .scaleEffect(vm.mapLocation == location ? 1.5 : 1)
+                        .scaleEffect(locationViewModel.mapLocation == location ? 1.5 : 1)
                         .onTapGesture {
-                            vm.showNextLocation(location: location)
+                            locationViewModel.showNextLocation(location: location)
                         }
                 }
         })
@@ -72,9 +72,7 @@ struct ClinicMapView: View {
 
 struct ClinicMapView_Previews: PreviewProvider {
     static var previews: some View {
-        ClinicMapView(profileVM: ProfileViewModel())
-//            .environmentObject(LocationsViewModel())
-//            .environmentObject(ProfileViewModel())
+        ClinicMapView(interfaceData: InterfaceData())
     }
 }
 
@@ -110,12 +108,12 @@ struct LocationMapAnnotationView: View {
 
 struct EditLocationsButton: View {
         
-    @ObservedObject var vm: LocationsViewModel
+    @ObservedObject var locationViewModel: LocationsViewModel
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         NavigationLink {
-            LocationsList(vm: vm)
+            LocationsList(locationViewModel: locationViewModel)
         } label: {
             BarButtonView(
                 image: "pencil",

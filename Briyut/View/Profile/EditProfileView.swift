@@ -13,7 +13,9 @@ import FirebaseFirestoreSwift
 
 struct EditProfileView: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
+    
     @Environment(\.presentationMode) var presentationMode
     @Binding var notEntered: Bool
     @State private var name: String = ""
@@ -54,7 +56,7 @@ struct EditProfileView: View {
                             
                             mainInformationFields
                             
-                            if vm.user?.isDoctor ?? false {
+                            if interfaceData.user?.isDoctor ?? false {
                                 doctorScheduleSettings
                             }
                         }
@@ -91,7 +93,7 @@ struct EditProfileView: View {
                 Button("choose-new-photo-string") {
                     showPhotosPicker = true
                 }
-                if let url = vm.user?.photoUrl, url != "" {
+                if let url = interfaceData.user?.photoUrl, url != "" {
                     Button("delete-current-photo-string", role: .destructive) {
                         deleteCurrentPhoto()
                     }
@@ -119,9 +121,13 @@ struct EditProfileView: View {
 
 struct EditProfileView_Previews: PreviewProvider {
     static var previews: some View {
+        
+        let interfaceData = InterfaceData()
+
         VStack {
             EditProfileView(notEntered: .constant(false))
-                .environmentObject(ProfileViewModel())
+                .environmentObject(interfaceData)
+                .environmentObject(MainViewModel(data: interfaceData))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)
@@ -139,7 +145,7 @@ extension EditProfileView {
             VStack {
                 if selectedPhoto == nil {
                     ProfileImage(
-                        photoURL: vm.user?.photoUrl,
+                        photoURL: interfaceData.user?.photoUrl,
                         frame: ScreenSize.height * 0.12,
                         color: Color.secondary.opacity(0.1),
                         padding: 16
@@ -185,7 +191,7 @@ extension EditProfileView {
                 input: $lastName
             )
             
-            if !vm.authProviders.contains(.phone) {
+            if !interfaceData.authProviders.contains(.phone) {
                 AccentInputField(promptText: "+38 (099)-999-99-99", title: "phone-number-string", input: $phoneNumber)
                     .keyboardType(.phonePad)
             }
@@ -268,10 +274,10 @@ extension EditProfileView {
 extension EditProfileView {
     
     private func deleteCurrentPhoto() {
-        guard let user = vm.user else { return }
+        guard let user = interfaceData.user else { return }
         Task {
-            try await vm.deletePreviousPhoto(url: user.photoUrl!)
-            try await vm.editProfile(
+            try await mainViewModel.profileViewModel.deletePreviousPhoto(url: user.photoUrl!)
+            try await mainViewModel.profileViewModel.editProfile(
                 userID: user.userId,
                 name: name != "" ? name : nil,
                 lastName: lastName != "" ? lastName : nil,
@@ -288,19 +294,19 @@ extension EditProfileView {
                     Timestamp(date: endVacation)
                 ] : nil
             )
-            try await vm.loadCurrentUser()
+            try await mainViewModel.profileViewModel.loadCurrentUser()
             presentationMode.wrappedValue.dismiss()
         }
     }
     
     private func saveProfileAction() async throws {
-        guard let user = vm.user else { return }
+        guard let user = interfaceData.user else { return }
         var url: String = user.photoUrl ?? ""
         
         if let selectedPhoto {
-            try await vm.deleteStorageFolderContents(documentId: user.userId, childStorage: "users")
-            let path = try await vm.savePhoto(item: selectedPhoto, childStorage: "users")
-            url = try await vm.getUrlForImage(path: path)
+            try await mainViewModel.profileViewModel.storageViewModel.deleteStorageFolderContents(documentId: user.userId, childStorage: "users")
+            let path = try await mainViewModel.profileViewModel.savePhoto(item: selectedPhoto, childStorage: "users")
+            url = try await mainViewModel.profileViewModel.getUrlForImage(path: path)
         }
         
         let scheduleTimes: [String : String]? = {
@@ -325,7 +331,7 @@ extension EditProfileView {
         loading = true
         
         do {
-            try await vm.editProfile(
+            try await mainViewModel.profileViewModel.editProfile(
                 userID: user.userId,
                 name: name != "" ? name : nil,
                 lastName: lastName != "" ? lastName : nil,
@@ -336,7 +342,7 @@ extension EditProfileView {
                 vacation: vacation,
                 vacationDates: vacationDates
             )
-            try await vm.loadCurrentUser()
+            try await mainViewModel.profileViewModel.loadCurrentUser()
             loading = false
             presentationMode.wrappedValue.dismiss()
         } catch {
@@ -344,49 +350,7 @@ extension EditProfileView {
             print("Can't save changes")
         }
     }
-    
-//    private func saveProfileAction() async throws {
-//        guard let user = vm.user else { return }
-//        var url: String = user.photoUrl ?? ""
-//        if let selectedPhoto {
-//            try await vm.deleteStorageFolderContents(documentId: user.userId, childStorage: "users")
-//            let path = try await vm.savePhoto(item: selectedPhoto, childStorage: "users")
-//            url = try await vm.getUrlForImage(path: path)
-//        }
-//        let scheduleTimes: [String : String]? = {
-//            if customSchedule {
-//                return [
-//                    DateFormatter.customFormatter(format: "HH:mm").string(from: workStartTime) :
-//                        DateFormatter.customFormatter(format: "HH:mm").string(from: workEndTime)
-//                ]
-//            } else {
-//                return nil
-//            }
-//        }()
-//
-//        let vacationDates: [Timestamp]? = {
-//            if vacation {
-//                return [Timestamp(date: startVacation), Timestamp(date: endVacation)]
-//            } else {
-//                return nil
-//            }
-//        }()
-//
-//        try await vm.editProfile(
-//            userID: user.userId,
-//            name: name != "" ? name : nil,
-//            lastName: lastName != "" ? lastName : nil,
-//            phoneNumber: phoneNumber.count > 5 ? phoneNumber : nil,
-//            photoURL: url,
-//            customSchedule: customSchedule,
-//            scheduleTimes: scheduleTimes,
-//            vacation: vacation,
-//            vacationDates: vacationDates
-//        )
-//        try await vm.loadCurrentUser()
-//        presentationMode.wrappedValue.dismiss()
-//    }
-    
+        
     private func roundDateToNearestInterval(date: Date) -> Date {
         let interval: TimeInterval = 15 * 60
         let timeInterval = date.timeIntervalSinceReferenceDate
@@ -405,7 +369,7 @@ extension EditProfileView {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
         
-        if let user = vm.user {
+        if let user = interfaceData.user {
             name = user.name ?? ""
             lastName = user.lastName ?? ""
             phoneNumber = user.phoneNumber ?? ""
@@ -425,7 +389,7 @@ extension EditProfileView {
             primaryButton: .destructive(Text("yes-i'm-sure-string"), action: {
                 Task {
                     do {
-                        try await vm.deleteAccount()
+                        try await mainViewModel.profileViewModel.deleteAccount()
                         notEntered = true
                     } catch {
                         print("Something went wrong")

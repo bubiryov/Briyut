@@ -9,7 +9,8 @@ import SwiftUI
 
 struct AllProcedures: View {
     
-    @EnvironmentObject var vm: ProfileViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
+    @EnvironmentObject var mainViewModel: MainViewModel
     @State private var isEditing: Bool = false
     @State private var searchText: String = ""
     @Binding var notEntered: Bool
@@ -18,10 +19,10 @@ struct AllProcedures: View {
     @FocusState var focus: Bool
     private var procedures: [ProcedureModel] {
         var filteredProcedures: [ProcedureModel] = []
-        if let user = vm.user, user.isDoctor {
-            filteredProcedures = vm.procedures.filter({ $0.availableDoctors.contains(user.userId) })
+        if let user = interfaceData.user, user.isDoctor {
+            filteredProcedures = interfaceData.procedures.filter({ $0.availableDoctors.contains(user.userId) })
         } else {
-            filteredProcedures = vm.procedures
+            filteredProcedures = interfaceData.procedures
         }
         
         let sortedProcedures = filteredProcedures.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
@@ -39,7 +40,7 @@ struct AllProcedures: View {
                 Color.backgroundColor.edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    if vm.user?.isDoctor == true {
+                    if interfaceData.user?.isDoctor == true {
                         TopBar<EditButton, AddProcedureButton>(
                             text: "procedures-string",
                             leftButton: EditButton(isEditing: $isEditing),
@@ -63,7 +64,7 @@ struct AllProcedures: View {
                         ForEach(procedures, id: \.procedureId) { procedure in
                             
                             ProcedureRow(
-                                vm: vm,
+                                interfaceData: interfaceData,
                                 procedure: procedure,
                                 isEditing: $isEditing,
                                 selectedTab: $selectedTab
@@ -75,14 +76,14 @@ struct AllProcedures: View {
                                 withVariance: 0.055
                             )).repeat(while: isEditing), value: isEditing)
                             .padding(.horizontal, isEditing ? 3 : 0)
-                            .disabled(vm.user?.isDoctor != true && alertContition() ? true : false)
+                            .disabled(interfaceData.user?.isDoctor != true && alertContition() ? true : false)
                         }
                     }
                     .scrollIndicators(.hidden)
                 }
                 .onAppear {
                     Task {
-                        try await vm.getAllProcedures()
+                        try await mainViewModel.procedureViewModel.getAllProcedures()
                     }
                 }
             }
@@ -92,9 +93,11 @@ struct AllProcedures: View {
 
 struct AddProcedureView_Previews: PreviewProvider {
     static var previews: some View {
+        let interfaceData = InterfaceData()
         VStack {
             AllProcedures(notEntered: .constant(false), showSearch: .constant(false), selectedTab: .constant(.plus))
-                .environmentObject(ProfileViewModel())
+                .environmentObject(interfaceData)
+                .environmentObject(MainViewModel(data: interfaceData))
         }
         .padding(.horizontal, 20)
         .background(Color.backgroundColor)
@@ -178,7 +181,7 @@ extension AllProcedures {
 
 extension AllProcedures {
     private func alertContition() -> Bool {
-        guard vm.user?.name == nil || vm.user?.phoneNumber == nil, vm.user?.isDoctor == false else {
+        guard interfaceData.user?.name == nil || interfaceData.user?.phoneNumber == nil, interfaceData.user?.isDoctor == false else {
             return false
         }
         return true

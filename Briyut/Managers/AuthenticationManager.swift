@@ -8,7 +8,31 @@
 import Foundation
 import FirebaseAuth
 
-final class AuthenticationManager {
+protocol AuthenticationManagerProtocol {
+    func getAuthenticatedUser() throws -> AuthDataResultModel
+    func signOut() throws
+    func getProvider() throws -> [AuthProviderOption]
+    func deleteAccount() async throws
+    
+    // Email functions
+    func createUser(email: String, password: String) async throws -> AuthDataResultModel
+    @discardableResult
+    func signIn(email: String, password: String) async throws -> AuthDataResultModel
+    func resetPassword(email: String) async throws
+    func changePassword(currentPassword: String, newPassword: String) async throws
+    
+    // Phone number functions
+    func sendCode(_ phoneNumber: String) async throws -> String
+    func verifyCode(ID: String, code: String) async throws -> (AuthDataResultModel, String?)
+    
+    // Google functions
+    func signInWithGoogle(tokens: GoogleSignInResultModel) async throws -> AuthDataResultModel
+    
+    // Apple functions
+    func signInWithApple(tokens: AppleSignInResultModel) async throws -> AuthDataResultModel
+}
+
+final class AuthenticationManager: AuthenticationManagerProtocol {
     
     static let shared = AuthenticationManager()
     private init() { }
