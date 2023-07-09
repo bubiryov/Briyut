@@ -12,15 +12,7 @@ struct HomeView: View {
     @EnvironmentObject var interfaceData: InterfaceData
     @EnvironmentObject var articlesVM: ArticlesViewModel
     @EnvironmentObject var mainViewModel: MainViewModel
-    
-//    init(selectedTab: Binding<Tab>, justOpened: Binding<Bool>, showSearch: Binding<Bool>, splashView: Binding<Bool>) {
-//        let mainViewModel = MainViewModel(data: interfaceData)
-//        _selectedTab = selectedTab
-//        _justOpened = justOpened
-//        _showSearch = showSearch
-//        _splashView = splashView
-//    }
-    
+        
     @Environment(\.colorScheme) var colorScheme
     @Binding var selectedTab: Tab
     @Binding var justOpened: Bool
