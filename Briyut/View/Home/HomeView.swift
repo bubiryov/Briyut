@@ -9,10 +9,18 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @EnvironmentObject var profileViewModel: ProfileViewModel
-    @EnvironmentObject var orderViewModel: OrderViewModel
-    @EnvironmentObject var procedureViewModel: ProcedureViewModel
+    @EnvironmentObject var interfaceData: InterfaceData
     @EnvironmentObject var articlesVM: ArticlesViewModel
+    @EnvironmentObject var mainViewModel: MainViewModel
+    
+//    init(selectedTab: Binding<Tab>, justOpened: Binding<Bool>, showSearch: Binding<Bool>, splashView: Binding<Bool>) {
+//        let mainViewModel = MainViewModel(data: interfaceData)
+//        _selectedTab = selectedTab
+//        _justOpened = justOpened
+//        _showSearch = showSearch
+//        _splashView = splashView
+//    }
+    
     @Environment(\.colorScheme) var colorScheme
     @Binding var selectedTab: Tab
     @Binding var justOpened: Bool
@@ -29,7 +37,7 @@ struct HomeView: View {
                 TopBar<MapButton, ProfileButton>(
                     text: "",
                     leftButton: MapButton(image: "pin", showMap: $showMap),
-                    rightButton: ProfileButton(selectedTab: $selectedTab, photo: profileViewModel.user?.photoUrl ?? ""))
+                    rightButton: ProfileButton(selectedTab: $selectedTab, photo: interfaceData.user?.photoUrl ?? ""))
                 
                 Text("find-your-procedure-string")
                     .font(Mariupol.bold, 30)
@@ -51,13 +59,14 @@ struct HomeView: View {
             .background(Color.backgroundColor)
         }
         .fullScreenCover(isPresented: $showMap) {
-            ClinicMapView(profileVM: profileViewModel)
+            ClinicMapView(interfaceData: interfaceData)
         }
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
+        let interfaceData = InterfaceData()
         VStack {
             HomeView(
                 selectedTab: .constant(.profile),
@@ -65,8 +74,9 @@ struct HomeView_Previews: PreviewProvider {
                 showSearch: .constant(false),
                 splashView: .constant(false)
             )
-            .environmentObject(PropertyViewModel())
+            .environmentObject(interfaceData)
             .environmentObject(ArticlesViewModel())
+            .environmentObject(MainViewModel(data: interfaceData))
         }
         .padding(.horizontal)
         .padding(.bottom)
@@ -123,9 +133,9 @@ extension HomeView {
                 .foregroundColor(.primary)
             }
             
-            if let nearestOrder = profileViewModel.activeOrders.first {
+            if let nearestOrder = interfaceData.activeOrders.first {
                 ZStack {
-                    if orderViewModel.activeOrders.count > 1 {
+                    if interfaceData.activeOrders.count > 1 {
                         RoundedRectangle(cornerRadius: ScreenSize.width / 15)
                             .frame(height: ScreenSize.height * 0.14)
                             .offset(y: ScreenSize.height / 35)
@@ -133,17 +143,18 @@ extension HomeView {
                             .foregroundColor(.mainColor.opacity(0.7))
                     }
                     OrderRow(
-                        vm: profileViewModel,
+                        interfaceData: interfaceData,
+                        mainViewModel: mainViewModel,
                         order: nearestOrder,
                         withButtons: false,
                         color: .mainColor,
                         fontColor: .white,
                         bigDate: true,
-                        userInformation: profileViewModel.user?.isDoctor ?? false ? .client : .doctor,
+                        userInformation: interfaceData.user?.isDoctor ?? false ? .client : .doctor,
                         photoBackgroundColor: colorScheme == .dark ? .white.opacity(0.2) : .white
                     )
                 }
-                .padding(.bottom, orderViewModel.activeOrders.count > 1 ? 5 : 0)
+                .padding(.bottom, interfaceData.activeOrders.count > 1 ? 5 : 0)
             } else {
                 Button {
                     withAnimation(.easeInOut(duration: 0.15)) {
@@ -217,16 +228,16 @@ extension HomeView {
     private func loadData() {
         Task {
             do {
-                try await profileViewModel.loadCurrentUser()
-                try await profileViewModel.getAllDoctors()
-                try await procedureViewModel.getAllProcedures()
+                try await mainViewModel.profileViewModel.loadCurrentUser()
+                try await mainViewModel.profileViewModel.getAllDoctors()
+                try await mainViewModel.procedureViewModel.getAllProcedures()
                 
-                if profileViewModel.user?.isDoctor ?? false {
-                    try await profileViewModel.getAllUsers()
+                if interfaceData.user?.isDoctor ?? false {
+                    try await mainViewModel.profileViewModel.getAllUsers()
                 }
                 
                 if justOpened {
-                    try await orderViewModel.updateOrdersStatus(isDone: false, isDoctor: profileViewModel.user?.isDoctor ?? false)
+                    try await mainViewModel.orderViewModel.updateOrdersStatus(isDone: false, isDoctor: interfaceData.user?.isDoctor ?? false)
                     try await articlesVM.getRequiredArticles(countLimit: 6)
                     justOpened = false
                 }

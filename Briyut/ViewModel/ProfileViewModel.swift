@@ -11,107 +11,94 @@ import SwiftUI
 import PhotosUI
 
 @MainActor
-class PropertyViewModel: ObservableObject {
+class ProfileViewModel {
     
-    @Published var user: DBUser? = nil
-    @Published var doctors: [DBUser] = []
-    @Published var users: [DBUser] = []
-    @Published var procedures: [ProcedureModel] = []
-    @Published var authProviders: [AuthProviderOption] = []
-    @Published var activeOrders: [OrderModel] = []
-    @Published var doneOrders: [OrderModel] = []
-    @Published var allOrders: [OrderModel] = []
-    
-    var activeLastDocument: DocumentSnapshot? = nil
-    var doneLastDocument: DocumentSnapshot? = nil
-    var allLastDocument: DocumentSnapshot? = nil
-
-}
-
-@MainActor
-class ProfileViewModel: PropertyViewModel {
-    
-    let orderViewModel: OrderViewModel
+    let data: InterfaceData
     let procedureViewModel: ProcedureViewModel
+    let orderViewModel: OrderViewModel
+    let storageViewModel: StorageViewModel
+
+    let userManager: UserManagerProtocol
+    let authenticationManager: AuthenticationManagerProtocol
     
-    init(orderViewModel: OrderViewModel, procedureViewModel: ProcedureViewModel) {
-        self.orderViewModel = orderViewModel
+    init(data: InterfaceData, procedureViewModel: ProcedureViewModel, orderViewModel: OrderViewModel, userManager: UserManagerProtocol, authenticationManager: AuthenticationManagerProtocol, storageManager: StorageManagerProtocol) {
+        self.data = data
         self.procedureViewModel = procedureViewModel
+        self.orderViewModel = orderViewModel
+        self.userManager = userManager
+        self.authenticationManager = authenticationManager
+        self.storageViewModel = StorageViewModel(storageManager: storageManager)
     }
-                
+    
     func loadCurrentUser() async throws {
-        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
-        user = try await getUser(userId: authDataResult.uid)
+        let authDataResult = try authenticationManager.getAuthenticatedUser()
+        data.user = try await getUser(userId: authDataResult.uid)
     }
     
     func getUser(userId: String) async throws -> DBUser {
-        try await UserManager.shared.getUser(userId: userId)
+        try await userManager.getUser(userId: userId)
     }
     
     func getAllUsers() async throws {
-        users = try await UserManager.shared.getAllUsers()
+        data.users = try await userManager.getAllUsers()
     }
     
     func getProvider() {
-        if let providers = try? AuthenticationManager.shared.getProvider() {
-            authProviders = providers
+        if let providers = try? authenticationManager.getProvider() {
+            data.authProviders = providers
         }
     }
             
     func signOut() throws {
         do {
-            try AuthenticationManager.shared.signOut()
+            try authenticationManager.signOut()
         } catch  {
             print("Log out error: \(error)")
         }
     }
-    
-    func deleteStorageFolderContents(documentId: String, childStorage: String) async throws {
-        try await StorageManager.shared.deleteFolderContents(documentId: documentId, childStorage: childStorage)
-    }
-    
+        
     func deleteAccount() async throws {
-        guard let user = user else { throw URLError(.badServerResponse) }
+        guard let user = data.user else { throw URLError(.badServerResponse) }
         try await orderViewModel.deleteUnfinishedOrders(idType: .client, id: user.userId)
-        try await UserManager.shared.deleteUser(userId: user.userId)
-        try await deleteStorageFolderContents(documentId: user.userId, childStorage: "users")
-        try await AuthenticationManager.shared.deleteAccount()
-        self.user = nil
+        try await userManager.deleteUser(userId: user.userId)
+        try await storageViewModel.deleteStorageFolderContents(documentId: user.userId, childStorage: "users")
+        try await authenticationManager.deleteAccount()
+        data.user = nil
     }
     
     func updateBlockStatus(userID: String, isBlocked: Bool) async throws {
-        try await UserManager.shared.updateBlockStatus(userID: userID, isBlocked: isBlocked)
+        try await userManager.updateBlockStatus(userID: userID, isBlocked: isBlocked)
         if isBlocked {
             try await orderViewModel.deleteUnfinishedOrders(idType: .client, id: userID)
         }
-        activeLastDocument = nil
-        activeOrders = []
+        data.activeLastDocument = nil
+        data.activeOrders = []
         try await orderViewModel.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 2)
         try await getAllUsers()
     }
     
     func addDoctor(userID: String) async throws {
-        guard try await UserManager.shared.checkIfUserExists(userId: userID) else {
+        guard try await userManager.checkIfUserExists(userId: userID) else {
             return
         }
-        try await UserManager.shared.makeDoctor(userID: userID)
+        try await userManager.makeDoctor(userID: userID)
         try await getAllDoctors()
     }
     
     func removeDoctor(userID: String) async throws {
-        guard userID != user?.userId else { return }
-        try await UserManager.shared.removeDoctor(userID: userID)
+        guard userID != data.user?.userId else { return }
+        try await userManager.removeDoctor(userID: userID)
         try await orderViewModel.deleteUnfinishedOrders(idType: .doctor, id: userID)
         try await procedureViewModel.updateProceduresForDoctor(userID: userID)
         try await getAllDoctors()
     }
     
     func getAllDoctors() async throws {
-        self.doctors = try await UserManager.shared.getAllDoctors()
+        data.doctors = try await userManager.getAllDoctors()
     }
     
     func editProfile(userID: String, name: String?, lastName: String?, phoneNumber: String?, photoURL: String?, customSchedule: Bool?, scheduleTimes: [String: String]?, vacation: Bool?, vacationDates: [Timestamp]?) async throws {
-        return try await UserManager.shared.editProfile(userID: userID, name: name, lastName: lastName, phoneNumber: phoneNumber, photoURL: photoURL, customSchedule: customSchedule, scheduleTimes: scheduleTimes, vacation: vacation, vacationDates: vacationDates)
+        return try await userManager.editProfile(userID: userID, name: name, lastName: lastName, phoneNumber: phoneNumber, photoURL: photoURL, customSchedule: customSchedule, scheduleTimes: scheduleTimes, vacation: vacation, vacationDates: vacationDates)
     }
     
     func savePhoto(item: PhotosPickerItem, childStorage: String) async throws -> String {
@@ -119,157 +106,18 @@ class ProfileViewModel: PropertyViewModel {
         guard let data = try await item.loadTransferable(type: Data.self) else {
             throw URLError(.badServerResponse)
         }
-        guard let user = user else {
+        guard let user = self.data.user else {
             throw URLError(.badServerResponse)
         }
-        return try await StorageManager.shared.saveImage(data: data, childStorage: childStorage, documentId: user.userId, contentTypes: contentTypes)
+        return try await storageViewModel.saveImage(data: data, childStorage: childStorage, documentId: user.userId, contentTypes: contentTypes)
     }
     
     func deletePreviousPhoto(url: String) async throws {
-        try await StorageManager.shared.deletePreviousPhoto(url: url)
+        try await storageViewModel.deletePreviousPhoto(url: url)
     }
     
     func getUrlForImage(path: String) async throws -> String {
-        return try await StorageManager.shared.getUrlForImage(path: path)
+        return try await storageViewModel.getUrlForImage(path: path)
     }
 }
 
-@MainActor
-class OrderViewModel: PropertyViewModel {
-        
-    func getRequiredOrders(dataFetchMode: DataFetchMode, isDone: Bool, countLimit: Int) async throws {
-        if !isDone {
-            let (activeOrders, activeLastDocument) = try await OrderManager.shared.getRequiredOrders(dataFetchMode: dataFetchMode, userId: user?.userId ?? "", isDoctor: user?.isDoctor ?? false, isDone: false, countLimit: countLimit, lastDocument: activeLastDocument)
-            self.activeOrders.append(contentsOf: activeOrders)
-            if let activeLastDocument {
-                self.activeLastDocument = activeLastDocument
-            }
-        } else {
-            let (doneOrders, doneLastDocument) = try await OrderManager.shared.getRequiredOrders(dataFetchMode: dataFetchMode, userId: user?.userId ?? "", isDoctor: user?.isDoctor ?? false, isDone: true, countLimit: countLimit, lastDocument: doneLastDocument)
-            self.doneOrders.append(contentsOf: doneOrders)
-            if let doneLastDocument {
-                self.doneLastDocument = doneLastDocument
-            }
-        }
-    }
-    
-    func getAllOrders(dataFetchMode: DataFetchMode, count: Int?, isDone: Bool?) async throws {
-        let (orders, lastDocument) = try await OrderManager.shared.getRequiredOrders(dataFetchMode: dataFetchMode, userId: "", isDoctor: false, isDone: isDone, countLimit: count, lastDocument: allLastDocument)
-        self.allOrders.append(contentsOf: orders)
-        if let lastDocument {
-            self.allLastDocument = lastDocument
-        }
-        print("Downloaded orders")
-    }
-
-    func addNewOrder(order: OrderModel) async throws {
-        try await OrderManager.shared.createNewOrder(order: order)
-        activeLastDocument = nil
-        activeOrders = []
-        try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
-    }
-    
-    func editOrderTime(orderId: String, date: Timestamp, end: Timestamp) async throws {
-        try await OrderManager.shared.editOrderTime(orderId: orderId, date: date, end: end)
-//        activeLastDocument = nil
-//        activeOrders = []
-//        try await getAllOrders(isDone: false, countLimit: 6)
-    }
-    
-    func removeOrder(orderId: String) async throws {
-        try await OrderManager.shared.removeOrder(orderId: orderId)
-//        activeLastDocument = nil
-//        activeOrders = []
-//        try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
-    }
-        
-    func updateOrdersStatus(isDone: Bool, isDoctor: Bool) async throws {
-        try await getAllOrders(dataFetchMode: .all, count: nil, isDone: isDone)
-        for order in allOrders {
-            let calendar = Calendar.current
-            let procedureDuration = try await ProcedureManager.shared.getProduct(procedureId: order.procedureId).duration
-            if calendar.date(byAdding: .minute, value: procedureDuration, to: order.date.dateValue())! <= Date() {
-                try await OrderManager.shared.updateOrderStatus(orderId: order.orderId)
-            }
-        }
-        allLastDocument = nil
-        allOrders = []
-        try await getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 6)
-        try await getRequiredOrders(dataFetchMode: .user, isDone: true, countLimit: 6)
-    }
-    
-    func getDayMonthOrders(date: Date, selectionMode: DateSelectionMode, doctorId: String?, firstDate: Date?, secondDate: Date?) async throws -> [OrderModel] {
-        return try await OrderManager.shared.getDayMounthOrders(for: date, selectionMode: selectionMode, doctorId: doctorId, firstDate: firstDate, secondDate: secondDate)
-    }
-    
-    func deleteUnfinishedOrders(idType: IDType, id: String) async throws {
-        do {
-            try await OrderManager.shared.deleteUnfinishedOrders(idType: idType, id: id)
-            print("Active orders deleted")
-        } catch {
-            print("Error with deleting active orders")
-            throw URLError(.badURL)
-        }
-    }
-    
-//    func getDayOrders(date: Date, doctorId: String?) async throws -> [OrderModel] {
-//        let dayOrders = try await OrderManager.shared.getDayOrders(date: date, doctorId: doctorId)
-//        return dayOrders
-//    }
-    
-    func getDayOrderTimes(date: Date, selectionMode: DateSelectionMode, doctorId: String?) async throws -> [(Date, Date)] {
-        let orders = try await getDayMonthOrders(date: date, selectionMode: selectionMode, doctorId: doctorId, firstDate: nil, secondDate: nil)
-        var occupied = [(Date, Date)]()
-        for order in orders {
-            let start = order.date.dateValue()
-            let end = order.end.dateValue()
-
-            let tuple = (start, end)
-            occupied.append(tuple)
-        }
-        return occupied
-    }
-
-}
-
-@MainActor
-class ProcedureViewModel: PropertyViewModel {
-    
-    let orderViewModel: OrderViewModel
-    
-    init(orderViewModel: OrderViewModel) {
-        self.orderViewModel = orderViewModel
-    }
-    
-    func addNewProcedure(procedure: ProcedureModel) async throws {
-        try await ProcedureManager.shared.createNewProcedure(procedure: procedure)
-        try await getAllProcedures()
-    }
-        
-    func getProcedure(procedureId: String) async throws -> ProcedureModel {
-        try await ProcedureManager.shared.getProduct(procedureId: procedureId)
-    }
-    
-    func getAllProcedures() async throws {
-        procedures = try await ProcedureManager.shared.getAllProcedures()
-    }
-            
-    func editProcedure(procedureId: String, name: String, duration: Int, cost: Int, parallelQuantity: Int, availableDoctors: [String]) async throws {
-        try await ProcedureManager.shared.editProcedure(procedureId: procedureId, name: name, duration: duration, cost: cost, parallelQuantity: parallelQuantity, availableDoctors: availableDoctors)
-        try await getAllProcedures()
-    }
-    
-    func removeProcedure(procedureId: String) async throws {
-        try await ProcedureManager.shared.removeProcedure(procedureId: procedureId)
-        try await orderViewModel.deleteUnfinishedOrders(idType: .procedure, id: procedureId)
-        try await getAllProcedures()
-        activeLastDocument = nil
-        activeOrders = []
-        try await orderViewModel.getRequiredOrders(dataFetchMode: .user, isDone: false, countLimit: 2)
-    }
-    
-    func updateProceduresForDoctor(userID: String) async throws {
-        try await ProcedureManager.shared.updateProceduresForDoctor(userID: userID)
-    }
-
-}

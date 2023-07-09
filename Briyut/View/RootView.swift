@@ -8,27 +8,25 @@
 import SwiftUI
 
 struct RootView: View {
-    
-//    @StateObject var vm = ProfileViewModel()
-    
-    @StateObject var propertyViewModel: PropertyViewModel = PropertyViewModel()
-    @StateObject var articlesVM: ArticlesViewModel = ArticlesViewModel()
-    var profileViewModel: ProfileViewModel
-    var procedureViewModel: ProcedureViewModel
-    var orderViewModel: OrderViewModel = OrderViewModel()
-    
-    init(notEntered: Binding<Bool>, splashView: Binding<Bool>) {
-        _notEntered = notEntered
-        _splashView = splashView
         
-        self.procedureViewModel = ProcedureViewModel(orderViewModel: orderViewModel)
-        self.profileViewModel = ProfileViewModel(orderViewModel: orderViewModel, procedureViewModel: procedureViewModel)
-    }
-
+    @StateObject private var interfaceData: InterfaceData
+    @StateObject var mainViewModel: MainViewModel
+    @StateObject var articlesVM: ArticlesViewModel = ArticlesViewModel()
     
-    @State private var selectedTab: Tab = .home
     @Binding var notEntered: Bool
     @Binding var splashView: Bool
+    
+    init(notEntered: Binding<Bool>, splashView: Binding<Bool>) {
+        let interfaceData = InterfaceData()
+        let mainViewModel = MainViewModel(data: interfaceData)
+        _interfaceData = StateObject(wrappedValue: interfaceData)
+        _mainViewModel = StateObject(wrappedValue: mainViewModel)
+        
+        _notEntered = notEntered
+        _splashView = splashView
+    }
+    
+    @State private var selectedTab: Tab = .home
     @State var justOpened: Bool = true
     @State var showSearch: Bool = false
         
@@ -42,17 +40,24 @@ struct RootView: View {
                     switch selectedTab {
                     case .home:
                         HomeView(selectedTab: $selectedTab, justOpened: $justOpened, showSearch: $showSearch, splashView: $splashView)
-                            .environmentObject(propertyViewModel)
+                            .environmentObject(interfaceData)
+                            .environmentObject(mainViewModel)
                             .environmentObject(articlesVM)
                     case .plus:
                         AllProcedures(notEntered: $notEntered, showSearch: $showSearch, selectedTab: $selectedTab)
-                            .environmentObject(profileViewModel)
+                            .environmentObject(interfaceData)
+                            .environmentObject(mainViewModel)
+
                     case .calendar:
                         CalendarView()
-                            .environmentObject(profileViewModel)
+                            .environmentObject(interfaceData)
+                            .environmentObject(mainViewModel)
+
                     case .profile:
                         ProfileView(notEntered: $notEntered)
-                            .environmentObject(profileViewModel)
+                            .environmentObject(interfaceData)
+                            .environmentObject(mainViewModel)
+
                     }
                 }
                 .padding(.top, topPadding())
@@ -66,11 +71,11 @@ struct RootView: View {
 
         }
         .background(Color.backgroundColor)
-//        .onAppear {
-//            Task {
-//                vm.getProvider()
-//            }
-//        }
+        .onAppear {
+            Task {
+                mainViewModel.profileViewModel.getProvider()
+            }
+        }
     }    
 }
 
