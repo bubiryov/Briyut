@@ -109,20 +109,20 @@ extension DateFormatter {
         let monthString = self.string(from: date)
         
         let monthMapping: [String: String] = [
-            "January": "Январь",
-            "February": "Февраль",
-            "March": "Март",
-            "April": "Апрель",
-            "May": "Май",
-            "June": "Июнь",
-            "July": "Июль",
-            "August": "Август",
-            "September": "Сентябрь",
-            "October": "Октябрь",
-            "November": "Ноябрь",
-            "December": "Декабрь"
+            "January": "Січень",
+            "February": "Лютий",
+            "March": "Березень",
+            "April": "Квітень",
+            "May": "Травень",
+            "June": "Червень",
+            "July": "Липень",
+            "August": "Серпень",
+            "September": "Вересень",
+            "October": "Жовтень",
+            "November": "Листопад",
+            "December": "Грудень"
         ]
-        
+
         return monthMapping[monthString] ?? monthString
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
-import Combine
+//import Combine
 
 protocol ProcedureManagerProtocol {
     func getProduct(procedureId: String) async throws -> ProcedureModel
