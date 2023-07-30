@@ -1,4 +1,17 @@
 # Briyut Clinic
+
+Welcome to the world of taking care of your health and improving your well-being! We present you our amazing medical app, created with love for all those who strive for an active and healthy life.
+
+Our app is your trusted partner in the recovery and rehabilitation process. With a simple and intuitive interface, you will be able to make appointments for procedures, choose a convenient time and enjoy the improvement of your physical and emotional state.
+
+Forget complications and inconveniences - we give you access to experienced physicians who will accompany you every step of the way on your journey to health. With their help, you will gain the confidence and care that will facilitate your full recovery.
+
+Our private office is your cozy and secure space where you will always be aware of your upcoming and past appointments. You'll be able to easily view your schedule and be confident in your schedule.
+
+And for our caring physicians, we provide convenient tools to edit procedures, add new colleagues, and view statistics. This helps us provide a high level of care and improve your experience with us.
+
+Caring for your health is our inspiration and calling. We created this app to make your recovery more comfortable, efficient and enjoyable.
+
 <img width="433" alt="SCR-20230723-qpez" src="https://github.com/bubiryov/Briyut-Clinic/assets/124048186/f6f20951-e6f6-47ba-8f32-893429699ae4">
 <img width="433" alt="SCR-20230723-qnvj" src="https://github.com/bubiryov/Briyut-Clinic/assets/124048186/273ff49c-bdad-4478-b8d6-b8d0d5287fb8">
 <img width="433" alt="SCR-20230723-qpaz" src="https://github.com/bubiryov/Briyut-Clinic/assets/124048186/c6594688-ad8a-4b69-bff7-a9408d9de670">
